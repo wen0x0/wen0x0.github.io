@@ -17,7 +17,7 @@ They're widely used in search, data validation, parsing logs, and more.
 A **regular expression** is a special string that describes a search pattern.
 It allows you to match complex text using concise syntax.
 
-```regex
+```plaintext
 abc     # Matches exact 'abc'
 \d      # Matches any digit (0–9)
 \w      # Matches any word character (a-z, A-Z, 0-9, _)
@@ -29,19 +29,19 @@ abc     # Matches exact 'abc'
 
 ## Quantifiers
 
-```regex
+```plaintext
 a*      # 0 or more of 'a'
 a+      # 1 or more of 'a'
 a?      # 0 or 1 of 'a'
-a{3}  # Exactly 3 of 'a'
-a{2,4}# Between 2 and 4 of 'a'
+a{3}    # Exactly 3 of 'a'
+a{2,4}  # Between 2 and 4 of 'a'
 ```
 
 ---
 
 ## Character Classes
 
-```regex
+```plaintext
 [abc]       # Matches 'a', 'b', or 'c'
 [^abc]      # Not 'a', 'b', or 'c'
 [a-zA-Z0-9] # Any letter or digit
@@ -51,17 +51,17 @@ a{2,4}# Between 2 and 4 of 'a'
 
 ## Anchors
 
-```regex
+```plaintext
 ^start   # Match at beginning
 end$     # Match at end
-word # Word boundary
+\bword\b   # Word boundary 
 ```
 
 ---
 
 ## Groups and Alternation
 
-```regex
+```plaintext
 (grab|take)   # Matches 'grab' or 'take'
 (colou?r)     # 'color' or 'colour'
 (\d{3})-(\d{2})-(\d{4})  # Grouped SSN-like pattern
@@ -73,19 +73,19 @@ end$     # Match at end
 
 ### Validate an Email
 
-```regex
+```plaintext
 ^[\w.-]+@[\w.-]+\.\w+$
 ```
 
 ### Find All URLs
 
-```regex
+```plaintext
 https?:\/\/(www\.)?[\w\-]+(\.[\w\-]+)+
 ```
 
 ### Extract Words
 
-```regex
+```plaintext
 \b\w+\b
 ```
 
