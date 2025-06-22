@@ -1,8 +1,6 @@
-# wen0x0 — Personal Blog
+# Wen0x0
 
-![Build & Deploy](https://github.com/wen0x0/wen0x0.github.io/actions/workflows/pages.yml/badge.svg)
-
-Welcome to **wen0x0**, my personal blog where I collect what I learn and share what I think.  
+Welcome to **Wen0x0**, my personal blog where I collect what I learn and share what I think.  
 I'm **Tong Nguyen Quoc Anh**, but you can call me **Wen**.  
 Just a student, curious about computers.
 
