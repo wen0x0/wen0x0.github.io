@@ -52,8 +52,8 @@ a{2,4}  # Between 2 and 4 of 'a'
 ## Anchors
 
 ```text
-^start   # Match at beginning
-end$     # Match at end
+^start     # Match at beginning
+end$       # Match at end
 \bword\b   # Word boundary 
 ```
 
@@ -62,8 +62,8 @@ end$     # Match at end
 ## Groups and Alternation
 
 ```text
-(grab|take)   # Matches 'grab' or 'take'
-(colou?r)     # 'color' or 'colour'
+(grab|take)              # Matches 'grab' or 'take'
+(colou?r)                # 'color' or 'colour'
 (\d{3})-(\d{2})-(\d{4})  # Grouped SSN-like pattern
 ```
 
