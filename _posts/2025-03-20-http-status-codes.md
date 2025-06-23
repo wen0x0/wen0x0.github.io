@@ -58,5 +58,3 @@ Understanding HTTP status codes is essential for debugging, writing APIs, and bu
 They form the communication layer between client and server.
 
 ---
-
-Keep your HTTP knowledge strong 💪
