@@ -1,7 +1,7 @@
 ---
 title: "Learn Regular Expressions (Regex) Basics"
-date: 2025-02-25 20:21:42 +0700
-categories: [Notes]
+date: 2025-02-27 20:21:42 +0700
+categories: [Blog]
 tags: [Regex, Pattern, Search]
 pin: false
 comments: true
