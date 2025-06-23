@@ -117,5 +117,3 @@ dmesg | grep -i usb
 it becomes an indispensable tool for quick text processing, debugging logs, or finding patterns across codebases.
 
 ---
-
-Happy grepping!
