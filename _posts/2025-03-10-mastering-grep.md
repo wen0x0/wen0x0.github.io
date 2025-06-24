@@ -2,7 +2,7 @@
 title: "Mastering Grep for Efficient Text Search"
 date: 2025-03-10 19:15:00 +0700
 categories: [Blog]
-tags: [Grep, CLI, Search, Regex]
+tags: [grep, cli, regex]
 pin: false
 comments: true
 ---

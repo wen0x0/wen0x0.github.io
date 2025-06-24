@@ -2,7 +2,7 @@
 title: "Learn Markdown Quickly and Easily"
 date: 2025-02-22 22:53:17 +0700
 categories: [Blog]
-tags: [Markdown]
+tags: [markdown]
 pin: false
 comments: true
 ---
