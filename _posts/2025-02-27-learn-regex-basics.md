@@ -2,7 +2,7 @@
 title: "Learn Regular Expressions (Regex) Basics"
 date: 2025-02-27 20:21:42 +0700
 categories: [Blog]
-tags: [Regex, Pattern, Search]
+tags: [regex]
 pin: false
 comments: true
 ---

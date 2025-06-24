@@ -2,7 +2,7 @@
 title: "Understanding HTTP Status Codes"
 date: 2025-03-20 19:35:00 +0700
 categories: [Blog, Web]
-tags: [HTTP, Web, StatusCode, REST]
+tags: [http, web, status code, rest]
 pin: false
 comments: true
 ---

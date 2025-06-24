@@ -27,7 +27,8 @@ date: $DATETIME
 categories: [Miscellaneous]
 tags: []
 pin: false
-comments: true
+comments: false
+published: false
 ---
 
 
