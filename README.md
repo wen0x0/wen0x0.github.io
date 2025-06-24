@@ -6,17 +6,10 @@ Just a student, curious about computers.
 
 This blog is powered by [Jekyll](https://jekyllrb.com/) and the [Chirpy](https://github.com/cotes2020/jekyll-theme-chirpy) theme.
 
-## 🔍 Topics Covered
+## Visit the Blog
 
-- 💻 Computer Science & Programming
-- 🔐 Cybersecurity & CTF Writeups
-- 📚 Wiki-style Knowledge Notes
-- ✍️ Personal Thoughts (Blog)
+ [https://wen0x0.github.io](https://wen0x0.github.io)
 
-## 🌐 Visit the Blog
+## License
 
-🔗 [https://wen0x0.github.io](https://wen0x0.github.io)
-
-## 📄 License
-
-MIT
+**MIT**
