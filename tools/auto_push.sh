@@ -6,4 +6,4 @@ git add .
 
 git commit -m "New Update $today"
 
-git push origin main
+git push -f origin main
