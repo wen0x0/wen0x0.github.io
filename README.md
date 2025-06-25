@@ -10,4 +10,4 @@ This blog is powered by [Jekyll](https://jekyllrb.com/) and the [Chirpy](https:/
 
 ## License
 
-**MIT**
+MIT

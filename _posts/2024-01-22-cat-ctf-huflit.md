@@ -30,11 +30,16 @@ published: true
 ![Cat's Image](/assets/img/2024/01/Cat.jpg)
 
 Trước tiên thì cứ ngó nghiêng xem con file này mặt mũi, tên họ như nào đã
+
 ```bash
 file Cat.jpg  
 ```
+
 Kết quả:
-> Cat.jpg: JPEG image data, JFIF standard 1.01, resolution (DPI), density 300x300, segment length 16, Exif Standard: [TIFF image data, little-endian, direntries=270]
+
+```text
+Cat.jpg: JPEG image data, JFIF standard 1.01, resolution (DPI), density 300x300, segment length 16, Exif Standard: [TIFF image data, little-endian, direntries=270]
+```
 
 Ý nghĩa:  
 **Cat.jpg**  
