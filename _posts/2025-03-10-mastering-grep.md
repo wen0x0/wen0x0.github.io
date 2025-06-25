@@ -5,6 +5,7 @@ categories: [Blog]
 tags: [grep, cli, regex]
 pin: false
 comments: true
+published: true
 ---
 
 **Grep** is a command-line tool used to search for text using patterns or regular expressions.  

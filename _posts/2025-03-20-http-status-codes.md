@@ -5,6 +5,7 @@ categories: [Blog, Web]
 tags: [http, web, status code, rest]
 pin: false
 comments: true
+published: true
 ---
 
 **HTTP Status Codes** are standard response codes given by web servers on the Internet.  

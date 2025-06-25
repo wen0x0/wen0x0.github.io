@@ -5,6 +5,7 @@ categories: [Blog]
 tags: [regex]
 pin: false
 comments: true
+published: true
 ---
 
 **Regular Expressions (Regex)** are powerful tools for pattern matching and text processing.
