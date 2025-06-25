@@ -374,11 +374,12 @@ Nghe cứ như
 
 Xem qua mặt mũi 3 file đó nào  
 
-| Tên file    | Ảnh                                                                                 | Mã màu (Hex) | Decimal         |
-| ----------- | ------------------------------------------------------------------------------------ | ------------ | --------------- |
-| `duong.PNG` | <img alt="Ảnh màu xám xanh" src="/assets/img/2024/01/duong.PNG" width="120"/>       | #4D6572      | (77, 101, 104)  |
-| `vao.PNG`   | <img alt="Ảnh màu xám tối" src="/assets/img/2024/01/vao.PNG" width="120"/>           | #636564      | (99, 101, 100)  |
-| `em.PNG`    | <img alt="Ảnh màu xanh xám" src="/assets/img/2024/01/em.PNG" width="120"/>           | #656E7A      | (101, 110, 122) |
+| Tên file    | Ảnh                                                | Mã màu (Hex) | Decimal         |
+| ----------- | -------------------------------------------------- | ------------ | --------------- |
+| `duong.PNG` | [Xem ảnh duong.PNG](/assets/img/2024/01/duong.PNG) | #4D6572      | (77, 101, 104)  |
+| `vao.PNG`   | [Xem ảnh vao.PNG](/assets/img/2024/01/vao.PNG)     | #636564      | (99, 101, 100)  |
+| `em.PNG`    | [Xem ảnh em.PNG](/assets/img/2024/01/em.PNG)       | #656E7A      | (101, 110, 122) |
+
 
  
 Trên các ảnh có các mã màu dạng Hex/Dec  
