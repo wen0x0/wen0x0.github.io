@@ -1,5 +1,5 @@
 ---
-title: "Bắt đầu với Git: Hướng dẫn nhập môn một cách chill"
+title: "Nhập môn Git một cách chill"
 date: 2023-02-05 20:21:42 +0700
 categories: [Blog]
 tags: [git, version control]
@@ -36,12 +36,12 @@ Nếu thấy hiện ra phiên bản là ổn rồi nhé!
 ## Những lệnh cơ bản
 
 ```bash
-git init                 # Tạo một Git repo mới
-git status               # Xem tình hình hiện tại
-git add .                # Đưa tất cả thay đổi vào vùng chờ commit
+git init        # Tạo một Git repo mới
+git status      # Xem tình hình hiện tại
+git add .       # Đưa tất cả thay đổi vào vùng chờ commit
 git commit -m "Lời nhắn yêu thương"  # Lưu lại thay đổi với một thông điệp
-git log                  # Xem lịch sử commit
-git diff                 # So sánh sự khác biệt giữa các thay đổi
+git log         # Xem lịch sử commit
+git diff        # So sánh sự khác biệt giữa các thay đổi
 ```
 
 ---
@@ -62,8 +62,8 @@ Với GitHub hoặc GitLab, bạn có thể lưu code trên mây và làm việc
 
 ```bash
 git branch                    # Xem danh sách các nhánh
-git checkout -b new-feature  # Tạo và chuyển sang nhánh mới
-git merge new-feature        # Gộp nhánh vào nhánh hiện tại
+git checkout -b new-feature   # Tạo và chuyển sang nhánh mới
+git merge new-feature         # Gộp nhánh vào nhánh hiện tại
 ```
 
 Mỗi nhánh như một không gian thử nghiệm riêng – thoải mái sáng tạo mà không sợ ảnh hưởng ai.
