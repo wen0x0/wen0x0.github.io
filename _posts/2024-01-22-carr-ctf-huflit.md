@@ -374,11 +374,11 @@ Nghe cứ như
 
 Xem qua mặt mũi 3 file đó nào  
 
-| Tên file    | Ảnh                                                    | Mã màu (Hex) | Decimal         |
-| ----------- | ------------------------------------------------------ | ------------ | --------------- |
-| `duong.PNG` | <img src="/assets/img/2024/01/duong.PNG" width="120"/> | #4D6572      | (77, 101, 104)  |
-| `vao.PNG`   | <img src="/assets/img/2024/01/vao.PNG" width="120"/>   | #636564      | (99, 101, 100)  |
-| `em.PNG`    | <img src="/assets/img/2024/01/em.PNG" width="120"/>    | #656E7A      | (101, 110, 122) |
+| Tên file    | Ảnh                                                              | Mã màu (Hex)   | Decimal         |
+| ----------- | ---------------------------------------------------------------- | -------------- | --------------- |
+| `duong.PNG` | <img alt="img" src="/assets/img/2024/01/duong.PNG" width="120"/> | #4D6572      | (77, 101, 104)  |
+| `vao.PNG`   | <img alt="img" src="/assets/img/2024/01/vao.PNG" width="120"/>   | #636564      | (99, 101, 100)  |
+| `em.PNG`    | <img alt="img" src="/assets/img/2024/01/em.PNG" width="120"/>    | #656E7A      | (101, 110, 122) |
  
 Trên các ảnh có các mã màu dạng Hex/Dec  
 Đi chuyển các mã này sang ASCII xem thử có ý nghĩa gì không nào
