@@ -22,7 +22,7 @@ published: true
 ## Recon & Initial Analysis
 
 Đề cho ta một file zip, cứ giải nén ra thử  
-Đi vào bên trong, ta sẽ thấy 1 file ảnh jpg nữa  
+Ta sẽ thấy 1 file ảnh jpg  
 ![pic.jpg](/assets/img/2024/01/pic.jpg)
 
 
@@ -234,7 +234,7 @@ Lens ID                         : iPhone 7 Plus back dual camera 3.99mm f/1.8
 Ngày tạo ảnh: 30/01/2019  
 Ngày chỉnh sửa file: 30/10/2019 — có thể là lần ảnh được lưu lại hoặc sao chép.  
 Ngày inode bị thay đổi: 25/06/2025 — ảnh đã được di chuyển, phân quyền hoặc rename gần đây.  
-Ngày truy cập gần nhất: 2023 — được mở bởi người dùng hoặc ứng dụng.  
+Ngày truy cập gần nhất: 31/10/2023 — được mở bởi người dùng hoặc ứng dụng.  
 
 
 **Thông số camera lúc chụp**  
@@ -299,9 +299,6 @@ binwalk pic.jpg
 Kết quả
 
 ```text
-sowen@vostro:/mnt/c/Users/quoca/Downloads/carr/car
-$> binwalk pic.jpg
-
 DECIMAL       HEXADECIMAL     DESCRIPTION
 --------------------------------------------------------------------------------
 0             0x0             JPEG image data, JFIF standard 1.01
