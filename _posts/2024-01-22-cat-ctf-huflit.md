@@ -5,6 +5,7 @@ categories: [CTF, Forensics]
 tags: [write-ups, forensics, ctf huflit]
 pin: false
 comments: true
+published: true
 ---
 
 ## Challenge Info
