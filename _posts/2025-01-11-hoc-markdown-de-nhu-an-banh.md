@@ -95,7 +95,7 @@ def hello():
 
 ```python
 def hello():
-  print("Hello, Markdown!")
+    print("Hello, Markdown!")
 ```
 
 ## Trích dẫn (Blockquotes)
@@ -117,16 +117,16 @@ def hello():
 ## Bảng (Tables)
 
 ```markdown
-| Tên   | Vai trò    |
-|------ |----------- |
-| Wen   | Sinh viên  |
-| Anh   | Blogger    |
+| Tên | Vai trò   |
+| --- | --------- |
+| Wen | Sinh viên |
+| Anh | Blogger   |
 ```
 
-| Tên   | Vai trò    |
-|------ |----------- |
-| Wen   | Sinh viên  |
-| Anh   | Blogger    |
+| Tên | Vai trò   |
+| --- | --------- |
+| Wen | Sinh viên |
+| Anh | Blogger   |
 
 
 ## Checklist (nếu dùng GitHub)
@@ -144,3 +144,6 @@ def hello():
 ## Tổng kết
 Markdown giúp nội dung của bạn gọn gàng, rõ ràng và dễ đọc hơn.  
 Dù bạn viết tài liệu, ghi chú học tập hay blog cá nhân, Markdown là công cụ nhỏ mà có võ đấy nha!
+
+---
+

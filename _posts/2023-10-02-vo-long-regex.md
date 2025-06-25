@@ -92,3 +92,5 @@ Bạn có thể vọc ngay tại:
 Regex ban đầu nhìn như ký hiệu ngoài hành tinh, nhưng khi quen rồi thì lại thấy "bén" cực kỳ.  
 Chỉ vài ký tự là bạn có thể lọc log, tìm lỗi, xử lý chuỗi văn bản như một phù thủy của dòng lệnh.  
 Nên... đừng sợ, cứ luyện dần là "lên trình" nhé!  
+
+--- 
