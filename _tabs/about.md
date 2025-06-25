@@ -7,16 +7,18 @@ order: 4
 ---
 
 
-I'm **Tong Nguyen Quoc Anh** — or just **Wen**.  
+Hi there 👋  
+I'm **Wen**  
 Just a student, curious about computers.  
-**Wen0x0** is where I collect what I learn and share what I think.  
+This is where I collect what I learn and share what I think.  
 
 ---
 
 ### Let’s connect
 
-[**Facebook**](https://www.facebook.com/weninthelab) · [**LinkedIn**](https://www.linkedin.com/in/sowenn) · [**Email**](mailto:quocanhtn.work@gmail.com)
+[**Facebook**](https://www.facebook.com/wen0x0) · [**Email**](mailto:quocanhtn.work@gmail.com)
 
 ---
 
-*Appreciate your visit. Stay curious, keep exploring.*
+*Appreciate your visit.*  
+*Stay curious, keep exploring.*  
