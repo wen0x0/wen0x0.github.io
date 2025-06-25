@@ -8,14 +8,15 @@
 - type: facebook
   icon: 'fab fa-facebook'
   url: 'https://www.facebook.com/wen0x0'
-
-# - type: linkedin
-#   icon: 'fab fa-linkedin'   # icons powered by <https://fontawesome.com/>
-#   url:  'https://www.linkedin.com/in/wenvn/'                 
-
+  
 - type: email
   icon: "fas fa-envelope"
   noblank: true # open link in current tab
+# - type: linkedin
+#   icon: 'fab fa-linkedin'   # icons powered by <https://fontawesome.com/>
+#   url:  ''                 
+
+
 
 # - type: rss
 #   icon: "fas fa-rss"
