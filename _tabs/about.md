@@ -7,7 +7,7 @@ order: 4
 ---
 
 
-Hi there 👋  
+## Hi there 👋  
 I'm **Wen**  
 Just a student, curious about computers.  
 This is where I collect what I learn and share what I think.  
