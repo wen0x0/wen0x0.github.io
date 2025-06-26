@@ -6,10 +6,8 @@ order: 4
 
 ---
 
-
-
 I'm **Wen**.  
-Just a regular person, curious about computers.
+Just a normal person, curious about computers.
 
 ---
 
