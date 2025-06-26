@@ -21,8 +21,7 @@ published: true
 
 ## Recon & Initial Analysis
 
-Đề cho ta một file zip, cứ giải nén ra thử  
-Ta sẽ thấy 1 file ảnh jpg  
+Đề cho ta một file zip, cứ giải nén ra thử thì ta sẽ thấy 1 file ảnh jpg  
 ![pic.jpg](/assets/img/2024/01/pic.jpg)
 
 
