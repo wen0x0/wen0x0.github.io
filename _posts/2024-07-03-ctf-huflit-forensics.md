@@ -1288,4 +1288,498 @@ HUFLIT{TRUY_CAP_MAY_GIANG_VIEN_VOI_SHARE_AN_ICMP$_DE_LAY_DAP_AN}
 
 ---
 
+Bổ file đề ra bằng `unzip`, ta có ngay 1 em file `mem` khá múp (~ 3.6GB) =))
+
+```bash
+file mem
+```
+
+```text
+mem: DOS/MBR boot sector, code offset 0x52+2, OEM-ID "NTFS    ", sectors/cluster 8, Media descriptor 0xf8, sectors/track 63, heads 255, hidden sectors 128, dos < 4.0 BootSector (0), FAT (1Y bit by descriptor); NTFS, sectors/track 63, physical drive 0x80, sectors 7573503, $MFT start cluster 262144, $MFTMirror start cluster 2, bytes/RecordSegment 2^(-1*246), clusters/index block 1, serial number 0b4de8f7ade8f33a0; contains bootstrap BOOTMGR
+```
+
+File này là một sector khởi động (boot sector) từ vùng đầu của một ổ đĩa hoặc phân vùng.  
+Dữ liệu boot sector này chứa thông tin quan trọng về cấu trúc phân vùng và được sử dụng khi máy tính khởi động.
+
+Chi tiết thì
+
+| Trường                            | Ý nghĩa                                                                                                                                            |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DOS/MBR boot sector`             | Đây là một boot sector theo định dạng MBR (Master Boot Record), có thể được dùng bởi BIOS để boot vào hệ điều hành.                                |
+| `code offset 0x52+2`              | Mã khởi động (bootstrap code) bắt đầu từ offset `0x52+2 = 0x54` (84 thập phân).                                                                    |
+| `OEM-ID "NTFS    "`               | Chuỗi OEM ID là "NTFS    ", định dạng phân vùng là NTFS. Chuỗi này thường bắt đầu từ offset 0x03.                                                  |
+| `sectors/cluster 8`               | Mỗi cluster chứa 8 sector. Với sector size thường là 512 byte → 1 cluster = 4 KB.                                                                  |
+| `Media descriptor 0xf8`           | Giá trị 0xF8 là descriptor cho ổ cứng chuẩn. (Floppy dùng 0xF0)                                                                                    |
+| `sectors/track 63`                | Số sector trên mỗi track là 63 (chuẩn thông thường trong BIOS CHS geometry).                                                                       |
+| `heads 255`                       | Có 255 đầu đọc/ghi trên mỗi cylinder (CHS geometry chuẩn).                                                                                         |
+| `hidden sectors 128`              | Có 128 sector bị ẩn trước phân vùng này (thường là khoảng không gian chứa MBR hoặc partition table).                                               |
+| `dos < 4.0 BootSector (0)`        | Mã khởi động tương thích với DOS phiên bản dưới 4.0, có thể là flag phân tích.                                                                     |
+| `FAT (1Y bit by descriptor)`      | Có thể đang tham chiếu đến cách nhận diện loại hệ thống file qua Media Descriptor. Tuy nhiên, ở đây định dạng là NTFS.                             |
+| `NTFS`                            | Nhấn mạnh lại hệ thống tập tin là **NTFS** (Windows NT File System).                                                                               |
+| `physical drive 0x80`             | BIOS device number `0x80` — đây là ổ đĩa đầu tiên (primary hard disk).                                                                             |
+| `sectors 7573503`                 | Tổng số sector trong phân vùng này là 7,573,503. Với sector 512 byte → khoảng 3.6 GB.                                                              |
+| `$MFT start cluster 262144`       | `$MFT` (Master File Table) — bảng quản lý tập tin chính bắt đầu tại cluster 262144.                                                                |
+| `$MFTMirror start cluster 2`      | `$MFTMirror` — bản sao dự phòng của `$MFT`, đặt tại cluster 2.                                                                                     |
+| `bytes/RecordSegment 2^(-1*246)`  | Cái này hơi bất thường. Giá trị thông thường là 1024, 2048, 4096… Dạng biểu diễn log 2 có thể là cách phân tích của công cụ. Có khả năng lỗi dịch. |
+| `clusters/index block 1`          | Có 1 cluster trên mỗi index block (dùng cho directory indexing).                                                                                   |
+| `serial number 0b4de8f7ade8f33a0` | Serial number duy nhất của phân vùng (GUID-like), dùng để nhận diện.                                                                               |
+| `contains bootstrap BOOTMGR`      | Có chứa **BOOTMGR**, tức là vùng này có thể khởi động vào Windows loader.                                                                          |
+
+Đây là một phân vùng khởi động NTFS, có thể là ổ `C:\` của một hệ điều hành Windows.  
+Đã chứa BOOTMGR, có khả năng khởi động hệ thống.  
+`$MFT` và `$MFTMirror` được định vị rõ ràng, điều này sẽ giúp kiểm tra/recover dữ liệu nếu có lỗi.  
+Các tham số CHS (sectors/track, heads) là để đảm bảo tương thích BIOS cũ, thường không còn được sử dụng trong hệ thống hiện đại (sử dụng LBA).
+
+Dùng `fsstat` để xem thử thông tin có gì mới không
+
+```bash
+fsstat mem
+```
+
+```text
+FILE SYSTEM INFORMATION
+--------------------------------------------
+File System Type: NTFS
+Volume Serial Number: B4DE8F7ADE8F33A0
+OEM Name: NTFS
+Volume Name: recover
+Version: Windows XP
+
+METADATA INFORMATION
+--------------------------------------------
+First Cluster of MFT: 262144
+First Cluster of MFT Mirror: 2
+Size of MFT Entries: 1024 bytes
+Size of Index Records: 4096 bytes
+Range: 0 - 256
+Root Directory: 5
+
+CONTENT INFORMATION
+--------------------------------------------
+Sector Size: 512
+Cluster Size: 4096
+Total Cluster Range: 0 - 946686
+Total Sector Range: 0 - 7573502
+
+$AttrDef Attribute Values:
+$STANDARD_INFORMATION (16)   Size: 48-72   Flags: Resident
+$ATTRIBUTE_LIST (32)   Size: No Limit   Flags: Non-resident
+$FILE_NAME (48)   Size: 68-578   Flags: Resident,Index
+$OBJECT_ID (64)   Size: 0-256   Flags: Resident
+$SECURITY_DESCRIPTOR (80)   Size: No Limit   Flags: Non-resident
+$VOLUME_NAME (96)   Size: 2-256   Flags: Resident
+$VOLUME_INFORMATION (112)   Size: 12-12   Flags: Resident
+$DATA (128)   Size: No Limit   Flags:
+$INDEX_ROOT (144)   Size: No Limit   Flags: Resident
+$INDEX_ALLOCATION (160)   Size: No Limit   Flags: Non-resident
+$BITMAP (176)   Size: No Limit   Flags: Non-resident
+$REPARSE_POINT (192)   Size: 0-16384   Flags: Non-resident
+$EA_INFORMATION (208)   Size: 8-8   Flags: Resident
+$EA (224)   Size: 0-65536   Flags:
+$LOGGED_UTILITY_STREAM (256)   Size: 0-65536   Flags: Non-resident
+```
+
+**FILE SYSTEM INFORMATION**
+
+| Trường                                     | Ý nghĩa                                                                                                                                |
+| ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
+| **File System Type: NTFS**                 | Xác nhận hệ thống tập tin là NTFS (New Technology File System – của Windows).                                                          |
+| **Volume Serial Number: B4DE8F7ADE8F33A0** | Số nhận dạng duy nhất của volume, trùng với boot sector. Có thể dùng để xác định partition.                                            |
+| **OEM Name: NTFS**                         | Tên OEM đặt trong boot sector, thường là “NTFS    ” trong hệ thống NTFS chuẩn.                                                         |
+| **Volume Name: recover**                   | Tên của ổ đĩa (volume label) là `recover`.                                                                                             |
+| **Version: Windows XP**                    | Phiên bản hệ điều hành ghi format filesystem này là Windows XP – lưu ý là format thôi chứ không có nghĩa hệ điều hành đang dùng là XP. |
+
+**METADATA INFORMATION**
+
+| Trường                                | Ý nghĩa                                                                                                       |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| **First Cluster of MFT: 262144**      | `$MFT` là bảng ghi thông tin về tất cả file – bắt đầu ở cluster 262144.                                       |
+| **First Cluster of MFT Mirror: 2**    | `$MFTMirr` – bản sao của `$MFT` dùng để khôi phục nếu MFT chính bị hỏng.                                      |
+| **Size of MFT Entries: 1024 bytes**   | Mỗi bản ghi trong `$MFT` có kích thước 1024 byte.                                                             |
+| **Size of Index Records: 4096 bytes** | Kích thước bản ghi index trong thư mục, thường là 1 cluster = 4096 byte.                                      |
+| **Range: 0 - 256**                    | Có thể là ID range của system metadata entries, ví dụ Entry 0 là `$MFT`, 5 là thư mục gốc (`Root Directory`). |
+| **Root Directory: 5**                 | Entry ID 5 trong MFT là thư mục gốc (`/`). Trong NTFS, đây là quy ước chuẩn.                                  |
+
+
+**CONTENT INFORMATION**
+
+| Trường                              | Ý nghĩa                                                                     |
+| ----------------------------------- | --------------------------------------------------------------------------- |
+| **Sector Size: 512**                | Mỗi sector có 512 byte.                                                     |
+| **Cluster Size: 4096**              | Mỗi cluster gồm 8 sector → 4096 byte (chuẩn NTFS hiện đại).                 |
+| **Total Cluster Range: 0 - 946686** | Tổng số cluster = 946,687. Tổng dung lượng ổ = 946,687 × 4096B ≈ **3.6 GB** |
+| **Total Sector Range: 0 - 7573502** | Tổng sector = 7,573,503 × 512B = 3.8 GB                                     |
+
+
+**$AttrDef Attribute Values**
+
+Bảng này liệt kê các attribute chuẩn của NTFS – mỗi file là 1 record trong $MFT, và được biểu diễn bởi các attribute.
+
+| Tên                      | Mã (ID)  | Ý nghĩa                                                  | Kích thước | Cờ                  |
+| ------------------------ | -------- | -------------------------------------------------------- | ---------- | ------------------- |
+| `$STANDARD_INFORMATION`  | 16       | Metadata cơ bản: thời gian tạo, quyền, flags             | 48-72      | **Resident**        |
+| `$ATTRIBUTE_LIST`        | 32       | Dùng khi file có nhiều attribute phân tán                | No limit   | **Non-resident**    |
+| `$FILE_NAME`             | 48       | Tên file + metadata nhỏ                                  | 68–578     | **Resident, Index** |
+| `$OBJECT_ID`             | 64       | GUID ID của file (ít gặp)                                | 0–256      | **Resident**        |
+| `$SECURITY_DESCRIPTOR`   | 80       | ACL, owner, SID…                                         | No limit   | **Non-resident**    |
+| `$VOLUME_NAME`           | 96       | Label của ổ đĩa                                          | 2–256      | **Resident**        |
+| `$VOLUME_INFORMATION`    | 112      | Thông tin về volume: version, flags…                     | 12         | **Resident**        |
+| `$DATA`                  | 128      | Dữ liệu chính của file                                   | No limit   | —                   |
+| `$INDEX_ROOT`            | 144      | Dữ liệu chỉ mục của thư mục nhỏ (B+ tree)                | No limit   | **Resident**        |
+| `$INDEX_ALLOCATION`      | 160      | Danh sách cluster chứa index (với thư mục lớn)           | No limit   | **Non-resident**    |
+| `$BITMAP`                | 176      | Bitmap theo dõi index allocation                         | No limit   | **Non-resident**    |
+| `$REPARSE_POINT`         | 192      | Điểm nối lại như symlink, junction                       | 0–16384    | **Non-resident**    |
+| `$EA_INFORMATION`, `$EA` | 208, 224 | Extended Attributes (thường không dùng trên NTFS thường) | 8; 0–65536 | Vary                |
+| `$LOGGED_UTILITY_STREAM` | 256      | Dữ liệu hệ thống phục vụ file consistency                | 0–65536    | **Non-resident**    |
+
+
+Tóm lại:
+
+- Đây là volume NTFS kích thước ~3.6GB, định dạng bởi hệ điều hành (hoặc tool) thuộc thời Windows XP.
+- Volume được đặt tên là recover → có thể là phân vùng phục hồi, forensic hoặc dữ liệu cứu hộ.
+- MFT và metadata là chuẩn NTFS, có thể dễ dàng phân tích bằng fls, istat, icat, mftdump, hoặc analyzeMFT.
+- Có thể truy xuất $MFT, xem cấu trúc file, extract file bị xóa nếu chưa bị overwrite.
+
+Vậy thì dò folder và file thoi nào
+
+```bash
+fls -f ntfs -o 0 mem
+```
+
+```text
+r/r 4-128-1:    $AttrDef
+r/r 8-128-2:    $BadClus
+r/r 8-128-1:    $BadClus:$Bad
+r/r 6-128-4:    $Bitmap
+r/r 7-128-1:    $Boot
+d/d 11-144-4:   $Extend
+r/r 2-128-1:    $LogFile
+r/r 0-128-6:    $MFT
+r/r 1-128-1:    $MFTMirr
+r/r 9-128-8:    $Secure:$SDS
+r/r 9-144-11:   $Secure:$SDH
+r/r 9-144-14:   $Secure:$SII
+r/r 10-128-1:   $UpCase
+r/r 10-128-4:   $UpCase:$Info
+r/r 3-128-3:    $Volume
+d/d 36-144-1:   System Volume Information
+d/- * 0:        thi2
+d/- * 42:       Web
+-/d * 39-144-5: thi2
+V/V 256:        $OrphanFiles
+```
+
+Kết quả trên cho thấy các file hệ thống của NTFS như `$MFT`, `$LogFile`, `$AttrDef`, và cả các thư mục người dùng như `thi2` và `Web`.
+
+Các entry quan trọng
+
+| Entry                                     | Ý nghĩa                                                                                     |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `r/r 0-128-6: $MFT`                       | Bảng Master File Table – trái tim của hệ thống file NTFS.                                   |
+| `r/r 1-128-1: $MFTMirr`                   | Bản sao của MFT, dùng khi bị lỗi.                                                           |
+| `d/- * 0: thi2`                           | **Thư mục gốc** hoặc thư mục đặc biệt được người dùng tạo. Ký hiệu `*` cho biết **bị xóa**. |
+| `d/d 36-144-1: System Volume Information` | Thư mục hệ thống dùng bởi Windows cho các restore point, Indexing, v.v.                     |
+| `V/V 256: $OrphanFiles`                   | Thư mục chứa **các file rời rạc hoặc bị xóa nhưng chưa overwrite** – dùng để khôi phục.     |
+| `d/- * 42: Web`                           | Một thư mục người dùng khác – **đã bị xóa**.                                                |
+
+
+Có 2 bản ghi `thi2`:
+
+```text
+d/- * 0: thi2
+-/d * 39-144-5: thi2
+```
+
+Dùng bản ghi thứ hai vì có inode thật (không phải `0` – thường là `root` hoặc damaged)
+
+```bash
+fls -f ntfs -o 0 mem 39
+```
+
+```
+r/r * 40-128-1: bando.jpg
+r/r * 40-128-3: bando.jpg:com.apple.lastuseddate#PS
+r/r * 40-128-4: bando.jpg:com.apple.metadatakMDItemWhereFroms
+r/r * 40-128-5: bando.jpg:com.apple.metadata_kMDItemUserTags
+r/r * 40-128-6: bando.jpg:com.apple.quarantine
+d/d * 48-144-1: hinh
+r/r * 41-128-1: hublot.jpg
+r/r * 41-128-3: hublot.jpg:com.apple.lastuseddate#PS
+r/r * 41-128-4: hublot.jpg:com.apple.quarantine
+r/r * 42-128-1: khobau.jpg
+r/r * 42-128-3: khobau.jpg:com.apple.lastuseddate#PS
+r/r * 42-128-4: khobau.jpg:com.apple.metadatakMDItemWhereFroms
+r/r * 42-128-5: khobau.jpg:com.apple.metadata_kMDItemUserTags
+r/r * 42-128-6: khobau.jpg:com.apple.quarantine
+r/r * 43-128-1: network.pcap
+r/r * 43-128-3: network.pcap:com.apple.metadatakMDItemWhereFroms
+r/r * 43-128-4: network.pcap:com.apple.quarantine
+r/r * 44-128-1: thi2.zip
+r/r * 45-128-1: thongbao.pdf
+r/r * 45-128-3: thongbao.pdf:AFP_AfpInfo
+r/r * 45-128-4: thongbao.pdf:com.apple.quarantine
+r/r * 46-128-3: thuxanh.rtf
+r/r * 46-128-4: thuxanh.rtf:AFP_AfpInfo
+r/r * 46-128-5: thuxanh.rtf:com.apple.lastuseddate#PS
+r/r * 46-128-6: thuxanh.rtf:com.apple.metadatakMDLabel_7yj6tur34gg767v6joha44wo6q
+r/r * 46-128-7: thuxanh.rtf:com.apple.metadata_kMDItemUserTags
+d/d * 51-144-1: untitled folder
+r/r * 47-128-1: Victory-TwoStepsFromHell-3890867.mp3
+r/r * 47-128-3: Victory-TwoStepsFromHell-3890867.mp3:com.apple.lastuseddate#PS
+r/r * 47-128-4: Victory-TwoStepsFromHell-3890867.mp3:com.apple.metadatakMDItemWhereFroms
+r/r * 47-128-5: Victory-TwoStepsFromHell-3890867.mp3:com.apple.quarantine
+```
+
+Danh sách file chính trong thi2 cần recover
+
+| Inode      | Tên file                       | Ghi chú          |
+| ---------- | ------------------------------ | ---------------- |
+| `40-128-1` | `bando.jpg`                    | Ảnh              |
+| `41-128-1` | `hublot.jpg`                   | Ảnh              |
+| `42-128-1` | `khobau.jpg`                   | Ảnh              |
+| `43-128-1` | `network.pcap`                 | Gói dữ liệu mạng |
+| `44-128-1` | `thi2.zip`                     | File nén         |
+| `45-128-1` | `thongbao.pdf`                 | Tài liệu PDF     |
+| `46-128-3` | `thuxanh.rtf`                  | Văn bản          |
+| `47-128-1` | `Victory-TwoStepsFromHell.mp3` | Nhạc             |
+
+Các file khác như `*:AFP_AfpInfo`, `*:com.apple.*` là **metadata** (không quan trọng với việc recover dữ liệu chính)
+
+Dùng `icat` để recover
+
+```bash
+mkdir -p recovered/thi2
+icat -f ntfs -o 0 mem 40 > recovered/thi2/bando.jpg
+icat -f ntfs -o 0 mem 41 > recovered/thi2/hublot.jpg
+icat -f ntfs -o 0 mem 42 > recovered/thi2/khobau.jpg
+icat -f ntfs -o 0 mem 43 > recovered/thi2/network.pcap
+icat -f ntfs -o 0 mem 44 > recovered/thi2/thi2.zip
+icat -f ntfs -o 0 mem 45 > recovered/thi2/thongbao.pdf
+icat -f ntfs -o 0 mem 46 > recovered/thi2/thuxanh.rtf
+icat -f ntfs -o 0 mem 47 > recovered/thi2/Victory-TwoStepsFromHell.mp3
+```
+
+Có 2 thư mục con là `hinh` inode 48 và `untitled folder` inode 51, nhưng có lẽ để sau
+
+Trong đấy có 1 em file zip là `thi2.zip` nhưng em này cần password T-T
+
+Lảo đảo thì có 1 em file document là `thuxanh.rtf` với nội dung trông khá "bình thường", đọc thì chẳng có nghĩa gì mấy :b
+
+![thuxanh.rtf](/assets/img/2024/01/thuxanh.png)
+
+Dạo quanh một hồi thì có em file `thongbao.pdf`, bên trong chứa một đoạn chữ nhỏ xíu, giấu tít phía góc dưới =.=
+
+![alt text](/assets/img/2024/01/spammimic.png)
+
+> Mở bằng trình đọc PDF nào đó hẳn hoi thì dễ thấy hơn là browser nhé 
+
+[`Spam Mimic`](https://www.spammimic.com/) đơn giản là một tool giúp chuyển đổi 1 đoạn tin thành 1 đoạn trông như là spam và có thể làm ngược lại
+
+Nhớ lại khi nãy em `thuxanh.rtf` có nội dung khá "bình thường"  
+Đem đống đó đi decode bằng [`Spam Mimic`](https://www.spammimic.com/) nào =))  
+
+Kết quả
+
+```text
+Y2FsbCBtZSAwOTAyNjU5MDUw
+```
+
+Theo trực giác của 1 dân chơi mã hóa thì đoạn đấy là base64 encoded đấy =))
+
+```bash
+echo "Y2FsbCBtZSAwOTAyNjU5MDUw" | base64 -d
+```
+
+Kết quả hay đấy
+
+```text
+call me 0902659050
+```
+
+Thế là gọi vào `0902659050` rồi hỏi flag à =))??
+
+Thử đem đoạn trên dùng làm password để extract `thi2.zip` khi nãy thử
+
+Kết quả thì... không khả thi lắm ==
+
+![alt text](/assets/img/2024/01/thi2zip.png)
+
+Loay hoay với cái sđt `0902659050` một hồi thì nhớ lại con điện thoại nokia cũ xì của ông thầy  
+Có bàn phím như này  
+
+![Nokia keypad](/assets/img/2024/01/phone.png)
+
+Dựa theo cách đánh chữ và ký tự trên con phone của thầy thì từ số `0902659050`, ta có thể ra 1 đoạn mới vô nghĩa mà hữu dụng trong bài này =))
+
+```text
+0 9 0 2 6 5 9 0 5 0
++ w + a m j w + j +
+```
+
+`+w+amjw+j+` chính là password để extract `thi2.zip` 
+
+Di chuyển tiếp vào trong `thi2`, ta sẽ thấy 1 tấm hình `thi2.jpg`
+
+![thi2.jpg](/assets/img/2024/01/thi2.jpg)
+
+Dùng `exiftool` check tiếp hình này nào
+
+```bash
+exiftool thi2.jpg
+```
+
+```text
+ExifTool Version Number         : 12.40
+File Name                       : thi2.jpg
+Directory                       : .
+File Size                       : 3.0 MiB
+File Modification Date/Time     : 2018:09:23 13:42:19+07:00
+File Access Date/Time           : 2019:10:31 09:36:05+07:00
+File Inode Change Date/Time     : 2025:06:27 00:02:49+07:00
+File Permissions                : -rwxrwxrwx
+File Type                       : JPEG
+File Type Extension             : jpg
+MIME Type                       : image/jpeg
+Exif Byte Order                 : Big-endian (Motorola, MM)
+Make                            : Apple
+Camera Model Name               : iPhone 7 Plus
+X Resolution                    : 72
+Y Resolution                    : 72
+Resolution Unit                 : inches
+Software                        : 12.0
+Modify Date                     : 2018:09:23 13:42:19
+Y Cb Cr Positioning             : Centered
+Exposure Time                   : 1/2128
+F Number                        : 1.8
+Exposure Program                : Program AE
+ISO                             : 20
+Exif Version                    : 0221
+Date/Time Original              : 2018:09:23 13:42:19
+Create Date                     : 2018:09:23 13:42:19
+Components Configuration        : Y, Cb, Cr, -
+Shutter Speed Value             : 1/2128
+Aperture Value                  : 1.8
+Brightness Value                : 9.892353013
+Exposure Compensation           : 0
+Metering Mode                   : Multi-segment
+Flash                           : Auto, Did not fire
+Focal Length                    : 4.0 mm
+Subject Area                    : 2015 1511 2217 1330
+Run Time Flags                  : Valid
+Run Time Value                  : 4415928790041
+Run Time Scale                  : 1000000000
+Run Time Epoch                  : 0
+Acceleration Vector             : 0.006496704652 -0.9607270367 -0.2691131831
+Sub Sec Time Original           : 723
+Sub Sec Time Digitized          : 723
+Flashpix Version                : 0100
+Color Space                     : Uncalibrated
+Exif Image Width                : 3024
+Exif Image Height               : 4032
+Sensing Method                  : One-chip color area
+Scene Type                      : Directly photographed
+Exposure Mode                   : Auto
+White Balance                   : Auto
+Focal Length In 35mm Format     : 28 mm
+Scene Capture Type              : Standard
+Lens Info                       : 3.99000001-6.6mm f/1.8-2.8
+Lens Make                       : Apple
+Lens Model                      : iPhone 7 Plus back dual camera 3.99mm f/1.8
+GPS Latitude Ref                : North
+GPS Longitude Ref               : East
+GPS Altitude Ref                : Above Sea Level
+GPS Time Stamp                  : 06:42:19
+GPS Speed Ref                   : km/h
+GPS Speed                       : 1.25
+GPS Img Direction Ref           : True North
+GPS Img Direction               : 265.9993284
+GPS Dest Bearing Ref            : True North
+GPS Dest Bearing                : 265.9993284
+GPS Date Stamp                  : 2018:09:23
+GPS Horizontal Positioning Error: 30 m
+Compression                     : JPEG (old-style)
+Thumbnail Offset                : 2206
+Thumbnail Length                : 9219
+Profile CMM Type                : Apple Computer Inc.
+Profile Version                 : 4.0.0
+Profile Class                   : Display Device Profile
+Color Space Data                : RGB
+Profile Connection Space        : XYZ
+Profile Date Time               : 2017:07:07 13:22:32
+Profile File Signature          : acsp
+Primary Platform                : Apple Computer Inc.
+CMM Flags                       : Not Embedded, Independent
+Device Manufacturer             : Apple Computer Inc.
+Device Model                    :
+Device Attributes               : Reflective, Glossy, Positive, Color
+Rendering Intent                : Perceptual
+Connection Space Illuminant     : 0.9642 1 0.82491
+Profile Creator                 : Apple Computer Inc.
+Profile ID                      : ca1a9582257f104d389913d5d1ea1582
+Profile Description             : Display P3
+Profile Copyright               : Copyright Apple Inc., 2017
+Media White Point               : 0.95045 1 1.08905
+Red Matrix Column               : 0.51512 0.2412 -0.00105
+Green Matrix Column             : 0.29198 0.69225 0.04189
+Blue Matrix Column              : 0.1571 0.06657 0.78407
+Red Tone Reproduction Curve     : (Binary data 32 bytes, use -b option to extract)
+Chromatic Adaptation            : 1.04788 0.02292 -0.0502 0.02959 0.99048 -0.01706 -0.00923 0.01508 0.75168
+Blue Tone Reproduction Curve    : (Binary data 32 bytes, use -b option to extract)
+Green Tone Reproduction Curve   : (Binary data 32 bytes, use -b option to extract)
+Image Width                     : 3024
+Image Height                    : 4032
+Encoding Process                : Baseline DCT, Huffman coding
+Bits Per Sample                 : 8
+Color Components                : 3
+Y Cb Cr Sub Sampling            : YCbCr4:2:0 (2 2)
+Run Time Since Power Up         : 1:13:36
+Aperture                        : 1.8
+Image Size                      : 3024x4032
+Megapixels                      : 12.2
+Scale Factor To 35 mm Equivalent: 7.0
+Shutter Speed                   : 1/2128
+Create Date                     : 2018:09:23 13:42:19.723
+Date/Time Original              : 2018:09:23 13:42:19.723
+Thumbnail Image                 : (Binary data 9219 bytes, use -b option to extract)
+GPS Altitude                    : 11.1 m Above Sea Level
+GPS Date/Time                   : 2018:09:23 06:42:19Z
+GPS Latitude                    : 21 deg 2' 49.13" N
+GPS Longitude                   : 105 deg 54' 53.56" E
+Circle Of Confusion             : 0.004 mm
+Field Of View                   : 65.5 deg
+Focal Length                    : 4.0 mm (35 mm equivalent: 28.0 mm)
+GPS Position                    : 21 deg 2' 49.13" N, 105 deg 54' 53.56" E
+Hyperfocal Distance             : 2.07 m
+Light Value                     : 15.1
+Lens ID                         : iPhone 7 Plus back dual camera 3.99mm f/1.8
+```
+
+Theo tên đề bài thì có lẽ nó liên quan đến GPS nhiều hơn nhỉ??
+
+| Trường                   | Giá trị                            |
+| ------------------------ | ---------------------------------- |
+| **GPS Position**         | 21° 2' 49.13" N, 105° 54' 53.56" E |
+| **Địa điểm**             | Trung tâm **Hà Nội**, Việt Nam     |
+| **GPS Altitude**         | 11.1 m trên mực nước biển          |
+| **GPS Speed**            | 1.25 km/h                          |
+| **GPS Img Direction**    | 266° (hướng Tây)                   |
+| **GPS Horizontal Error** | 30 m                               |
+
+![alt text](/assets/img/2024/01/riverside.png)
+
+Đúng là `riverside` thật =))
+
+Thôi thì hash md5 tọa độ lấy flag luon 
+
+```bash
+echo -n "21 deg 2' 49.13\" N, 105 deg 54' 53.56\" E" | md5sum
+```
+
+flag:  
+
+```text
+HUFLIT{f66e45234d4536cb88f12bc2cc95f760}
+```
+
+---
 

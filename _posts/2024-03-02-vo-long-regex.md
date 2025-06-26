@@ -1,6 +1,6 @@
 ---
 title: "Vỡ lòng Regex – Khi bạn muốn làm phù thủy văn bản"
-date: 2024-06-02 20:21:42 +0700
+date: 2024-03-02 20:21:42 +0700
 categories: [Blog]
 tags: [regex]
 pin: false
