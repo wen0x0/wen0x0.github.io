@@ -7,9 +7,9 @@ order: 4
 ---
 
 
-## Hi there 👋  
+
 I'm **Wen**.  
-Just a normal person who’s curious about computers.  
+Just a regular person, curious about computers.
 
 ---
 
