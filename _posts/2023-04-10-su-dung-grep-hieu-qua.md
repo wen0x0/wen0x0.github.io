@@ -1,6 +1,6 @@
 ---
 title: "Sử dụng grep hiệu quả để tìm kiếm văn bản"
-date: 2023-09-10 19:15:00 +0700
+date: 2023-04-10 19:15:00 +0700
 categories: [Blog]
 tags: [grep, cli, regex]
 pin: false
