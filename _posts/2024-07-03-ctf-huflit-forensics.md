@@ -1769,13 +1769,13 @@ Theo tên đề bài thì có lẽ nó liên quan đến GPS nhiều hơn nhỉ?
 
 Đúng là `riverside` thật =))
 
-Thôi thì hash md5 tọa độ lấy flag luon 
+Thôi thì hash md5 tọa độ lấy flag luon nhe
 
 ```bash
 echo -n "21 deg 2' 49.13\" N, 105 deg 54' 53.56\" E" | md5sum
 ```
 
-flag:  
+Flag:  
 
 ```text
 HUFLIT{f66e45234d4536cb88f12bc2cc95f760}
