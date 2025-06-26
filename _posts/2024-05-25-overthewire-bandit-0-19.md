@@ -449,4 +449,5 @@ Vậy là mình vừa hoàn thành 20 level đầu tiên của `Bandit`. Đây l
 Từ level 20 trở đi, thử thách sẽ thiên về tự động hóa, scripting và một chút về mạng. Mình sẽ tiếp tục học dần, vừa làm vừa rút kinh nghiệm.  
 Khi nào rảnh thì mình sẽ viết tiếp bài sau =)))  
 
+
 ---
