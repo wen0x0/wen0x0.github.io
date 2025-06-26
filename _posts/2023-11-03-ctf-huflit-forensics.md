@@ -1282,7 +1282,7 @@ HUFLIT{TRUY_CAP_MAY_GIANG_VIEN_VOI_SHARE_AN_ICMP$_DE_LAY_DAP_AN}
 
 ## Riverside
 
-- **Resource**: [File](/assets/img/2024/01/filemem.zip)
+- **Resource**: [File]([/assets/img/2024/01/filemem.zip](https://8yh843-my.sharepoint.com/:u:/g/personal/tnqa_8yh843_onmicrosoft_com/ESuDPS7AnrhEoHI5gWfKiV0BRbGQBXCuYtpdXV6iPYldyw?e=uP3u16))
 - **Description**:  
   *format flag: HUFLIT{md5(flag)}*
 
