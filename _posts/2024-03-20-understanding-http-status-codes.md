@@ -1,6 +1,6 @@
 ---
 title: "Understanding HTTP Status Codes"
-date: 2023-03-20 19:35:00 +0700
+date: 2024-03-20 19:35:00 +0700
 categories: [Blog, Web]
 tags: [http, web, status code, rest]
 pin: false

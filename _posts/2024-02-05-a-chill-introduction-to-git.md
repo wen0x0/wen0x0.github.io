@@ -1,6 +1,6 @@
 ---
 title: "A Chill Introduction to Git"
-date: 2023-02-05 20:21:42 +0700
+date: 2024-02-05 20:21:42 +0700
 categories: [Blog]
 tags: [git, version control]
 pin: false
