@@ -22,7 +22,7 @@ FILENAME="_posts/$DATE-$SLUG.md"
 # === 5. Generate front matter and content ===
 cat > "$FILENAME" <<EOF
 ---
-title: "$TITLE · "
+title: "$TITLE – "
 date: $DATETIME
 categories: [CTF]
 tags: [write-ups]
