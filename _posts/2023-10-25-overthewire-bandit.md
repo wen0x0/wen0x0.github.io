@@ -1,6 +1,6 @@
 ---
 title: "OverTheWire: Bandit Walkthrough (Level 0 – 19)"
-date: 2023-05-25 17:35:00 +0700
+date: 2023-10-25 17:35:00 +0700
 categories: [CTF]
 tags: [overthewire, bandit, ctf, write-ups, linux, privilege escalation, bash scripting]
 pin: false
