@@ -1,5 +1,5 @@
 ---
-title: "Vỡ lòng Regex - Khi bạn muốn làm phù thủy văn bản"
+title: "Vỡ lòng Regex – Khi bạn muốn làm phù thủy văn bản"
 date: 2023-06-02 20:21:42 +0700
 categories: [Blog]
 tags: [regex]
