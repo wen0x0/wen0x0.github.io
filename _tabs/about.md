@@ -7,7 +7,7 @@ order: 4
 ---
 
 I'm **Wen**.  
-Just a normal person, curious about computers.
+Just a normal person, curious about computers.  
 
 ---
 
