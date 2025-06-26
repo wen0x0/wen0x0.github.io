@@ -20,5 +20,4 @@ This is where I collect what I learn and share what I think.
 
 ---
 
-*Appreciate your visit.*  
-*Stay curious, keep exploring.*  
+*You don't have to be great to start, but you have to start to be great.*
