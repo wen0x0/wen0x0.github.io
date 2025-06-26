@@ -84,7 +84,7 @@ Ta sẽ vào check hex byte xem và search thử các key string như: flag, ctf
 ![alt text](/assets/img/2024/01/image.png)
 
 Vậy ra search với key "flag" ta sẽ thấy được 1 string đáng nghi  
-Dùng `strings` + `grep` để copy string đó ra nào  
+Dùng `strings` + `grep` để dễ copy string đó hơn  
 
 ```bash
 strings Cat.jpg | grep flag
@@ -1584,7 +1584,7 @@ Kết quả
 Y2FsbCBtZSAwOTAyNjU5MDUw
 ```
 
-Theo trực giác của 1 dân chơi mã hóa thì đoạn đấy là base64 encoded đấy =))
+Theo trực giác của 1 dân chơi mã hóa thì đoạn đấy là Base64 encoded đấy =))
 
 ```bash
 echo "Y2FsbCBtZSAwOTAyNjU5MDUw" | base64 -d
