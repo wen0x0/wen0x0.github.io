@@ -1,5 +1,5 @@
 ---
-title: "CTF HUFLIT · Cat"
+title: "CTF HUFLIT – Cat"
 date: 2024-01-22 23:10:32 +0700
 categories: [CTF, Forensics]
 tags: [write-ups, forensics, ctf huflit, ctf]
