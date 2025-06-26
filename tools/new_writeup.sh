@@ -69,4 +69,4 @@ published: false
 - ...
 EOF
 
-echo "New write-up created at: $POST_FILE"
+echo "New write-up created!"

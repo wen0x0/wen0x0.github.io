@@ -2,7 +2,7 @@
 title: "CTF HUFLIT · Carr"
 date: 2024-01-23 01:32:05 +0700
 categories: [CTF, Forensics]
-tags: [write-ups, forensics, ctf huflit]
+tags: [write-ups, forensics, ctf huflit, ctf]
 pin: false
 comments: false
 published: true
