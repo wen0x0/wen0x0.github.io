@@ -9,8 +9,7 @@ order: 4
 
 ## Hi there 👋  
 I'm **Wen**.  
-Just a student, curious about computers.  
-This is where I collect what I learn and share what I think.  
+Just a normal person who’s curious about computers.  
 
 ---
 
