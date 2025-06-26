@@ -1,5 +1,5 @@
 ---
-title: "CTF HUFLIT – Forensics Write-ups"
+title: "CTF HUFLIT – Forensics"
 date: 2023-11-03 23:10:32 +0700
 categories: [CTF, Forensics]
 tags: [write-ups, forensics, ctf huflit, ctf]
