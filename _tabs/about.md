@@ -7,7 +7,7 @@ order: 4
 ---
 
 I'm **Wen**.  
-Just a normal person, curious about computers.  
+Just a person, curious about computers.  
 
 ---
 
@@ -17,4 +17,4 @@ Just a normal person, curious about computers.
 
 ---
 
-*"You don't have to be great to start, but you have to start to be great"*
+*You don't have to be great to start, but you have to start to be great*

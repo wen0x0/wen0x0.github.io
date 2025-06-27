@@ -25,7 +25,7 @@ cat > "$FILENAME" <<EOF
 title: "$TITLE – "
 date: $DATETIME
 categories: [CTF]
-tags: [write-ups]
+tags: [write-ups, ctf]
 pin: false
 comments: false
 published: false
