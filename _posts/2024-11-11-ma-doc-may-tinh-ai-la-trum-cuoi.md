@@ -12,7 +12,7 @@ published: true
 
 Cuộc sống công nghệ thật tuyệt… cho đến khi máy tính bỗng chậm rì, quạt kêu vù vù, hoặc đầy quảng cáo nhảm. Đó có thể là do **malware (mã độc)** – những kẻ phá hoại vô hình luôn rình rập.
 
-Hãy cùng khám phá **các loại malware phổ biến nhất** để biết kẻ thù nào nguy hiểm nhất với bạn nhé.
+Hãy cùng khám phá **các loại malware phổ biến nhất** để biết kẻ thù nào nguy hiểm nhất nha.
 
 ---
 
@@ -318,6 +318,6 @@ Thế giới malware **muôn hình vạn trạng**. Để tự bảo vệ:
 - [x] Không cài crack lung tung  
 - [x] Luôn backup dữ liệu
 
-Hy vọng bài viết giúp bạn hiểu hơn về **các sát thủ vô hình** này. Hãy share cho bạn bè để cùng cảnh giác nhé!
+Hy vọng bài viết giúp bạn nắm tí kiến thức về **các sát thủ vô hình** này để sau này còn biết ai đang phá hoại máy tính của mình nhé.
 
 ---
