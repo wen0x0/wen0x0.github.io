@@ -8,11 +8,9 @@ comments: false
 published: true
 ---
 
-# Máy tính của bạn có đang bị "nhiễm độc"?
+Cuộc sống công nghệ thật tuyệt… cho đến khi máy tính bỗng chậm rì, quạt kêu vù vù, hoặc đầy quảng cáo nhảm. Đó có thể là do **malware (mã độc)** – những kẻ phá hoại vô hình luôn rình rập. 
 
-Cuộc sống công nghệ thật tuyệt… cho đến khi máy tính bỗng chậm rì, quạt kêu vù vù, hoặc đầy quảng cáo nhảm. Đó có thể là do **malware (mã độc)** – những kẻ phá hoại vô hình luôn rình rập.
-
-Hãy cùng khám phá **các loại malware phổ biến nhất** để biết kẻ thù nào nguy hiểm nhất nha.
+Hãy cùng khám phá **các loại malware** để biết kẻ nào nguy hiểm nhất nha.
 
 ---
 
