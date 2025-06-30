@@ -593,7 +593,7 @@ Ryuk enumerate network shares bằng `WNetOpenEnumW()` và `WNetEnumResourceA()`
 
 ## Yara Rule
 
-```yara
+```text
 rule Ryuk
 {
     meta:
