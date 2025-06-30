@@ -5,7 +5,7 @@ categories: [Notes, Windows]
 tags: [windows 11, process]
 pin: false
 comments: false
-published: false
+published: true
 ---
 
 ## Introduction
