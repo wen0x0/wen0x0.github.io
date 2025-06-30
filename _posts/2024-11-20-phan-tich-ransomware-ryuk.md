@@ -133,7 +133,7 @@ Trước khi dropper thoát, nó truyền đường dẫn của mình cho execut
 Ryuk sử dụng registry key kinh điển để đạt được persistence.  
 Nó tạo một giá trị mới với tên là `"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run\svchos"` và dữ liệu được đặt thành đường dẫn executable.
 
-Lệnh đầy đủ trong mẫu của tôi là:
+Lệnh đầy đủ trong mẫu của mình là:
 
 ```cmd
 C:\Windows\System32\cmd.exe /C REG ADD "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "svchos" /t REG_SZ /d "C:\users\Public\oxrCPDa.exe" /f
@@ -260,7 +260,7 @@ Chúng ta có thể sử dụng debugger để lấy các tên này thay vì rev
 
 Ryuk có một danh sách dài các service và process định sẵn để "thanh lý" bằng `net stop` và `taskkill /IM` tương ứng.
 
-#### Danh sách Services:
+#### Danh sách Services
 - Acronis VSS Provider
 - Enterprise Client Service
 - Sophos Agent
@@ -443,7 +443,7 @@ Ryuk có một danh sách dài các service và process định sẵn để "tha
 - KAVFS
 - mfefire
 
-#### Danh sách Processes:
+#### Danh sách Processes
 - zoolz.exe
 - agntsvc.exe
 - dbeng50.exe
