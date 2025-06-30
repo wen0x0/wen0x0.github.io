@@ -1270,3 +1270,5 @@ Hiểu rõ về các process hệ thống Windows 11 là kỹ năng quan trọng
 7. **Document baselines** - Biết performance bình thường để identify issues nhanh hơn
 
 Việc nắm vững kiến thức về các process này sẽ giúp bạn trở thành một Windows power user hoặc system administrator hiệu quả hơn, có khả năng troubleshoot problems nhanh chóng và maintain hệ thống ổn định.
+
+---
