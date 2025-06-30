@@ -307,7 +307,7 @@ Chỉ vài dòng Python cũng tạo ra keylogger nguy hiểm.
 
 ---
 
-## Kết luận
+## Conclusion
 
 Thế giới malware **muôn hình vạn trạng**. Để tự bảo vệ:
 
