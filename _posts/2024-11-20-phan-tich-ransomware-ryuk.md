@@ -58,7 +58,7 @@ Dropper này khôn khéo như một tên trộm có kinh nghiệm. Đầu tiên,
 
 ![Dropper](/assets/img/2024/10/dropper.png)
 
-![Dropper in C](dropperc.png)
+![Dropper in C](/assets/img/2024/10/dropperc.png)
 
 
 
