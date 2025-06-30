@@ -1210,41 +1210,41 @@ wmic service get Name,State,StartMode,ProcessId
 ## Best Practices cho System Administrators
 
 ### Daily Monitoring
-1. **Check Task Manager performance graphs**
-2. **Monitor Event Logs for errors**
-3. **Review high resource usage processes**
-4. **Check system temperatures và fan speeds**
+1. **Kiểm tra biểu đồ hiệu suất trong Task Manager**
+2. **Theo dõi Event Logs xem có lỗi không**
+3. **Xem các tiến trình sử dụng nhiều tài nguyên**
+4. **Kiểm tra nhiệt độ hệ thống và tốc độ quạt**
 
 ### Weekly Maintenance
-1. **Full system antivirus scan**
-2. **Disk cleanup và defragmentation**
-3. **Windows Update check**
-4. **Registry cleanup (với caution)**
+1. **Quét virus toàn bộ hệ thống**
+2. **Dọn dẹp đĩa và chống phân mảnh**
+3. **Kiểm tra Windows Update**
+4. **Dọn dẹp registry (cẩn thận)**
 
 ### Monthly Reviews
-1. **Analyze performance trends**
-2. **Review installed programs**
-3. **Check startup programs**
-4. **Update drivers và firmware**
+1. **Phân tích xu hướng hiệu suất**
+2. **Xem lại các chương trình đã cài**
+3. **Kiểm tra các chương trình khởi động**
+4. **Cập nhật driver và firmware**
 
 ### Emergency Response
 1. **High CPU/Memory usage**:
-   - Identify problematic process
-   - Check for malware
-   - Restart services if safe
-   - Reboot as last resort
+   - Xác định tiến trình gây ra
+   - Kiểm tra malware
+   - Restart service nếu an toàn
+   - Khởi động lại máy nếu cần
 
 2. **System unresponsive**:
    - Ctrl + Alt + Del
-   - Task Manager > End task
-   - Safe Mode boot
-   - System Restore
+   - Mở Task Manager > End task
+   - Khởi động Safe Mode
+   - System Restore (Phục hồi hệ thống)
 
 3. **Suspected malware**:
-   - Disconnect from network
-   - Boot from antivirus rescue disk
-   - Full system scan
-   - Consider system restore/reset
+   - Ngắt kết nối mạng
+   - Boot bằng antivirus rescue disk
+   - Quét toàn bộ hệ thống
+   - Cân nhắc restore/reset hệ điều hành
 
 ## Kết luận
 
