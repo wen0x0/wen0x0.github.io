@@ -1,7 +1,7 @@
 ---
 title: "Phân tích Ryuk Ransomware: Sự tinh vi trong từng dòng code"
 date: 2024-11-20 02:23:52 +0700
-categories: [Blog, Malware]
+categories: [Notes, Malware]
 tags: [ryuk, ransomware, malware, cybersecurity, reverse engineering]
 pin: false
 comments: false

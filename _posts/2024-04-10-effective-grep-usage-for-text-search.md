@@ -1,7 +1,7 @@
 ---
 title: "Effective Grep Usage for Text Search"
 date: 2024-04-10 19:15:00 +0700
-categories: [Blog]
+categories: [Notes]
 tags: [grep, cli, regex]
 pin: false
 comments: true

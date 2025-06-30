@@ -1,7 +1,7 @@
 ---
 title: "Malware 101: Ai là trùm cuối trong thế giới mã độc?"
 date: 2024-11-11 02:23:52 +0700
-categories: [Blog, Cybersecurity, Malware]
+categories: [Notes, Cybersecurity, Malware]
 tags: [malware, cybersecurity]
 pin: false
 comments: false
