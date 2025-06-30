@@ -1,7 +1,7 @@
 ---
 title: "Understanding HTTP Methods"
 date: 2024-01-02 17:35:00 +0700
-categories: [Blog]
+categories: [Notes]
 tags: [http, web, rest, api, method]
 pin: false
 comments: true
