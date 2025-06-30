@@ -1,7 +1,7 @@
 ---
 title: "A Chill Introduction to Git"
 date: 2024-02-05 20:21:42 +0700
-categories: [Blog]
+categories: [Notes]
 tags: [git, version control]
 pin: false
 comments: true
