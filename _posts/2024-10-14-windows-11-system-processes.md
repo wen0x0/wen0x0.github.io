@@ -8,9 +8,7 @@ comments: false
 published: false
 ---
 
-# Danh sách đầy đủ và chi tiết các Process hệ thống Windows 11
-
-## Giới thiệu
+## Introduction
 
 Windows 11 chạy hàng trăm process khác nhau để duy trì hoạt động của hệ thống. Bài viết này cung cấp danh sách chi tiết và đầy đủ nhất về tất cả các process hệ thống, giúp bạn hiểu rõ chức năng, mức độ quan trọng và cách quản lý chúng.
 
