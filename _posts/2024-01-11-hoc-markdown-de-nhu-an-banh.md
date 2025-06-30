@@ -1,7 +1,7 @@
 ---
 title: "Học Markdown dễ như ăn bánh??"
 date: 2024-01-11 22:53:17 +0700
-categories: [Blog]
+categories: [Notes]
 tags: [markdown]
 pin: false
 comments: true
