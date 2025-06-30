@@ -1,5 +1,5 @@
 ---
-title: "Phân Tích Ransomware Ryuk"
+title: "Phân tích Ryuk Ransomware: Sự tinh vi trong từng dòng code"
 date: 2024-11-20 02:23:52 +0700
 categories: [Blog, Malware]
 tags: [ryuk, ransomware, malware, cybersecurity, reverse engineering]
@@ -615,9 +615,10 @@ rule Ryuk
 
 ## Resources
 
-- [Deep Analysis of Ryuk Ransomware - n1ghtw0lf](https://n1ght-w0lf.github.io/malware%20analysis/ryuk-ransomware/)
+
 - [Malwarebytes - Threat Spotlight: The Curious Case of Ryuk Ransomware](https://blog.malwarebytes.com/threat-spotlight/2019/12/threat-spotlight-the-curious-case-of-ryuk-ransomware/)
 - [Check Point Research - Ryuk Ransomware Targeted Campaign Break](https://research.checkpoint.com/2018/ryuk-ransomware-targeted-campaign-break/)
+- [Deep Analysis of Ryuk Ransomware - n1ghtw0lf](https://n1ght-w0lf.github.io/malware%20analysis/ryuk-ransomware/)
 - [ANY.RUN - Ryuk Sample Analysis](https://app.any.run/tasks/81eaa3cf-eb75-411f-adba-b09472927155/)
 - [Microsoft Docs - Event 4672](https://docs.microsoft.com/en-us/windows/security/threat-protection/auditing/event-4672)
 - [CodeProject - Obtain the plain text session key using CryptoAPI](https://www.codeproject.com/Articles/1658/Obtain-the-plain-text-session-key-using-CryptoAPI)
