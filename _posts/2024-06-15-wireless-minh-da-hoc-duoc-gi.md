@@ -1,5 +1,5 @@
 ---
-title: "Wireless - Cuộc cách mạng không dây đã thay đổi thế giới như thế nào?"
+title: "Wireless – Mình đã học được gì?"
 date: 2024-06-15 19:25:48 +0700
 categories: [Notes, Networking]
 tags: [wireless, wifi, bluetooth, 5G, networking, radio frequency]
