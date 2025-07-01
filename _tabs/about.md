@@ -11,9 +11,7 @@ Just a person, curious about computers.
 
 ---
 
-Here’s my personal library if you’re interested.
-
-[WenLib](https://wen0x0.github.io/wenlib/)
+Here’s my personal [library](https://wen0x0.github.io/wenlib/) if you’re interested.
 
 ---
 
