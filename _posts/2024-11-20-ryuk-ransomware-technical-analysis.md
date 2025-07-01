@@ -591,6 +591,10 @@ Ryuk enumerate network shares bằng `WNetOpenEnumW()` và `WNetEnumResourceA()`
 ### Registry
 - `HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run`
 
+### Emails
+- WayneEvenson@protonmail[.]com
+- WayneEvenson@tutanota[.]com
+
 ## Yara Rule
 
 ```text
