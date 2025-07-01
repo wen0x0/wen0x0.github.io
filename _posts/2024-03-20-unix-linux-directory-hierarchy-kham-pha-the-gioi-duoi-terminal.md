@@ -1,5 +1,5 @@
 ---
-title: "Unix/Linux Directory Hierarchy: Khám Phá Thế Giới Dưới Terminal"
+title: "Unix/Linux Directory Hierarchy: Khám phá thế giới dưới Terminal"
 date: 2024-03-20 19:15:00 +0700
 categories: [Notes]
 tags: [linux, unix, filesystem, directories, system-administration]

@@ -142,7 +142,6 @@ def hello():
 - [ ] Đăng bài
 
 ## Tổng kết
-
 Markdown giúp nội dung của bạn gọn gàng, rõ ràng và dễ đọc hơn.  
 Dù bạn viết tài liệu, ghi chú học tập hay blog cá nhân, Markdown là công cụ nhỏ mà có võ đấy nha!
 

@@ -8,8 +8,6 @@ comments: false
 published: true
 ---
 
-# HTTP Methods - Các phương thức giao tiếp giữa Client và Server
-
 HTTP (HyperText Transfer Protocol) là giao thức nền tảng của World Wide Web, định nghĩa cách thức client (trình duyệt web, ứng dụng mobile) và server (máy chủ web) giao tiếp với nhau. Trong bài viết này, chúng ta sẽ tìm hiểu chi tiết về các HTTP Methods - những "động từ" mô tả hành động mà client muốn thực hiện với tài nguyên trên server.
 
 ## HTTP Method là gì?
