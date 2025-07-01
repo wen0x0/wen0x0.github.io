@@ -1,5 +1,5 @@
 ---
-title: "Regex: Nghệ thuật của những kẻ \"Masochist\" và cách để không \"phát điên\""
+title: "Regex: Nghệ thuật của những kẻ \"masochist\" và cách để không \"phát điên\""
 date: 2024-03-02 20:21:42 +0700
 categories: [Notes]
 tags: [regex]

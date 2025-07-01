@@ -1,5 +1,5 @@
 ---
-title: "Grep – Vũ khí bí mật để đào xới File Log"
+title: "Grep – Bùa hộ mệnh khi log quá dài"
 date: 2024-04-10 19:15:00 +0700
 categories: [Notes, Linux]
 tags: [linux, command line, grep, regex, text processing]
