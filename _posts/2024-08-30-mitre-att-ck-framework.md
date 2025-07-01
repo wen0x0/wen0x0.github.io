@@ -2,7 +2,7 @@
 title: "Tìm hiểu về MITRE ATT&CK Framework"
 date: 2024-08-30 19:25:48 +0700
 categories: [Notes, Cybersecurity]
-tags: [MITRE ATT&CK, cybersecurity, blue team, red team]
+tags: [mitre att&ck, cybersecurity, blue team, red team]
 pin: false
 comments: false
 published: true
