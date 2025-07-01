@@ -11,6 +11,12 @@ Just a person, curious about computers.
 
 ---
 
+Here’s my personal library if you’re interested.
+
+[WenLib](https://wen0x0.github.io/wenlib/)
+
+---
+
 ### Let’s connect
 
 [**Facebook**](https://www.facebook.com/wen0x0) · [**Email**](mailto:weninthelab@gmail.com)
