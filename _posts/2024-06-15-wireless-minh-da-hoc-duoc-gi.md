@@ -296,7 +296,7 @@ Xử lý dữ liệu gần nguồn thay vì gửi về cloud, giảm latency và
 - Carbon footprint optimization trong network design
 - Sustainable materials cho wireless equipment
 
-## Conclusion
+## Kết luận
 
 Công nghệ wireless đã đi một chặng đường dài từ những chiếc radio đầu tiên đến mạng 5G hiện tại. Chúng ta đã chứng kiến sự tiến hóa từ 2G "chỉ gọi được điện thoại" đến 5G "kết nối mọi thứ". 
 

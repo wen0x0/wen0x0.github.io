@@ -612,9 +612,9 @@ rule Ryuk
         5 of them
 }
 ```
+> Yara rule này mình lấy từ N1ghtW0lf nhé
 
-## Resources
-
+## Resources tham khảo
 
 - [Malwarebytes - Threat Spotlight: The Curious Case of Ryuk Ransomware](https://blog.malwarebytes.com/threat-spotlight/2019/12/threat-spotlight-the-curious-case-of-ryuk-ransomware/)
 - [Check Point Research - Ryuk Ransomware Targeted Campaign Break](https://research.checkpoint.com/2018/ryuk-ransomware-targeted-campaign-break/)
@@ -623,7 +623,7 @@ rule Ryuk
 - [Microsoft Docs - Event 4672](https://docs.microsoft.com/en-us/windows/security/threat-protection/auditing/event-4672)
 - [CodeProject - Obtain the plain text session key using CryptoAPI](https://www.codeproject.com/Articles/1658/Obtain-the-plain-text-session-key-using-CryptoAPI)
 
-## Conclusion
+## Kết luận
 
 Ryuk không chỉ là một ransomware đơn thuần mà là một "tác phẩm nghệ thuật" của tội phạm mạng - được thiết kế tỉ mỉ, thực thi chính xác và có hiệu quả tàn phá khủng khiếp. Sự phối hợp giữa Emotet, TrickBot và Ryuk tạo nên một chuỗi tấn công hoàn chỉnh có thể làm tê liệt toàn bộ hạ tầng IT của một tổ chức.
 

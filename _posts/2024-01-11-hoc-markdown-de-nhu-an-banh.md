@@ -1,5 +1,5 @@
 ---
-title: "Học Markdown dễ như ăn bánh??"
+title: "Học Markdown dễ như ăn bánh?"
 date: 2024-01-11 22:53:17 +0700
 categories: [Notes]
 tags: [markdown]
@@ -142,6 +142,7 @@ def hello():
 - [ ] Đăng bài
 
 ## Tổng kết
+
 Markdown giúp nội dung của bạn gọn gàng, rõ ràng và dễ đọc hơn.  
 Dù bạn viết tài liệu, ghi chú học tập hay blog cá nhân, Markdown là công cụ nhỏ mà có võ đấy nha!
 

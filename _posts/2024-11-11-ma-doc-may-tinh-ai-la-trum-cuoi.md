@@ -307,7 +307,7 @@ Chỉ vài dòng Python cũng tạo ra keylogger nguy hiểm.
 
 ---
 
-## Conclusion
+## Kết luận
 
 Thế giới malware **muôn hình vạn trạng**. Để tự bảo vệ:
 
@@ -316,6 +316,6 @@ Thế giới malware **muôn hình vạn trạng**. Để tự bảo vệ:
 - [x] Không cài crack lung tung  
 - [x] Luôn backup dữ liệu
 
-Hy vọng bài viết giúp bạn nắm tí kiến thức về **các sát thủ vô hình** này để sau này còn biết ai đang phá hoại máy tính của mình nhé.
+Hy vọng bài viết giúp bạn nắm tí kiến thức về **các sát thủ vô hình** này để còn biết được "ai" đang ẩn náu phá hoại máy tính của mình nhé.
 
 ---

@@ -442,7 +442,7 @@ ssh bandit19@bandit.labs.overthewire.org -p 2220 cat /etc/bandit_pass/bandit19
 
 ---
 
-## Conclusion
+## Kết luận
 
 Vậy là mình vừa hoàn thành 20 level đầu tiên của `Bandit`. Đây là chặng đường giúp mình làm quen với Linux command line, hiểu thêm về file permission, encoding, pipe, redirect, cũng như trải nghiệm các công cụ như `find`, `nc`, `openssl`, `tar`, `gzip`, ...
 

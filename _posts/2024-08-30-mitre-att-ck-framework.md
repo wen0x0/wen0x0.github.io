@@ -1,5 +1,5 @@
 ---
-title: "Tìm hiểu về MITRE ATT&CK Framework"
+title: "MITRE ATT&CK: Chiếc la bàn định hướng cho phân tích tấn công"
 date: 2024-08-30 19:25:48 +0700
 categories: [Notes, Cybersecurity]
 tags: [mitre att&ck, cybersecurity, blue team, red team]
