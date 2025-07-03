@@ -91,7 +91,7 @@ bytes: 1234
 ### 3. **Analytics Engine - Động Cơ Phân Tích**
 
 **Rule-based Detection**: Sử dụng các quy tắc định trước để phát hiện threats. Ví dụ:
-```bash
+```text
 IF failed_login_attempts > 5 
 AND time_window < 5_minutes 
 AND source_ip = external 
