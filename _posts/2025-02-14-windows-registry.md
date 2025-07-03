@@ -5,7 +5,7 @@ categories: [Notes, Windows, Registry]
 tags: [registry, windows, regedit, troubleshooting, optimization]
 pin: false
 comments: false
-published: false
+published: true
 ---
 
 Nếu Windows là một con người, thì Registry chính là bộ não của nó - nơi lưu trữ mọi kí ức, sở thích, thói quen, và cả những bí mật tối tăm nhất. Và giống như việc mổ não người, việc "mổ" Registry cũng có thể cứu mạng... hoặc biến máy tính thành một chiếc "gạch" đắt tiền.

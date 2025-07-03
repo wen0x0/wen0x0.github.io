@@ -5,7 +5,7 @@ categories: [Notes, Windows, Cybersecurity, Forensics]
 tags: [event logs, windows, logging, troubleshooting, forensics]
 pin: false
 comments: false
-published: false
+published: true
 ---
 
 Nếu bạn từng tự hỏi Windows làm gì khi bạn không nhìn, thì Windows Event Logs chính là cuốn nhật ký bí mật mà nó ghi chép mọi thứ. Từ việc bạn đăng nhập lúc 3 giờ sáng để chơi game, đến lúc máy tính quyết định "tự sướng" bằng cách restart giữa buổi họp quan trọng - tất cả đều được ghi lại một cách tỉ mỉ như một thám tử tư.
