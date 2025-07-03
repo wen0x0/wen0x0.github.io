@@ -1,7 +1,7 @@
 ---
 title: "Windows Event Logs: Cuốn nhật ký của Windows"
 date: 2025-01-05 22:50:41 +0700
-categories: [Notes, Windows, Event Logs]
+categories: [Notes, Windows, Logs]
 tags: [event logs, windows, logging, troubleshooting, forensics]
 pin: false
 comments: false
