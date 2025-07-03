@@ -1,7 +1,7 @@
 ---
 title: "Ryuk Ransomware Technical Analysis"
 date: 2024-11-20 02:23:52 +0700
-categories: [Notes, Malware, Reverse Engineering]
+categories: [Notes, Cybersecurity, Malware, Reverse Engineering]
 tags: [ryuk, ransomware, malware, cybersecurity, reverse engineering]
 pin: false
 comments: false

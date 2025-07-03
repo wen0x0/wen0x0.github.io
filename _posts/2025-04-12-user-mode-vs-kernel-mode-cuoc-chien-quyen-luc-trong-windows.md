@@ -1,7 +1,7 @@
 ---
 title: "User Mode vs Kernel Mode – Cuộc chiến quyền lực trong Windows"
 date: 2025-04-12 22:50:41 +0700
-categories: [Notes, System Architecture, Windows]
+categories: [Notes, Windows]
 tags: [windows, user mode, kernel mode, subsystems, operating systems, systems programming]
 pin: false
 comments: false

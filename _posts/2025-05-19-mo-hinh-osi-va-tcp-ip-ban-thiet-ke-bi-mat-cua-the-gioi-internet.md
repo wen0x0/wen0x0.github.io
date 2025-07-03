@@ -1,7 +1,7 @@
 ---
-title: "OSI & TCP/IP: Bản đồ giải mã Internet"
+title: "Mô hình OSI và TCP/IP: Bản thiết kế bí mật của thế giới Internet"
 date: 2025-05-19 22:50:41 +0700
-categories: [Notes, Networking, Protocol]
+categories: [Notes, Networking]
 tags: [osi, tcp/ip, network architecture, networking]
 pin: false
 comments: false
