@@ -193,7 +193,41 @@
 // .highlight .bp { color: #ffb86c; }
 // .highlight .vc, .highlight .vg, .highlight .vi { color: #f8f8f2; }
 
-/* Monokai Theme */
+// /* Monokai Theme */
+// .highlight {
+//   background: #272822;
+//   color: #f8f8f2;
+//   border-radius: 6px;
+//   padding: 1rem;
+//   overflow-x: auto;
+//   font-family: 'Fira Code', monospace;
+// }
+
+// .highlight .c { color: #75715e; font-style: italic; }
+// .highlight .k { color: #f92672; }
+// .highlight .o { color: #f92672; }
+// .highlight .cm { color: #75715e; font-style: italic; }
+// .highlight .cp { color: #f92672; }
+// .highlight .nt { color: #66d9ef; }
+// .highlight .s { color: #e6db74; }
+// .highlight .dl { color: #e6db74; }
+// .highlight .na { color: #a6e22e; }
+// .highlight .nb { color: #f8f8f2; }
+// .highlight .nc { color: #a6e22e; }
+// .highlight .no { color: #fd971f; }
+// .highlight .nd { color: #a6e22e; }
+// .highlight .ni { color: #f92672; }
+// .highlight .ne { color: #f92672; }
+// .highlight .nf { color: #a6e22e; }
+// .highlight .nl { color: #f8f8f2; }
+// .highlight .nn { color: #f8f8f2; }
+// .highlight .nv { color: #f8f8f2; }
+// .highlight .m { color: #ae81ff; }
+// .highlight .s1, .highlight .s2 { color: #e6db74; }
+// .highlight .bp { color: #f8f8f2; }
+// .highlight .vc, .highlight .vg, .highlight .vi { color: #f8f8f2; }
+
+/* Monokai Theme (Extended Full Detail) */
 .highlight {
   background: #272822;
   color: #f8f8f2;
@@ -203,29 +237,157 @@
   font-family: 'Fira Code', monospace;
 }
 
-.highlight .c { color: #75715e; font-style: italic; }
-.highlight .k { color: #f92672; }
-// .highlight .o { color: #f92672; }
-.highlight .o { color: #fff; }
-.highlight .cm { color: #75715e; font-style: italic; }
-.highlight .cp { color: #f92672; }
-.highlight .nt { color: #66d9ef; }
-.highlight .s { color: #e6db74; }
-.highlight .dl { color: #e6db74; }
-.highlight .na { color: #a6e22e; }
-.highlight .nb { color: #f8f8f2; }
-.highlight .nc { color: #a6e22e; }
-.highlight .no { color: #fd971f; }
-.highlight .nd { color: #a6e22e; }
-.highlight .ni { color: #f92672; }
-.highlight .ne { color: #f92672; }
-.highlight .nf { color: #a6e22e; }
-.highlight .nl { color: #f8f8f2; }
-.highlight .nn { color: #f8f8f2; }
-.highlight .nv { color: #f8f8f2; }
-.highlight .m { color: #ae81ff; }
-.highlight .s1, .highlight .s2 { color: #e6db74; }
-.highlight .bp { color: #f8f8f2; }
-.highlight .vc, .highlight .vg, .highlight .vi { color: #f8f8f2; }
+/* Comments */
+.highlight .c,
+.highlight .ch,
+.highlight .cd,
+.highlight .cm,
+.highlight .cpf,
+.highlight .c1,
+.highlight .cs {
+  color: #75715e;
+  font-style: italic;
+}
+
+/* Generic Prompt */
+.highlight .gp {
+  color: #75715e;
+}
+
+/* Errors */
+.highlight .err {
+  color: #f8f8f2;
+  background-color: #f92672;
+}
+
+/* Keywords */
+.highlight .k,
+.highlight .kn,
+.highlight .kp,
+.highlight .kr,
+.highlight .kv,
+.highlight .kc,
+.highlight .kd {
+  color: #f92672;
+}
+
+/* Keyword Type */
+.highlight .kt {
+  color: #66d9ef;
+}
+
+/* Operators */
+.highlight .o,
+.highlight .ow {
+  color: #f92672;
+}
+
+/* Punctuation */
+.highlight .p,
+.highlight .pi {
+  color: #f8f8f2;
+}
+
+/* Generic Inserted */
+.highlight .gi {
+  color: #a6e22e;
+}
+
+/* Generic Deleted */
+.highlight .gd {
+  color: #f92672;
+  background-color: #320000;
+}
+
+/* Generic Heading */
+.highlight .gh {
+  color: #66d9ef;
+  font-weight: bold;
+}
+
+/* Namespaces, Classes, Constants */
+.highlight .nn,
+.highlight .nc,
+.highlight .no {
+  color: #a6e22e;
+}
+
+/* Attributes */
+.highlight .na {
+  color: #a6e22e;
+}
+
+/* Numbers */
+.highlight .m,
+.highlight .mb,
+.highlight .mf,
+.highlight .mh,
+.highlight .mi,
+.highlight .il,
+.highlight .mo,
+.highlight .mx {
+  color: #ae81ff;
+}
+
+/* Strings */
+.highlight .s,
+.highlight .sb,
+.highlight .sc,
+.highlight .dl,
+.highlight .sd,
+.highlight .s2,
+.highlight .sh,
+.highlight .sx,
+.highlight .s1,
+.highlight .ss {
+  color: #e6db74;
+}
+
+/* Keyword Namespace / Preprocessor */
+.highlight .cp,
+.highlight .nt,
+.highlight .sa {
+  color: #f92672;
+}
+
+/* Regex */
+.highlight .sr {
+  color: #fd971f;
+}
+
+/* Special literals (e.g. true, false) */
+.highlight .si,
+.highlight .se {
+  color: #fd971f;
+}
+
+/* Functions */
+.highlight .nf {
+  color: #a6e22e;
+}
+
+/* Built-in names */
+.highlight .nb,
+.highlight .bp {
+  color: #f8f8f2;
+}
+
+/* Variables */
+.highlight .nv,
+.highlight .vc,
+.highlight .vg,
+.highlight .vi {
+  color: #f8f8f2;
+}
+
+/* Tables */
+.highlight table td {
+  padding: 5px;
+}
+
+.highlight table pre {
+  margin: 0;
+}
+
 
 }
