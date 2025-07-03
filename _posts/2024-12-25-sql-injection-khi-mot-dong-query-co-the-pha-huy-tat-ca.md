@@ -2,7 +2,7 @@
 title: "SQL Injection – Khi một dòng query có thể phá hủy tất cả"
 date: 2024-12-25 17:35:00 +0700
 categories: [Notes, Cybersecurity, Database]
-tags: [sql injection, web security, database security, owasp, penetration testing, vulnerability]
+tags: [sql injection, web security, database security, cybersecurity, owasp, penetration testing, vulnerability]
 pin: false
 comments: false
 published: true

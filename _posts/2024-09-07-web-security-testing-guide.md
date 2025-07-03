@@ -2,7 +2,7 @@
 title: "OWASP Web Security Testing Guide: Học đi, đừng đợi bị hack"
 date: 2024-09-07 17:35:00 +0700
 categories: [Notes, Cybersecurity, Web Security]
-tags: [owasp, security testing, web security, web, penetration testing, vulnerability assessment]
+tags: [owasp, security testing, web security, web, cybersecurity, penetration testing, vulnerability assessment]
 pin: false
 comments: false
 published: true
