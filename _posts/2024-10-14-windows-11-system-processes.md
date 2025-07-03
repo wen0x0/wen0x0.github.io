@@ -2,7 +2,7 @@
 title: "Windows 11 System Processes – Ai đang chạy gì trên máy bạn?"
 date: 2024-10-14 01:47:31 +0700
 categories: [Notes, Windows]
-tags: [windows 11, process]
+tags: [windows 11, windows, process]
 pin: false
 comments: false
 published: true
