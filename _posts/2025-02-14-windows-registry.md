@@ -24,41 +24,41 @@ Registry có cấu trúc phân cấp giống như file system, nhưng thay vì f
 
 Registry được chia thành 5 phần chính, mỗi phần có một nhiệm vụ riêng:
 
-#### HKEY_CLASSES_ROOT (HKCR)
+#### 1. HKEY_CLASSES_ROOT (HKCR)
 Đây là nơi Windows lưu thông tin về file associations và COM objects. Nó như một "từ điển" cho Windows biết khi bạn double-click file .txt thì mở bằng Notepad, file .mp3 thì mở bằng Windows Media Player (hoặc Spotify nếu bạn không sống trong thế kỷ 20).
 
-#### HKEY_CURRENT_USER (HKCU)
+#### 2. HKEY_CURRENT_USER (HKCU)
 Đây là "phòng riêng" của user hiện tại. Mọi cài đặt cá nhân - từ wallpaper, theme, đến các preference của ứng dụng - đều được lưu ở đây. Mỗi user có một "phòng riêng" khác nhau.
 
-#### HKEY_LOCAL_MACHINE (HKLM)
+#### 3. HKEY_LOCAL_MACHINE (HKLM)
 Đây là "trung tâm điều khiển" của toàn bộ máy tính. Chứa thông tin về hardware, installed software, system configuration - những thứ ảnh hưởng đến tất cả users trên máy.
 
-#### HKEY_USERS (HKU)
+#### 4. HKEY_USERS (HKU)
 Chứa thông tin về tất cả user accounts trên máy. Nó như một "danh bạ" của tất cả những ai từng đăng nhập vào máy tính.
 
-#### HKEY_CURRENT_CONFIG (HKCC)
+#### 5. HKEY_CURRENT_CONFIG (HKCC)
 Chứa thông tin về hardware configuration hiện tại. Nó như một "snapshot" của hardware setup mà Windows đang sử dụng.
 
 ## Registry Values: Các "ghi chú" trong bộ não
 
 Registry Values là nơi lưu trữ dữ liệu thực sự. Có nhiều loại values khác nhau:
 
-### REG_SZ (String Value)
+### 1. REG_SZ (String Value)
 Lưu trữ text thuần túy. Ví dụ: tên máy tính, đường dẫn đến file.
 
-### REG_DWORD (32-bit Integer)
+### 2. REG_DWORD (32-bit Integer)
 Lưu trữ số nguyên 32-bit. Thường dùng cho các cài đặt on/off (1/0), timeout values, v.v.
 
-### REG_QWORD (64-bit Integer)
+### 3. REG_QWORD (64-bit Integer)
 Phiên bản 64-bit của DWORD. Dành cho những con số "to hơn".
 
-### REG_BINARY
+### 4. REG_BINARY
 Lưu trữ dữ liệu nhị phân. Có thể là gì cũng được - từ icon đến encrypted data.
 
-### REG_MULTI_SZ
+### 5. REG_MULTI_SZ
 Lưu trữ nhiều strings trong một value. Như một "danh sách" các text.
 
-### REG_EXPAND_SZ
+### 6. REG_EXPAND_SZ
 String có thể chứa environment variables. Ví dụ: `%SystemRoot%\System32\notepad.exe`
 
 ## Cách truy cập Registry: Những "chìa khóa" vào bộ não
@@ -89,7 +89,7 @@ Remove-Item -Path "HKCU:\Software\MyApp" -Recurse
 ### Method 3: Command Line (reg.exe)
 Sử dụng `reg` command:
 
-```cmd
+```powershell
 # Query registry value
 reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v ProductName
 
@@ -115,22 +115,22 @@ string productName = key.GetValue("ProductName").ToString();
 
 Registry không phải là một file duy nhất mà được chia thành nhiều **hives** (tổ ong):
 
-### SAM (Security Account Manager)
+### 1. SAM (Security Account Manager)
 Chứa thông tin về user accounts và passwords. Được bảo vệ nghiêm ngặt.
 
-### SECURITY
+### 2. SECURITY
 Chứa security policies và permissions. Cũng được bảo vệ như Fort Knox.
 
-### SOFTWARE
+### 3. SOFTWARE
 Chứa thông tin về installed software cho toàn bộ máy.
 
-### SYSTEM
+### 4. SYSTEM
 Chứa system configuration, drivers, services.
 
-### DEFAULT
+### 5. DEFAULT
 Template cho user profiles mới.
 
-### NTUSER.DAT
+### 6. NTUSER.DAT
 Registry hive của từng user, chứa HKCU data.
 
 Các hives này được lưu trong:
@@ -139,10 +139,10 @@ Các hives này được lưu trong:
 
 ## Registry trong System Administration
 
-### Backup và Restore
+### 1. Backup và Restore
 **Luôn backup trước khi chỉnh sửa Registry!**
 
-```cmd
+```powershell
 # Export entire registry
 reg export HKLM backup_hklm.reg
 
@@ -153,10 +153,10 @@ reg export "HKLM\SOFTWARE\MyApp" myapp_backup.reg
 reg import backup_hklm.reg
 ```
 
-### Group Policy và Registry
+### 2. Group Policy và Registry
 Group Policy thực chất là một interface đẹp để chỉnh sửa Registry. Mỗi policy setting tương ứng với một registry entry.
 
-### Registry Monitoring
+### 3. Registry Monitoring
 Sử dụng tools như:
 - **Process Monitor**: Theo dõi registry access real-time
 - **Registry Monitor**: Giám sát thay đổi registry
@@ -164,21 +164,21 @@ Sử dụng tools như:
 
 ## Registry Forensics và Security
 
-### Forensic Analysis
+### 1. Forensic Analysis
 Registry chứa rất nhiều thông tin forensic quan trọng:
 - Recently used files và applications
 - USB devices đã kết nối
 - Network connections
 - User activity timeline
 
-### Security Implications
+### 2. Security Implications
 Registry có thể được sử dụng để:
 - **Persistence**: Malware tạo autorun entries
 - **Privilege Escalation**: Chỉnh sửa permissions
 - **Data Hiding**: Lưu trữ malicious data
 - **System Manipulation**: Thay đổi system behavior
 
-### Common Attack Vectors
+### 3. Common Attack Vectors
 ```powershell
 # Tìm autorun entries (nơi malware thường ẩn)
 Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run"
@@ -190,16 +190,16 @@ Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstal
 
 ## Registry Optimization và Maintenance
 
-### Registry Cleaners: Có thực sự cần thiết?
+### 1. Registry Cleaners: Có thực sự cần thiết?
 Trái với quảng cáo, Registry hiếm khi cần "cleaning". Windows tự quản lý Registry khá tốt. Registry cleaners đôi khi gây hại nhiều hơn lợi.
 
-### Performance Impact
+### 2. Performance Impact
 Registry được load vào memory khi boot, vì vậy:
 - Registry lớn sẽ đồng nghĩa với boot time lâu hơn
 - Nhưng impact không đáng kể trên hardware hiện đại
 - Đừng lo lắng về Registry size trừ khi có vấn đề cụ thể
 
-### Best Practices
+### 3. Best Practices
 1. **Backup trước khi chỉnh sửa**
 2. **Test changes trên máy ảo trước**
 3. **Document những thay đổi**
@@ -207,19 +207,19 @@ Registry được load vào memory khi boot, vì vậy:
 
 ## Registry Tweaks phổ biến
 
-### Disable Windows Defender (Không khuyến khích)
+### 1. Disable Windows Defender (Không khuyến khích)
 ```reg
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender]
 "DisableAntiSpyware"=dword:00000001
 ```
 
-### Enable God Mode
+### 2. Enable God Mode
 ```reg
 [HKEY_CURRENT_USER\Software\Classes\CLSID\{ED7BA470-8E54-465E-825C-99712043E01C}]
 @="All Tasks"
 ```
 
-### Customize Windows appearance
+### 3. Customize Windows appearance
 ```reg
 [HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize]
 "AppsUseLightTheme"=dword:00000000
@@ -228,27 +228,26 @@ Registry được load vào memory khi boot, vì vậy:
 
 ## Troubleshooting Registry Issues
 
-### Common Problems
+### 1. Common Problems
 1. **Corrupted Registry**: Boot issues, system instability
 2. **Permissions Issues**: Cannot modify certain keys
 3. **Missing Keys**: Applications not working properly
 
-### Recovery Methods
+### 2. Recovery Methods
 1. **System Restore**: Rollback registry changes
 2. **Last Known Good Configuration**: Boot with previous working registry
 3. **Registry Backup**: Restore from backup
 4. **Safe Mode**: Access registry when Windows won't boot normally
 
-### Emergency Recovery
-```cmd
-# Boot from Windows PE/Recovery disk
-# Navigate to C:\Windows\System32\Config
-# Replace corrupted hives with backups from C:\Windows\System32\Config\RegBack
-```
+### 3. Emergency Recovery
+
+1. Boot from Windows PE/Recovery disk
+2. Navigate to `C:\Windows\System32\Config`
+3. Replace corrupted hives with backups from `C:\Windows\System32\Config\RegBack`
 
 ## Registry Programming và Automation
 
-### PowerShell Scripts
+### 1. PowerShell Scripts
 ```powershell
 # Function to safely modify registry
 function Set-RegistryValue {
@@ -271,7 +270,7 @@ function Set-RegistryValue {
 }
 ```
 
-### Batch Scripts
+### 2. Batch Scripts
 ```batch
 @echo off
 echo Modifying registry...
@@ -285,15 +284,15 @@ if %errorlevel% equ 0 (
 
 ## Registry trong Modern Windows
 
-### Windows 10/11 Changes
+### 1. Windows 10/11 Changes
 - **App registration**: UWP apps sử dụng Registry khác biệt
 - **Virtualization**: Registry virtualization cho compatibility
 - **Cloud sync**: Một số registry settings được sync qua Microsoft account
 
-### Container Support
+### 2. Container Support
 Windows containers có isolated registry views, cho phép ứng dụng chạy mà không ảnh hưởng đến host registry.
 
-### Future Directions
+### 3. Future Directions
 Microsoft đang dần chuyển sang:
 - **Configuration files**: JSON, XML thay vì Registry
 - **Group Policy CSP**: Modern management

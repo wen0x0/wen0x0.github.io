@@ -25,38 +25,38 @@ Tưởng tượng Event Logs như một thư ký cực kỳ tận tâm, không b
 
 Windows tổ chức Event Logs thành các categories khác nhau, mỗi loại phục vụ một mục đích riêng biệt:
 
-### Application Log
+### 1. Application Log
 Đây là nơi các ứng dụng "tâm sự" về cuộc đời của chúng. Nếu Microsoft Word quyết định tự tử giữa chừng khi bạn đang viết báo cáo, thông tin về cái chết bi thảm đó sẽ được ghi lại ở đây.
 
-### System Log
+### 2. System Log
 Đây là nhật ký của chính hệ điều hành Windows. Mọi thứ từ việc khởi động services, lỗi driver, đến những lúc Windows quyết định "đi ngủ" đột ngột đều được ghi ở đây.
 
-### Security Log
+### 3. Security Log
 Đây là "camera an ninh" của Windows. Mọi hoạt động liên quan đến bảo mật - đăng nhập, thay đổi quyền, truy cập file được bảo vệ - đều được ghi lại với độ chi tiết đáng sợ.
 
-### Setup Log
+### 4. Setup Log
 Ghi lại quá trình cài đặt và cập nhật Windows. Nếu Windows Update làm hỏng máy bạn, đây là nơi để tìm bằng chứng "tội phạm".
 
-### Forwarded Events
+### 5. Forwarded Events
 Dành cho môi trường enterprise, nơi các event từ máy khác được forward về để giám sát tập trung.
 
 ## Các loại Event Level: Từ "Mọi thứ ổn" đến "Thế giới đang kết thúc"
 
 Windows phân loại các event theo mức độ nghiêm trọng:
 
-### Information (Thông tin)
+### 1. Information (Thông tin)
 Những sự kiện bình thường, như việc một service khởi động thành công. Giống như việc Windows nói "Hôm nay tôi đã thức dậy và làm việc bình thường".
 
-### Warning (Cảnh báo)
+### 2. Warning (Cảnh báo)
 Có gì đó không ổn nhưng chưa đến mức nghiêm trọng. Giống như việc Windows nói "Ê, disk space sắp hết rồi đấy, nhưng tôi vẫn chạy được".
 
-### Error (Lỗi)
+### 3. Error (Lỗi)
 Có gì đó đã xảy ra sai. Một service không khởi động được, hoặc một ứng dụng bị crash. Windows đang nói "Tôi đã cố gắng, nhưng không được".
 
-### Critical (Nghiêm trọng)
+### 4. Critical (Nghiêm trọng)
 Đây là lúc Windows hét lên "HELP ME!". Hệ thống có thể sắp crash hoặc đã gặp lỗi nghiêm trọng.
 
-### Success Audit & Failure Audit
+### 5. Success Audit & Failure Audit
 Dành riêng cho Security Log, ghi lại việc ai đó thành công hoặc thất bại trong việc làm gì đó (thường là đăng nhập).
 
 ## Cách truy cập Event Logs
@@ -84,7 +84,7 @@ Get-WinEvent -LogName System -MaxEvents 100 | Where-Object {$_.LevelDisplayName 
 ### Method 3: Command Line
 Sử dụng `wevtutil` command:
 
-```cmd
+```powershell
 # List tất cả log names
 wevtutil el
 
@@ -99,21 +99,21 @@ wevtutil qe System /c:10 /rd:true /f:text
 
 Mỗi event có một Event ID - một con số duy nhất định danh loại event đó. Một số Event ID "nổi tiếng" mà admin nào cũng phải biết:
 
-### Security Events
+### 1. Security Events
 - **4624**: Successful logon (ai đó đăng nhập thành công)
 - **4625**: Failed logon (ai đó đăng nhập thất bại)
 - **4648**: Logon using explicit credentials (ai đó dùng credential khác)
 - **4720**: User account created (tạo user mới)
 - **4726**: User account deleted (xóa user)
 
-### System Events
+### 2. System Events
 - **6005**: Event Log service started (Windows vừa khởi động)
 - **6006**: Event Log service stopped (Windows đang tắt)
 - **6008**: Unexpected shutdown (Windows tắt đột ngột)
 - **7034**: Service crashed unexpectedly (service bị crash)
 - **7036**: Service changed state (service khởi động/dừng)
 
-### Application Events
+### 3. Application Events
 - **1000**: Application Error (ứng dụng bị crash)
 - **1001**: Application Hang (ứng dụng bị treo)
 
@@ -121,36 +121,36 @@ Mỗi event có một Event ID - một con số duy nhất định danh loại e
 
 Event Log là công cụ không thể thiếu trong digital forensics và incident response. Nó giúp:
 
-### Phát hiện Intrusion
+### 1. Phát hiện Intrusion
 - Theo dõi failed login attempts
 - Phát hiện privilege escalation
 - Theo dõi lateral movement
 
-### Compliance và Audit
+### 2. Compliance và Audit
 - Ghi lại ai làm gì và khi nào
 - Tracking file access
 - Monitoring policy changes
 
-### Troubleshooting
+### 3. Troubleshooting
 - Tìm nguyên nhân của system crash
 - Phát hiện hardware issues
 - Debug application problems
 
 ## Cấu hình Event Log: Tùy chỉnh theo ý muốn
 
-### Thay đổi Log Size
+### 1. Thay đổi Log Size
 Mặc định, Event Log có giới hạn về kích thước. Có thể thay đổi qua:
 - Event Viewer → Properties của từng log
 - Group Policy
 - Registry
 
-### Log Retention Policy
+### 2. Log Retention Policy
 Có thể cấu hình Windows xử lý như thế nào khi log đầy:
 - **Overwrite events as needed**: Ghi đè events cũ
 - **Archive log when full**: Backup log và tạo log mới
 - **Do not overwrite events**: Không ghi thêm event mới
 
-### Syslog Integration
+### 3. Syslog Integration
 Windows có thể forward events đến syslog server:
 ```powershell
 # Tạo subscription để forward events
@@ -159,24 +159,24 @@ wecutil cs subscription.xml
 
 ## Best Practices: Làm sao để không bị Event Log "dìm"
 
-### Monitoring quan trọng
+### 1. Monitoring quan trọng
 - Thiết lập alerts cho critical events
 - Monitor failed login attempts
 - Theo dõi service failures
 
-### Log Management
+### 2. Log Management
 - Định kỳ backup logs
 - Tăng log size cho môi trường production
 - Sử dụng log forwarding cho centralized monitoring
 
-### Filtering và Analysis
+### 3. Filtering và Analysis
 - Sử dụng custom views trong Event Viewer
 - Tạo PowerShell scripts để automated analysis
 - Integrate với SIEM solutions
 
 ## Event Log Forensics: Khi Windows trở thành "nhân chứng"
 
-### Timeline Analysis
+### 1. Timeline Analysis
 Event Log giúp tạo timeline của các sự kiện:
 ```powershell
 # Tạo timeline của logon events
@@ -185,13 +185,13 @@ Select-Object TimeCreated, @{Name="User";Expression={$_.Properties[5].Value}} |
 Sort-Object TimeCreated
 ```
 
-### Correlation Analysis
+### 2. Correlation Analysis
 Kết hợp multiple event sources để tạo big picture:
 - System + Security + Application logs
 - Network logs + Event logs
 - File system monitoring + Event logs
 
-### Evidence Collection
+### 3. Evidence Collection
 Event logs là digital evidence quan trọng:
 - Export logs in native format (.evtx)
 - Maintain chain of custody
@@ -199,17 +199,17 @@ Event logs là digital evidence quan trọng:
 
 ## Troubleshooting thường gặp
 
-### Event Log Service không khởi động
+### 1. Event Log Service không khởi động
 - Check Windows Event Log service
 - Verify log file permissions
 - Check disk space
 
-### Logs bị corrupt
+### 2. Logs bị corrupt
 - Sử dụng `wevtutil` để repair
 - Restore từ backup
 - Clear log nếu cần thiết
 
-### Performance issues
+### 3. Performance issues
 - Reduce log size
 - Increase log retention
 - Move logs to faster storage
@@ -221,6 +221,8 @@ Microsoft đang phát triển Event Log với:
 - Better integration với cloud services
 - Improved correlation features
 - Machine learning-based analysis
+
+## Kết luận
 
 Windows Event Logs có thể trông khô khan và kỹ thuật, nhưng nó là một trong những công cụ mạnh mẽ nhất để hiểu và quản lý hệ thống Windows. Nó như một thám tử tư âm thầm, ghi lại mọi dấu vết để giúp bạn giải quyết vấn đề khi cần thiết.
 
