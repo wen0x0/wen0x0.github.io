@@ -6,7 +6,7 @@ This blog is powered by [Jekyll](https://jekyllrb.com/) and the [Chirpy](https:/
 
 ## Visit the Blog
 
- [https://wen0x0.github.io](https://wen.is-a.dev)
+[wen.is-a.dev](https://wen.is-a.dev)
 
 ## License
 
