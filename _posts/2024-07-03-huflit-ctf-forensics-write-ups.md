@@ -2,7 +2,7 @@
 title: "HUFLIT CTF – Forensics Write-ups"
 date: 2024-07-03 23:10:32 +0700
 categories: [Notes, CTF, Cybersecurity, Forensics]
-tags: [write-ups, forensics, ctf huflit, ctf]
+tags: [write-ups, forensics, huflit ctf, ctf]
 pin: false
 comments: false
 published: true
