@@ -11,7 +11,7 @@ Just a person, curious about computers.
 
 ---
 
-Here are some [books](https://wen.is-a.dev/wenlib-personal-library) I “stole” to look smarter.
+Here are some [books](https://wen.is-a.dev/wenlib-personal-library) I definitely didn’t steal… 👀
 
 ---
 
