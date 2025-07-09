@@ -8,7 +8,7 @@ comments: false
 published: true
 ---
 
-Đây là write-ups của mình dành cho các challenge về Forensics của CTF HUFLIT. Một phần vì đây là bài tập ở trường, một phần vì mình muốn chia sẻ kinh nghiệm và cách tiếp cận với những ai quan tâm đến lĩnh vực Digital Forensics.
+Đây là write-ups của mình dành cho các challenge về Forensics của HUFLIT CTF. Một phần vì đây là bài tập ở trường, một phần vì mình muốn chia sẻ kinh nghiệm và cách tiếp cận với những ai quan tâm đến lĩnh vực Digital Forensics.
 
 ---
 
