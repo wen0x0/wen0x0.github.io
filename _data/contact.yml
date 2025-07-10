@@ -1,6 +1,4 @@
 #  The contact options.
-- type: github
-  icon: "fab fa-github"
 
 # - type: twitter
 #   icon: "fa-brands fa-x-twitter"
@@ -9,8 +7,10 @@
   icon: 'fab fa-facebook'
   url: 'https://www.facebook.com/wen0x0'
 
-
-
+- type: git
+  icon: "fab fa-github-alt"
+  url: 'https://github.com/wen0x0'
+  
 - type: email
   icon: "fas fa-envelope"
   noblank: true # open link in current tab
