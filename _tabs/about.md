@@ -11,7 +11,7 @@ Just a person, curious about computers.
 
 ---
 
-Here are some [books](https://wen.is-a.dev/wenlib-personal-library) I definitely didn’t steal… 👀
+Here are some [books](https://8yh843-my.sharepoint.com/:f:/g/personal/tnqa_8yh843_onmicrosoft_com/EpphXLAVmZxNthTZjDQcnbQBP4rNfOQzYpSSEgcUTfvMOw) I definitely didn’t steal… 👀
 
 ---
 
