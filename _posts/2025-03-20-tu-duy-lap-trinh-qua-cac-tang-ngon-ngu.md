@@ -2,7 +2,7 @@
 title: "Tư duy lập trình qua các tầng ngôn ngữ"
 date: 2025-03-20 22:50:41 +0700
 categories: [Notes, Programming, Software Development]
-tags: [high level, low level, programming mindset, code reading, assembly, python, c, javascript]
+tags: [high level, low-level, programming mindset, code reading, assembly, python, c, javascript]
 pin: false
 comments: false
 published: true

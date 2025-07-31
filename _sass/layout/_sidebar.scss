@@ -75,24 +75,26 @@ $sidebar-display: 'sidebar-display'; /* the attribute for sidebar display */
     }
   }
 
-  .profile-wrapper {
-    @include mx.mt-mb(2.5rem);
-    @extend %clickable-transition;
+.profile-wrapper {
+  @include mx.mt-mb(2.5rem);
+  @extend %clickable-transition;
 
-    padding-left: 4.5rem;
-    padding-right: 1.25rem;
-    width: 100%;
+  width: 100%;
+  margin-bottom: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-    @include bp.lg {
-      margin-top: 3rem;
-    }
-
-    @include bp.xxxl {
-      margin-top: 3.5rem;
-      margin-bottom: 2.5rem;
-      padding-left: 3.5rem;
-    }
+  @include bp.lg {
+    margin-top: 3rem;
   }
+
+  @include bp.xxxl {
+    margin-top: 3.5rem;
+    margin-bottom: 2.5rem;
+  }
+}
+
 
   .site-title {
     @extend %clickable-transition;
@@ -107,7 +109,6 @@ $sidebar-display: 'sidebar-display'; /* the attribute for sidebar display */
     margin-bottom: 0.5rem;
     width: fit-content;
     color: var(--site-title-color);
-    margin-left: 25px;
   }
 
   .site-subtitle {
@@ -119,7 +120,8 @@ $sidebar-display: 'sidebar-display'; /* the attribute for sidebar display */
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    width: 130px ;
+    width: 100%;
+    text-align: center;
   }
 
   ul {

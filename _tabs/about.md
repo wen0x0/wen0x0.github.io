@@ -13,7 +13,7 @@ Just a person, curious about computers.
 
 ### Let’s connect
 
-[Facebook](https://www.facebook.com/wen0x0) · [GitHub](https://github.com/wen0x0) · [Email](mailto:weninthelab@gmail.com)
+[Facebook](https://www.facebook.com/wen0x0) · [GitHub](https://github.com/wen0x0) · [Email](mailto:quocanhtn.work@gmail.com)
 
 ---
 
