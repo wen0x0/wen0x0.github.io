@@ -1,5 +1,5 @@
 ---
-title: "Regex: Nghệ thuật của những kẻ \"masochist\" và cách để không \"phát điên\""
+title: "Regex: Đọc không hiểu nhưng chạy được là vui"
 date: 2024-03-02 20:21:42 +0700
 categories: [Notes]
 tags: [regex]

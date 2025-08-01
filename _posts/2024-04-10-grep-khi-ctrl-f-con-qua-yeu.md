@@ -1,5 +1,5 @@
 ---
-title: "Grep – Bùa hộ mệnh khi log quá dài"
+title: "Grep – Khi Ctrl+F còn quá yếu"
 date: 2024-04-10 19:15:00 +0700
 categories: [Notes, Linux]
 tags: [linux, command line, grep, regex, text processing]
