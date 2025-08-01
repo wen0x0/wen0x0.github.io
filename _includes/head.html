@@ -54,8 +54,9 @@
     {%- unless page.layout == 'home' -%}
       {{ page.title | append: ' | ' }}
     {%- endunless -%}
-    {{ site.title }}
+    {{ site.title | append: "'s Notes" }}
   </title>
+
 
   {% include_cached favicons.html %}
 
