@@ -3,18 +3,19 @@ name: Deploy Zola site
 on:
   push:
     branches:
-      - main
+      - main  
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout source
+        uses: actions/checkout@v3
 
-      - name: Setup Zola
+      - name: Install Zola
         uses: shalzz/zola-deploy-action@v0.18.0
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          args: build
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
