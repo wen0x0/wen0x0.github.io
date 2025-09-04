@@ -3,22 +3,18 @@ name: Deploy Zola site
 on:
   push:
     branches:
-      - main   
-      
+      - main
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Install Zola
-        run: |
-          wget -qO- https://github.com/getzola/zola/releases/latest/download/zola-v0.18.0-x86_64-unknown-linux-gnu.tar.gz | tar xz
-          sudo mv zola /usr/local/bin
-
-      - name: Build site
-        run: zola build
+      - name: Setup Zola
+        uses: shalzz/zola-deploy-action@v0.18.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
