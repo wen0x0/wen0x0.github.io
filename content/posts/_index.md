@@ -5,7 +5,7 @@ sort_by = "date"
 template = "blog.html"
 page_template = "post.html"
 insert_anchor_links = "right"
-generate_feeds = true
+generate_feeds = false
 
 [extra]
 lang = "en"
@@ -13,7 +13,7 @@ lang = "en"
 title = "Posts"
 subtitle = "Toi viet linh tinh o day"
 
-date_format = "%b %-d, %Y"
+date_format = "%b %d, %Y"
 
 categorized = false # posts can be categorized
 back_to_top = true # show back-to-top button
