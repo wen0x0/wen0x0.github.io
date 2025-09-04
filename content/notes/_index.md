@@ -1,6 +1,6 @@
 +++
-title = "Wen's notes - Posts"
-description = "Toi viet linh tinh o day"
+title = "Wen's Notes"
+description = "Mình viết linh tinh ở đây"
 sort_by = "date"
 template = "blog.html"
 page_template = "post.html"
@@ -10,12 +10,12 @@ generate_feeds = false
 [extra]
 lang = "en"
 
-title = "Posts"
-subtitle = "Toi viet linh tinh o day"
+title = "OwO"
+subtitle = "Mình viết linh tinh ở đây"
 
 date_format = "%b %d, %Y"
 
-categorized = false # posts can be categorized
+categorized = true # posts can be categorized
 back_to_top = true # show back-to-top button
 toc = true # show table-of-contents
 comment = false # enable comment

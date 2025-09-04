@@ -1,14 +1,14 @@
 +++
-title = "About me"
-description = "A simple soul in a complex system"
+title = "About Wen"
+description = "@_@"
 template = "prose.html"
 insert_anchor_links = "none"
 
 [extra]
 lang = 'en'
 
-title = "Just call me Wen"
-subtitle = "My real name is Quoc Anh"
+title = "About me"
+subtitle = "(👉ﾟヮﾟ)👉  (⌐■_■)"
 
 math = false
 mermaid = false
@@ -17,12 +17,8 @@ comment = false
 reaction = false
 +++
 
----
-
 I'm **Wen**.  
 Just a person, curious about computers.  
-
----
 
 ### Let’s connect
 
