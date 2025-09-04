@@ -11,7 +11,7 @@ footer = false
 name = "Quoc Anh"
 id = "@wen"
 bio = "A simple soul in a complex system"
-avatar = "img/avar.svg"
+avatar = "icon/ava.svg"
 links = [
     { name = "GitHub", icon = "github", url = "https://github.com/wen0x0" },
     { name = "Email", icon = "email", url = "mailto:quocanh010104@gmail.com" },
