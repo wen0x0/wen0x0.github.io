@@ -5,7 +5,7 @@ date = 2024-01-02
 draft = false
 [taxonomies]
 categories = ["Notes"]
-tags = ["http", "web", "api", "rest", "backend", "frontend"]
+tags = ["http", "web", "api", "rest"]
 [extra]
 lang = "vi"
 toc = true
