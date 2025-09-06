@@ -39,6 +39,27 @@ lang %}
   });
 </script>
 {% endif %}
+<style>
+  .post {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .post>span:first-child {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+
+  .post>.date {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+</style>
 {% endblock head %}
 
 {% block content %}

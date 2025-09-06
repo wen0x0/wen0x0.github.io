@@ -1,11 +1,11 @@
 +++
-title = "Các phương thức HTTP"
-description = "Tìm hiểu chi tiết về các HTTP Methods - GET, POST, PUT, PATCH, DELETE và cách sử dụng chúng trong RESTful APIs"
+title = "HTTP Methods – Các phương thức giao tiếp giữa Client và Server"
+description = "HTTP Methods – Các phương thức giao tiếp giữa Client và Server"
 date = 2024-01-02
 draft = false
 [taxonomies]
 categories = ["Notes"]
-tags = ["http", "web", "api", "rest"]
+tags = ["http", "web", "api"]
 [extra]
 lang = "vi"
 toc = true

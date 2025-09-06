@@ -1,6 +1,6 @@
 +++
-title = "Quản lý version với Git"
-description = ""
+title = "Git – Hệ thống quản lý phiên bản phân tán mạnh mẽ"
+description = "Git – Hệ thống quản lý phiên bản phân tán mạnh mẽ"
 date = 2024-02-05
 draft = false
 [taxonomies]

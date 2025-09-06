@@ -10,7 +10,7 @@ generate_feeds = false
 [extra]
 lang = "en"
 
-title = "OwO"
+title = "(〃￣︶￣)人(￣︶￣〃)"
 subtitle = "Mình viết linh tinh ở đây"
 
 date_format = "%b %d, %Y"

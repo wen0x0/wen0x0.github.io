@@ -1,5 +1,5 @@
 base_url = "https://wen.is-a.dev"
-title = "Wen @berserker"
+title = "Wen – Blog"
 description = "A simple soul in a complex system"
 default_language = "en"
 
@@ -45,7 +45,8 @@ blog_section_path = "/notes"
 back_link_text = "Back" # Text of the back button
 force_theme = false # false | "light" | "dark"
 
-footer_copyright = "© 2025 Wen"
+footer_copyright = "© 2025"
+name = "Wen"
 footer_credits = false # Whether to show "Built with zola and serene" in footer
 
 not_found_error_text = "404 Not Found"
