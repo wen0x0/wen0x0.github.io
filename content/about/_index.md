@@ -8,7 +8,7 @@ insert_anchor_links = "none"
 lang = 'en'
 
 title = "About me"
-subtitle = "(👉ﾟヮﾟ)👉  (⌐■_■)"
+subtitle = "(～￣▽￣)～"
 
 math = false
 mermaid = false
@@ -17,11 +17,10 @@ comment = false
 reaction = false
 +++
 
-I'm **Wen**.  
+I'm Wen.  
 Just a person, curious about computers.  
 
-### Let’s connect
-
+Let’s connect:  
 [Facebook](https://www.facebook.com/wen0x0) · [GitHub](https://github.com/wen0x0) · [Email](mailto:quocanhtn.work@gmail.com)
 
 

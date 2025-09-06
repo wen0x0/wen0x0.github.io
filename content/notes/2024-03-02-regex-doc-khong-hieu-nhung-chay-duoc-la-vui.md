@@ -99,13 +99,13 @@ Parentheses `()` tạo ra groups, cho phép bạn:
 2. Capture (bắt) nội dung để sử dụng sau này
 
 ```
-(abc)+          # Match "abc", "abcabc", "abcabcabc", ...
+(abc)+                   # Match "abc", "abcabc", "abcabcabc", ...
 (\d{3})-(\d{3})-(\d{4})  # Match số điện thoại US format và capture các phần
 ```
 
 ### Non-capturing Groups
 
-Đôi khi bạn muốn nhóm nhưng không muốn capture (giống như muốn ăn bánh nhưng không muốn béo):
+Đôi khi bạn muốn nhóm nhưng không muốn capture:
 
 ```
 (?:abc)+        # Nhóm "abc" nhưng không capture

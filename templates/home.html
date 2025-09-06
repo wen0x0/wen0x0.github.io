@@ -50,10 +50,12 @@ lang %}
       {% endif %}
       <div id="text">
         <div>
-          <span id="name">{{ section.extra.name }}</span>
-          {% if section.extra.id %}
-          <span id="id">{{ section.extra.id }}</span>
-          {% endif %}
+          <b>
+            <span id="name">{{ section.extra.name }}</span>
+            {% if section.extra.id %}
+            <span id="id">{{ section.extra.id }}</span>
+            {% endif %}
+          </b>
         </div>
         {% if section.extra.bio %}
         <div id="bio"> {{ section.extra.bio }} </div>
@@ -93,13 +95,11 @@ lang %}
     {% set section_md_path = blog_section_path ~ "/_index.md" %}
     {% set blog_section = get_section(path=section_md_path) %}
 
-    {% if section.extra.gif %}
+    <!-- {% if section.extra.gif %}
     <div class="gif-wrapper">
       <img src="{{ get_url(path=section.extra.gif) }}" alt="intro gif" class="intro-gif">
     </div>
-    {% endif %}
-
-
+    {% endif %} -->
 
     <section class="layout-list">
       <div class="post-list">

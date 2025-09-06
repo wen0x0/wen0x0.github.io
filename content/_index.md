@@ -9,21 +9,18 @@ footer = false
 
 # If you don't want to display id/bio/avatar, simply comment out that line
 name = "Wen"
-id = "@nightowl"
+id = "@engineer"
 bio = "A simple soul in a complex system"
 avatar = "img/righright.png"
 links = [
     { name = "GitHub", icon = "github", url = "https://github.com/wen0x0" },
-    { name = "Email", icon = "email", url = "mailto:quocanh010104@gmail.com" },
+    { name = "Email", icon = "email", url = "mailto:quocanhtn.work@gmail.com" },
 ]
 
-gif = "img/future.gif"
+# gif = "img/future.gif"
 # Show a few recent posts in home page
 recent = true
-recent_max = 3
+recent_max = 5
 recent_more_text = "more »"
 date_format = "%b %d, %Y"
 +++
-
-
----
