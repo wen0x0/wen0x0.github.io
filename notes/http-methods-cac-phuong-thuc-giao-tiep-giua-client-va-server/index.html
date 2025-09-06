@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  
+  
+    
+  
+  <meta name="description" content="Tìm hiểu chi tiết về các HTTP Methods - GET, POST, PUT, PATCH, DELETE và cách sử dụng chúng trong RESTful APIs">
+
+  <title>Các phương thức HTTP</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="https://wen.is-a.dev/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://wen.is-a.dev/img/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://wen.is-a.dev/img/apple-touch-icon.png">
+
+  
+  <style>
+  /* light mode colors */
+  body {
+    /* --primary-color: #5871a2; */
+    --primary-color: #505050;
+    --primary-pale-color: #5871a233;
+    --primary-decoration-color: #5871a210;
+    --bg-color: #ffffff;
+    /* --text-color: #2f3030; */
+    --text-color: #000000;
+    /* --text-pale-color: #767676; */
+    --text-pale-color: #000000;
+    --text-decoration-color: #a9a9a9;
+    --highlight-mark-color: #5f75b020;
+
+    --callout-note-color: #5871a2;
+    --callout-tip-color: #268556;
+    --callout-important-color: #885fc9;
+    --callout-warning-color: #ab6632;
+    --callout-caution-color: #c64e4e;
+  }
+
+  /* dark mode colors */
+  body.dark {
+    /* --primary-color: #6f8fd1; */
+    --primary-color: #00ffff;
+    --primary-pale-color: #6f8fd166;
+    --primary-decoration-color: #6f8fd112;
+    /* --bg-color: #1c1c1c; */
+    --bg-color: #002a30;
+    /* --text-color: #c1c1c1; */
+    --text-color: #ffffff;
+    /* --text-pale-color: #848484; */
+    --text-pale-color: #ffffff;
+    --text-decoration-color: #5f5f5f;
+    --highlight-mark-color: #8296cb3b;
+
+    --callout-note-color: #6f8fd1;
+    --callout-tip-color: #47976f;
+    --callout-important-color: #9776cd;
+    --callout-warning-color: #ad7a52;
+    --callout-caution-color: #d06161;
+  }
+
+  /* typography */
+  body {
+    --main-font: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --code-font: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    --homepage-max-width: 768px;
+    --main-max-width: 768px;
+    --avatar-size: 75px;
+    --font-size: 16px;
+    --line-height: 1.75;
+    --img-border-radius: 0px;
+    --detail-border-radius: 0px;
+    --dark-mode-img-brightness: 0.75;
+    --dark-mode-chart-brightness: 0.75;
+    --inline-code-border-radius: 2px;
+    --inline-code-bg-color: var(--primary-decoration-color);
+    --block-code-border-radius: 0px;
+    --block-code-border-color: var(--primary-color);
+    --detail-border-color: var(--primary-color);
+  }
+
+  .gif-wrapper {
+    text-align: center;
+    margin: 1.5rem 0;
+  }
+
+  .gif-wrapper .intro-gif {
+    max-width: 96%;
+    height: auto;
+    border-radius: 8px;
+  }
+</style>
+  <link rel="stylesheet" href="https://wen.is-a.dev/main.css">
+  
+
+
+
+  
+</head>
+
+<body class="post">
+  
+  <script>
+    const theme = sessionStorage.getItem('theme');
+    const match = window.matchMedia("(prefers-color-scheme: dark)").matches
+    if ((theme && theme == 'dark') || (!theme && match)) {
+      document.body.classList.add('dark');
+      const hl = document.querySelector('link#hl');
+      if (hl) hl.href = 'https://wen.is-a.dev/hl-dark.css';
+    }
+  </script>
+  
+  
+<div id="wrapper">
+  <div id="blank"></div>
+  <aside>
+    
+    
+    <nav>
+      <ul>
+        
+        <li>
+          <a class="h2" href="#http-method-la-gi">HTTP Method là gì?</a>
+          
+        </li>
+        
+        <li>
+          <a class="h2" href="#cau-truc-cua-http-request">Cấu trúc của HTTP Request</a>
+          
+        </li>
+        
+        <li>
+          <a class="h2" href="#cac-http-methods-chinh">Các HTTP Methods chính</a>
+          
+          <ul>
+            
+            <li>
+              <a class="h3" href="#1-get-lay-du-lieu">1. GET - Lấy dữ liệu</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#2-post-tao-moi-du-lieu">2. POST - Tạo mới dữ liệu</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#3-put-cap-nhat-toan-bo-du-lieu">3. PUT - Cập nhật toàn bộ dữ liệu</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#4-patch-cap-nhat-mot-phan-du-lieu">4. PATCH - Cập nhật một phần dữ liệu</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#5-delete-xoa-du-lieu">5. DELETE - Xóa dữ liệu</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#6-head-lay-metadata">6. HEAD - Lấy metadata</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#7-options-lay-thong-tin-ve-cac-methods-duoc-ho-tro">7. OPTIONS - Lấy thông tin về các methods được hỗ trợ</a>
+            </li>
+            
+          </ul>
+          
+        </li>
+        
+        <li>
+          <a class="h2" href="#restful-api-va-http-methods">RESTful API và HTTP Methods</a>
+          
+          <ul>
+            
+            <li>
+              <a class="h3" href="#crud-operations-voi-rest">CRUD Operations với REST</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#restful-url-design">RESTful URL Design</a>
+            </li>
+            
+          </ul>
+          
+        </li>
+        
+        <li>
+          <a class="h2" href="#http-status-codes-kem-theo-methods">HTTP Status Codes kèm theo Methods</a>
+          
+          <ul>
+            
+            <li>
+              <a class="h3" href="#get-responses">GET Responses</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#post-responses">POST Responses</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#put-patch-responses">PUT&#x2F;PATCH Responses</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#delete-responses">DELETE Responses</a>
+            </li>
+            
+          </ul>
+          
+        </li>
+        
+        <li>
+          <a class="h2" href="#best-practices-khi-su-dung-http-methods">Best Practices khi sử dụng HTTP Methods</a>
+          
+          <ul>
+            
+            <li>
+              <a class="h3" href="#1-su-dung-dung-method-cho-dung-muc-dich">1. Sử dụng đúng method cho đúng mục đích</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#2-idempotency-trong-thiet-ke-api">2. Idempotency trong thiết kế API</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#3-su-dung-patch-cho-partial-updates">3. Sử dụng PATCH cho partial updates</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#4-content-type-headers">4. Content-Type headers</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#5-authentication-va-authorization">5. Authentication và Authorization</a>
+            </li>
+            
+          </ul>
+          
+        </li>
+        
+        <li>
+          <a class="h2" href="#cac-loi-thuong-gap">Các lỗi thường gặp</a>
+          
+          <ul>
+            
+            <li>
+              <a class="h3" href="#1-su-dung-get-cho-cac-hanh-dong-thay-doi-du-lieu">1. Sử dụng GET cho các hành động thay đổi dữ liệu</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#2-khong-handle-idempotency-dung-cach">2. Không handle idempotency đúng cách</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#3-tra-ve-status-code-khong-phu-hop">3. Trả về status code không phù hợp</a>
+            </li>
+            
+          </ul>
+          
+        </li>
+        
+        <li>
+          <a class="h2" href="#testing-http-methods">Testing HTTP Methods</a>
+          
+          <ul>
+            
+            <li>
+              <a class="h3" href="#su-dung-curl">Sử dụng cURL</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#su-dung-postman">Sử dụng Postman</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#su-dung-javascript-fetch-api">Sử dụng JavaScript Fetch API</a>
+            </li>
+            
+          </ul>
+          
+        </li>
+        
+        <li>
+          <a class="h2" href="#bao-mat-voi-http-methods">Bảo mật với HTTP Methods</a>
+          
+          <ul>
+            
+            <li>
+              <a class="h3" href="#1-validation-va-sanitization">1. Validation và Sanitization</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#2-rate-limiting">2. Rate Limiting</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#3-cors-configuration">3. CORS Configuration</a>
+            </li>
+            
+          </ul>
+          
+        </li>
+        
+        <li>
+          <a class="h2" href="#performance-optimization">Performance Optimization</a>
+          
+          <ul>
+            
+            <li>
+              <a class="h3" href="#1-caching-cho-get-requests">1. Caching cho GET requests</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#2-pagination-cho-get-requests">2. Pagination cho GET requests</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#3-compression">3. Compression</a>
+            </li>
+            
+          </ul>
+          
+        </li>
+        
+        <li>
+          <a class="h2" href="#ket-luan">Kết luận</a>
+          
+        </li>
+        
+      </ul>
+    </nav>
+    
+    
+    <button id="back-to-top" aria-label="back to top">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-up"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+
+    </button>
+    
+  </aside>
+  <main>
+    
+<header>
+  <nav>
+    <a href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;notes">← Back</a>
+  </nav>
+</header>
+
+
+    <div>
+      
+      
+      
+      
+      <div id="copy-cfg" style="display: none;" data-copy-icon="&lt;svg xmlns=&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2000&#x2F;svg&quot; viewBox=&quot;0 0 24 24&quot; width=&quot;18&quot; height=&quot;18&quot;&gt;&lt;path d=&quot;M6.9998 6V3C6.9998 2.44772 7.44752 2 7.9998 2H19.9998C20.5521 2 20.9998 2.44772 20.9998 3V17C20.9998 17.5523 20.5521 18 19.9998 18H16.9998V20.9991C16.9998 21.5519 16.5499 22 15.993 22H4.00666C3.45059 22 3 21.5554 3 20.9991L3.0026 7.00087C3.0027 6.44811 3.45264 6 4.00942 6H6.9998ZM5.00242 8L5.00019 20H14.9998V8H5.00242ZM8.9998 6H16.9998V16H18.9998V4H8.9998V6Z&quot; fill=&quot;currentColor&quot;&gt;&lt;&#x2F;path&gt;&lt;&#x2F;svg&gt;
+" data-check-icon="&lt;svg xmlns=&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2000&#x2F;svg&quot; viewBox=&quot;0 0 24 24&quot; width=&quot;18&quot; height=&quot;18&quot;&gt;&lt;path d=&quot;M10.0007 15.1709L19.1931 5.97852L20.6073 7.39273L10.0007 17.9993L3.63672 11.6354L5.05093 10.2212L10.0007 15.1709Z&quot; fill=&quot;currentColor&quot;&gt;&lt;&#x2F;path&gt;&lt;&#x2F;svg&gt;
+"></div>
+      
+      <article class="prose">
+        <h1>Các phương thức HTTP</h1>
+        <div id="post-info">
+          <div id="date">
+            <span id="publish">Jan 02, 2024</span>
+            </div>
+
+          
+          <div id="tags">
+            <a class="instant" href="https://wen.is-a.dev/tags/http"><span>#</span>http</a><a class="instant" href="https://wen.is-a.dev/tags/web"><span>#</span>web</a><a class="instant" href="https://wen.is-a.dev/tags/api"><span>#</span>api</a><a class="instant" href="https://wen.is-a.dev/tags/rest"><span>#</span>rest</a>
+          </div>
+          
+        </div>
+
+        
+        
+
+        
+
+        <p>HTTP (HyperText Transfer Protocol) là giao thức nền tảng của World Wide Web, định nghĩa cách thức client (trình duyệt web, ứng dụng mobile) và server (máy chủ web) giao tiếp với nhau. Trong bài viết này, chúng ta sẽ tìm hiểu chi tiết về các HTTP Methods - những "động từ" mô tả hành động mà client muốn thực hiện với tài nguyên trên server.</p>
+<h2 id="http-method-la-gi">HTTP Method là gì?<a class="zola-anchor" href="#http-method-la-gi" aria-label="Anchor link for: http-method-la-gi" style="visibility: hidden;"></a></h2>
+<p>HTTP Method (hay còn gọi là HTTP Verb) là một phần quan trọng trong HTTP request, cho biết loại hành động mà client muốn thực hiện với tài nguyên được chỉ định. Mỗi method có ý nghĩa và cách hoạt động riêng biệt, giúp tạo ra một hệ thống giao tiếp chuẩn và dễ hiểu.</p>
+<p>Khi bạn nhập một URL vào trình duyệt và nhấn Enter, trình duyệt sẽ gửi một HTTP request với method GET đến server. Khi bạn điền form đăng ký tài khoản và nhấn "Đăng ký", trình duyệt thường gửi POST request.</p>
+<h2 id="cau-truc-cua-http-request">Cấu trúc của HTTP Request<a class="zola-anchor" href="#cau-truc-cua-http-request" aria-label="Anchor link for: cau-truc-cua-http-request" style="visibility: hidden;"></a></h2>
+<p>Trước khi đi sâu vào các methods, hãy xem cấu trúc cơ bản của một HTTP request:</p>
+<pre style="background-color:#151515;color:#e8e8d3;"><code><span>GET /api/users/123 HTTP/1.1
+</span><span>Host: example.com
+</span><span>User-Agent: Mozilla/5.0
+</span><span>Accept: application/json
+</span><span>Authorization: Bearer token123
+</span></code></pre>
+<p>Trong đó:</p>
+<ul>
+<li><strong>GET</strong> là HTTP method</li>
+<li><strong>/api/users/123</strong> là đường dẫn đến tài nguyên</li>
+<li><strong>HTTP/1.1</strong> là phiên bản HTTP</li>
+<li>Các dòng tiếp theo là headers chứa thông tin bổ sung</li>
+</ul>
+<h2 id="cac-http-methods-chinh">Các HTTP Methods chính<a class="zola-anchor" href="#cac-http-methods-chinh" aria-label="Anchor link for: cac-http-methods-chinh" style="visibility: hidden;"></a></h2>
+<h3 id="1-get-lay-du-lieu">1. GET - Lấy dữ liệu<a class="zola-anchor" href="#1-get-lay-du-lieu" aria-label="Anchor link for: 1-get-lay-du-lieu" style="visibility: hidden;"></a></h3>
+<p><strong>Mục đích</strong>: Yêu cầu lấy dữ liệu từ server mà không thay đổi gì trên server.</p>
+<p><strong>Đặc điểm</strong>:</p>
+<ul>
+<li><strong>Safe</strong>: Không thay đổi trạng thái server</li>
+<li><strong>Idempotent</strong>: Gọi nhiều lần cho kết quả giống nhau</li>
+<li><strong>Cacheable</strong>: Có thể được cache để tăng hiệu suất</li>
+<li>Dữ liệu được gửi qua URL parameters (query string)</li>
+</ul>
+<p><strong>Ví dụ thực tế</strong>:</p>
+<pre style="background-color:#151515;color:#e8e8d3;"><code><span>GET /api/users HTTP/1.1
+</span><span>Host: example.com
+</span><span>
+</span><span># Lấy danh sách người dùng với bộ lọc
+</span><span>GET /api/products?category=electronics&amp;price_max=500 HTTP/1.1
+</span><span>Host: shop.com
+</span><span>
+</span><span># Lấy thông tin chi tiết một sản phẩm
+</span><span>GET /api/products/123 HTTP/1.1
+</span><span>Host: shop.com
+</span></code></pre>
+<p><strong>Khi nào sử dụng</strong>:</p>
+<ul>
+<li>Lấy danh sách dữ liệu (sản phẩm, bài viết, người dùng)</li>
+<li>Xem chi tiết một mục cụ thể</li>
+<li>Tìm kiếm và lọc dữ liệu</li>
+<li>Tải trang web</li>
+</ul>
+<p><strong>Response thành công</strong>: 200 OK</p>
+<h3 id="2-post-tao-moi-du-lieu">2. POST - Tạo mới dữ liệu<a class="zola-anchor" href="#2-post-tao-moi-du-lieu" aria-label="Anchor link for: 2-post-tao-moi-du-lieu" style="visibility: hidden;"></a></h3>
+<p><strong>Mục đích</strong>: Gửi dữ liệu đến server để tạo tài nguyên mới hoặc thực hiện một hành động.</p>
+<p><strong>Đặc điểm</strong>:</p>
+<ul>
+<li><strong>Not Safe</strong>: Có thể thay đổi trạng thái server</li>
+<li><strong>Not Idempotent</strong>: Gọi nhiều lần có thể tạo ra kết quả khác nhau</li>
+<li><strong>Not Cacheable</strong>: Thường không được cache</li>
+<li>Dữ liệu được gửi trong request body</li>
+</ul>
+<p><strong>Ví dụ thực tế</strong>:</p>
+<pre style="background-color:#151515;color:#e8e8d3;"><code><span>POST /api/users HTTP/1.1
+</span><span>Host: example.com
+</span><span>Content-Type: application/json
+</span><span>
+</span><span>{
+</span><span>  &quot;name&quot;: &quot;Nguyễn Văn A&quot;,
+</span><span>  &quot;email&quot;: &quot;nguyenvana@example.com&quot;,
+</span><span>  &quot;password&quot;: &quot;securepassword123&quot;
+</span><span>}
+</span></code></pre>
+<pre style="background-color:#151515;color:#e8e8d3;"><code><span>POST /api/orders HTTP/1.1
+</span><span>Host: shop.com
+</span><span>Content-Type: application/json
+</span><span>
+</span><span>{
+</span><span>  &quot;user_id&quot;: 123,
+</span><span>  &quot;items&quot;: [
+</span><span>    {&quot;product_id&quot;: 456, &quot;quantity&quot;: 2},
+</span><span>    {&quot;product_id&quot;: 789, &quot;quantity&quot;: 1}
+</span><span>  ],
+</span><span>  &quot;shipping_address&quot;: &quot;123 Đường ABC, Quận 1, TP.HCM&quot;
+</span><span>}
+</span></code></pre>
+<p><strong>Khi nào sử dụng</strong>:</p>
+<ul>
+<li>Đăng ký tài khoản mới</li>
+<li>Tạo bài viết, sản phẩm mới</li>
+<li>Gửi form liên hệ</li>
+<li>Xử lý thanh toán</li>
+<li>Upload file</li>
+</ul>
+<p><strong>Response thành công</strong>: 201 Created hoặc 200 OK</p>
+<h3 id="3-put-cap-nhat-toan-bo-du-lieu">3. PUT - Cập nhật toàn bộ dữ liệu<a class="zola-anchor" href="#3-put-cap-nhat-toan-bo-du-lieu" aria-label="Anchor link for: 3-put-cap-nhat-toan-bo-du-lieu" style="visibility: hidden;"></a></h3>
+<p><strong>Mục đích</strong>: Thay thế hoàn toàn một tài nguyên hoặc tạo mới nếu không tồn tại.</p>
+<p><strong>Đặc điểm</strong>:</p>
+<ul>
+<li><strong>Not Safe</strong>: Thay đổi trạng thái server</li>
+<li><strong>Idempotent</strong>: Gọi nhiều lần cho kết quả giống nhau</li>
+<li><strong>Not Cacheable</strong>: Không được cache</li>
+<li>Thay thế toàn bộ tài nguyên</li>
+</ul>
+<p><strong>Ví dụ thực tế</strong>:</p>
+<pre style="background-color:#151515;color:#e8e8d3;"><code><span>PUT /api/users/123 HTTP/1.1
+</span><span>Host: example.com
+</span><span>Content-Type: application/json
+</span><span>
+</span><span>{
+</span><span>  &quot;id&quot;: 123,
+</span><span>  &quot;name&quot;: &quot;Nguyễn Văn B&quot;,
+</span><span>  &quot;email&quot;: &quot;nguyenvanb@example.com&quot;,
+</span><span>  &quot;phone&quot;: &quot;0901234567&quot;,
+</span><span>  &quot;address&quot;: &quot;456 Đường XYZ, Quận 2, TP.HCM&quot;
+</span><span>}
+</span></code></pre>
+<p><strong>Khi nào sử dụng</strong>:</p>
+<ul>
+<li>Cập nhật thông tin hồ sơ người dùng</li>
+<li>Thay đổi cấu hình hệ thống</li>
+<li>Cập nhật toàn bộ thông tin sản phẩm</li>
+</ul>
+<p><strong>Response thành công</strong>: 200 OK hoặc 204 No Content</p>
+<h3 id="4-patch-cap-nhat-mot-phan-du-lieu">4. PATCH - Cập nhật một phần dữ liệu<a class="zola-anchor" href="#4-patch-cap-nhat-mot-phan-du-lieu" aria-label="Anchor link for: 4-patch-cap-nhat-mot-phan-du-lieu" style="visibility: hidden;"></a></h3>
+<p><strong>Mục đích</strong>: Cập nhật một phần của tài nguyên, chỉ những trường được chỉ định.</p>
+<p><strong>Đặc điểm</strong>:</p>
+<ul>
+<li><strong>Not Safe</strong>: Thay đổi trạng thái server</li>
+<li><strong>Not Idempotent</strong>: Có thể không idempotent tùy thuộc vào implementation</li>
+<li><strong>Not Cacheable</strong>: Không được cache</li>
+<li>Chỉ cập nhật các trường được gửi</li>
+</ul>
+<p><strong>Ví dụ thực tế</strong>:</p>
+<pre style="background-color:#151515;color:#e8e8d3;"><code><span>PATCH /api/users/123 HTTP/1.1
+</span><span>Host: example.com
+</span><span>Content-Type: application/json
+</span><span>
+</span><span>{
+</span><span>  &quot;phone&quot;: &quot;0987654321&quot;
+</span><span>}
+</span></code></pre>
+<pre style="background-color:#151515;color:#e8e8d3;"><code><span>PATCH /api/products/456 HTTP/1.1
+</span><span>Host: shop.com
+</span><span>Content-Type: application/json
+</span><span>
+</span><span>{
+</span><span>  &quot;price&quot;: 299000,
+</span><span>  &quot;stock&quot;: 15
+</span><span>}
+</span></code></pre>
+<p><strong>Khi nào sử dụng</strong>:</p>
+<ul>
+<li>Cập nhật một vài trường thông tin</li>
+<li>Thay đổi trạng thái (active/inactive)</li>
+<li>Cập nhật số lượng tồn kho</li>
+</ul>
+<p><strong>Response thành công</strong>: 200 OK hoặc 204 No Content</p>
+<h3 id="5-delete-xoa-du-lieu">5. DELETE - Xóa dữ liệu<a class="zola-anchor" href="#5-delete-xoa-du-lieu" aria-label="Anchor link for: 5-delete-xoa-du-lieu" style="visibility: hidden;"></a></h3>
+<p><strong>Mục đích</strong>: Xóa tài nguyên được chỉ định trên server.</p>
+<p><strong>Đặc điểm</strong>:</p>
+<ul>
+<li><strong>Not Safe</strong>: Thay đổi trạng thái server</li>
+<li><strong>Idempotent</strong>: Xóa nhiều lần không tạo ra hiệu ứng phụ</li>
+<li><strong>Not Cacheable</strong>: Không được cache</li>
+</ul>
+<p><strong>Ví dụ thực tế</strong>:</p>
+<pre style="background-color:#151515;color:#e8e8d3;"><code><span>DELETE /api/users/123 HTTP/1.1
+</span><span>Host: example.com
+</span><span>Authorization: Bearer token123
+</span></code></pre>
+<pre style="background-color:#151515;color:#e8e8d3;"><code><span>DELETE /api/posts/456 HTTP/1.1
+</span><span>Host: blog.com
+</span><span>Authorization: Bearer token123
+</span></code></pre>
+<p><strong>Khi nào sử dụng</strong>:</p>
+<ul>
+<li>Xóa tài khoản người dùng</li>
+<li>Xóa bài viết, sản phẩm</li>
+<li>Hủy đơn hàng</li>
+<li>Xóa file upload</li>
+</ul>
+<p><strong>Response thành công</strong>: 200 OK, 202 Accepted, hoặc 204 No Content</p>
+<h3 id="6-head-lay-metadata">6. HEAD - Lấy metadata<a class="zola-anchor" href="#6-head-lay-metadata" aria-label="Anchor link for: 6-head-lay-metadata" style="visibility: hidden;"></a></h3>
+<p><strong>Mục đích</strong>: Giống GET nhưng chỉ trả về headers, không có response body.</p>
+<p><strong>Đặc điểm</strong>:</p>
+<ul>
+<li><strong>Safe</strong>: Không thay đổi trạng thái server</li>
+<li><strong>Idempotent</strong>: Gọi nhiều lần cho kết quả giống nhau</li>
+<li><strong>Cacheable</strong>: Có thể được cache</li>
+<li>Không có response body</li>
+</ul>
+<p><strong>Ví dụ thực tế</strong>:</p>
+<pre style="background-color:#151515;color:#e8e8d3;"><code><span>HEAD /api/users/123 HTTP/1.1
+</span><span>Host: example.com
+</span></code></pre>
+<p><strong>Khi nào sử dụng</strong>:</p>
+<ul>
+<li>Kiểm tra tài nguyên có tồn tại không</li>
+<li>Lấy thông tin về size file trước khi download</li>
+<li>Kiểm tra Last-Modified để caching</li>
+</ul>
+<h3 id="7-options-lay-thong-tin-ve-cac-methods-duoc-ho-tro">7. OPTIONS - Lấy thông tin về các methods được hỗ trợ<a class="zola-anchor" href="#7-options-lay-thong-tin-ve-cac-methods-duoc-ho-tro" aria-label="Anchor link for: 7-options-lay-thong-tin-ve-cac-methods-duoc-ho-tro" style="visibility: hidden;"></a></h3>
+<p><strong>Mục đích</strong>: Truy vấn các HTTP methods được hỗ trợ cho một tài nguyên.</p>
+<p><strong>Đặc điểm</strong>:</p>
+<ul>
+<li><strong>Safe</strong>: Không thay đổi trạng thái server</li>
+<li><strong>Idempotent</strong>: Gọi nhiều lần cho kết quả giống nhau</li>
+<li>Quan trọng cho CORS (Cross-Origin Resource Sharing)</li>
+</ul>
+<p><strong>Ví dụ thực tế</strong>:</p>
+<pre style="background-color:#151515;color:#e8e8d3;"><code><span>OPTIONS /api/users HTTP/1.1
+</span><span>Host: example.com
+</span><span>Origin: https://myapp.com
+</span></code></pre>
+<p><strong>Response</strong>:</p>
+<pre style="background-color:#151515;color:#e8e8d3;"><code><span>HTTP/1.1 200 OK
+</span><span>Allow: GET, POST, PUT, DELETE, OPTIONS
+</span><span>Access-Control-Allow-Origin: https://myapp.com
+</span><span>Access-Control-Allow-Methods: GET, POST, PUT, DELETE
+</span></code></pre>
+<p><strong>Khi nào sử dụng</strong>:</p>
+<ul>
+<li>CORS preflight requests</li>
+<li>API discovery</li>
+<li>Kiểm tra quyền truy cập</li>
+</ul>
+<h2 id="restful-api-va-http-methods">RESTful API và HTTP Methods<a class="zola-anchor" href="#restful-api-va-http-methods" aria-label="Anchor link for: restful-api-va-http-methods" style="visibility: hidden;"></a></h2>
+<p>REST (Representational State Transfer) là một kiến trúc phổ biến cho việc thiết kế web services, sử dụng HTTP methods một cách có ý nghĩa:</p>
+<h3 id="crud-operations-voi-rest">CRUD Operations với REST<a class="zola-anchor" href="#crud-operations-voi-rest" aria-label="Anchor link for: crud-operations-voi-rest" style="visibility: hidden;"></a></h3>
+<pre style="background-color:#151515;color:#e8e8d3;"><code><span># Create (Tạo mới)
+</span><span>POST /api/products
+</span><span>{
+</span><span>  &quot;name&quot;: &quot;iPhone 15&quot;,
+</span><span>  &quot;price&quot;: 25000000,
+</span><span>  &quot;category&quot;: &quot;smartphone&quot;
+</span><span>}
+</span><span>
+</span><span># Read (Đọc)
+</span><span>GET /api/products          # Lấy danh sách
+</span><span>GET /api/products/123      # Lấy chi tiết
+</span><span>
+</span><span># Update (Cập nhật)
+</span><span>PUT /api/products/123      # Cập nhật toàn bộ
+</span><span>PATCH /api/products/123    # Cập nhật một phần
+</span><span>
+</span><span># Delete (Xóa)
+</span><span>DELETE /api/products/123
+</span></code></pre>
+<h3 id="restful-url-design">RESTful URL Design<a class="zola-anchor" href="#restful-url-design" aria-label="Anchor link for: restful-url-design" style="visibility: hidden;"></a></h3>
+<pre style="background-color:#151515;color:#e8e8d3;"><code><span># Collection và Resource
+</span><span>GET /api/users             # Lấy danh sách users
+</span><span>GET /api/users/123         # Lấy user có ID 123
+</span><span>POST /api/users            # Tạo user mới
+</span><span>PUT /api/users/123         # Cập nhật user 123
+</span><span>DELETE /api/users/123      # Xóa user 123
+</span><span>
+</span><span># Nested Resources
+</span><span>GET /api/users/123/orders      # Lấy đơn hàng của user 123
+</span><span>POST /api/users/123/orders     # Tạo đơn hàng cho user 123
+</span></code></pre>
+<h2 id="http-status-codes-kem-theo-methods">HTTP Status Codes kèm theo Methods<a class="zola-anchor" href="#http-status-codes-kem-theo-methods" aria-label="Anchor link for: http-status-codes-kem-theo-methods" style="visibility: hidden;"></a></h2>
+<h3 id="get-responses">GET Responses<a class="zola-anchor" href="#get-responses" aria-label="Anchor link for: get-responses" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>200 OK</strong>: Thành công</li>
+<li><strong>404 Not Found</strong>: Không tìm thấy tài nguyên</li>
+<li><strong>304 Not Modified</strong>: Dữ liệu chưa thay đổi (cache)</li>
+</ul>
+<h3 id="post-responses">POST Responses<a class="zola-anchor" href="#post-responses" aria-label="Anchor link for: post-responses" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>201 Created</strong>: Tạo thành công</li>
+<li><strong>400 Bad Request</strong>: Dữ liệu đầu vào không hợp lệ</li>
+<li><strong>409 Conflict</strong>: Tài nguyên đã tồn tại</li>
+</ul>
+<h3 id="put-patch-responses">PUT/PATCH Responses<a class="zola-anchor" href="#put-patch-responses" aria-label="Anchor link for: put-patch-responses" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>200 OK</strong>: Cập nhật thành công</li>
+<li><strong>204 No Content</strong>: Cập nhật thành công, không trả về dữ liệu</li>
+<li><strong>404 Not Found</strong>: Không tìm thấy tài nguyên cần cập nhật</li>
+</ul>
+<h3 id="delete-responses">DELETE Responses<a class="zola-anchor" href="#delete-responses" aria-label="Anchor link for: delete-responses" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>200 OK</strong>: Xóa thành công</li>
+<li><strong>204 No Content</strong>: Xóa thành công, không trả về dữ liệu</li>
+<li><strong>404 Not Found</strong>: Không tìm thấy tài nguyên cần xóa</li>
+</ul>
+<h2 id="best-practices-khi-su-dung-http-methods">Best Practices khi sử dụng HTTP Methods<a class="zola-anchor" href="#best-practices-khi-su-dung-http-methods" aria-label="Anchor link for: best-practices-khi-su-dung-http-methods" style="visibility: hidden;"></a></h2>
+<h3 id="1-su-dung-dung-method-cho-dung-muc-dich">1. Sử dụng đúng method cho đúng mục đích<a class="zola-anchor" href="#1-su-dung-dung-method-cho-dung-muc-dich" aria-label="Anchor link for: 1-su-dung-dung-method-cho-dung-muc-dich" style="visibility: hidden;"></a></h3>
+<pre style="background-color:#151515;color:#e8e8d3;"><code><span># Sai: Sử dụng GET để xóa dữ liệu
+</span><span>GET /api/users/delete/123
+</span><span>
+</span><span># Đúng: Sử dụng DELETE
+</span><span>DELETE /api/users/123
+</span></code></pre>
+<h3 id="2-idempotency-trong-thiet-ke-api">2. Idempotency trong thiết kế API<a class="zola-anchor" href="#2-idempotency-trong-thiet-ke-api" aria-label="Anchor link for: 2-idempotency-trong-thiet-ke-api" style="visibility: hidden;"></a></h3>
+<pre style="background-color:#151515;color:#e8e8d3;"><code><span># PUT nên idempotent
+</span><span>PUT /api/users/123
+</span><span>{
+</span><span>  &quot;name&quot;: &quot;Nguyễn Văn A&quot;,
+</span><span>  &quot;email&quot;: &quot;nguyenvana@example.com&quot;
+</span><span>}
+</span><span># Gọi nhiều lần không tạo ra side effects
+</span></code></pre>
+<h3 id="3-su-dung-patch-cho-partial-updates">3. Sử dụng PATCH cho partial updates<a class="zola-anchor" href="#3-su-dung-patch-cho-partial-updates" aria-label="Anchor link for: 3-su-dung-patch-cho-partial-updates" style="visibility: hidden;"></a></h3>
+<pre style="background-color:#151515;color:#e8e8d3;"><code><span># Không hiệu quả: Gửi toàn bộ object
+</span><span>PUT /api/users/123
+</span><span>{
+</span><span>  &quot;id&quot;: 123,
+</span><span>  &quot;name&quot;: &quot;Old Name&quot;,
+</span><span>  &quot;email&quot;: &quot;new.email@example.com&quot;,  # Chỉ thay đổi email
+</span><span>  &quot;phone&quot;: &quot;0901234567&quot;,
+</span><span>  &quot;address&quot;: &quot;Old Address&quot;
+</span><span>}
+</span><span>
+</span><span># Hiệu quả: Chỉ gửi trường cần thay đổi
+</span><span>PATCH /api/users/123
+</span><span>{
+</span><span>  &quot;email&quot;: &quot;new.email@example.com&quot;
+</span><span>}
+</span></code></pre>
+<h3 id="4-content-type-headers">4. Content-Type headers<a class="zola-anchor" href="#4-content-type-headers" aria-label="Anchor link for: 4-content-type-headers" style="visibility: hidden;"></a></h3>
+<pre style="background-color:#151515;color:#e8e8d3;"><code><span># JSON data
+</span><span>POST /api/users HTTP/1.1
+</span><span>Content-Type: application/json
+</span><span>
+</span><span>{
+</span><span>  &quot;name&quot;: &quot;Test User&quot;
+</span><span>}
+</span><span>
+</span><span># Form data
+</span><span>POST /api/upload HTTP/1.1
+</span><span>Content-Type: multipart/form-data
+</span><span>
+</span><span># URL encoded
+</span><span>POST /api/login HTTP/1.1
+</span><span>Content-Type: application/x-www-form-urlencoded
+</span><span>
+</span><span>username=testuser&amp;password=123456
+</span></code></pre>
+<h3 id="5-authentication-va-authorization">5. Authentication và Authorization<a class="zola-anchor" href="#5-authentication-va-authorization" aria-label="Anchor link for: 5-authentication-va-authorization" style="visibility: hidden;"></a></h3>
+<pre style="background-color:#151515;color:#e8e8d3;"><code><span># Bearer token
+</span><span>GET /api/private-data HTTP/1.1
+</span><span>Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+</span><span>
+</span><span># Basic auth
+</span><span>GET /api/admin HTTP/1.1
+</span><span>Authorization: Basic dXNlcm5hbWU6cGFzc3dvcmQ=
+</span><span>
+</span><span># API Key
+</span><span>GET /api/data HTTP/1.1
+</span><span>X-API-Key: abc123def456ghi789
+</span></code></pre>
+<h2 id="cac-loi-thuong-gap">Các lỗi thường gặp<a class="zola-anchor" href="#cac-loi-thuong-gap" aria-label="Anchor link for: cac-loi-thuong-gap" style="visibility: hidden;"></a></h2>
+<h3 id="1-su-dung-get-cho-cac-hanh-dong-thay-doi-du-lieu">1. Sử dụng GET cho các hành động thay đổi dữ liệu<a class="zola-anchor" href="#1-su-dung-get-cho-cac-hanh-dong-thay-doi-du-lieu" aria-label="Anchor link for: 1-su-dung-get-cho-cac-hanh-dong-thay-doi-du-lieu" style="visibility: hidden;"></a></h3>
+<pre style="background-color:#151515;color:#e8e8d3;"><code><span># Nguy hiểm: Search engines có thể crawl và xóa dữ liệu
+</span><span>GET /admin/delete-user?id=123
+</span><span>
+</span><span># An toàn
+</span><span>DELETE /admin/users/123
+</span></code></pre>
+<h3 id="2-khong-handle-idempotency-dung-cach">2. Không handle idempotency đúng cách<a class="zola-anchor" href="#2-khong-handle-idempotency-dung-cach" aria-label="Anchor link for: 2-khong-handle-idempotency-dung-cach" style="visibility: hidden;"></a></h3>
+<pre style="background-color:#151515;color:#e8e8d3;"><code><span># PUT không idempotent
+</span><span>PUT /api/users/123/increment-score
+</span><span># Gọi nhiều lần sẽ tăng score nhiều lần
+</span><span>
+</span><span># PUT idempotent
+</span><span>PUT /api/users/123/score
+</span><span>{
+</span><span>  &quot;score&quot;: 100
+</span><span>}
+</span></code></pre>
+<h3 id="3-tra-ve-status-code-khong-phu-hop">3. Trả về status code không phù hợp<a class="zola-anchor" href="#3-tra-ve-status-code-khong-phu-hop" aria-label="Anchor link for: 3-tra-ve-status-code-khong-phu-hop" style="visibility: hidden;"></a></h3>
+<pre data-lang="javascript" style="background-color:#151515;color:#e8e8d3;" class="language-javascript "><code class="language-javascript" data-lang="javascript"><span style="color:#888888;">// Sai: Trả về 200 khi không tìm thấy
+</span><span style="color:#ffb964;">app</span><span>.get(</span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">/api/users/:id</span><span style="color:#556633;">&#39;</span><span>, (</span><span style="color:#ffb964;">req</span><span>, </span><span style="color:#ffb964;">res</span><span>) </span><span style="color:#8fbfdc;">=&gt; </span><span>{
+</span><span>  </span><span style="color:#8fbfdc;">const </span><span style="color:#ffb964;">user </span><span>= </span><span style="color:#fad07a;">findUser</span><span>(</span><span style="color:#ffb964;">req</span><span>.</span><span style="color:#ffb964;">params</span><span>.id);
+</span><span>  </span><span style="color:#8fbfdc;">if </span><span>(!</span><span style="color:#ffb964;">user</span><span>) {
+</span><span>    </span><span style="color:#8fbfdc;">return </span><span style="color:#ffb964;">res</span><span>.</span><span style="color:#fad07a;">status</span><span>(</span><span style="color:#cf6a4c;">200</span><span>).</span><span style="color:#fad07a;">json</span><span>({ message: </span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">User not found</span><span style="color:#556633;">&#39; </span><span>});
+</span><span>  }
+</span><span>  </span><span style="color:#ffb964;">res</span><span>.</span><span style="color:#fad07a;">json</span><span>(</span><span style="color:#ffb964;">user</span><span>);
+</span><span>});
+</span><span>
+</span><span style="color:#888888;">// Đúng: Trả về 404
+</span><span style="color:#ffb964;">app</span><span>.get(</span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">/api/users/:id</span><span style="color:#556633;">&#39;</span><span>, (</span><span style="color:#ffb964;">req</span><span>, </span><span style="color:#ffb964;">res</span><span>) </span><span style="color:#8fbfdc;">=&gt; </span><span>{
+</span><span>  </span><span style="color:#8fbfdc;">const </span><span style="color:#ffb964;">user </span><span>= </span><span style="color:#fad07a;">findUser</span><span>(</span><span style="color:#ffb964;">req</span><span>.</span><span style="color:#ffb964;">params</span><span>.id);
+</span><span>  </span><span style="color:#8fbfdc;">if </span><span>(!</span><span style="color:#ffb964;">user</span><span>) {
+</span><span>    </span><span style="color:#8fbfdc;">return </span><span style="color:#ffb964;">res</span><span>.</span><span style="color:#fad07a;">status</span><span>(</span><span style="color:#cf6a4c;">404</span><span>).</span><span style="color:#fad07a;">json</span><span>({ error: </span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">User not found</span><span style="color:#556633;">&#39; </span><span>});
+</span><span>  }
+</span><span>  </span><span style="color:#ffb964;">res</span><span>.</span><span style="color:#fad07a;">json</span><span>(</span><span style="color:#ffb964;">user</span><span>);
+</span><span>});
+</span></code></pre>
+<h2 id="testing-http-methods">Testing HTTP Methods<a class="zola-anchor" href="#testing-http-methods" aria-label="Anchor link for: testing-http-methods" style="visibility: hidden;"></a></h2>
+<h3 id="su-dung-curl">Sử dụng cURL<a class="zola-anchor" href="#su-dung-curl" aria-label="Anchor link for: su-dung-curl" style="visibility: hidden;"></a></h3>
+<pre data-lang="bash" style="background-color:#151515;color:#e8e8d3;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#888888;"># GET request
+</span><span style="color:#ffb964;">curl -X</span><span> GET </span><span style="color:#556633;">&quot;</span><span style="color:#99ad6a;">https://api.example.com/users</span><span style="color:#556633;">&quot;
+</span><span>
+</span><span style="color:#888888;"># POST request
+</span><span style="color:#ffb964;">curl -X</span><span> POST </span><span style="color:#556633;">&quot;</span><span style="color:#99ad6a;">https://api.example.com/users</span><span style="color:#556633;">&quot; </span><span>\
+</span><span style="color:#ffb964;">  -H </span><span style="color:#556633;">&quot;</span><span style="color:#99ad6a;">Content-Type: application/json</span><span style="color:#556633;">&quot; </span><span>\
+</span><span style="color:#ffb964;">  -d </span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">{&quot;name&quot;:&quot;Test User&quot;,&quot;email&quot;:&quot;test@example.com&quot;}</span><span style="color:#556633;">&#39;
+</span><span>
+</span><span style="color:#888888;"># PUT request
+</span><span style="color:#ffb964;">curl -X</span><span> PUT </span><span style="color:#556633;">&quot;</span><span style="color:#99ad6a;">https://api.example.com/users/123</span><span style="color:#556633;">&quot; </span><span>\
+</span><span style="color:#ffb964;">  -H </span><span style="color:#556633;">&quot;</span><span style="color:#99ad6a;">Content-Type: application/json</span><span style="color:#556633;">&quot; </span><span>\
+</span><span style="color:#ffb964;">  -d </span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">{&quot;name&quot;:&quot;Updated Name&quot;,&quot;email&quot;:&quot;updated@example.com&quot;}</span><span style="color:#556633;">&#39;
+</span><span>
+</span><span style="color:#888888;"># DELETE request
+</span><span style="color:#ffb964;">curl -X</span><span> DELETE </span><span style="color:#556633;">&quot;</span><span style="color:#99ad6a;">https://api.example.com/users/123</span><span style="color:#556633;">&quot; </span><span>\
+</span><span style="color:#ffb964;">  -H </span><span style="color:#556633;">&quot;</span><span style="color:#99ad6a;">Authorization: Bearer token123</span><span style="color:#556633;">&quot;
+</span></code></pre>
+<h3 id="su-dung-postman">Sử dụng Postman<a class="zola-anchor" href="#su-dung-postman" aria-label="Anchor link for: su-dung-postman" style="visibility: hidden;"></a></h3>
+<p>Postman là công cụ GUI phổ biến để test APIs:</p>
+<ol>
+<li>Tạo collection cho API</li>
+<li>Thêm requests với các methods khác nhau</li>
+<li>Thiết lập headers và body</li>
+<li>Sử dụng variables và environments</li>
+<li>Viết tests tự động</li>
+</ol>
+<h3 id="su-dung-javascript-fetch-api">Sử dụng JavaScript Fetch API<a class="zola-anchor" href="#su-dung-javascript-fetch-api" aria-label="Anchor link for: su-dung-javascript-fetch-api" style="visibility: hidden;"></a></h3>
+<pre data-lang="javascript" style="background-color:#151515;color:#e8e8d3;" class="language-javascript "><code class="language-javascript" data-lang="javascript"><span style="color:#888888;">// GET request
+</span><span style="color:#8fbfdc;">const </span><span style="color:#fad07a;">getUsers </span><span>= </span><span style="color:#8fbfdc;">async </span><span>() </span><span style="color:#8fbfdc;">=&gt; </span><span>{
+</span><span>  </span><span style="color:#8fbfdc;">const </span><span style="color:#ffb964;">response </span><span>= </span><span style="color:#8fbfdc;">await </span><span style="color:#fad07a;">fetch</span><span>(</span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">/api/users</span><span style="color:#556633;">&#39;</span><span>);
+</span><span>  </span><span style="color:#8fbfdc;">const </span><span style="color:#ffb964;">users </span><span>= </span><span style="color:#8fbfdc;">await </span><span style="color:#ffb964;">response</span><span>.</span><span style="color:#fad07a;">json</span><span>();
+</span><span>  </span><span style="color:#8fbfdc;">return </span><span style="color:#ffb964;">users</span><span>;
+</span><span>};
+</span><span>
+</span><span style="color:#888888;">// POST request
+</span><span style="color:#8fbfdc;">const </span><span style="color:#fad07a;">createUser </span><span>= </span><span style="color:#8fbfdc;">async </span><span>(</span><span style="color:#ffb964;">userData</span><span>) </span><span style="color:#8fbfdc;">=&gt; </span><span>{
+</span><span>  </span><span style="color:#8fbfdc;">const </span><span style="color:#ffb964;">response </span><span>= </span><span style="color:#8fbfdc;">await </span><span style="color:#fad07a;">fetch</span><span>(</span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">/api/users</span><span style="color:#556633;">&#39;</span><span>, {
+</span><span>    method: </span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">POST</span><span style="color:#556633;">&#39;</span><span>,
+</span><span>    headers: {
+</span><span>      </span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">Content-Type</span><span style="color:#556633;">&#39;</span><span>: </span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">application/json</span><span style="color:#556633;">&#39;</span><span>,
+</span><span>    },
+</span><span>    body: JSON.stringify(</span><span style="color:#ffb964;">userData</span><span>)
+</span><span>  });
+</span><span>  </span><span style="color:#8fbfdc;">return </span><span style="color:#ffb964;">response</span><span>.</span><span style="color:#fad07a;">json</span><span>();
+</span><span>};
+</span><span>
+</span><span style="color:#888888;">// PUT request
+</span><span style="color:#8fbfdc;">const </span><span style="color:#fad07a;">updateUser </span><span>= </span><span style="color:#8fbfdc;">async </span><span>(</span><span style="color:#ffb964;">id</span><span>, </span><span style="color:#ffb964;">userData</span><span>) </span><span style="color:#8fbfdc;">=&gt; </span><span>{
+</span><span>  </span><span style="color:#8fbfdc;">const </span><span style="color:#ffb964;">response </span><span>= </span><span style="color:#8fbfdc;">await </span><span style="color:#fad07a;">fetch</span><span>(</span><span style="color:#99ad6a;">`/api/users/${</span><span style="color:#ffb964;">id</span><span style="color:#99ad6a;">}`</span><span>, {
+</span><span>    method: </span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">PUT</span><span style="color:#556633;">&#39;</span><span>,
+</span><span>    headers: {
+</span><span>      </span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">Content-Type</span><span style="color:#556633;">&#39;</span><span>: </span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">application/json</span><span style="color:#556633;">&#39;</span><span>,
+</span><span>    },
+</span><span>    body: JSON.stringify(</span><span style="color:#ffb964;">userData</span><span>)
+</span><span>  });
+</span><span>  </span><span style="color:#8fbfdc;">return </span><span style="color:#ffb964;">response</span><span>.</span><span style="color:#fad07a;">json</span><span>();
+</span><span>};
+</span><span>
+</span><span style="color:#888888;">// DELETE request
+</span><span style="color:#8fbfdc;">const </span><span style="color:#fad07a;">deleteUser </span><span>= </span><span style="color:#8fbfdc;">async </span><span>(</span><span style="color:#ffb964;">id</span><span>) </span><span style="color:#8fbfdc;">=&gt; </span><span>{
+</span><span>  </span><span style="color:#8fbfdc;">const </span><span style="color:#ffb964;">response </span><span>= </span><span style="color:#8fbfdc;">await </span><span style="color:#fad07a;">fetch</span><span>(</span><span style="color:#99ad6a;">`/api/users/${</span><span style="color:#ffb964;">id</span><span style="color:#99ad6a;">}`</span><span>, {
+</span><span>    method: </span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">DELETE</span><span style="color:#556633;">&#39;
+</span><span>  });
+</span><span>  </span><span style="color:#8fbfdc;">return </span><span style="color:#ffb964;">response</span><span>.</span><span style="color:#ffb964;">ok</span><span>;
+</span><span>};
+</span></code></pre>
+<h2 id="bao-mat-voi-http-methods">Bảo mật với HTTP Methods<a class="zola-anchor" href="#bao-mat-voi-http-methods" aria-label="Anchor link for: bao-mat-voi-http-methods" style="visibility: hidden;"></a></h2>
+<h3 id="1-validation-va-sanitization">1. Validation và Sanitization<a class="zola-anchor" href="#1-validation-va-sanitization" aria-label="Anchor link for: 1-validation-va-sanitization" style="visibility: hidden;"></a></h3>
+<pre data-lang="javascript" style="background-color:#151515;color:#e8e8d3;" class="language-javascript "><code class="language-javascript" data-lang="javascript"><span style="color:#888888;">// Kiểm tra dữ liệu đầu vào
+</span><span style="color:#ffb964;">app</span><span>.</span><span style="color:#fad07a;">post</span><span>(</span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">/api/users</span><span style="color:#556633;">&#39;</span><span>, (</span><span style="color:#ffb964;">req</span><span>, </span><span style="color:#ffb964;">res</span><span>) </span><span style="color:#8fbfdc;">=&gt; </span><span>{
+</span><span>  </span><span style="color:#8fbfdc;">const </span><span>{ </span><span style="color:#ffb964;">name</span><span>, </span><span style="color:#ffb964;">email</span><span>, </span><span style="color:#ffb964;">password </span><span>} = </span><span style="color:#ffb964;">req</span><span>.body;
+</span><span>  
+</span><span>  </span><span style="color:#888888;">// Validation
+</span><span>  </span><span style="color:#8fbfdc;">if </span><span>(!</span><span style="color:#ffb964;">name </span><span>|| </span><span style="color:#ffb964;">name</span><span>.length &lt; </span><span style="color:#cf6a4c;">2</span><span>) {
+</span><span>    </span><span style="color:#8fbfdc;">return </span><span style="color:#ffb964;">res</span><span>.</span><span style="color:#fad07a;">status</span><span>(</span><span style="color:#cf6a4c;">400</span><span>).</span><span style="color:#fad07a;">json</span><span>({ error: </span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">Tên phải có ít nhất 2 ký tự</span><span style="color:#556633;">&#39; </span><span>});
+</span><span>  }
+</span><span>  
+</span><span>  </span><span style="color:#8fbfdc;">if </span><span>(!</span><span style="color:#fad07a;">isValidEmail</span><span>(</span><span style="color:#ffb964;">email</span><span>)) {
+</span><span>    </span><span style="color:#8fbfdc;">return </span><span style="color:#ffb964;">res</span><span>.</span><span style="color:#fad07a;">status</span><span>(</span><span style="color:#cf6a4c;">400</span><span>).</span><span style="color:#fad07a;">json</span><span>({ error: </span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">Email không hợp lệ</span><span style="color:#556633;">&#39; </span><span>});
+</span><span>  }
+</span><span>  
+</span><span>  </span><span style="color:#8fbfdc;">if </span><span>(</span><span style="color:#ffb964;">password</span><span>.length &lt; </span><span style="color:#cf6a4c;">8</span><span>) {
+</span><span>    </span><span style="color:#8fbfdc;">return </span><span style="color:#ffb964;">res</span><span>.</span><span style="color:#fad07a;">status</span><span>(</span><span style="color:#cf6a4c;">400</span><span>).</span><span style="color:#fad07a;">json</span><span>({ error: </span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">Mật khẩu phải có ít nhất 8 ký tự</span><span style="color:#556633;">&#39; </span><span>});
+</span><span>  }
+</span><span>  
+</span><span>  </span><span style="color:#888888;">// Sanitization
+</span><span>  </span><span style="color:#8fbfdc;">const </span><span style="color:#ffb964;">sanitizedData </span><span>= {
+</span><span>    name: </span><span style="color:#fad07a;">sanitize</span><span>(</span><span style="color:#ffb964;">name</span><span>),
+</span><span>    email: </span><span style="color:#fad07a;">sanitize</span><span>(</span><span style="color:#ffb964;">email</span><span>),
+</span><span>    password: </span><span style="color:#fad07a;">hashPassword</span><span>(</span><span style="color:#ffb964;">password</span><span>)
+</span><span>  };
+</span><span>  
+</span><span>  </span><span style="color:#888888;">// Tạo user...
+</span><span>});
+</span></code></pre>
+<h3 id="2-rate-limiting">2. Rate Limiting<a class="zola-anchor" href="#2-rate-limiting" aria-label="Anchor link for: 2-rate-limiting" style="visibility: hidden;"></a></h3>
+<pre data-lang="javascript" style="background-color:#151515;color:#e8e8d3;" class="language-javascript "><code class="language-javascript" data-lang="javascript"><span style="color:#8fbfdc;">const </span><span style="color:#ffb964;">rateLimit </span><span>= require(</span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">express-rate-limit</span><span style="color:#556633;">&#39;</span><span>);
+</span><span>
+</span><span style="color:#888888;">// Giới hạn POST requests
+</span><span style="color:#8fbfdc;">const </span><span style="color:#ffb964;">postLimiter </span><span>= </span><span style="color:#fad07a;">rateLimit</span><span>({
+</span><span>  windowMs: </span><span style="color:#cf6a4c;">15 </span><span>* </span><span style="color:#cf6a4c;">60 </span><span>* </span><span style="color:#cf6a4c;">1000</span><span>, </span><span style="color:#888888;">// 15 phút
+</span><span>  max: </span><span style="color:#cf6a4c;">10</span><span>, </span><span style="color:#888888;">// Tối đa 10 requests
+</span><span>  message: </span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">Quá nhiều yêu cầu tạo mới, vui lòng thử lại sau</span><span style="color:#556633;">&#39;
+</span><span>});
+</span><span>
+</span><span style="color:#ffb964;">app</span><span>.</span><span style="color:#fad07a;">post</span><span>(</span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">/api/users</span><span style="color:#556633;">&#39;</span><span>, </span><span style="color:#ffb964;">postLimiter</span><span>, (</span><span style="color:#ffb964;">req</span><span>, </span><span style="color:#ffb964;">res</span><span>) </span><span style="color:#8fbfdc;">=&gt; </span><span>{
+</span><span>  </span><span style="color:#888888;">// Xử lý tạo user
+</span><span>});
+</span></code></pre>
+<h3 id="3-cors-configuration">3. CORS Configuration<a class="zola-anchor" href="#3-cors-configuration" aria-label="Anchor link for: 3-cors-configuration" style="visibility: hidden;"></a></h3>
+<pre data-lang="javascript" style="background-color:#151515;color:#e8e8d3;" class="language-javascript "><code class="language-javascript" data-lang="javascript"><span style="color:#8fbfdc;">const </span><span style="color:#ffb964;">cors </span><span>= require(</span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">cors</span><span style="color:#556633;">&#39;</span><span>);
+</span><span>
+</span><span style="color:#ffb964;">app</span><span>.</span><span style="color:#fad07a;">use</span><span>(</span><span style="color:#fad07a;">cors</span><span>({
+</span><span>  origin: [</span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">https://myapp.com</span><span style="color:#556633;">&#39;</span><span>, </span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">https://admin.myapp.com</span><span style="color:#556633;">&#39;</span><span>],
+</span><span>  methods: [</span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">GET</span><span style="color:#556633;">&#39;</span><span>, </span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">POST</span><span style="color:#556633;">&#39;</span><span>, </span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">PUT</span><span style="color:#556633;">&#39;</span><span>, </span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">DELETE</span><span style="color:#556633;">&#39;</span><span>],
+</span><span>  allowedHeaders: [</span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">Content-Type</span><span style="color:#556633;">&#39;</span><span>, </span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">Authorization</span><span style="color:#556633;">&#39;</span><span>],
+</span><span>  credentials: true
+</span><span>}));
+</span></code></pre>
+<h2 id="performance-optimization">Performance Optimization<a class="zola-anchor" href="#performance-optimization" aria-label="Anchor link for: performance-optimization" style="visibility: hidden;"></a></h2>
+<h3 id="1-caching-cho-get-requests">1. Caching cho GET requests<a class="zola-anchor" href="#1-caching-cho-get-requests" aria-label="Anchor link for: 1-caching-cho-get-requests" style="visibility: hidden;"></a></h3>
+<pre data-lang="javascript" style="background-color:#151515;color:#e8e8d3;" class="language-javascript "><code class="language-javascript" data-lang="javascript"><span style="color:#8fbfdc;">const </span><span style="color:#ffb964;">NodeCache </span><span>= require(</span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">node-cache</span><span style="color:#556633;">&#39;</span><span>);
+</span><span style="color:#8fbfdc;">const </span><span style="color:#ffb964;">cache </span><span>= new </span><span style="color:#ffb964;">NodeCache</span><span>({ stdTTL: </span><span style="color:#cf6a4c;">300 </span><span>}); </span><span style="color:#888888;">// Cache 5 phút
+</span><span>
+</span><span style="color:#ffb964;">app</span><span>.get(</span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">/api/users</span><span style="color:#556633;">&#39;</span><span>, (</span><span style="color:#ffb964;">req</span><span>, </span><span style="color:#ffb964;">res</span><span>) </span><span style="color:#8fbfdc;">=&gt; </span><span>{
+</span><span>  </span><span style="color:#8fbfdc;">const </span><span style="color:#ffb964;">cacheKey </span><span>= </span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">users_list</span><span style="color:#556633;">&#39;</span><span>;
+</span><span>  </span><span style="color:#8fbfdc;">const </span><span style="color:#ffb964;">cachedData </span><span>= </span><span style="color:#ffb964;">cache</span><span>.get(</span><span style="color:#ffb964;">cacheKey</span><span>);
+</span><span>  
+</span><span>  </span><span style="color:#8fbfdc;">if </span><span>(</span><span style="color:#ffb964;">cachedData</span><span>) {
+</span><span>    </span><span style="color:#8fbfdc;">return </span><span style="color:#ffb964;">res</span><span>.</span><span style="color:#fad07a;">json</span><span>(</span><span style="color:#ffb964;">cachedData</span><span>);
+</span><span>  }
+</span><span>  
+</span><span>  </span><span style="color:#8fbfdc;">const </span><span style="color:#ffb964;">users </span><span>= </span><span style="color:#fad07a;">getUsersFromDatabase</span><span>();
+</span><span>  </span><span style="color:#ffb964;">cache</span><span>.set(</span><span style="color:#ffb964;">cacheKey</span><span>, </span><span style="color:#ffb964;">users</span><span>);
+</span><span>  </span><span style="color:#ffb964;">res</span><span>.</span><span style="color:#fad07a;">json</span><span>(</span><span style="color:#ffb964;">users</span><span>);
+</span><span>});
+</span></code></pre>
+<h3 id="2-pagination-cho-get-requests">2. Pagination cho GET requests<a class="zola-anchor" href="#2-pagination-cho-get-requests" aria-label="Anchor link for: 2-pagination-cho-get-requests" style="visibility: hidden;"></a></h3>
+<pre data-lang="javascript" style="background-color:#151515;color:#e8e8d3;" class="language-javascript "><code class="language-javascript" data-lang="javascript"><span style="color:#ffb964;">app</span><span>.get(</span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">/api/users</span><span style="color:#556633;">&#39;</span><span>, (</span><span style="color:#ffb964;">req</span><span>, </span><span style="color:#ffb964;">res</span><span>) </span><span style="color:#8fbfdc;">=&gt; </span><span>{
+</span><span>  </span><span style="color:#8fbfdc;">const </span><span style="color:#ffb964;">page </span><span>= parseInt(</span><span style="color:#ffb964;">req</span><span>.</span><span style="color:#ffb964;">query</span><span>.</span><span style="color:#ffb964;">page</span><span>) || </span><span style="color:#cf6a4c;">1</span><span>;
+</span><span>  </span><span style="color:#8fbfdc;">const </span><span style="color:#ffb964;">limit </span><span>= parseInt(</span><span style="color:#ffb964;">req</span><span>.</span><span style="color:#ffb964;">query</span><span>.</span><span style="color:#ffb964;">limit</span><span>) || </span><span style="color:#cf6a4c;">10</span><span>;
+</span><span>  </span><span style="color:#8fbfdc;">const </span><span style="color:#ffb964;">offset </span><span>= (</span><span style="color:#ffb964;">page </span><span>- </span><span style="color:#cf6a4c;">1</span><span>) * </span><span style="color:#ffb964;">limit</span><span>;
+</span><span>  
+</span><span>  </span><span style="color:#8fbfdc;">const </span><span style="color:#ffb964;">users </span><span>= </span><span style="color:#fad07a;">getUsersFromDatabase</span><span>(</span><span style="color:#ffb964;">limit</span><span>, </span><span style="color:#ffb964;">offset</span><span>);
+</span><span>  </span><span style="color:#8fbfdc;">const </span><span style="color:#ffb964;">total </span><span>= </span><span style="color:#fad07a;">getTotalUsersCount</span><span>();
+</span><span>  
+</span><span>  </span><span style="color:#ffb964;">res</span><span>.</span><span style="color:#fad07a;">json</span><span>({
+</span><span>    data: </span><span style="color:#ffb964;">users</span><span>,
+</span><span>    pagination: {
+</span><span>      </span><span style="color:#ffb964;">page</span><span>,
+</span><span>      </span><span style="color:#ffb964;">limit</span><span>,
+</span><span>      </span><span style="color:#ffb964;">total</span><span>,
+</span><span>      totalPages: Math.ceil(</span><span style="color:#ffb964;">total </span><span>/ </span><span style="color:#ffb964;">limit</span><span>)
+</span><span>    }
+</span><span>  });
+</span><span>});
+</span></code></pre>
+<h3 id="3-compression">3. Compression<a class="zola-anchor" href="#3-compression" aria-label="Anchor link for: 3-compression" style="visibility: hidden;"></a></h3>
+<pre data-lang="javascript" style="background-color:#151515;color:#e8e8d3;" class="language-javascript "><code class="language-javascript" data-lang="javascript"><span style="color:#8fbfdc;">const </span><span style="color:#ffb964;">compression </span><span>= require(</span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">compression</span><span style="color:#556633;">&#39;</span><span>);
+</span><span>
+</span><span style="color:#ffb964;">app</span><span>.</span><span style="color:#fad07a;">use</span><span>(</span><span style="color:#fad07a;">compression</span><span>({
+</span><span>  </span><span style="color:#fad07a;">filter</span><span>: (</span><span style="color:#ffb964;">req</span><span>, </span><span style="color:#ffb964;">res</span><span>) </span><span style="color:#8fbfdc;">=&gt; </span><span>{
+</span><span>    </span><span style="color:#8fbfdc;">if </span><span>(</span><span style="color:#ffb964;">req</span><span>.headers[</span><span style="color:#556633;">&#39;</span><span style="color:#99ad6a;">x-no-compression</span><span style="color:#556633;">&#39;</span><span>]) {
+</span><span>      </span><span style="color:#8fbfdc;">return </span><span>false;
+</span><span>    }
+</span><span>    </span><span style="color:#8fbfdc;">return </span><span style="color:#ffb964;">compression</span><span>.</span><span style="color:#fad07a;">filter</span><span>(</span><span style="color:#ffb964;">req</span><span>, </span><span style="color:#ffb964;">res</span><span>);
+</span><span>  }
+</span><span>}));
+</span></code></pre>
+<h2 id="ket-luan">Kết luận<a class="zola-anchor" href="#ket-luan" aria-label="Anchor link for: ket-luan" style="visibility: hidden;"></a></h2>
+<p>HTTP Methods là nền tảng của giao tiếp web hiện đại. Hiểu rõ từng method và cách sử dụng chúng đúng cách sẽ giúp bạn:</p>
+<p><strong>Xây dựng APIs chất lượng</strong>: RESTful, dễ hiểu và maintainable</p>
+<p><strong>Tối ưu performance</strong>: Sử dụng caching hiệu quả, giảm tải server</p>
+<p><strong>Đảm bảo bảo mật</strong>: Proper validation, authorization và rate limiting</p>
+<p><strong>Tăng trải nghiệm người dùng</strong>: Responses nhanh, error handling tốt</p>
+<p><strong>Dễ dàng debugging</strong>: Clear semantics giúp troubleshooting dễ dàng hơn</p>
+<p>Hãy luôn nhớ các nguyên tắc cơ bản: GET để lấy dữ liệu, POST để tạo mới, PUT/PATCH để cập nhật, DELETE để xóa. Kết hợp với việc sử dụng đúng status codes và headers, bạn sẽ tạo ra những APIs professional và robust.</p>
+<p>Trong thực tế, việc thiết kế API tốt không chỉ dừng lại ở việc chọn đúng HTTP method mà còn bao gồm nhiều yếu tố khác như authentication, error handling, documentation, và monitoring. Tuy nhiên, nắm vững HTTP Methods là bước đầu tiên và quan trọng nhất trong hành trình này.</p>
+<hr />
+
+      </article>
+
+      
+      
+
+      
+      
+    </div>
+
+    
+
+
+<footer>
+  <div class="left">
+    <div class="copyright">
+      © 2025 Wen
+      
+    </div>
+  </div>
+
+  <div class="right">
+    
+    
+    
+    
+
+    
+    
+    
+    <button id="theme-toggle" aria-label="theme switch">
+      <span class="moon-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill="currentColor"></path></svg>
+</span>
+      <span class="sun-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z" fill="currentColor"></path></svg>
+</span>
+    </button>
+    
+  </div>
+</footer>
+
+
+
+
+
+  </main>
+</div>
+
+  
+<script src="/js/lightense.min.js"></script>
+
+
+  <script src="https://wen.is-a.dev/js/main.js"></script>
+</body>
+
+</html>

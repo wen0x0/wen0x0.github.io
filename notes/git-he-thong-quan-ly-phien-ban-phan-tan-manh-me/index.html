@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  
+  
+    
+  
+  <meta name="description" content="Mình viết linh tinh ở đây">
+
+  <title>Quản lý version với Git</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="https://wen.is-a.dev/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://wen.is-a.dev/img/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://wen.is-a.dev/img/apple-touch-icon.png">
+
+  
+  <style>
+  /* light mode colors */
+  body {
+    /* --primary-color: #5871a2; */
+    --primary-color: #505050;
+    --primary-pale-color: #5871a233;
+    --primary-decoration-color: #5871a210;
+    --bg-color: #ffffff;
+    /* --text-color: #2f3030; */
+    --text-color: #000000;
+    /* --text-pale-color: #767676; */
+    --text-pale-color: #000000;
+    --text-decoration-color: #a9a9a9;
+    --highlight-mark-color: #5f75b020;
+
+    --callout-note-color: #5871a2;
+    --callout-tip-color: #268556;
+    --callout-important-color: #885fc9;
+    --callout-warning-color: #ab6632;
+    --callout-caution-color: #c64e4e;
+  }
+
+  /* dark mode colors */
+  body.dark {
+    /* --primary-color: #6f8fd1; */
+    --primary-color: #00ffff;
+    --primary-pale-color: #6f8fd166;
+    --primary-decoration-color: #6f8fd112;
+    /* --bg-color: #1c1c1c; */
+    --bg-color: #002a30;
+    /* --text-color: #c1c1c1; */
+    --text-color: #ffffff;
+    /* --text-pale-color: #848484; */
+    --text-pale-color: #ffffff;
+    --text-decoration-color: #5f5f5f;
+    --highlight-mark-color: #8296cb3b;
+
+    --callout-note-color: #6f8fd1;
+    --callout-tip-color: #47976f;
+    --callout-important-color: #9776cd;
+    --callout-warning-color: #ad7a52;
+    --callout-caution-color: #d06161;
+  }
+
+  /* typography */
+  body {
+    --main-font: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --code-font: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    --homepage-max-width: 768px;
+    --main-max-width: 768px;
+    --avatar-size: 75px;
+    --font-size: 16px;
+    --line-height: 1.75;
+    --img-border-radius: 0px;
+    --detail-border-radius: 0px;
+    --dark-mode-img-brightness: 0.75;
+    --dark-mode-chart-brightness: 0.75;
+    --inline-code-border-radius: 2px;
+    --inline-code-bg-color: var(--primary-decoration-color);
+    --block-code-border-radius: 0px;
+    --block-code-border-color: var(--primary-color);
+    --detail-border-color: var(--primary-color);
+  }
+
+  .gif-wrapper {
+    text-align: center;
+    margin: 1.5rem 0;
+  }
+
+  .gif-wrapper .intro-gif {
+    max-width: 96%;
+    height: auto;
+    border-radius: 8px;
+  }
+</style>
+  <link rel="stylesheet" href="https://wen.is-a.dev/main.css">
+  
+
+
+
+  
+</head>
+
+<body class="post">
+  
+  <script>
+    const theme = sessionStorage.getItem('theme');
+    const match = window.matchMedia("(prefers-color-scheme: dark)").matches
+    if ((theme && theme == 'dark') || (!theme && match)) {
+      document.body.classList.add('dark');
+      const hl = document.querySelector('link#hl');
+      if (hl) hl.href = 'https://wen.is-a.dev/hl-dark.css';
+    }
+  </script>
+  
+  
+<div id="wrapper">
+  <div id="blank"></div>
+  <aside>
+    
+    
+    <nav>
+      <ul>
+        
+        <li>
+          <a class="h2" href="#tai-sao-git-lai-quan-trong">Tại sao Git lại quan trọng?</a>
+          
+        </li>
+        
+        <li>
+          <a class="h2" href="#cac-khai-niem-co-ban">Các khái niệm cơ bản</a>
+          
+          <ul>
+            
+            <li>
+              <a class="h3" href="#repository-repo">Repository (Repo)</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#working-directory-staging-area-va-git-directory">Working Directory, Staging Area và Git Directory</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#commit">Commit</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#branch-nhanh">Branch (Nhánh)</a>
+            </li>
+            
+          </ul>
+          
+        </li>
+        
+        <li>
+          <a class="h2" href="#cai-dat-git">Cài đặt Git</a>
+          
+          <ul>
+            
+            <li>
+              <a class="h3" href="#tren-windows">Trên Windows</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#tren-macos">Trên macOS</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#tren-linux-ubuntu-debian">Trên Linux (Ubuntu&#x2F;Debian)</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#cau-hinh-ban-dau">Cấu hình ban đầu</a>
+            </li>
+            
+          </ul>
+          
+        </li>
+        
+        <li>
+          <a class="h2" href="#cac-lenh-git-co-ban">Các lệnh Git cơ bản</a>
+          
+          <ul>
+            
+            <li>
+              <a class="h3" href="#khoi-tao-va-sao-chep-repository">Khởi tạo và sao chép repository</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#lam-viec-voi-files">Làm việc với files</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#xem-lich-su">Xem lịch sử</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#lam-viec-voi-remote-repository">Làm việc với remote repository</a>
+            </li>
+            
+          </ul>
+          
+        </li>
+        
+        <li>
+          <a class="h2" href="#lam-viec-voi-branches">Làm việc với Branches</a>
+          
+          <ul>
+            
+            <li>
+              <a class="h3" href="#tao-va-chuyen-doi-branch">Tạo và chuyển đổi branch</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#merge-va-rebase">Merge và Rebase</a>
+            </li>
+            
+          </ul>
+          
+        </li>
+        
+        <li>
+          <a class="h2" href="#xu-ly-xung-dot-conflicts">Xử lý xung đột (Conflicts)</a>
+          
+        </li>
+        
+        <li>
+          <a class="h2" href="#cac-lenh-huu-ich-khac">Các lệnh hữu ích khác</a>
+          
+          <ul>
+            
+            <li>
+              <a class="h3" href="#stash-luu-tam-thoi-thay-doi">Stash - Lưu tạm thời thay đổi</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#reset-va-revert">Reset và Revert</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#tag">Tag</a>
+            </li>
+            
+          </ul>
+          
+        </li>
+        
+        <li>
+          <a class="h2" href="#workflow-pho-bien">Workflow phổ biến</a>
+          
+          <ul>
+            
+            <li>
+              <a class="h3" href="#git-flow">Git Flow</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#github-flow">GitHub Flow</a>
+            </li>
+            
+          </ul>
+          
+        </li>
+        
+        <li>
+          <a class="h2" href="#best-practices">Best Practices</a>
+          
+          <ul>
+            
+            <li>
+              <a class="h3" href="#commit-messages">Commit Messages</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#gitignore">Gitignore</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#atomic-commits">Atomic Commits</a>
+            </li>
+            
+          </ul>
+          
+        </li>
+        
+        <li>
+          <a class="h2" href="#troubleshooting-pho-bien">Troubleshooting phổ biến</a>
+          
+          <ul>
+            
+            <li>
+              <a class="h3" href="#undo-commit-cuoi-cung">Undo commit cuối cùng</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#thay-doi-commit-message-cuoi">Thay đổi commit message cuối</a>
+            </li>
+            
+            <li>
+              <a class="h3" href="#khoi-phuc-file-da-xoa">Khôi phục file đã xóa</a>
+            </li>
+            
+          </ul>
+          
+        </li>
+        
+        <li>
+          <a class="h2" href="#ket-luan">Kết luận</a>
+          
+        </li>
+        
+      </ul>
+    </nav>
+    
+    
+    <button id="back-to-top" aria-label="back to top">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-up"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+
+    </button>
+    
+  </aside>
+  <main>
+    
+<header>
+  <nav>
+    <a href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;notes">← Back</a>
+  </nav>
+</header>
+
+
+    <div>
+      
+      
+      
+      
+      <div id="copy-cfg" style="display: none;" data-copy-icon="&lt;svg xmlns=&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2000&#x2F;svg&quot; viewBox=&quot;0 0 24 24&quot; width=&quot;18&quot; height=&quot;18&quot;&gt;&lt;path d=&quot;M6.9998 6V3C6.9998 2.44772 7.44752 2 7.9998 2H19.9998C20.5521 2 20.9998 2.44772 20.9998 3V17C20.9998 17.5523 20.5521 18 19.9998 18H16.9998V20.9991C16.9998 21.5519 16.5499 22 15.993 22H4.00666C3.45059 22 3 21.5554 3 20.9991L3.0026 7.00087C3.0027 6.44811 3.45264 6 4.00942 6H6.9998ZM5.00242 8L5.00019 20H14.9998V8H5.00242ZM8.9998 6H16.9998V16H18.9998V4H8.9998V6Z&quot; fill=&quot;currentColor&quot;&gt;&lt;&#x2F;path&gt;&lt;&#x2F;svg&gt;
+" data-check-icon="&lt;svg xmlns=&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2000&#x2F;svg&quot; viewBox=&quot;0 0 24 24&quot; width=&quot;18&quot; height=&quot;18&quot;&gt;&lt;path d=&quot;M10.0007 15.1709L19.1931 5.97852L20.6073 7.39273L10.0007 17.9993L3.63672 11.6354L5.05093 10.2212L10.0007 15.1709Z&quot; fill=&quot;currentColor&quot;&gt;&lt;&#x2F;path&gt;&lt;&#x2F;svg&gt;
+"></div>
+      
+      <article class="prose">
+        <h1>Quản lý version với Git</h1>
+        <div id="post-info">
+          <div id="date">
+            <span id="publish">Feb 05, 2024</span>
+            </div>
+
+          
+          <div id="tags">
+            <a class="instant" href="https://wen.is-a.dev/tags/git"><span>#</span>git</a><a class="instant" href="https://wen.is-a.dev/tags/version-control"><span>#</span>version control</a>
+          </div>
+          
+        </div>
+
+        
+        
+
+        
+
+        <p>Git là một hệ thống quản lý phiên bản phân tán (Distributed Version Control System) được phát triển bởi Linus Torvalds vào năm 2005. Đây là công cụ không thể thiếu trong quá trình phát triển phần mềm hiện đại, giúp các developer theo dõi, quản lý và cộng tác hiệu quả trên các dự án.</p>
+<h2 id="tai-sao-git-lai-quan-trong">Tại sao Git lại quan trọng?<a class="zola-anchor" href="#tai-sao-git-lai-quan-trong" aria-label="Anchor link for: tai-sao-git-lai-quan-trong" style="visibility: hidden;"></a></h2>
+<p>Git giải quyết nhiều vấn đề phổ biến trong việc phát triển phần mềm:</p>
+<p><strong>Theo dõi thay đổi</strong>: Git ghi lại mọi thay đổi trong code của bạn, cho phép bạn xem ai đã thay đổi gì, khi nào và tại sao.</p>
+<p><strong>Sao lưu và khôi phục</strong>: Mọi phiên bản của code đều được lưu trữ, bạn có thể dễ dàng quay lại phiên bản trước đó nếu cần.</p>
+<p><strong>Cộng tác nhóm</strong>: Nhiều người có thể làm việc trên cùng một dự án mà không lo xung đột hoặc mất dữ liệu.</p>
+<p><strong>Phân nhánh</strong>: Tạo các nhánh để phát triển tính năng mới mà không ảnh hưởng đến code chính.</p>
+<h2 id="cac-khai-niem-co-ban">Các khái niệm cơ bản<a class="zola-anchor" href="#cac-khai-niem-co-ban" aria-label="Anchor link for: cac-khai-niem-co-ban" style="visibility: hidden;"></a></h2>
+<h3 id="repository-repo">Repository (Repo)<a class="zola-anchor" href="#repository-repo" aria-label="Anchor link for: repository-repo" style="visibility: hidden;"></a></h3>
+<p>Repository là nơi Git lưu trữ tất cả dữ liệu về dự án của bạn, bao gồm files, lịch sử thay đổi, và metadata. Có hai loại repository:</p>
+<ul>
+<li><strong>Local Repository</strong>: Nằm trên máy tính của bạn</li>
+<li><strong>Remote Repository</strong>: Nằm trên server (như GitHub, GitLab)</li>
+</ul>
+<h3 id="working-directory-staging-area-va-git-directory">Working Directory, Staging Area và Git Directory<a class="zola-anchor" href="#working-directory-staging-area-va-git-directory" aria-label="Anchor link for: working-directory-staging-area-va-git-directory" style="visibility: hidden;"></a></h3>
+<p>Git hoạt động với ba khu vực chính:</p>
+<ol>
+<li><strong>Working Directory</strong>: Nơi bạn làm việc với files</li>
+<li><strong>Staging Area</strong>: Nơi chuẩn bị các thay đổi trước khi commit</li>
+<li><strong>Git Directory</strong>: Nơi Git lưu trữ metadata và object database</li>
+</ol>
+<h3 id="commit">Commit<a class="zola-anchor" href="#commit" aria-label="Anchor link for: commit" style="visibility: hidden;"></a></h3>
+<p>Commit là một snapshot của dự án tại một thời điểm cụ thể. Mỗi commit có:</p>
+<ul>
+<li>Một hash ID duy nhất</li>
+<li>Thông điệp mô tả thay đổi</li>
+<li>Thông tin về tác giả và thời gian</li>
+<li>Tham chiếu đến commit cha</li>
+</ul>
+<h3 id="branch-nhanh">Branch (Nhánh)<a class="zola-anchor" href="#branch-nhanh" aria-label="Anchor link for: branch-nhanh" style="visibility: hidden;"></a></h3>
+<p>Branch cho phép bạn tách ra khỏi dòng phát triển chính để làm việc trên các tính năng mới mà không ảnh hưởng đến code chính.</p>
+<h2 id="cai-dat-git">Cài đặt Git<a class="zola-anchor" href="#cai-dat-git" aria-label="Anchor link for: cai-dat-git" style="visibility: hidden;"></a></h2>
+<h3 id="tren-windows">Trên Windows<a class="zola-anchor" href="#tren-windows" aria-label="Anchor link for: tren-windows" style="visibility: hidden;"></a></h3>
+<pre data-lang="bash" style="background-color:#151515;color:#e8e8d3;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#888888;"># Tải xuống từ https://git-scm.com/download/win
+</span><span style="color:#888888;"># Hoặc sử dụng Chocolatey
+</span><span style="color:#ffb964;">choco</span><span> install git
+</span><span>
+</span><span style="color:#888888;"># Hoặc sử dụng winget
+</span><span style="color:#ffb964;">winget</span><span> install Git.Git
+</span></code></pre>
+<h3 id="tren-macos">Trên macOS<a class="zola-anchor" href="#tren-macos" aria-label="Anchor link for: tren-macos" style="visibility: hidden;"></a></h3>
+<pre data-lang="bash" style="background-color:#151515;color:#e8e8d3;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#888888;"># Sử dụng Homebrew
+</span><span style="color:#ffb964;">brew</span><span> install git
+</span><span>
+</span><span style="color:#888888;"># Hoặc sử dụng MacPorts
+</span><span style="color:#ffb964;">sudo</span><span> port install git
+</span></code></pre>
+<h3 id="tren-linux-ubuntu-debian">Trên Linux (Ubuntu/Debian)<a class="zola-anchor" href="#tren-linux-ubuntu-debian" aria-label="Anchor link for: tren-linux-ubuntu-debian" style="visibility: hidden;"></a></h3>
+<pre data-lang="bash" style="background-color:#151515;color:#e8e8d3;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#ffb964;">sudo</span><span> apt update
+</span><span style="color:#ffb964;">sudo</span><span> apt install git
+</span></code></pre>
+<h3 id="cau-hinh-ban-dau">Cấu hình ban đầu<a class="zola-anchor" href="#cau-hinh-ban-dau" aria-label="Anchor link for: cau-hinh-ban-dau" style="visibility: hidden;"></a></h3>
+<pre data-lang="bash" style="background-color:#151515;color:#e8e8d3;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#ffb964;">git</span><span> config</span><span style="color:#ffb964;"> --global</span><span> user.name </span><span style="color:#556633;">&quot;</span><span style="color:#99ad6a;">Tên của bạn</span><span style="color:#556633;">&quot;
+</span><span style="color:#ffb964;">git</span><span> config</span><span style="color:#ffb964;"> --global</span><span> user.email </span><span style="color:#556633;">&quot;</span><span style="color:#99ad6a;">email@example.com</span><span style="color:#556633;">&quot;
+</span><span style="color:#ffb964;">git</span><span> config</span><span style="color:#ffb964;"> --global</span><span> init.defaultBranch main
+</span></code></pre>
+<h2 id="cac-lenh-git-co-ban">Các lệnh Git cơ bản<a class="zola-anchor" href="#cac-lenh-git-co-ban" aria-label="Anchor link for: cac-lenh-git-co-ban" style="visibility: hidden;"></a></h2>
+<h3 id="khoi-tao-va-sao-chep-repository">Khởi tạo và sao chép repository<a class="zola-anchor" href="#khoi-tao-va-sao-chep-repository" aria-label="Anchor link for: khoi-tao-va-sao-chep-repository" style="visibility: hidden;"></a></h3>
+<pre data-lang="bash" style="background-color:#151515;color:#e8e8d3;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#888888;"># Khởi tạo repository mới
+</span><span style="color:#ffb964;">git</span><span> init
+</span><span>
+</span><span style="color:#888888;"># Sao chép repository từ remote
+</span><span style="color:#ffb964;">git</span><span> clone https://github.com/username/repository.git
+</span><span>
+</span><span style="color:#888888;"># Sao chép với tên thư mục khác
+</span><span style="color:#ffb964;">git</span><span> clone https://github.com/username/repository.git my-project
+</span></code></pre>
+<h3 id="lam-viec-voi-files">Làm việc với files<a class="zola-anchor" href="#lam-viec-voi-files" aria-label="Anchor link for: lam-viec-voi-files" style="visibility: hidden;"></a></h3>
+<pre data-lang="bash" style="background-color:#151515;color:#e8e8d3;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#888888;"># Xem trạng thái repository
+</span><span style="color:#ffb964;">git</span><span> status
+</span><span>
+</span><span style="color:#888888;"># Thêm files vào staging area
+</span><span style="color:#ffb964;">git</span><span> add filename.txt
+</span><span style="color:#ffb964;">git</span><span> add .  </span><span style="color:#888888;"># Thêm tất cả files
+</span><span>
+</span><span style="color:#888888;"># Xem sự khác biệt
+</span><span style="color:#ffb964;">git</span><span> diff  </span><span style="color:#888888;"># So sánh working directory với staging area
+</span><span style="color:#ffb964;">git</span><span> diff</span><span style="color:#ffb964;"> --staged  </span><span style="color:#888888;"># So sánh staging area với commit cuối
+</span><span>
+</span><span style="color:#888888;"># Commit thay đổi
+</span><span style="color:#ffb964;">git</span><span> commit</span><span style="color:#ffb964;"> -m </span><span style="color:#556633;">&quot;</span><span style="color:#99ad6a;">Thông điệp commit</span><span style="color:#556633;">&quot;
+</span><span style="color:#ffb964;">git</span><span> commit</span><span style="color:#ffb964;"> -am </span><span style="color:#556633;">&quot;</span><span style="color:#99ad6a;">Add và commit trong một lệnh</span><span style="color:#556633;">&quot;
+</span></code></pre>
+<h3 id="xem-lich-su">Xem lịch sử<a class="zola-anchor" href="#xem-lich-su" aria-label="Anchor link for: xem-lich-su" style="visibility: hidden;"></a></h3>
+<pre data-lang="bash" style="background-color:#151515;color:#e8e8d3;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#888888;"># Xem lịch sử commit
+</span><span style="color:#ffb964;">git</span><span> log
+</span><span style="color:#ffb964;">git</span><span> log</span><span style="color:#ffb964;"> --oneline  </span><span style="color:#888888;"># Hiển thị ngắn gọn
+</span><span style="color:#ffb964;">git</span><span> log</span><span style="color:#ffb964;"> --graph    </span><span style="color:#888888;"># Hiển thị dạng đồ thị
+</span><span style="color:#ffb964;">git</span><span> log</span><span style="color:#ffb964;"> --author</span><span>=</span><span style="color:#556633;">&quot;</span><span style="color:#99ad6a;">Tên tác giả</span><span style="color:#556633;">&quot;  </span><span style="color:#888888;"># Lọc theo tác giả
+</span><span>
+</span><span style="color:#888888;"># Xem thay đổi trong commit cụ thể
+</span><span style="color:#ffb964;">git</span><span> show commit-hash
+</span></code></pre>
+<h3 id="lam-viec-voi-remote-repository">Làm việc với remote repository<a class="zola-anchor" href="#lam-viec-voi-remote-repository" aria-label="Anchor link for: lam-viec-voi-remote-repository" style="visibility: hidden;"></a></h3>
+<pre data-lang="bash" style="background-color:#151515;color:#e8e8d3;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#888888;"># Thêm remote repository
+</span><span style="color:#ffb964;">git</span><span> remote add origin https://github.com/username/repository.git
+</span><span>
+</span><span style="color:#888888;"># Xem danh sách remote
+</span><span style="color:#ffb964;">git</span><span> remote</span><span style="color:#ffb964;"> -v
+</span><span>
+</span><span style="color:#888888;"># Đẩy code lên remote
+</span><span style="color:#ffb964;">git</span><span> push origin main
+</span><span style="color:#ffb964;">git</span><span> push</span><span style="color:#ffb964;"> -u</span><span> origin main  </span><span style="color:#888888;"># Đặt upstream branch
+</span><span>
+</span><span style="color:#888888;"># Kéo code từ remote
+</span><span style="color:#ffb964;">git</span><span> pull origin main
+</span><span style="color:#ffb964;">git</span><span> fetch origin  </span><span style="color:#888888;"># Chỉ tải về, không merge
+</span></code></pre>
+<h2 id="lam-viec-voi-branches">Làm việc với Branches<a class="zola-anchor" href="#lam-viec-voi-branches" aria-label="Anchor link for: lam-viec-voi-branches" style="visibility: hidden;"></a></h2>
+<h3 id="tao-va-chuyen-doi-branch">Tạo và chuyển đổi branch<a class="zola-anchor" href="#tao-va-chuyen-doi-branch" aria-label="Anchor link for: tao-va-chuyen-doi-branch" style="visibility: hidden;"></a></h3>
+<pre data-lang="bash" style="background-color:#151515;color:#e8e8d3;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#888888;"># Xem danh sách branch
+</span><span style="color:#ffb964;">git</span><span> branch
+</span><span style="color:#ffb964;">git</span><span> branch</span><span style="color:#ffb964;"> -a  </span><span style="color:#888888;"># Bao gồm remote branches
+</span><span>
+</span><span style="color:#888888;"># Tạo branch mới
+</span><span style="color:#ffb964;">git</span><span> branch feature-login
+</span><span>
+</span><span style="color:#888888;"># Chuyển sang branch khác
+</span><span style="color:#ffb964;">git</span><span> checkout feature-login
+</span><span>
+</span><span style="color:#888888;"># Tạo và chuyển sang branch mới
+</span><span style="color:#ffb964;">git</span><span> checkout</span><span style="color:#ffb964;"> -b</span><span> feature-registration
+</span><span>
+</span><span style="color:#888888;"># Sử dụng git switch (Git 2.23+)
+</span><span style="color:#ffb964;">git</span><span> switch feature-login
+</span><span style="color:#ffb964;">git</span><span> switch</span><span style="color:#ffb964;"> -c</span><span> feature-new-feature
+</span></code></pre>
+<h3 id="merge-va-rebase">Merge và Rebase<a class="zola-anchor" href="#merge-va-rebase" aria-label="Anchor link for: merge-va-rebase" style="visibility: hidden;"></a></h3>
+<pre data-lang="bash" style="background-color:#151515;color:#e8e8d3;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#888888;"># Merge branch vào branch hiện tại
+</span><span style="color:#ffb964;">git</span><span> merge feature-login
+</span><span>
+</span><span style="color:#888888;"># Rebase branch hiện tại lên branch khác
+</span><span style="color:#ffb964;">git</span><span> rebase main
+</span><span>
+</span><span style="color:#888888;"># Xóa branch
+</span><span style="color:#ffb964;">git</span><span> branch</span><span style="color:#ffb964;"> -d</span><span> feature-login     </span><span style="color:#888888;"># Xóa branch đã merge
+</span><span style="color:#ffb964;">git</span><span> branch</span><span style="color:#ffb964;"> -D</span><span> feature-login     </span><span style="color:#888888;"># Xóa branch chưa merge
+</span></code></pre>
+<h2 id="xu-ly-xung-dot-conflicts">Xử lý xung đột (Conflicts)<a class="zola-anchor" href="#xu-ly-xung-dot-conflicts" aria-label="Anchor link for: xu-ly-xung-dot-conflicts" style="visibility: hidden;"></a></h2>
+<p>Khi merge hoặc rebase, đôi khi xảy ra xung đột. Git sẽ đánh dấu các file có xung đột:</p>
+<pre style="background-color:#151515;color:#e8e8d3;"><code><span>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+</span><span>Code từ branch hiện tại
+</span><span>=======
+</span><span>Code từ branch khác
+</span><span>&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature-branch
+</span></code></pre>
+<p>Để giải quyết:</p>
+<ol>
+<li>Mở file và chỉnh sửa thủ công</li>
+<li>Xóa các dấu hiệu xung đột (<code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code>, <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code>)</li>
+<li>Add file đã sửa: <code>git add filename</code></li>
+<li>Commit: <code>git commit -m "Resolve conflict"</code></li>
+</ol>
+<h2 id="cac-lenh-huu-ich-khac">Các lệnh hữu ích khác<a class="zola-anchor" href="#cac-lenh-huu-ich-khac" aria-label="Anchor link for: cac-lenh-huu-ich-khac" style="visibility: hidden;"></a></h2>
+<h3 id="stash-luu-tam-thoi-thay-doi">Stash - Lưu tạm thời thay đổi<a class="zola-anchor" href="#stash-luu-tam-thoi-thay-doi" aria-label="Anchor link for: stash-luu-tam-thoi-thay-doi" style="visibility: hidden;"></a></h3>
+<pre data-lang="bash" style="background-color:#151515;color:#e8e8d3;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#888888;"># Lưu thay đổi vào stash
+</span><span style="color:#ffb964;">git</span><span> stash
+</span><span style="color:#ffb964;">git</span><span> stash push</span><span style="color:#ffb964;"> -m </span><span style="color:#556633;">&quot;</span><span style="color:#99ad6a;">Work in progress</span><span style="color:#556633;">&quot;
+</span><span>
+</span><span style="color:#888888;"># Xem danh sách stash
+</span><span style="color:#ffb964;">git</span><span> stash list
+</span><span>
+</span><span style="color:#888888;"># Áp dụng stash
+</span><span style="color:#ffb964;">git</span><span> stash apply
+</span><span style="color:#ffb964;">git</span><span> stash pop  </span><span style="color:#888888;"># Apply và xóa khỏi stash
+</span><span>
+</span><span style="color:#888888;"># Xóa stash
+</span><span style="color:#ffb964;">git</span><span> stash drop
+</span><span style="color:#ffb964;">git</span><span> stash clear  </span><span style="color:#888888;"># Xóa tất cả stash
+</span></code></pre>
+<h3 id="reset-va-revert">Reset và Revert<a class="zola-anchor" href="#reset-va-revert" aria-label="Anchor link for: reset-va-revert" style="visibility: hidden;"></a></h3>
+<pre data-lang="bash" style="background-color:#151515;color:#e8e8d3;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#888888;"># Reset về commit trước (nguy hiểm!)
+</span><span style="color:#ffb964;">git</span><span> reset</span><span style="color:#ffb964;"> --hard</span><span> HEAD</span><span style="color:#ffb964;">~</span><span>1
+</span><span>
+</span><span style="color:#888888;"># Revert commit (an toàn hơn)
+</span><span style="color:#ffb964;">git</span><span> revert commit-hash
+</span><span>
+</span><span style="color:#888888;"># Reset file về trạng thái của commit cuối
+</span><span style="color:#ffb964;">git</span><span> checkout -- filename
+</span><span style="color:#ffb964;">git</span><span> restore filename  </span><span style="color:#888888;"># Git 2.23+
+</span></code></pre>
+<h3 id="tag">Tag<a class="zola-anchor" href="#tag" aria-label="Anchor link for: tag" style="visibility: hidden;"></a></h3>
+<pre data-lang="bash" style="background-color:#151515;color:#e8e8d3;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#888888;"># Tạo tag
+</span><span style="color:#ffb964;">git</span><span> tag v1.0.0
+</span><span style="color:#ffb964;">git</span><span> tag</span><span style="color:#ffb964;"> -a</span><span> v1.0.0</span><span style="color:#ffb964;"> -m </span><span style="color:#556633;">&quot;</span><span style="color:#99ad6a;">Version 1.0.0</span><span style="color:#556633;">&quot;
+</span><span>
+</span><span style="color:#888888;"># Đẩy tag lên remote
+</span><span style="color:#ffb964;">git</span><span> push origin v1.0.0
+</span><span style="color:#ffb964;">git</span><span> push origin</span><span style="color:#ffb964;"> --tags
+</span><span>
+</span><span style="color:#888888;"># Xem danh sách tag
+</span><span style="color:#ffb964;">git</span><span> tag
+</span></code></pre>
+<h2 id="workflow-pho-bien">Workflow phổ biến<a class="zola-anchor" href="#workflow-pho-bien" aria-label="Anchor link for: workflow-pho-bien" style="visibility: hidden;"></a></h2>
+<h3 id="git-flow">Git Flow<a class="zola-anchor" href="#git-flow" aria-label="Anchor link for: git-flow" style="visibility: hidden;"></a></h3>
+<p>Git Flow là một workflow phổ biến với các branch:</p>
+<ul>
+<li><code>main/master</code>: Code production</li>
+<li><code>develop</code>: Code development</li>
+<li><code>feature/*</code>: Các tính năng mới</li>
+<li><code>release/*</code>: Chuẩn bị release</li>
+<li><code>hotfix/*</code>: Sửa lỗi khẩn cấp</li>
+</ul>
+<h3 id="github-flow">GitHub Flow<a class="zola-anchor" href="#github-flow" aria-label="Anchor link for: github-flow" style="visibility: hidden;"></a></h3>
+<p>Workflow đơn giản hơn:</p>
+<ol>
+<li>Tạo branch từ <code>main</code></li>
+<li>Thêm commits</li>
+<li>Mở Pull Request</li>
+<li>Thảo luận và review</li>
+<li>Merge vào <code>main</code></li>
+</ol>
+<h2 id="best-practices">Best Practices<a class="zola-anchor" href="#best-practices" aria-label="Anchor link for: best-practices" style="visibility: hidden;"></a></h2>
+<h3 id="commit-messages">Commit Messages<a class="zola-anchor" href="#commit-messages" aria-label="Anchor link for: commit-messages" style="visibility: hidden;"></a></h3>
+<p>Viết commit message rõ ràng và có ý nghĩa:</p>
+<pre style="background-color:#151515;color:#e8e8d3;"><code><span>feat: add user authentication
+</span><span>fix: resolve login validation bug
+</span><span>docs: update README installation guide
+</span><span>refactor: optimize database queries
+</span></code></pre>
+<h3 id="gitignore">Gitignore<a class="zola-anchor" href="#gitignore" aria-label="Anchor link for: gitignore" style="visibility: hidden;"></a></h3>
+<p>Tạo file <code>.gitignore</code> để loại trừ files không cần thiết:</p>
+<pre data-lang="gitignore" style="background-color:#151515;color:#e8e8d3;" class="language-gitignore "><code class="language-gitignore" data-lang="gitignore"><span style="color:#888888;"># Dependencies
+</span><span style="color:#ffb964;">node_modules</span><span>/
+</span><span>*.log
+</span><span>
+</span><span style="color:#888888;"># Build outputs
+</span><span style="color:#ffb964;">dist</span><span>/
+</span><span style="color:#ffb964;">build</span><span>/
+</span><span>
+</span><span style="color:#888888;"># Environment files
+</span><span>.env
+</span><span>.env.local
+</span><span>
+</span><span style="color:#888888;"># IDE files
+</span><span>.vscode/
+</span><span>.idea/
+</span><span>
+</span><span style="color:#888888;"># OS files
+</span><span>.DS_Store
+</span><span style="color:#ffb964;">Thumbs</span><span>.db
+</span></code></pre>
+<h3 id="atomic-commits">Atomic Commits<a class="zola-anchor" href="#atomic-commits" aria-label="Anchor link for: atomic-commits" style="visibility: hidden;"></a></h3>
+<p>Mỗi commit nên thực hiện một thay đổi logic duy nhất. Điều này giúp:</p>
+<ul>
+<li>Dễ review code</li>
+<li>Dễ debug khi có lỗi</li>
+<li>Dễ revert nếu cần</li>
+</ul>
+<h2 id="troubleshooting-pho-bien">Troubleshooting phổ biến<a class="zola-anchor" href="#troubleshooting-pho-bien" aria-label="Anchor link for: troubleshooting-pho-bien" style="visibility: hidden;"></a></h2>
+<h3 id="undo-commit-cuoi-cung">Undo commit cuối cùng<a class="zola-anchor" href="#undo-commit-cuoi-cung" aria-label="Anchor link for: undo-commit-cuoi-cung" style="visibility: hidden;"></a></h3>
+<pre data-lang="bash" style="background-color:#151515;color:#e8e8d3;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#888888;"># Giữ lại thay đổi trong working directory
+</span><span style="color:#ffb964;">git</span><span> reset</span><span style="color:#ffb964;"> --soft</span><span> HEAD</span><span style="color:#ffb964;">~</span><span>1
+</span><span>
+</span><span style="color:#888888;"># Bỏ thay đổi hoàn toàn
+</span><span style="color:#ffb964;">git</span><span> reset</span><span style="color:#ffb964;"> --hard</span><span> HEAD</span><span style="color:#ffb964;">~</span><span>1
+</span></code></pre>
+<h3 id="thay-doi-commit-message-cuoi">Thay đổi commit message cuối<a class="zola-anchor" href="#thay-doi-commit-message-cuoi" aria-label="Anchor link for: thay-doi-commit-message-cuoi" style="visibility: hidden;"></a></h3>
+<pre data-lang="bash" style="background-color:#151515;color:#e8e8d3;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#ffb964;">git</span><span> commit</span><span style="color:#ffb964;"> --amend -m </span><span style="color:#556633;">&quot;</span><span style="color:#99ad6a;">New commit message</span><span style="color:#556633;">&quot;
+</span></code></pre>
+<h3 id="khoi-phuc-file-da-xoa">Khôi phục file đã xóa<a class="zola-anchor" href="#khoi-phuc-file-da-xoa" aria-label="Anchor link for: khoi-phuc-file-da-xoa" style="visibility: hidden;"></a></h3>
+<pre data-lang="bash" style="background-color:#151515;color:#e8e8d3;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#ffb964;">git</span><span> checkout HEAD -- filename
+</span><span style="color:#ffb964;">git</span><span> restore filename
+</span></code></pre>
+<h2 id="ket-luan">Kết luận<a class="zola-anchor" href="#ket-luan" aria-label="Anchor link for: ket-luan" style="visibility: hidden;"></a></h2>
+<p>Git là công cụ mạnh mẽ và linh hoạt, tuy nhiên cần thời gian để thành thạo. Hãy bắt đầu với các lệnh cơ bản và dần dần khám phá các tính năng nâng cao. Việc thực hành thường xuyên và hiểu rõ workflow của team sẽ giúp bạn sử dụng Git hiệu quả hơn.</p>
+<p>Nhớ rằng Git không chỉ là công cụ lưu trữ code mà còn là hệ thống ghi lại lịch sử phát triển dự án. Hãy tận dụng sức mạnh này để xây dựng các dự án chất lượng và cộng tác hiệu quả với team.</p>
+<hr />
+
+      </article>
+
+      
+      
+
+      
+      
+    </div>
+
+    
+
+
+<footer>
+  <div class="left">
+    <div class="copyright">
+      © 2025 Wen
+      
+    </div>
+  </div>
+
+  <div class="right">
+    
+    
+    
+    
+
+    
+    
+    
+    <button id="theme-toggle" aria-label="theme switch">
+      <span class="moon-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill="currentColor"></path></svg>
+</span>
+      <span class="sun-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z" fill="currentColor"></path></svg>
+</span>
+    </button>
+    
+  </div>
+</footer>
+
+
+
+
+
+  </main>
+</div>
+
+  
+<script src="/js/lightense.min.js"></script>
+
+
+  <script src="https://wen.is-a.dev/js/main.js"></script>
+</body>
+
+</html>
