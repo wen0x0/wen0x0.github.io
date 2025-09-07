@@ -1,6 +1,6 @@
 +++
-title = "ECC - Nhỏ gọn nhưng mạnh mẽ"
-description = "Khám phá ECC (Elliptic Curve Cryptography) - công nghệ mã hóa hiện đại với độ bảo mật cao nhưng key size nhỏ gọn, được sử dụng rộng rãi từ smartphone đến blockchain"
+title = "ECC – Nhỏ gọn nhưng mạnh mẽ"
+description = "Khám phá ECC (Elliptic Curve Cryptography) – công nghệ mã hóa hiện đại với độ bảo mật cao nhưng key size nhỏ gọn, được sử dụng rộng rãi từ smartphone đến blockchain"
 date = 2025-06-15
 draft = false
 
