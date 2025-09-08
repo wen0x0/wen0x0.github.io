@@ -13,7 +13,12 @@ taxonomies = [{ name = "tags" }, { name = "categories" }]
 
 [markdown]
 highlight_code = true
-highlight_theme = "boron"
+# highlight_theme = "boron"
+# highlight_theme = "zenburn"
+# highlight_theme = "monokai"
+# highlight_theme = "1337"
+
+highlight_theme = "css"
 extra_syntaxes_and_themes = ["highlight_themes"]
 highlight_themes_css = [
   { theme = "serene-light", filename = "hl-light.css" },
