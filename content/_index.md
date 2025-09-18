@@ -16,11 +16,11 @@ links = [
     { name = "GitHub", icon = "github", url = "https://github.com/wen0x0" },
     { name = "Email", icon = "email", url = "mailto:quocanhtn.work@gmail.com" },
 ]
-
+verified = true
 # gif = "img/future.gif"
 # Show a few recent posts in home page
 recent = true
-recent_max = 5
+recent_max = 3
 recent_more_text = "more »"
 date_format = "%b %d, %Y"
 +++

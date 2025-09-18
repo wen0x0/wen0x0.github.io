@@ -1,5 +1,5 @@
 +++
-title = "Linh tinh về GREP"
+title = "Linh tinh về công cụ mang tên GREP"
 description = "Linh tinh về GREP"
 date = 2024-04-10
 draft = false
@@ -22,11 +22,11 @@ reaction = false
 
 Có bao giờ bạn cảm thấy như một thám tử đang lục tung cả một thư viện để tìm một câu trích dẫn mà mình nhớ mang máng không? Hoặc như Sherlock Holmes đang cần tìm một manh mối nhỏ xíu trong một đống tài liệu khổng lồ? Nếu có, thì hôm nay mình sẽ giới thiệu với bạn một "thám tử" siêu đẳng của thế giới command line - **grep**.
 
-**Grep** là viết tắt của "**Global Regular Expression Print**" - nghe có vẻ hầm hố phải không? Nhưng đừng để cái tên làm bạn sợ, vì grep thực chất là một trong những công cụ thân thiện và hữu ích nhất mà bạn sẽ gặp trong terminal.
+**GREP** là viết tắt của "**Global Regular Expression Print**" - nghe có vẻ hầm hố phải không? Nhưng đừng để cái tên làm bạn sợ, vì grep thực chất là một trong những công cụ thân thiện và hữu ích nhất mà bạn sẽ gặp trong terminal.
 
-## Grep là gì và tại sao nó quan trọng?
+## GREP là gì và tại sao nó quan trọng?
 
-Grep là một công cụ command line được sử dụng để tìm kiếm văn bản theo pattern (mẫu) trong các file hoặc input stream. Nó như một chiếc kính lúp siêu mạnh giúp bạn tìm ra những gì mình cần trong biển thông tin bao la.
+GREP là một công cụ command line được sử dụng để tìm kiếm văn bản theo pattern (mẫu) trong các file hoặc input stream. Nó như một chiếc kính lúp siêu mạnh giúp bạn tìm ra những gì mình cần trong biển thông tin bao la.
 
 Tưởng tượng bạn có một file log với hàng nghìn dòng, và bạn chỉ muốn tìm những dòng chứa từ "ERROR". Thay vì phải lăn chuột đến tê liệt hoặc dùng Ctrl+F như một người nguyên thủy, grep sẽ giúp bạn làm điều này chỉ trong một giây.
 
@@ -111,7 +111,7 @@ grep -A 3 -B 2 "error" log.txt
 
 Như việc xem bối cảnh xung quanh một sự kiện để hiểu rõ hơn chuyện gì đã xảy ra.
 
-## Regular Expressions - Vũ khí bí mật của Grep
+## Regular Expressions - Vũ khí bí mật của GREP
 
 Đây chính là nơi grep trở nên thực sự mạnh mẽ. Regular expressions (regex) là một ngôn ngữ pattern matching cho phép bạn tìm kiếm theo các mẫu phức tạp.
 
@@ -234,7 +234,7 @@ grep -r "pattern" /path/to/directory/
 
 ## Kết hợp grep với các command khác
 
-Grep thực sự tỏa sáng khi được kết hợp với các command khác thông qua pipes:
+GREP thực sự tỏa sáng khi được kết hợp với các command khác thông qua pipes:
 
 ```bash
 # Tìm process và kill
@@ -268,7 +268,7 @@ pgrep -f "nginx"  # Nhanh hơn ps aux | grep nginx
 
 ## Kết luận
 
-Grep là một trong những công cụ không thể thiếu trong arsenal của bất kỳ developer, system administrator, hay bất cứ ai làm việc với command line. Nó đơn giản nhưng mạnh mẽ, linh hoạt nhưng đáng tin cậy.
+GREP là một trong những công cụ không thể thiếu trong arsenal của bất kỳ developer, system administrator, hay bất cứ ai làm việc với command line. Nó đơn giản nhưng mạnh mẽ, linh hoạt nhưng đáng tin cậy.
 
 Từ việc tìm kiếm đơn giản đến pattern matching phức tạp, từ debug code đến phân tích log files, grep luôn sẵn sàng là người bạn đồng hành trung thành. Và điều tuyệt vời nhất? Nó có mặt trên hầu hết mọi hệ thống Unix-like, từ Linux đến macOS.
 

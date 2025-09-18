@@ -8,7 +8,7 @@ insert_anchor_links = "none"
 lang = 'en'
 
 title = "About me"
-subtitle = "(～￣▽￣)～"
+subtitle = "(✿◡‿◡)"
 
 math = false
 mermaid = false

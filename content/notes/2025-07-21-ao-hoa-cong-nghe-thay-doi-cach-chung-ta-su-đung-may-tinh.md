@@ -1,5 +1,5 @@
 +++
-title = "Ảo Hóa - Công nghệ thay đổi cách chúng ta sử dụng máy tính"
+title = "Ảo Hóa – Công nghệ thay đổi cách chúng ta sử dụng máy tính"
 description = "Tìm hiểu tất cả về công nghệ ảo hóa: từ máy ảo truyền thống đến container hiện đại, giúp bạn nắm vững kiến thức cốt lõi một cách dễ hiểu"
 date = 2025-07-21
 draft = false
