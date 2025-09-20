@@ -10,8 +10,33 @@
 {%- endblock lang %}
 {% block title %}{{section.title}}{% endblock title %}
 {% block desc %}
-  <meta name="description" content="{{ term.name }}">
+<meta name="description" content="{{ term.name }}">
 {% endblock desc %}
+
+{% block head %}
+{{ super() }}
+<style>
+  .layout-list .post {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+  }
+
+  .post>span:first-child {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+
+  .post>.date {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+</style>
+{% endblock head %}
 
 {% block content %}
 <div id="wrapper">
