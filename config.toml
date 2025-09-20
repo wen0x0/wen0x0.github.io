@@ -52,6 +52,14 @@ force_theme = false # false | "light" | "dark"
 
 footer_copyright = "© 2025"
 name = "Wen"
+id = "@berserker"
+bio = "Learning by leaping into the fight"
+avatar = "img/righright.png"
+links = [
+    { name = "GitHub", icon = "github", url = "https://github.com/wen0x0" },
+    { name = "Email", icon = "email", url = "mailto:quocanhtn.work@gmail.com" },
+]
+verified = true
 footer_credits = false # Whether to show "Built with zola and serene" in footer
 
 not_found_error_text = "404 Not Found"

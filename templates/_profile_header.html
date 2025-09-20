@@ -5,8 +5,8 @@
     <div id="text">
         <div>
             <b>
-                <span id="name">{{ section.extra.name }}</span>
-                {% if section.extra.verified %}
+                <span id="name">{{ config.extra.name }}</span>
+                {% if config.extra.verified %}
                 <span class="verified-icon" title="Verified">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="#1DA1F2">
                         <path
@@ -14,13 +14,13 @@
                     </svg>
                 </span>
                 {% endif %}
-                {% if section.extra.id %}
-                <span id="id">{{ section.extra.id }}</span>
+                {% if config.extra.id %}
+                <span id="id">{{ config.extra.id }}</span>
                 {% endif %}
             </b>
         </div>
-        {% if section.extra.bio %}
-        <div id="bio"> {{ section.extra.bio }} </div>
+        {% if config.extra.bio %}
+        <div id="bio"> {{ config.extra.bio }} </div>
         {% endif %}
     </div>
 </section>
@@ -33,7 +33,7 @@
         {% endfor %}
     </div>
     <div id="right">
-        {% for link in section.extra.links %}
+        {% for link in config.extra.links %}
         <a href="{{ link.url }}" aria-label="{{ link.name }}" target="_blank" rel='noreferrer noopener'>
             {% set icon_path = "icon/" ~ link.icon ~ ".svg" %}
             {% set icon = load_data(path=icon_path) %}
