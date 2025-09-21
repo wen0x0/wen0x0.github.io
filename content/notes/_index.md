@@ -1,6 +1,6 @@
 +++
 title = "Wen's Notes"
-description = "Mình viết linh tinh ở đây"
+description = "You don't have to be great to start, but you have to start to be great"
 sort_by = "date"
 template = "blog.html"
 page_template = "post.html"
@@ -11,7 +11,7 @@ generate_feeds = false
 lang = "en"
 
 title = "(❁´◡`❁)"
-subtitle = "Mình viết linh tinh ở đây"
+subtitle = "You don't have to be great to start, but you have to start to be great"
 
 date_format = "%b %d, %Y"
 
