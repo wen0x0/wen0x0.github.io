@@ -1,5 +1,6 @@
 {% import "macros/prose.html" as macros %}
 {% extends "_base.html" %}
+
 {% block head %}
 {{ super() }}
 <style>
@@ -22,13 +23,21 @@
     flex-shrink: 0;
     white-space: nowrap;
   }
+
+  .year-heading {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    font-size: 1.25em;
+    font-weight: bold;
+  }
 </style>
 {% endblock head %}
 
-{% block page %}blog{% endblock page%}
+{% block page %}blog{% endblock page %}
 {% block lang %}{% if section.extra.lang %}{{ section.extra.lang }}{% else %}{{ section.lang }}{% endif %}{% endblock
 lang %}
 {% block title %}{{ section.title }}{% endblock title %}
+
 {% block desc %}
 {% if section.description %}
 {% set desc = section.description %}
@@ -39,38 +48,78 @@ lang %}
 {% endblock desc %}
 
 {% block content %}
+
 <div id="wrapper">
   {{ macros::back_link(path = get_url(path="/")) }}
+
   {% include "_section_title.html" %}
   <main class="layout-list">
+
+    {# Nếu có categorized thì group theo category trước #}
     {% if section.extra.categorized %}
-    {% for category,posts in section.pages | sort(attribute="taxonomies.categories.0") |
-    group_by(attribute="taxonomies.categories.0") %}
+    {% for category,posts in section.pages
+    | sort(attribute="taxonomies.categories.0")
+    | group_by(attribute="taxonomies.categories.0") %}
     {% set category_name = category %}
     {% if category is matching("^__[0-9]{2}__") %}
     {% set category_name = category | split(pat="") | slice(start=7) | join(sep="") %}
     {% endif %}
+
     <h2 class="category">{{ category_name }}</h2>
     <div class="post-list categorized">
-      {% for post in posts %}
+      {% set posts_sorted = posts | sort(attribute="date") | reverse %}
+      {% for post in posts_sorted %}
+      {% set year = post.date | date(format="%Y") %}
+
+      {% if loop.first %}
+      <h3 class="year-heading">{{ year }}</h3>
+      {% else %}
+      {% set prev_index = loop.index0 - 1 %}
+      {% set prev_post = posts_sorted[prev_index] %}
+      {% set prev_year = prev_post.date | date(format="%Y") %}
+      {% if year != prev_year %}
+      <h3 class="year-heading">{{ year }}</h3>
+      {% endif %}
+      {% endif %}
+
       <a class="post instant {% if post.extra.featured %}featured{% endif %}" href="{{ post.permalink }}">
         <span>{{ post.title }}</span>
-        <span class="date">{{ post.date | date(format=section.extra.date_format) }}</span>
+        <span class="date" style="font-family: consolas, 'Courier New', Courier, monospace;">
+          {{ post.date | date(format=section.extra.date_format) }}
+        </span>
       </a>
       {% endfor %}
     </div>
     {% endfor %}
+
+    {# Nếu không categorized thì chỉ group theo year #}
     {% else %}
     <div class="post-list">
-      {% for post in section.pages %}
+      {% set posts_sorted = section.pages | sort(attribute="date") | reverse %}
+      {% for post in posts_sorted %}
+      {% set year = post.date | date(format="%Y") %}
+
+      {% if loop.first %}
+      <h3 class="year-heading">{{ year }}</h3>
+      {% else %}
+      {% set prev_index = loop.index0 - 1 %}
+      {% set prev_post = posts_sorted[prev_index] %}
+      {% set prev_year = prev_post.date | date(format="%Y") %}
+      {% if year != prev_year %}
+      <h3 class="year-heading">{{ year }}</h3>
+      {% endif %}
+      {% endif %}
+
       <a class="post instant {% if post.extra.featured %}featured{% endif %}" href="{{ post.permalink }}">
         <span>{{ post.title }}</span>
-        <span class="date">{{ post.date | date(format=section.extra.date_format) }}</span>
+        <span class="date" style="font-family: consolas, 'Courier New', Courier, monospace;">
+          {{ post.date | date(format=section.extra.date_format) }}
+        </span>
       </a>
       {% endfor %}
     </div>
-
     {% endif %}
+
   </main>
   {% include "_footer.html" %}
 </div>

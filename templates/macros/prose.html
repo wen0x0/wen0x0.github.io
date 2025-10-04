@@ -1,9 +1,54 @@
 {% macro back_link(path) %}
-<header>
+<header class="top-nav">
   <nav>
-    <a href="{{ path }}">← {{ config.extra.back_link_text }}</a>
+    <!-- Left: Back -->
+    <div class="nav-left">
+      <a href="{{ path }}" class="back-link">← {{ config.extra.back_link_text }}</a>
+    </div>
+
+    <!-- Center: Avatar -->
+    <div class="nav-center">
+      {% if config.extra.avatar %}
+      <a href="/">
+        <img src="{{ get_url(path=config.extra.avatar) }}" alt="avatar" class="avatar">
+      </a>
+      {% endif %}
+    </div>
+
+    <!-- Right: Menu dropdown -->
+    <div class="nav-right">
+      <div class="menu-wrapper">
+        <button class="menu-trigger" aria-label="menu">
+          &#9776;
+        </button>
+        <div class="menu-dropdown">
+          <a href="{{ get_url(path='notes') }}">Notes</a>
+          <a href="{{ get_url(path='tags') }}">Tags</a>
+          <a href="{{ get_url(path='about') }}">About</a>
+        </div>
+      </div>
+    </div>
   </nav>
 </header>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const trigger = document.querySelector(".menu-trigger");
+    const wrapper = document.querySelector(".menu-wrapper");
+
+    if (trigger && wrapper) {
+      trigger.addEventListener("click", () => {
+        wrapper.classList.toggle("active");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!wrapper.contains(e.target)) {
+          wrapper.classList.remove("active");
+        }
+      });
+    }
+  });
+
+</script>
 {% endmacro %}
 
 

@@ -13,9 +13,9 @@ lang = "en"
 title = "(❁´◡`❁)"
 subtitle = "You don't have to be great to start, but you have to start to be great"
 
-date_format = "%b %d, %Y"
+date_format = "%b %d"
 
-categorized = true # posts can be categorized
+categorized = false # posts can be categorized
 back_to_top = true # show back-to-top button
 toc = true # show table-of-contents
 comment = false # enable comment

@@ -17,10 +17,11 @@ comment = false
 reaction = false
 +++
 
-I'm Wen.  
-Just a person, curious about computers.  
+I'm Wen  
+Just a person, curious about computers  
 
-Let’s connect:  
+
+Contact:
 [Facebook](https://www.facebook.com/wen0x0) · [GitHub](https://github.com/wen0x0) · [Email](mailto:quocanhtn.work@gmail.com)
 
 

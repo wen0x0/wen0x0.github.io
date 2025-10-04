@@ -87,7 +87,8 @@ lang %}
         <a class="post instant {% if post.extra.featured %}featured{% endif %}" href="{{ post.permalink }}">
           <span>{{ post.title }}</span>
           <span class="line"></span>
-          <span class="date">{{ post.date | date(format=section.extra.date_format) }}</span>
+          <span class="date" style="font-family: consolas, 'Courier New', Courier, monospace;">{{ post.date |
+            date(format=section.extra.date_format) }}</span>
         </a>
         {% endfor %}
       </div>
