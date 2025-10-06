@@ -3,9 +3,11 @@ title = "Cùng nhìn lại những vai trò gốc rễ đã kiến tạo nên ng
 description = "Trước khi ngành CNTT có hàng trăm vai trò chuyên biệt như ngày nay, nó khởi đầu chỉ với vài vị trí nền tảng. Cùng tìm hiểu những role gốc đã đặt nền móng cho toàn ngành." 
 date = 2025-08-14 
 draft = false
+
 [taxonomies] 
 categories = ["Notes"] 
 tags = ["computer science", "information technology", "role evolution", "cs history"]
+
 [extra] 
 lang = "vi" 
 toc = true 
@@ -19,7 +21,6 @@ featured = false
 reaction = false 
 +++
 
----
 
 Ngày nay, khi nhắc đến ngành Công nghệ Thông tin, chúng ta thường nghĩ ngay đến hàng trăm vai trò chuyên biệt: DevOps Engineer, Data Scientist, AI Researcher, Product Manager, UX Designer, Cloud Architect... Danh sách dài đến mức một người mới vào nghề có thể cảm thấy choáng ngợp trước sự đa dạng này.
 
