@@ -17,7 +17,9 @@
 
     <!-- Right: Menu dropdown -->
     <div class="nav-right">
+
       <div class="menu-wrapper">
+
         <button class="menu-trigger" aria-label="menu">
           &#9776;
         </button>
@@ -25,6 +27,15 @@
           <a href="{{ get_url(path='notes') }}">Notes</a>
           <a href="{{ get_url(path='tags') }}">Tags</a>
           <a href="{{ get_url(path='about') }}">About</a>
+          {% if not config.extra.force_theme %}
+          {% set moon_icon = load_data(path="icon/moon.svg") %}
+          {% set sun_icon = load_data(path="icon/sun.svg") %}
+          <a id="theme-toggle" aria-label="theme switch">
+            <span class="moon-icon">{{ moon_icon | safe }}</span>
+            <span class="sun-icon">{{ sun_icon | safe }}</span>
+          </a>
+
+          {% endif %}
         </div>
       </div>
     </div>

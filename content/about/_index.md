@@ -27,4 +27,4 @@ Contact:
 
 ---
 
-*You don't have to be great to start, but you have to start to be great*
+<span class="foot-quote">“The measure of intelligence is the ability to change.”</span>

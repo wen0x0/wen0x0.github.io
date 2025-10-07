@@ -2,12 +2,12 @@
   /* light mode colors */
   body {
     /* --primary-color: #5871a2; */
-    --primary-color: #2c3e50;
+    --primary-color: #000000;
     --primary-pale-color: #5871a233;
     --primary-decoration-color: #5871a210;
     --bg-color: #f0f9ff;
     /* --text-color: #2f3030; */
-    --text-color: #333333;
+    --text-color: #000000;
     /* --text-pale-color: #767676; */
     --text-pale-color: #000000;
     --text-decoration-color: #a9a9a9;
@@ -44,7 +44,9 @@
 
   /* typography */
   body {
+    /* --main-font: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; */
     --main-font: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --heading-font: 'Lora', 'Bitter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
     --code-font: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
     --homepage-max-width: 768px;
     --main-max-width: 768px;
@@ -60,6 +62,15 @@
     --block-code-border-radius: 0px;
     --block-code-border-color: var(--primary-color);
     --detail-border-color: var(--primary-color);
+  }
+
+  #bio,
+  #left,
+  a.post,
+  a.back-link,
+  a.tag,
+  a.category {
+    font-family: var(--heading-font);
   }
 
   .gif-wrapper {
@@ -143,11 +154,11 @@
     flex-direction: column;
 
     background: var(--bg-color);
-
+    font-family: var(--heading-font);
     border: 1px solid var(--primary-pale-color);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     border-radius: 8px;
-    min-width: 150px;
+    min-width: 85px;
     padding: 0.25em 0;
     z-index: 2000;
 
@@ -170,12 +181,21 @@
     text-decoration: none;
     color: var(--text-color);
     font-size: 0.95em;
+    margin: auto;
     transition: background 0.2s ease, color 0.2s ease;
   }
 
+  #theme-toggle:hover {
+    cursor: pointer;
+  }
 
-  .menu-dropdown a:hover {
-    background: var(--primary-pale-color);
-    color: var(--primary-color);
+  .foot-quote,
+  .section-title,
+  .title {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    text-align: center;
+    display: block;
+    margin-top: 2em;
   }
 </style>

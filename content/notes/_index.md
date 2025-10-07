@@ -11,7 +11,7 @@ generate_feeds = false
 lang = "en"
 
 title = "(❁´◡`❁)"
-subtitle = "You don't have to be great to start, but you have to start to be great"
+subtitle = "\"You don't have to be great to start, but you have to start to be great.\""
 
 date_format = "%b %d"
 
