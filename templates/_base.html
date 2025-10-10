@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="{% block lang %}{% endblock lang %}">
 
 <head>
@@ -13,9 +12,11 @@
   <link rel="apple-touch-icon" sizes="180x180" href="{{ get_url(path=config.extra.apple_touch) }}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Ancizar+Sans:ital,wght@0,100..1000;1,100..1000&family=Bitter:ital,wght@0,100..900;1,100..900&family=Indie+Flower&family=Lora:ital,wght@0,400..700;1,400..700&family=Marcellus&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Ancizar+Sans:ital,wght@0,100..1000;1,100..1000&family=Bitter:ital,wght@0,100..900;1,100..900&family=Indie+Flower&family=Lora:ital,wght@0,400..700;1,400..700&family=Marcellus&display=swap"
+    rel="stylesheet">
   {% include "_custom_font.html" %}
   {% include "_custom_css.html" %}
   <link rel="stylesheet" href="{{ get_url(path='main.css') }}">
@@ -24,11 +25,18 @@
 </head>
 
 <body class="{% block page %}{% endblock page%}{% if config.extra.force_theme == " dark" %} dark{% endif %}">
+  <div id="rain" class="rain-container" hidden>
+    <div class="rain-layer" data-depth="1"></div> <!-- far -->
+    <div class="rain-layer" data-depth="1.5"></div> <!-- mid -->
+    <div class="rain-layer" data-depth="2"></div> <!-- near -->
+  </div>
+
+
   {% if not config.extra.force_theme %}
   <script>
     const theme = sessionStorage.getItem('theme');
-    const match = window.matchMedia("(prefers-color-scheme: dark)").matches
-    if ((theme && theme == 'dark') || (!theme && match)) {
+    const match = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if ((theme && theme === 'dark') || (!theme && match)) {
       document.body.classList.add('dark');
       const hl = document.querySelector('link#hl');
       if (hl) hl.href = '{{ get_url(path="hl-dark.css") }}';
@@ -36,10 +44,187 @@
   </script>
   {% endif %}
 
-
-
   {% block content %}{% endblock content %}
   {% block script %}{% endblock script %}
+
+  <!-- Rain init + API + Toggle wiring -->
+  <script>
+    (function () {
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      const root = document.documentElement;
+      const rainRoot = document.getElementById('rain');
+      if (!rainRoot) return;
+
+      let L1 = rainRoot.querySelector('.rain-layer[data-depth="1"]');   // far
+      let LM = rainRoot.querySelector('.rain-layer[data-depth="1.5"]'); // mid
+      let L2 = rainRoot.querySelector('.rain-layer[data-depth="2"]');   // near
+
+      // Nếu thiếu layer giữa thì tự thêm
+      if (!LM) {
+        LM = document.createElement('div');
+        LM.className = 'rain-layer';
+        LM.setAttribute('data-depth', '1.5');
+        rainRoot.insertBefore(LM, L2 || null);
+      }
+
+      const KEY = 'rain-enabled';
+      let enabled = sessionStorage.getItem(KEY);
+      if (enabled === null) enabled = '1';
+      const isEnabled = () => enabled === '1';
+
+      let rAF, lastW = innerWidth;
+
+      // Helpers
+      const css = (name) => getComputedStyle(root).getPropertyValue(name).trim();
+      const toMs = (varName, fb) => {
+        const v = css(varName); if (!v) return fb;
+        if (v.endsWith('ms')) return +v.slice(0, -2);
+        if (v.endsWith('s')) return +v.slice(0, -1) * 1000;
+        const n = parseFloat(v); return isNaN(n) ? fb : n;
+      };
+      const toPx = (varName, fb) => {
+        const v = css(varName); const n = parseFloat(v);
+        return isNaN(n) ? fb : n;
+      };
+      const rand = (min, max) => Math.random() * (max - min) + min;
+
+      function buildDrops() {
+        // Tham số từ CSS
+        const baseDensity = parseInt(css('--rain-density')) || 220;
+        const speedMin = toMs('--rain-speed-min', 1200);
+        const speedMax = toMs('--rain-speed-max', 3200);
+        const lenMin = toPx('--rain-length-min', 18);
+        const lenMax = toPx('--rain-length-max', 42);
+        const thickBase = toPx('--rain-thickness', 2.2);
+        const glowBase = toPx('--rain-glow', 8);
+        const alphaBase = parseFloat(css('--rain-opacity')) || 0.95;
+        const driftVar = css('--rain-drift') || '0vw'; // 0 = rơi thẳng
+
+        // Scale mật độ theo diện tích viewport (chuẩn hoá 1280×800)
+        const vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+        const vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+        const areaFactor = Math.min(2.2, Math.max(0.6, (vw * vh) / (1280 * 800)));
+        const isMobile = matchMedia('(max-width: 640px)').matches;
+        const density = Math.max(16, Math.round(baseDensity * areaFactor * (isMobile ? 0.85 : 1.0)));
+
+        // Xoá cũ
+        L1.innerHTML = ''; LM.innerHTML = ''; L2.innerHTML = '';
+
+        // Phân bổ theo lớp (far/mid/near)
+        const c1 = Math.round(density * 0.70);
+        const cm = Math.round(density * 0.65);
+        const c2 = Math.round(density * 0.60);
+
+        create(L1, c1, css('--rain-color-1'), 1.20, 0.75);
+        create(LM, cm, css('--rain-color-1'), 1.05, 0.88);
+        create(L2, c2, css('--rain-color-2'), 0.90, 0.98);
+
+        function create(layer, count, color, durScale = 1, baseOpacity = 1) {
+          const frag = document.createDocumentFragment();
+          const overscanX = Math.max(vw * 0.25, 220); // spawn phủ rộng 2 bên
+
+          for (let i = 0; i < count; i++) {
+            const d = document.createElement('span');
+            d.className = 'raindrop';
+
+            // Random nhưng trong biên độ hẹp để hạt "đều" và dễ nhìn
+            const x = rand(-overscanX, vw + overscanX);
+            const len = rand(lenMin, lenMax);
+            const dur = rand(speedMin, speedMax) * durScale;
+            const delay = -rand(0, dur);
+
+            const w = rand(thickBase * 0.9, thickBase * 1.4);
+            const glow = rand(glowBase * 0.9, glowBase * 1.2);
+            const alpha = Math.min(1, baseOpacity * alphaBase);
+
+            d.style.setProperty('--x', `${x}px`);
+            d.style.setProperty('--len', `${len}px`);
+            d.style.setProperty('--dur', `${dur}ms`);
+            d.style.setProperty('--delay', `${delay}ms`);
+            d.style.setProperty('--w', `${w}px`);
+            d.style.setProperty('--drift', driftVar);      // lấy drift từ CSS → 0vw = rơi thẳng
+            d.style.setProperty('--glow', `${glow}px`);
+            d.style.setProperty('--col', color);
+            d.style.setProperty('--alpha', String(alpha)); // độ đậm của hạt (kết hợp với CSS)
+
+            frag.appendChild(d);
+          }
+          layer.appendChild(frag);
+        }
+      }
+
+      // Giữ nguyên logic boost khi nền quá sáng
+      function boostOnVeryBrightBg() {
+        const bg = getComputedStyle(document.body).backgroundColor;
+        const [r, g, b] = (function (c) {
+          if (!c) return [255, 255, 255];
+          if (c.startsWith('rgb')) {
+            const m = c.match(/rgba?\(([^)]+)\)/i); if (!m) return [255, 255, 255];
+            const p = m[1].split(',').map(s => +s.trim()); return [p[0], p[1], p[2]];
+          }
+          if (c[0] === '#') {
+            const hex = c.length === 4 ? '#' + c[1] + c[1] + c[2] + c[2] + c[3] + c[3] : c;
+            const n = parseInt(hex.slice(1), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+          }
+          return [255, 255, 255];
+        })(bg);
+        const srgb = [r, g, b].map(v => { v /= 255; return v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); });
+        const lum = .2126 * srgb[0] + .7152 * srgb[1] + .0722 * srgb[2];
+        if (lum > 0.88) {
+          const rs = document.documentElement.style;
+          rs.setProperty('--rain-color-1', 'rgba(17,24,39,.40)');
+          rs.setProperty('--rain-color-2', 'rgba(17,24,39,.26)');
+          rs.setProperty('--rain-thickness', '2.8px');
+        }
+      }
+
+      function enableRain() {
+        rainRoot.hidden = false;
+        buildDrops();
+        boostOnVeryBrightBg();
+        document.addEventListener('visibilitychange', () => {
+          rainRoot.style.display = document.hidden ? 'none' : '';
+        });
+        addEventListener('resize', () => {
+          if (Math.abs(innerWidth - lastW) < 40) return;
+          lastW = innerWidth;
+          cancelAnimationFrame(rAF);
+          rAF = requestAnimationFrame(buildDrops);
+        });
+      }
+      function disableRain() {
+        rainRoot.hidden = true;
+        if (L1) L1.innerHTML = '';
+        if (LM) LM.innerHTML = '';
+        if (L2) L2.innerHTML = '';
+      }
+
+      // Public API
+      window.Rain = {
+        setEnabled(on) { on ? enableRain() : disableRain(); },
+        isEnabled() { return !rainRoot.hidden; },
+        rebuild() { if (!rainRoot.hidden) buildDrops(); }
+      };
+
+      if (isEnabled()) enableRain();
+
+      // Toggle button
+      const btn = document.getElementById('rain-toggle');
+      if (btn) {
+        const setBtn = (on) => btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+        setBtn(isEnabled());
+        btn.addEventListener('click', () => {
+          const on = btn.getAttribute('aria-pressed') !== 'true';
+          sessionStorage.setItem(KEY, on ? '1' : '0');
+          setBtn(on);
+          window.Rain.setEnabled(on);
+        });
+      }
+    })();
+  </script>
+
+
   <script src="{{ get_url(path='js/main.js') }}"></script>
 </body>
 

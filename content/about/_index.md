@@ -27,4 +27,4 @@ Contact:
 
 ---
 
-<span class="foot-quote">“The measure of intelligence is the ability to change.”</span>
+<span class="foot-quote">The measure of intelligence is the ability to change.</span>

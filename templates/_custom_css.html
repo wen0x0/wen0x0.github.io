@@ -23,11 +23,12 @@
   /* dark mode colors */
   body.dark {
     /* --primary-color: #6f8fd1; */
-    --primary-color: #f3ff8a;
+    --primary-color: #f2ff7b;
     --primary-pale-color: #6f8fd166;
     --primary-decoration-color: #6f8fd112;
     /* --bg-color: #1c1c1c; */
-    --bg-color: #002727;
+    /* --bg-color: #002727; */
+    --bg-color: #0a0f1d;
     /* --text-color: #c1c1c1; */
     --text-color: #ffffff;
     /* --text-pale-color: #848484; */
@@ -64,6 +65,8 @@
     --detail-border-color: var(--primary-color);
   }
 
+  #name,
+  #id,
   #bio,
   #left,
   a.post,
@@ -72,6 +75,8 @@
   a.category {
     font-family: var(--heading-font);
   }
+
+
 
   .gif-wrapper {
     text-align: center;
@@ -185,7 +190,8 @@
     transition: background 0.2s ease, color 0.2s ease;
   }
 
-  #theme-toggle:hover {
+  #theme-toggle:hover,
+  #rain-toggle:hover {
     cursor: pointer;
   }
 

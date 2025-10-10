@@ -4,7 +4,7 @@
     {% endif %}
     <div id="text">
         <div>
-            <b> 
+            <b>
                 <span id="name">{{ config.extra.name }}</span>
                 {% if config.extra.verified %}
                 <span class="verified-icon" title="Verified">
@@ -43,10 +43,18 @@
         {% if not section.extra.footer and not config.extra.force_theme %}
         {% set moon_icon = load_data(path="icon/moon.svg") %}
         {% set sun_icon = load_data(path="icon/sun.svg") %}
+        {% set rain_icon = load_data(path="icon/rain.svg") %}
+        {% set cloud_icon = load_data(path="icon/cloud.svg") %}
+        <button id="rain-toggle" aria-label="toggle rain">
+            <span class="rain-on">{{ rain_icon | safe }}</span>
+            <span class="rain-off">{{ cloud_icon | safe }}</span>
+        </button>
         <button id="theme-toggle" aria-label="theme switch">
             <span class="moon-icon">{{ moon_icon | safe }}</span>
             <span class="sun-icon">{{ sun_icon | safe }}</span>
         </button>
+
+
         {% endif %}
     </div>
 </section>

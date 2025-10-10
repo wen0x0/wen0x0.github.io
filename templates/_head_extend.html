@@ -1,0 +1,122 @@
+<style>
+    /* === RAIN === */
+    :root {
+
+        --rain-color-1: rgba(26, 38, 57, .35);
+        --rain-color-2: rgba(26, 38, 57, .22);
+        --rain-thickness: 2.6px;
+        --rain-length-min: 26px;
+        --rain-length-max: 56px;
+
+
+        --rain-speed-min: 1000ms;
+        --rain-speed-max: 3200ms;
+        --rain-density: 100;
+
+
+        --rain-glow: 9px;
+        --rain-opacity: 0.95;
+        --rain-highlight: 92%;
+
+        --rain-drift: 0vw;
+    }
+
+    @media (prefers-color-scheme: light) {
+        :root {
+            --rain-color-1: rgba(29, 41, 57, .40);
+            --rain-color-2: rgba(29, 41, 57, .26);
+            --rain-thickness: 2.7px;
+        }
+    }
+
+    .rain-container {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+    }
+
+    .rain-layer {
+        position: absolute;
+        inset: -20vh -20vw;
+    }
+
+    .raindrop {
+        top: -18vh;
+    }
+
+    .raindrop {
+        position: absolute;
+        width: var(--w, var(--rain-thickness));
+        height: var(--len, 32px);
+        background: linear-gradient(to bottom,
+                color-mix(in srgb, var(--col, var(--rain-color-1)) var(--rain-highlight), white) 0%,
+                var(--col, var(--rain-color-1)) 48%,
+                transparent 100%);
+        filter: drop-shadow(0 0 var(--glow, var(--rain-glow)) var(--col, var(--rain-color-1)));
+        transform: translate3d(var(--x, 0px), -18vh, 0);
+        will-change: transform, opacity;
+        opacity: var(--alpha, var(--rain-opacity));
+        animation: fall var(--dur, 2s) linear var(--delay, 0s) infinite;
+    }
+
+    @supports not (color: color-mix(in srgb, black, white)) {
+        .raindrop {
+            background: linear-gradient(to bottom, rgba(255, 255, 255, .72) 0%,
+                    var(--col, var(--rain-color-1)) 48%, transparent 100%);
+        }
+    }
+
+
+    @keyframes fall {
+        to {
+            transform: translate3d(calc(var(--x, 0px) + var(--drift, var(--rain-drift))), 140vh, 0);
+        }
+    }
+
+
+    @media (prefers-reduced-motion: reduce) {
+        .rain-container {
+            display: none !important;
+        }
+
+        .raindrop {
+            animation: none !important;
+        }
+    }
+
+    #rain-toggle .rain-on {
+        display: none;
+    }
+
+    #rain-toggle[aria-pressed="true"] .rain-on {
+        display: inline;
+    }
+
+    #rain-toggle[aria-pressed="true"] .rain-off {
+        display: none;
+    }
+
+    #rain-toggle:hover {
+        opacity: .9;
+    }
+
+    /* Cho rain nằm dưới nội dung */
+    .rain-container {
+        z-index: 0;
+        pointer-events: none;
+    }
+
+    /* Nâng block content (main) lên trên */
+    main {
+        position: relative;
+        z-index: 1;
+    }
+
+    /* (tuỳ chọn) nếu bạn có header/footer muốn nổi trên rain */
+    header,
+    footer {
+        position: relative;
+        z-index: 1;
+    }
+    
+</style>

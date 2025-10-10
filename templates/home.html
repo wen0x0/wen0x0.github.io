@@ -60,6 +60,7 @@ lang %}
     white-space: nowrap;
   }
 </style>
+
 {% endblock head %}
 
 {% block content %}
@@ -74,12 +75,6 @@ lang %}
     {% set blog_section_path = config.extra.blog_section_path | trim_start_matches(pat="/") %}
     {% set section_md_path = blog_section_path ~ "/_index.md" %}
     {% set blog_section = get_section(path=section_md_path) %}
-
-    <!-- {% if section.extra.gif %}
-    <div class="gif-wrapper">
-      <img src="{{ get_url(path=section.extra.gif) }}" alt="intro gif" class="intro-gif">
-    </div>
-    {% endif %} -->
 
     <section class="layout-list">
       <div class="post-list">
@@ -102,6 +97,7 @@ lang %}
   {% include "_footer.html" %}
   {% endif %}
 </div>
+
 {% endblock content %}
 
 {% block script %}
@@ -111,5 +107,7 @@ lang %}
   import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
   mermaid.initialize({ startOnLoad: true });
 </script>
+
 {% endif %}
+
 {% endblock script %}
