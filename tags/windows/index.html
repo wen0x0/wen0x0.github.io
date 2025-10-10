@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="
+
+en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  
+<meta name="description" content="windows">
+
+  <title>Wen&#x27;s Notes</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="https://wen.is-a.dev/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://wen.is-a.dev/img/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://wen.is-a.dev/img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Ancizar+Sans:ital,wght@0,100..1000;1,100..1000&family=Bitter:ital,wght@0,100..900;1,100..900&family=Indie+Flower&family=Lora:ital,wght@0,400..700;1,400..700&family=Marcellus&display=swap"
+    rel="stylesheet">
+  
+  <style>
+  /* light mode colors */
+  body {
+    /* --primary-color: #5871a2; */
+    --primary-color: #000000;
+    --primary-pale-color: #5871a233;
+    --primary-decoration-color: #5871a210;
+    --bg-color: #f0f9ff;
+    /* --text-color: #2f3030; */
+    --text-color: #000000;
+    /* --text-pale-color: #767676; */
+    --text-pale-color: #000000;
+    --text-decoration-color: #a9a9a9;
+    --highlight-mark-color: #5f75b020;
+
+    --callout-note-color: #5871a2;
+    --callout-tip-color: #268556;
+    --callout-important-color: #885fc9;
+    --callout-warning-color: #ab6632;
+    --callout-caution-color: #c64e4e;
+  }
+
+  /* dark mode colors */
+  body.dark {
+    /* --primary-color: #6f8fd1; */
+    --primary-color: #f2ff7b;
+    --primary-pale-color: #6f8fd166;
+    --primary-decoration-color: #6f8fd112;
+    /* --bg-color: #1c1c1c; */
+    /* --bg-color: #002727; */
+    --bg-color: #0a0f1d;
+    /* --text-color: #c1c1c1; */
+    --text-color: #ffffff;
+    /* --text-pale-color: #848484; */
+    --text-pale-color: #ffffff;
+    --text-decoration-color: #5f5f5f;
+    --highlight-mark-color: #8296cb3b;
+
+    --callout-note-color: #6f8fd1;
+    --callout-tip-color: #47976f;
+    --callout-important-color: #9776cd;
+    --callout-warning-color: #ad7a52;
+    --callout-caution-color: #d06161;
+  }
+
+  /* typography */
+  body {
+    /* --main-font: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; */
+    --main-font: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --heading-font: 'Lora', 'Bitter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --code-font: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    --homepage-max-width: 768px;
+    --main-max-width: 768px;
+    --avatar-size: 75px;
+    --font-size: 16px;
+    --line-height: 1.75;
+    --img-border-radius: 0px;
+    --detail-border-radius: 0px;
+    --dark-mode-img-brightness: 0.75;
+    --dark-mode-chart-brightness: 0.75;
+    --inline-code-border-radius: 2px;
+    --inline-code-bg-color: var(--primary-decoration-color);
+    --block-code-border-radius: 0px;
+    --block-code-border-color: var(--primary-color);
+    --detail-border-color: var(--primary-color);
+  }
+
+  #name,
+  #id,
+  #bio,
+  #left,
+  a.post,
+  a.back-link,
+  a.tag,
+  a.category {
+    font-family: var(--heading-font);
+  }
+
+
+
+  .gif-wrapper {
+    text-align: center;
+    margin: 1.5rem 0;
+  }
+
+  .gif-wrapper .intro-gif {
+    max-width: 96%;
+    height: auto;
+    border-radius: 8px;
+  }
+
+  .verified-icon {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 3px;
+    vertical-align: middle;
+  }
+
+  .verified-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .top-nav {
+    width: 100%;
+    padding-bottom: 1em;
+    border-bottom: 1px solid var(--border-color);
+    background: rgba(var(--background-rgb), 0.85);
+    backdrop-filter: blur(8px);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .top-nav nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+  }
+
+  .nav-left,
+  .nav-center,
+  .nav-right {
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-center {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-top: 1em;
+  }
+
+  .menu-wrapper {
+    position: relative;
+    margin-top: 1.5em;
+  }
+
+  .menu-trigger {
+    font-size: 1.5em;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-color);
+  }
+
+  .menu-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+
+    background: var(--bg-color);
+    font-family: var(--heading-font);
+    border: 1px solid var(--primary-pale-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    min-width: 85px;
+    padding: 0.25em 0;
+    z-index: 2000;
+
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .menu-wrapper.active .menu-dropdown {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+
+  .menu-dropdown a {
+    display: block;
+    padding: 0.6em 1em;
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 0.95em;
+    margin: auto;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  #theme-toggle:hover,
+  #rain-toggle:hover {
+    cursor: pointer;
+  }
+
+  .foot-quote,
+  .section-title,
+  .title {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    text-align: center;
+    display: block;
+    margin-top: 2em;
+  }
+</style>
+  <link rel="stylesheet" href="https://wen.is-a.dev/main.css">
+  
+
+<style>
+  .layout-list .post {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+  }
+
+  .post>span:first-child {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+
+  .post>.date {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+</style>
+
+  <style>
+    /* === RAIN === */
+    :root {
+
+        --rain-color-1: rgba(26, 38, 57, .35);
+        --rain-color-2: rgba(26, 38, 57, .22);
+        --rain-thickness: 2.6px;
+        --rain-length-min: 26px;
+        --rain-length-max: 56px;
+
+
+        --rain-speed-min: 1000ms;
+        --rain-speed-max: 3200ms;
+        --rain-density: 70;
+
+
+        --rain-glow: 9px;
+        --rain-opacity: 0.95;
+        --rain-highlight: 92%;
+
+        --rain-drift: 0vw;
+    }
+
+    @media (prefers-color-scheme: light) {
+        :root {
+            --rain-color-1: rgba(29, 41, 57, .40);
+            --rain-color-2: rgba(29, 41, 57, .26);
+            --rain-thickness: 2.7px;
+        }
+    }
+
+    .rain-container {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+    }
+
+    .rain-layer {
+        position: absolute;
+        inset: -20vh -20vw;
+    }
+
+    .raindrop {
+        top: -18vh;
+    }
+
+    .raindrop {
+        position: absolute;
+        width: var(--w, var(--rain-thickness));
+        height: var(--len, 32px);
+        background: linear-gradient(to bottom,
+                color-mix(in srgb, var(--col, var(--rain-color-1)) var(--rain-highlight), white) 0%,
+                var(--col, var(--rain-color-1)) 48%,
+                transparent 100%);
+        filter: drop-shadow(0 0 var(--glow, var(--rain-glow)) var(--col, var(--rain-color-1)));
+        transform: translate3d(var(--x, 0px), -18vh, 0);
+        will-change: transform, opacity;
+        opacity: var(--alpha, var(--rain-opacity));
+        animation: fall var(--dur, 2s) linear var(--delay, 0s) infinite;
+    }
+
+    @supports not (color: color-mix(in srgb, black, white)) {
+        .raindrop {
+            background: linear-gradient(to bottom, rgba(255, 255, 255, .72) 0%,
+                    var(--col, var(--rain-color-1)) 48%, transparent 100%);
+        }
+    }
+
+
+    @keyframes fall {
+        to {
+            transform: translate3d(calc(var(--x, 0px) + var(--drift, var(--rain-drift))), 140vh, 0);
+        }
+    }
+
+
+    @media (prefers-reduced-motion: reduce) {
+        .rain-container {
+            display: none !important;
+        }
+
+        .raindrop {
+            animation: none !important;
+        }
+    }
+
+    #rain-toggle .rain-on {
+        display: none;
+    }
+
+    #rain-toggle[aria-pressed="true"] .rain-on {
+        display: inline;
+    }
+
+    #rain-toggle[aria-pressed="true"] .rain-off {
+        display: none;
+    }
+
+    #rain-toggle:hover {
+        opacity: .9;
+    }
+
+    /* Cho rain nằm dưới nội dung */
+    .rain-container {
+        z-index: 0;
+        pointer-events: none;
+    }
+
+    /* Nâng block content (main) lên trên */
+    main {
+        position: relative;
+        z-index: 1;
+    }
+
+    /* (tuỳ chọn) nếu bạn có header/footer muốn nổi trên rain */
+    header,
+    footer {
+        position: relative;
+        z-index: 1;
+    }
+    
+</style>
+</head>
+
+<body class="tag-single">
+  <div id="rain" class="rain-container" hidden>
+    <div class="rain-layer" data-depth="1"></div> <!-- far -->
+    <div class="rain-layer" data-depth="1.5"></div> <!-- mid -->
+    <div class="rain-layer" data-depth="2"></div> <!-- near -->
+  </div>
+
+
+  
+  <script>
+    const theme = sessionStorage.getItem('theme');
+    const match = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if ((theme && theme === 'dark') || (!theme && match)) {
+      document.body.classList.add('dark');
+      const hl = document.querySelector('link#hl');
+      if (hl) hl.href = 'https://wen.is-a.dev/hl-dark.css';
+    }
+  </script>
+  
+
+  
+<div id="wrapper">
+  
+<header class="top-nav">
+  <nav>
+    <!-- Left: Back -->
+    <div class="nav-left">
+      <a href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;tags" class="back-link">← Back</a>
+    </div>
+
+    <!-- Center: Avatar -->
+    <div class="nav-center">
+      
+      <a href="/">
+        <img src="https://wen.is-a.dev/img/righright.png" alt="avatar" class="avatar">
+      </a>
+      
+    </div>
+
+    <!-- Right: Menu dropdown -->
+    <div class="nav-right">
+
+      <div class="menu-wrapper">
+
+        <button class="menu-trigger" aria-label="menu">
+          &#9776;
+        </button>
+        <div class="menu-dropdown">
+          <a href="https://wen.is-a.dev/notes">Notes</a>
+          <a href="https://wen.is-a.dev/tags">Tags</a>
+          <a href="https://wen.is-a.dev/about">About</a>
+          
+          
+          
+          
+          
+          <a id="rain-toggle" aria-label="toggle rain">
+            <span class="rain-on"><svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 24 24"
+     width="18" height="18"
+     fill="none"
+     stroke="currentColor"
+     stroke-width="2"
+     stroke-linecap="round"
+     stroke-linejoin="round"
+     aria-hidden="true">
+  <path d="M19.3278 16C20.3478 15.1745 21 13.9119 21 12.4969C21 10.6503 19.8893 8.94488 18.3 8.25C18.1317 5.32251 15.684 3 12.6893 3C10.3514 3 8.34694 4.48637 7.5 6.5C4.8 6.9375 3 9.20008 3 11.6493C3 13.1613 3.63296 14.5269 4.65065 15.5M8 18V20M8 12V14M12 19V21M16 18V20M16 12V14M12 13V15"/>
+</svg>
+</span>
+            <span class="rain-off"><svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 24 24"
+     width="18" height="18"
+     fill="none"
+     stroke="currentColor"
+     stroke-width="2"
+     stroke-linecap="round"
+     stroke-linejoin="round"
+     aria-hidden="true">
+  <path transform="translate(0,1)"
+        d="M19.3278 16C20.3478 15.1745 21 13.9119 21 12.4969
+           C21 10.6503 19.8893 8.94488 18.3 8.25
+           C18.1317 5.32251 15.684 3 12.6893 3
+           C10.3514 3 8.34694 4.48637 7.5 6.5
+           C4.8 6.9375 3 9.20008 3 11.6493
+           C3 13.1613 3.63296 14.5269 4.65065 15.5
+           C5.8979 16.692 7.586 17.5 9.5 17.5
+           H15C16.8 17.5 18.3 17 19.3278 16Z"/>
+</svg>
+</span>
+          </a>
+          <a id="theme-toggle" aria-label="theme switch">
+            <span class="moon-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill="currentColor"></path></svg>
+</span>
+            <span class="sun-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z" fill="currentColor"></path></svg>
+</span>
+          </a>
+
+          
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const trigger = document.querySelector(".menu-trigger");
+    const wrapper = document.querySelector(".menu-wrapper");
+
+    if (trigger && wrapper) {
+      trigger.addEventListener("click", () => {
+        wrapper.classList.toggle("active");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!wrapper.contains(e.target)) {
+          wrapper.classList.remove("active");
+        }
+      });
+    }
+  });
+
+</script>
+
+  <main class="layout-list">
+    <div class="title">
+      <span># windows</span>
+    </div>
+    <div class="post-list">
+      
+      <a class="post instant " href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;notes&#x2F;user-mode-vs-kernel-mode-cuoc-chien-quyen-luc-trong-windows&#x2F;">
+        <span>User Mode vs Kernel Mode – Cuộc chiến quyền lực trong Windows</span>
+        <span class="date">Apr 12</span>
+      </a>
+      
+      <a class="post instant " href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;notes&#x2F;windows-registry-bo-nao-dien-tu-cua-windows&#x2F;">
+        <span>Windows Registry: Bộ não điện tử của Windows</span>
+        <span class="date">Feb 14</span>
+      </a>
+      
+      <a class="post instant " href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;notes&#x2F;windows-event-logs-cuon-nhat-ky-cua-windows&#x2F;">
+        <span>Windows Event Logs: Cuốn nhật ký của Windows</span>
+        <span class="date">Jan 05</span>
+      </a>
+      
+      <a class="post instant " href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;notes&#x2F;windows-11-system-processes-ai-dang-chay-gi-tren-may-ban&#x2F;">
+        <span>Windows 11 System Processes – Ai đang chạy gì trên máy bạn?</span>
+        <span class="date">Oct 14</span>
+      </a>
+      
+    </div>
+  </main>
+  
+
+
+<footer>
+  <div class="left">
+    <div class="copyright">
+      © 2025 <a href="https:&#x2F;&#x2F;wen.is-a.dev">Quoc Anh</a>
+      
+    </div>
+  </div>
+
+  <div class="right">
+    
+    
+    
+    
+
+    <!-- 
+    
+    
+    <button id="theme-toggle" aria-label="theme switch">
+      <span class="moon-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill="currentColor"></path></svg>
+</span>
+      <span class="sun-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z" fill="currentColor"></path></svg>
+</span>
+    </button>
+     -->
+  </div>
+</footer>
+
+
+
+
+</div>
+
+  
+
+  <!-- Rain init + API + Toggle wiring -->
+  <script>
+    (function () {
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      const root = document.documentElement;
+      const rainRoot = document.getElementById('rain');
+      if (!rainRoot) return;
+
+      let L1 = rainRoot.querySelector('.rain-layer[data-depth="1"]');   // far
+      let LM = rainRoot.querySelector('.rain-layer[data-depth="1.5"]'); // mid
+      let L2 = rainRoot.querySelector('.rain-layer[data-depth="2"]');   // near
+
+      // Nếu thiếu layer giữa thì tự thêm
+      if (!LM) {
+        LM = document.createElement('div');
+        LM.className = 'rain-layer';
+        LM.setAttribute('data-depth', '1.5');
+        rainRoot.insertBefore(LM, L2 || null);
+      }
+
+      const KEY = 'rain-enabled';
+      let enabled = sessionStorage.getItem(KEY);
+      if (enabled === null) enabled = '1';
+      const isEnabled = () => enabled === '1';
+
+      let rAF, lastW = innerWidth;
+
+      // Helpers
+      const css = (name) => getComputedStyle(root).getPropertyValue(name).trim();
+      const toMs = (varName, fb) => {
+        const v = css(varName); if (!v) return fb;
+        if (v.endsWith('ms')) return +v.slice(0, -2);
+        if (v.endsWith('s')) return +v.slice(0, -1) * 1000;
+        const n = parseFloat(v); return isNaN(n) ? fb : n;
+      };
+      const toPx = (varName, fb) => {
+        const v = css(varName); const n = parseFloat(v);
+        return isNaN(n) ? fb : n;
+      };
+      const rand = (min, max) => Math.random() * (max - min) + min;
+
+      function buildDrops() {
+        // Tham số từ CSS
+        const baseDensity = parseInt(css('--rain-density')) || 220;
+        const speedMin = toMs('--rain-speed-min', 1200);
+        const speedMax = toMs('--rain-speed-max', 3200);
+        const lenMin = toPx('--rain-length-min', 18);
+        const lenMax = toPx('--rain-length-max', 42);
+        const thickBase = toPx('--rain-thickness', 2.2);
+        const glowBase = toPx('--rain-glow', 8);
+        const alphaBase = parseFloat(css('--rain-opacity')) || 0.95;
+        const driftVar = css('--rain-drift') || '0vw'; // 0 = rơi thẳng
+
+        // Scale mật độ theo diện tích viewport (chuẩn hoá 1280×800)
+        const vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+        const vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+        const areaFactor = Math.min(2.2, Math.max(0.6, (vw * vh) / (1280 * 800)));
+        const isMobile = matchMedia('(max-width: 640px)').matches;
+        const density = Math.max(16, Math.round(baseDensity * areaFactor * (isMobile ? 0.85 : 1.0)));
+
+        // Xoá cũ
+        L1.innerHTML = ''; LM.innerHTML = ''; L2.innerHTML = '';
+
+        // Phân bổ theo lớp (far/mid/near)
+        const c1 = Math.round(density * 0.70);
+        const cm = Math.round(density * 0.65);
+        const c2 = Math.round(density * 0.60);
+
+        create(L1, c1, css('--rain-color-1'), 1.20, 0.75);
+        create(LM, cm, css('--rain-color-1'), 1.05, 0.88);
+        create(L2, c2, css('--rain-color-2'), 0.90, 0.98);
+
+        function create(layer, count, color, durScale = 1, baseOpacity = 1) {
+          const frag = document.createDocumentFragment();
+          const overscanX = Math.max(vw * 0.25, 220); // spawn phủ rộng 2 bên
+
+          for (let i = 0; i < count; i++) {
+            const d = document.createElement('span');
+            d.className = 'raindrop';
+
+            // Random nhưng trong biên độ hẹp để hạt "đều" và dễ nhìn
+            const x = rand(-overscanX, vw + overscanX);
+            const len = rand(lenMin, lenMax);
+            const dur = rand(speedMin, speedMax) * durScale;
+            const delay = -rand(0, dur);
+
+            const w = rand(thickBase * 0.9, thickBase * 1.4);
+            const glow = rand(glowBase * 0.9, glowBase * 1.2);
+            const alpha = Math.min(1, baseOpacity * alphaBase);
+
+            d.style.setProperty('--x', `${x}px`);
+            d.style.setProperty('--len', `${len}px`);
+            d.style.setProperty('--dur', `${dur}ms`);
+            d.style.setProperty('--delay', `${delay}ms`);
+            d.style.setProperty('--w', `${w}px`);
+            d.style.setProperty('--drift', driftVar);      // lấy drift từ CSS → 0vw = rơi thẳng
+            d.style.setProperty('--glow', `${glow}px`);
+            d.style.setProperty('--col', color);
+            d.style.setProperty('--alpha', String(alpha)); // độ đậm của hạt (kết hợp với CSS)
+
+            frag.appendChild(d);
+          }
+          layer.appendChild(frag);
+        }
+      }
+
+      // Giữ nguyên logic boost khi nền quá sáng
+      function boostOnVeryBrightBg() {
+        const bg = getComputedStyle(document.body).backgroundColor;
+        const [r, g, b] = (function (c) {
+          if (!c) return [255, 255, 255];
+          if (c.startsWith('rgb')) {
+            const m = c.match(/rgba?\(([^)]+)\)/i); if (!m) return [255, 255, 255];
+            const p = m[1].split(',').map(s => +s.trim()); return [p[0], p[1], p[2]];
+          }
+          if (c[0] === '#') {
+            const hex = c.length === 4 ? '#' + c[1] + c[1] + c[2] + c[2] + c[3] + c[3] : c;
+            const n = parseInt(hex.slice(1), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+          }
+          return [255, 255, 255];
+        })(bg);
+        const srgb = [r, g, b].map(v => { v /= 255; return v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); });
+        const lum = .2126 * srgb[0] + .7152 * srgb[1] + .0722 * srgb[2];
+        if (lum > 0.88) {
+          const rs = document.documentElement.style;
+          rs.setProperty('--rain-color-1', 'rgba(17,24,39,.40)');
+          rs.setProperty('--rain-color-2', 'rgba(17,24,39,.26)');
+          rs.setProperty('--rain-thickness', '2.8px');
+        }
+      }
+
+      function enableRain() {
+        rainRoot.hidden = false;
+        buildDrops();
+        boostOnVeryBrightBg();
+        document.addEventListener('visibilitychange', () => {
+          rainRoot.style.display = document.hidden ? 'none' : '';
+        });
+        addEventListener('resize', () => {
+          if (Math.abs(innerWidth - lastW) < 40) return;
+          lastW = innerWidth;
+          cancelAnimationFrame(rAF);
+          rAF = requestAnimationFrame(buildDrops);
+        });
+      }
+      function disableRain() {
+        rainRoot.hidden = true;
+        if (L1) L1.innerHTML = '';
+        if (LM) LM.innerHTML = '';
+        if (L2) L2.innerHTML = '';
+      }
+
+      // Public API
+      window.Rain = {
+        setEnabled(on) { on ? enableRain() : disableRain(); },
+        isEnabled() { return !rainRoot.hidden; },
+        rebuild() { if (!rainRoot.hidden) buildDrops(); }
+      };
+
+      if (isEnabled()) enableRain();
+
+      // Toggle button
+      const btn = document.getElementById('rain-toggle');
+      if (btn) {
+        const setBtn = (on) => btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+        setBtn(isEnabled());
+        btn.addEventListener('click', () => {
+          const on = btn.getAttribute('aria-pressed') !== 'true';
+          sessionStorage.setItem(KEY, on ? '1' : '0');
+          setBtn(on);
+          window.Rain.setEnabled(on);
+        });
+      }
+    })();
+  </script>
+
+
+  <script src="https://wen.is-a.dev/js/main.js"></script>
+</body>
+
+</html>
