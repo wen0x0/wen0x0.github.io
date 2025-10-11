@@ -19,8 +19,6 @@ featured = false
 reaction = false  
 +++  
 
-# Khám phá các mô hình làm việc phổ biến trong phát triển phần mềm
-
 Trong ngành phát triển phần mềm, cách chúng ta **tổ chức công việc và quản lý dự án** ảnh hưởng trực tiếp đến **chất lượng sản phẩm, tiến độ và sự hài lòng của khách hàng**.  
 Trải qua nhiều năm, các mô hình làm việc như **Waterfall**, **Agile**, **Scrum**, hay **Kanban** đã ra đời, mỗi mô hình mang một triết lý và cách tiếp cận khác nhau.
 
