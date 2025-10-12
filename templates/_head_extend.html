@@ -11,7 +11,7 @@
 
         --rain-speed-min: 1000ms;
         --rain-speed-max: 3200ms;
-        --rain-density: 10;
+        --rain-density: 5;
 
 
         --rain-glow: 9px;
@@ -100,23 +100,5 @@
         opacity: .9;
     }
 
-    /* Cho rain nằm dưới nội dung */
-    .rain-container {
-        z-index: 0;
-        pointer-events: none;
-    }
-
-    /* Nâng block content (main) lên trên */
-    main {
-        position: relative;
-        z-index: 1;
-    }
-
-    /* (tuỳ chọn) nếu bạn có header/footer muốn nổi trên rain */
-    header,
-    footer {
-        position: relative;
-        z-index: 1;
-    }
     
 </style>
