@@ -53,7 +53,7 @@ force_theme = false # false | "light" | "dark"
 footer_copyright = "© 2025"
 name = "Quoc Anh"
 id = "@Wen"
-bio = "I'm a berserker."
+bio = "Everything makes sense, eventually."
 avatar = "img/righright.png"
 links = [
     { name = "GitHub", icon = "github", url = "https://github.com/wen0x0" },
