@@ -1,25 +1,27 @@
 <style>
-    /* === RAIN === */
     :root {
-
         --rain-color-1: rgba(26, 38, 57, .35);
         --rain-color-2: rgba(26, 38, 57, .22);
         --rain-thickness: 2.6px;
         --rain-length-min: 26px;
         --rain-length-max: 56px;
 
-
         --rain-speed-min: 1000ms;
         --rain-speed-max: 3200ms;
         --rain-density: 5;
 
-
         --rain-glow: 9px;
+
         --rain-opacity: 0.95;
         --rain-highlight: 92%;
 
         --rain-drift: 0vw;
+
+
+        --rain-blend-mode: normal;
+
     }
+
 
     @media (prefers-color-scheme: light) {
         :root {
@@ -29,15 +31,29 @@
         }
     }
 
+    body.dark {
+        --rain-color-1: rgba(124, 200, 255, .60);
+
+        --rain-color-2: rgba(124, 200, 255, .36);
+        --rain-opacity: 0.98;
+
+        --rain-highlight: 98%;
+
+        --rain-thickness: 2.8px;
+
+    }
+
     .rain-container {
         position: fixed;
         inset: 0;
         overflow: hidden;
+        contain: layout paint style;
+        pointer-events: none;
     }
 
     .rain-layer {
         position: absolute;
-        inset: -20vh -20vw;
+        inset: -10vh -10vw;
     }
 
     .raindrop {
@@ -48,24 +64,46 @@
         position: absolute;
         width: var(--w, var(--rain-thickness));
         height: var(--len, 32px);
-        background: linear-gradient(to bottom,
-                color-mix(in srgb, var(--col, var(--rain-color-1)) var(--rain-highlight), white) 0%,
+        background:
+            linear-gradient(to bottom,
+                color-mix(in srgb, var(--col, var(--rain-color-1)) 30%, white) 0%,
+                color-mix(in srgb, var(--col, var(--rain-color-1)) 60%, white) 10%,
+
                 var(--col, var(--rain-color-1)) 48%,
+
                 transparent 100%);
         filter: drop-shadow(0 0 var(--glow, var(--rain-glow)) var(--col, var(--rain-color-1)));
         transform: translate3d(var(--x, 0px), -18vh, 0);
         will-change: transform, opacity;
         opacity: var(--alpha, var(--rain-opacity));
         animation: fall var(--dur, 2s) linear var(--delay, 0s) infinite;
+        mix-blend-mode: var(--rain-blend-mode);
+    }
+
+    .raindrop::after {
+        content: "";
+        position: absolute;
+        top: -2px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: calc(var(--w, var(--rain-thickness)) * 1.1);
+        height: 6px;
+        border-radius: 999px;
+        background: radial-gradient(circle at 50% 25%,
+                rgba(255, 255, 255, .85) 0%,
+                color-mix(in srgb, var(--col, var(--rain-color-1)) 40%, transparent) 70%,
+                transparent 100%);
+        pointer-events: none;
     }
 
     @supports not (color: color-mix(in srgb, black, white)) {
         .raindrop {
-            background: linear-gradient(to bottom, rgba(255, 255, 255, .72) 0%,
-                    var(--col, var(--rain-color-1)) 48%, transparent 100%);
+            background: linear-gradient(to bottom,
+                    rgba(255, 255, 255, .78) 0%,
+                    var(--col, var(--rain-color-1)) 48%,
+                    transparent 100%);
         }
     }
-
 
     @keyframes fall {
         to {
@@ -73,6 +111,31 @@
         }
     }
 
+    @media (max-width: 640px),
+    (pointer: coarse) {
+        :root {
+            --rain-glow: 0px;
+            --rain-thickness: 2.2px;
+            --rain-length-min: 18px;
+            --rain-length-max: 42px;
+            --rain-blend-mode: normal;
+        }
+
+        .raindrop {
+            filter: none !important;
+            opacity: calc(var(--alpha, var(--rain-opacity)) * 1.02);
+        }
+
+        .raindrop::after {
+            display: none;
+        }
+    }
+
+    @media (min-width: 641px) and (pointer: fine) {
+        :root {
+            --rain-blend-mode: lighten;
+        }
+    }
 
     @media (prefers-reduced-motion: reduce) {
         .rain-container {
@@ -99,6 +162,4 @@
     #rain-toggle:hover {
         opacity: .9;
     }
-
-    
 </style>

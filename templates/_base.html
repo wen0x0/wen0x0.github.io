@@ -47,7 +47,6 @@
   {% block content %}{% endblock content %}
   {% block script %}{% endblock script %}
 
-  <!-- Rain init + API + Toggle wiring -->
   <script>
     (function () {
       if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -59,8 +58,6 @@
       let L1 = rainRoot.querySelector('.rain-layer[data-depth="1"]');   // far
       let LM = rainRoot.querySelector('.rain-layer[data-depth="1.5"]'); // mid
       let L2 = rainRoot.querySelector('.rain-layer[data-depth="2"]');   // near
-
-      // Nếu thiếu layer giữa thì tự thêm
       if (!LM) {
         LM = document.createElement('div');
         LM.className = 'rain-layer';
@@ -89,6 +86,12 @@
       };
       const rand = (min, max) => Math.random() * (max - min) + min;
 
+      // Nhận diện máy yếu / mobile để auto "hạ đồ họa"
+      const cores = navigator.hardwareConcurrency || 2;
+      const memGB = navigator.deviceMemory || 2;
+      const isMobile = matchMedia('(max-width: 640px)').matches;
+      const lowEnd = cores <= 4 || memGB <= 3;
+
       function buildDrops() {
         // Tham số từ CSS
         const baseDensity = parseInt(css('--rain-density')) || 220;
@@ -99,62 +102,75 @@
         const thickBase = toPx('--rain-thickness', 2.2);
         const glowBase = toPx('--rain-glow', 8);
         const alphaBase = parseFloat(css('--rain-opacity')) || 0.95;
-        const driftVar = css('--rain-drift') || '0vw'; // 0 = rơi thẳng
+        const driftVar = css('--rain-drift') || '0vw';
 
-        // Scale mật độ theo diện tích viewport (chuẩn hoá 1280×800)
+        // Viewport & tỉ lệ
         const vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
         const vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-        const areaFactor = Math.min(2.2, Math.max(0.6, (vw * vh) / (1280 * 800)));
-        const isMobile = matchMedia('(max-width: 640px)').matches;
-        const density = Math.max(16, Math.round(baseDensity * areaFactor * (isMobile ? 0.85 : 1.0)));
+        const areaFactor = Math.min(2.0, Math.max(0.6, (vw * vh) / (1280 * 800)));
+
+        // Giảm mạnh mật độ nếu mobile hoặc máy yếu
+        const perfScale =
+          lowEnd ? 0.35 :
+            isMobile ? 0.55 : 1.0;
+
+        const density = Math.max(12, Math.round(baseDensity * areaFactor * perfScale));
 
         // Xoá cũ
         L1.innerHTML = ''; LM.innerHTML = ''; L2.innerHTML = '';
 
-        // Phân bổ theo lớp (far/mid/near)
+        // Phân bổ lớp
         const c1 = Math.round(density * 0.70);
         const cm = Math.round(density * 0.65);
         const c2 = Math.round(density * 0.60);
 
-        create(L1, c1, css('--rain-color-1'), 1.20, 0.75);
-        create(LM, cm, css('--rain-color-1'), 1.05, 0.88);
-        create(L2, c2, css('--rain-color-2'), 0.90, 0.98);
+        // Mobile/lowEnd: bỏ glow để nhẹ hơn
+        const useGlow = !(isMobile || lowEnd);
 
-        function create(layer, count, color, durScale = 1, baseOpacity = 1) {
-          const frag = document.createDocumentFragment();
-          const overscanX = Math.max(vw * 0.25, 220); // spawn phủ rộng 2 bên
+        create(L1, c1, css('--rain-color-1'), 1.20, 0.75, useGlow);
+        create(LM, cm, css('--rain-color-1'), 1.05, 0.88, useGlow);
+        create(L2, c2, css('--rain-color-2'), 0.90, 0.98, useGlow);
 
-          for (let i = 0; i < count; i++) {
-            const d = document.createElement('span');
-            d.className = 'raindrop';
+        function create(layer, count, color, durScale = 1, baseOpacity = 1, glowOn = true) {
+          const overscanX = Math.max(vw * 0.10, 100); // giảm overscan
+          const batch = 120; // tạo theo lô để tránh giật khung
+          let i = 0;
 
-            // Random nhưng trong biên độ hẹp để hạt "đều" và dễ nhìn
-            const x = rand(-overscanX, vw + overscanX);
-            const len = rand(lenMin, lenMax);
-            const dur = rand(speedMin, speedMax) * durScale;
-            const delay = -rand(0, dur);
+          (function pump() {
+            const frag = document.createDocumentFragment();
+            const end = Math.min(i + batch, count);
+            for (; i < end; i++) {
+              const d = document.createElement('span');
+              d.className = 'raindrop';
 
-            const w = rand(thickBase * 0.9, thickBase * 1.4);
-            const glow = rand(glowBase * 0.9, glowBase * 1.2);
-            const alpha = Math.min(1, baseOpacity * alphaBase);
+              const x = rand(-overscanX, vw + overscanX);
+              const len = rand(lenMin, lenMax);
+              const dur = rand(speedMin, speedMax) * durScale;
+              const delay = -rand(0, dur);
 
-            d.style.setProperty('--x', `${x}px`);
-            d.style.setProperty('--len', `${len}px`);
-            d.style.setProperty('--dur', `${dur}ms`);
-            d.style.setProperty('--delay', `${delay}ms`);
-            d.style.setProperty('--w', `${w}px`);
-            d.style.setProperty('--drift', driftVar);      // lấy drift từ CSS → 0vw = rơi thẳng
-            d.style.setProperty('--glow', `${glow}px`);
-            d.style.setProperty('--col', color);
-            d.style.setProperty('--alpha', String(alpha)); // độ đậm của hạt (kết hợp với CSS)
+              const w = rand(thickBase * 0.9, thickBase * 1.4);
+              const glow = rand(glowBase * 0.9, glowBase * 1.2);
+              const alpha = Math.min(1, baseOpacity * alphaBase);
 
-            frag.appendChild(d);
-          }
-          layer.appendChild(frag);
+              d.style.setProperty('--x', `${x}px`);
+              d.style.setProperty('--len', `${len}px`);
+              d.style.setProperty('--dur', `${dur}ms`);
+              d.style.setProperty('--delay', `${delay}ms`);
+              d.style.setProperty('--w', `${w}px`);
+              d.style.setProperty('--drift', driftVar);
+              d.style.setProperty('--col', color);
+              d.style.setProperty('--alpha', String(alpha));
+              if (glowOn) d.style.setProperty('--glow', `${glow}px`);
+
+              frag.appendChild(d);
+            }
+            layer.appendChild(frag);
+            if (i < count) requestAnimationFrame(pump);
+          })();
         }
       }
 
-      // Giữ nguyên logic boost khi nền quá sáng
+      // Boost khi nền quá sáng (giữ nguyên)
       function boostOnVeryBrightBg() {
         const bg = getComputedStyle(document.body).backgroundColor;
         const [r, g, b] = (function (c) {
@@ -223,6 +239,7 @@
       }
     })();
   </script>
+
 
 
   <script src="{{ get_url(path='js/main.js') }}"></script>
