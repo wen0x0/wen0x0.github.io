@@ -3,34 +3,6 @@
 
 {% block head %}
 {{ super() }}
-<style>
-  .layout-list .post {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1em;
-  }
-
-  .post>span:first-child {
-    flex: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    min-width: 0;
-  }
-
-  .post>.date {
-    flex-shrink: 0;
-    white-space: nowrap;
-  }
-
-  .year-heading {
-    margin-top: 1.5em;
-    margin-bottom: 0.5em;
-    font-size: 1.25em;
-    font-weight: bold;
-  }
-</style>
 {% endblock head %}
 
 {% block page %}blog{% endblock page %}
@@ -84,7 +56,7 @@ lang %}
 
       <a class="post instant {% if post.extra.featured %}featured{% endif %}" href="{{ post.permalink }}">
         <span>{{ post.title }}</span>
-        <span class="date" style="font-family: consolas, 'Courier New', Courier, monospace;">
+        <span class="date"">
           {{ post.date | date(format=section.extra.date_format) }}
         </span>
       </a>

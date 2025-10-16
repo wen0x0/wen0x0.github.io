@@ -77,7 +77,10 @@
     font-family: var(--heading-font);
   }
 
-
+  span.date {
+    font-family: var(--code-font);
+    color: var(--text-pale-color);
+  }
 
   .gif-wrapper {
     text-align: center;
@@ -203,5 +206,33 @@
     text-align: center;
     display: block;
     margin-top: 2em;
+  }
+
+  .layout-list .post {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+  }
+
+  .post>span:first-child {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+
+  .post>.date {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .year-heading {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    font-size: 1.5em;
+    font-weight: bold;
+    font-family: var(--heading-font);
   }
 </style>
