@@ -32,10 +32,7 @@
           {% set sun_icon = load_data(path="icon/sun.svg") %}
           {% set rain_icon = load_data(path="icon/rain.svg") %}
           {% set cloud_icon = load_data(path="icon/cloud.svg") %}
-          <a id="rain-toggle" aria-label="toggle rain">
-            <span class="rain-on">{{ rain_icon | safe }}</span>
-            <span class="rain-off">{{ cloud_icon | safe }}</span>
-          </a>
+
           <a id="theme-toggle" aria-label="theme switch">
             <span class="moon-icon">{{ moon_icon | safe }}</span>
             <span class="sun-icon">{{ sun_icon | safe }}</span>
