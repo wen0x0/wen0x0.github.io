@@ -18,6 +18,7 @@
     --callout-important-color: #885fc9;
     --callout-warning-color: #ab6632;
     --callout-caution-color: #c64e4e;
+    background: url('{{ get_url(path="img/night-cine.gif") }}') center/cover no-repeat;
   }
 
   /* dark mode colors */
@@ -234,5 +235,20 @@
     font-size: 1.5em;
     font-weight: bold;
     font-family: var(--heading-font);
+  }
+
+  #wrapper main,
+  .section-title {
+    background: var(--bg-color);
+    max-width: var(--main-max-width);
+    border-radius: 14px;
+    border: 1px solid var(--primary-pale-color);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.10);
+    overflow: hidden;
+    padding: 1.3rem;
+  }
+
+  #wrapper main>section {
+    margin-block: 1rem;
   }
 </style>
