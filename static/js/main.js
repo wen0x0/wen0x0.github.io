@@ -257,3 +257,4 @@ if (document.querySelector('.prose')) {
   enableImgLightense();
   enableReaction();
 }
+

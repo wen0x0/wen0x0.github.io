@@ -108,6 +108,39 @@ lang %}
   mermaid.initialize({ startOnLoad: true });
 </script>
 
+<script>
+  (function () {
+    var el = document.getElementById('id');
+    if (!el) return;
+
+    // tôn trọng reduce motion
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    var full = el.textContent;
+    if (reduce) {
+      // hiển thị nguyên văn nếu người dùng không muốn animation
+      el.textContent = full;
+      return;
+    }
+
+    el.textContent = '';
+    var i = 0;
+    var speed = 45; // ms/char — có thể chỉnh 35–60 cho “đã tay” hơn
+    function type() {
+      if (i <= full.length) {
+        el.textContent = full.slice(0, i);
+        i++;
+        setTimeout(type, speed);
+      } else {
+        // tuỳ chọn: dừng lại, hoặc lặp sau một khoảng thời gian
+        // setTimeout(() => { i = 0; el.textContent = ''; type(); }, 2000);
+      }
+    }
+    type();
+  })();
+</script>
+
+
 {% endif %}
 
 {% endblock script %}
