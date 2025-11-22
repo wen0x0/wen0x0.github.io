@@ -51,8 +51,8 @@ back_link_text = "Back" # Text of the back button
 force_theme = false # false | "light" | "dark"
 
 footer_copyright = "© 2025"
-name = "Quoc Anh"
-id = "@Wen"
+name = "Wen"
+id = "⏔"
 bio = "Everything makes sense, eventually."
 avatar = "img/righright.png"
 links = [
