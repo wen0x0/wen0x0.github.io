@@ -1,2 +1,11 @@
 public/
 .DS_Store
+*.sh
+*.bat
+*.ps1
+.vscode/
+node_modules/
+dist/
+.env
+.env.local
+.env.*.local
