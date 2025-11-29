@@ -1,5 +1,5 @@
 base_url = "https://wen.is-a.dev"
-title = "Wen @Blog"
+title = "wenspace."
 description = "A simple soul in a complex system"
 default_language = "en"
 
@@ -51,8 +51,8 @@ back_link_text = "Back" # Text of the back button
 force_theme = false # false | "light" | "dark"
 
 footer_copyright = "© 2025"
-name = "Wen"
-id = "[madeinvn]"
+name = "wenspace."
+id = ""
 bio = "Everything makes sense, eventually."
 avatar = "img/righright.png"
 links = [
