@@ -8,7 +8,7 @@ categories = ["Notes"]
 tags = ["http", "web", "api"]
 [extra]
 lang = "vi"
-toc = true
+toc = false
 comment = false
 copy = true
 outdate_alert = false

@@ -8,7 +8,7 @@ categories = ["Notes"]
 tags = ["computer science", "information technology", "role evolution", "cs history"]
 [extra]
 lang = "vi"
-toc = true
+toc = false
 comment = false
 copy = true
 outdate_alert = false

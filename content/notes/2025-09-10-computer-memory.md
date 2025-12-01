@@ -8,7 +8,7 @@ categories = ["Notes"]
 tags = ["computer science", "memory management", "programming", "system architecture"]
 [extra]
 lang = "vi"
-toc = true
+toc = false
 comment = false
 copy = true
 outdate_alert = false

@@ -8,7 +8,7 @@ categories = ["Notes"]
 tags = ["sql injection", "cybersecurity", "penetration testing", "database"]
 [extra]
 lang = "vi"
-toc = true
+toc = false
 comment = false
 copy = true
 outdate_alert = false

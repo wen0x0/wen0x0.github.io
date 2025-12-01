@@ -8,7 +8,7 @@ categories = ["Notes"]
 tags = ["agile", "scrum", "waterfall", "project management", "software development"]  
 [extra]  
 lang = "vi"  
-toc = true  
+toc = false
 comment = false  
 copy = true  
 outdate_alert = false  

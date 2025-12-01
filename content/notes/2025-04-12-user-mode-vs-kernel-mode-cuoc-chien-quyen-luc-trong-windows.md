@@ -8,7 +8,7 @@ categories = ["Notes"]
 tags = ["windows", "user mode", "kernel mode", "os"]
 [extra]
 lang = "vi"
-toc = true
+toc = false
 comment = false
 copy = true
 outdate_alert = false
