@@ -1,0 +1,2105 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  
+
+
+
+<meta name="description" content="Windows 11 System Processes – Ai đang chạy gì trên máy bạn?">
+
+  <title>Windows 11 System Processes – Ai đang chạy gì trên máy bạn?</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="https://wen.is-a.dev/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://wen.is-a.dev/img/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://wen.is-a.dev/img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Ancizar+Sans:ital,wght@0,100..1000;1,100..1000&family=Bitter:ital,wght@0,100..900;1,100..900&family=Indie+Flower&family=Lora:ital,wght@0,400..700;1,400..700&family=Marcellus&display=swap"
+    rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;1,400;1,600&display=swap"
+    rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500..700&display=swap" rel="stylesheet">
+  
+  <style>
+  /* light mode colors */
+  body {
+    /* --primary-color: #5871a2; */
+    --primary-color: #005e05;
+    --primary-pale-color: #5871a233;
+    --primary-decoration-color: #5871a210;
+    --bg-color: #f0f9ff;
+    /* --text-color: #2f3030; */
+    --text-color: #000000;
+    /* --text-pale-color: #767676; */
+    --text-pale-color: #000000;
+    --text-decoration-color: #a9a9a9;
+    --highlight-mark-color: #5f75b020;
+
+    --callout-note-color: #5871a2;
+    --callout-tip-color: #268556;
+    --callout-important-color: #885fc9;
+    --callout-warning-color: #ab6632;
+    --callout-caution-color: #c64e4e;
+  }
+
+  /* dark mode colors */
+  body.dark {
+    /* --primary-color: #6f8fd1; */
+    --primary-color: #ecf16b;
+    --primary-pale-color: #6f8fd166;
+    --primary-decoration-color: #6f8fd112;
+    /* --bg-color: #1c1c1c; */
+    /* --bg-color: #002727; */
+    /* --bg-color: #002333; */
+    --bg-color: #01242E;
+    /* --text-color: #c1c1c1; */
+    --text-color: #ffffff;
+    /* --text-pale-color: #848484; */
+    --text-pale-color: #ffffff;
+    --text-decoration-color: #5f5f5f;
+    --highlight-mark-color: #8296cb3b;
+
+    --callout-note-color: #6f8fd1;
+    --callout-tip-color: #47976f;
+    --callout-important-color: #9776cd;
+    --callout-warning-color: #ad7a52;
+    --callout-caution-color: #d06161;
+  }
+
+  /* typography */
+  body {
+    /* --main-font: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; */
+    --main-font: 'Nunito', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --heading-font: 'Quicksand', 'Lora', 'Bitter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --code-font: 'Cascadia Code', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    --homepage-max-width: 768px;
+    --main-max-width: 768px;
+    --avatar-size: 75px;
+    --font-size: 16px;
+    --line-height: 1.75;
+    --img-border-radius: 0px;
+    --detail-border-radius: 11px;
+    --dark-mode-img-brightness: 0.75;
+    --dark-mode-chart-brightness: 0.75;
+    --inline-code-border-radius: 2px;
+    --inline-code-bg-color: var(--primary-decoration-color);
+    --block-code-border-radius: 0px;
+    --block-code-border-color: var(--primary-color);
+    --detail-border-color: var(--primary-color);
+  }
+
+
+  #name,
+  #id,
+  #left,
+  a.post,
+  a.back-link,
+  a.tag,
+  a.category,
+  .title {
+    font-family: var(--heading-font);
+  }
+
+  span.date {
+    font-family: var(--code-font);
+    color: var(--text-pale-color);
+  }
+
+  .gif-wrapper {
+    text-align: center;
+    margin: 1.5rem 0;
+  }
+
+  .gif-wrapper .intro-gif {
+    max-width: 96%;
+    height: auto;
+    border-radius: 8px;
+  }
+
+  .verified-icon {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 3px;
+    vertical-align: middle;
+  }
+
+  .verified-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .top-nav {
+    width: 100%;
+    padding-bottom: 1em;
+    border-bottom: 1px solid var(--border-color);
+    background: rgba(var(--background-rgb), 0.85);
+    backdrop-filter: blur(8px);
+    border-radius: var(--detail-border-radius);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .top-nav nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+  }
+
+  .nav-left,
+  .nav-center,
+  .nav-right {
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-center {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-top: 1em;
+  }
+
+  .menu-wrapper {
+    position: relative;
+    margin-top: 1.5em;
+  }
+
+  .menu-trigger {
+    font-size: 1.5em;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-color);
+  }
+
+  .menu-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+
+    background: var(--bg-color);
+    font-family: var(--heading-font);
+    border: 1px solid var(--primary-pale-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    min-width: 85px;
+    padding: 0.25em 0;
+    z-index: 2000;
+
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .menu-wrapper.active .menu-dropdown {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+
+  .menu-dropdown a {
+    display: block;
+    padding: 0.6em 1em;
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 0.95em;
+    margin: auto;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  #theme-toggle:hover,
+  #rain-toggle:hover {
+    cursor: pointer;
+  }
+
+  .foot-quote,
+  .section-title {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    text-align: center;
+    display: block;
+    margin-top: 2em;
+  }
+
+  .layout-list .post {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+  }
+
+  .post>span:first-child {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+
+  .post>.date {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .year-heading {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    font-size: 1.5em;
+    font-weight: bold;
+    font-family: var(--heading-font);
+  }
+
+  /* term-caret  */
+  #id.term-caret {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    position: relative;
+    white-space: nowrap;
+  }
+
+  #id.term-caret::after {
+    content: "_";
+
+    margin-left: 4px;
+    animation: blink 1s steps(1, end) infinite;
+    opacity: 1;
+    color: currentColor;
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #id.term-caret::after {
+      animation: none;
+      opacity: 1;
+    }
+  }
+
+  /* typewriter */
+  #id.typewriter {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    white-space: nowrap;
+    border-right: 1ch solid currentColor;
+    /* caret */
+    /* caret blink */
+    animation: caret-blink 1s steps(1, end) infinite;
+  }
+
+  @keyframes caret-blink {
+    50% {
+      border-right-color: transparent;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #id.typewriter {
+      animation: none;
+      border-right-color: currentColor;
+    }
+  }
+
+  /* glitch effect  */
+  #id.glitch {
+    position: relative;
+    display: inline-block;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  #id.glitch::before,
+  #id.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    clip-path: inset(0 0 0 0);
+    opacity: .85;
+  }
+
+  #id.glitch::before {
+    transform: translate(0, 0);
+    mix-blend-mode: screen;
+    text-shadow: 1px 0 0 #f00;
+    /* viền đỏ */
+    animation: glitch-1 2s infinite linear alternate-reverse;
+  }
+
+  #id.glitch::after {
+    transform: translate(0, 0);
+    mix-blend-mode: screen;
+    text-shadow: -1px 0 0 #0ff;
+    /* viền cyan */
+    animation: glitch-2 2.2s infinite linear alternate-reverse;
+  }
+
+  @keyframes glitch-1 {
+    0% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(0, 0);
+    }
+
+    20% {
+      clip-path: inset(10% 0 60% 0);
+      transform: translate(-1px, -1px);
+    }
+
+    40% {
+      clip-path: inset(40% 0 30% 0);
+      transform: translate(1px, 1px);
+    }
+
+    60% {
+      clip-path: inset(20% 0 55% 0);
+      transform: translate(-1px, 0);
+    }
+
+    80% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 1px);
+    }
+
+    100% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(0, 0);
+    }
+  }
+
+  @keyframes glitch-2 {
+    0% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 0);
+    }
+
+    20% {
+      clip-path: inset(40% 0 30% 0);
+      transform: translate(1px, 0);
+    }
+
+    40% {
+      clip-path: inset(10% 0 60% 0);
+      transform: translate(0, -1px);
+    }
+
+    60% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(-1px, 1px);
+    }
+
+    80% {
+      clip-path: inset(20% 0 55% 0);
+      transform: translate(1px, 0);
+    }
+
+    100% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+
+    #id.glitch::before,
+    #id.glitch::after {
+      animation: none;
+    }
+  }
+</style>
+  <link rel="stylesheet" href="https://wen.is-a.dev/main.css">
+  
+
+<link id="hl" rel="stylesheet" type="text/css" href="/hl-light.css" />
+
+
+
+  
+</head>
+
+<body class="post">
+
+  
+  <script>
+    const theme = sessionStorage.getItem('theme');
+    const match = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if ((theme && theme === 'dark') || (!theme && match)) {
+      document.body.classList.add('dark');
+      const hl = document.querySelector('link#hl');
+      if (hl) hl.href = 'https://wen.is-a.dev/hl-dark.css';
+    }
+  </script>
+  
+
+  
+<div id="wrapper">
+  <div id="blank"></div>
+  <aside>
+    
+    
+    
+    <button id="back-to-top" aria-label="back to top">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-up"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+
+    </button>
+    
+  </aside>
+  <main>
+    
+<header class="top-nav">
+  <nav>
+    <!-- Left: Back -->
+    <div class="nav-left">
+      <a href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts" class="back-link">← Back</a>
+    </div>
+
+    <!-- Center: Avatar -->
+    <div class="nav-center">
+      
+      <a href="/">
+        <img src="https://wen.is-a.dev/img/qwe.jpg" alt="avatar" class="avatar">
+      </a>
+      
+    </div>
+
+    <!-- Right: Menu dropdown -->
+    <div class="nav-right">
+
+      <div class="menu-wrapper">
+
+        <button class="menu-trigger" aria-label="menu">
+          &#9776;
+        </button>
+        <div class="menu-dropdown">
+          <a href="https://wen.is-a.dev/posts">POSTS</a>
+          <a href="https://wen.is-a.dev/about">ABOUT</a>
+          <a href="https://wen.is-a.dev/contact">CONTACT</a>
+          
+          
+          
+          
+          
+
+          <a id="theme-toggle" aria-label="theme switch">
+            <span class="moon-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill="currentColor"></path></svg>
+</span>
+            <span class="sun-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z" fill="currentColor"></path></svg>
+</span>
+          </a>
+
+          
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const trigger = document.querySelector(".menu-trigger");
+    const wrapper = document.querySelector(".menu-wrapper");
+
+    if (trigger && wrapper) {
+      trigger.addEventListener("click", () => {
+        wrapper.classList.toggle("active");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!wrapper.contains(e.target)) {
+          wrapper.classList.remove("active");
+        }
+      });
+    }
+  });
+
+</script>
+
+
+    <div>
+      
+      
+      
+      
+      <div id="copy-cfg" style="display: none;" data-copy-icon="&lt;svg xmlns=&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2000&#x2F;svg&quot; viewBox=&quot;0 0 24 24&quot; width=&quot;18&quot; height=&quot;18&quot;&gt;&lt;path d=&quot;M6.9998 6V3C6.9998 2.44772 7.44752 2 7.9998 2H19.9998C20.5521 2 20.9998 2.44772 20.9998 3V17C20.9998 17.5523 20.5521 18 19.9998 18H16.9998V20.9991C16.9998 21.5519 16.5499 22 15.993 22H4.00666C3.45059 22 3 21.5554 3 20.9991L3.0026 7.00087C3.0027 6.44811 3.45264 6 4.00942 6H6.9998ZM5.00242 8L5.00019 20H14.9998V8H5.00242ZM8.9998 6H16.9998V16H18.9998V4H8.9998V6Z&quot; fill=&quot;currentColor&quot;&gt;&lt;&#x2F;path&gt;&lt;&#x2F;svg&gt;
+" data-check-icon="&lt;svg xmlns=&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2000&#x2F;svg&quot; viewBox=&quot;0 0 24 24&quot; width=&quot;18&quot; height=&quot;18&quot;&gt;&lt;path d=&quot;M10.0007 15.1709L19.1931 5.97852L20.6073 7.39273L10.0007 17.9993L3.63672 11.6354L5.05093 10.2212L10.0007 15.1709Z&quot; fill=&quot;currentColor&quot;&gt;&lt;&#x2F;path&gt;&lt;&#x2F;svg&gt;
+">
+      </div>
+      
+      <article class="prose">
+        <h1 class="title">Windows 11 System Processes – Ai đang chạy gì trên máy bạn?</h1>
+        <div id="post-info">
+          <div id="date">
+            <span id="publish">Oct 14, 2024</span>
+            </div>
+
+          
+        </div>
+
+        
+        
+
+        
+
+        <h2 id="introduction">Introduction<a class="zola-anchor" href="#introduction" aria-label="Anchor link for: introduction" style="visibility: hidden;"></a></h2>
+<p>Windows 11 chạy hàng trăm process khác nhau để duy trì hoạt động của hệ thống. Bài viết này cung cấp danh sách chi tiết và đầy đủ nhất về tất cả các process hệ thống, giúp bạn hiểu rõ chức năng, mức độ quan trọng và cách quản lý chúng.</p>
+<h2 id="a-core-system-processes-cac-process-he-thong-cot-loi">A. CORE SYSTEM PROCESSES (Các Process hệ thống cốt lõi)<a class="zola-anchor" href="#a-core-system-processes-cac-process-he-thong-cot-loi" aria-label="Anchor link for: a-core-system-processes-cac-process-he-thong-cot-loi" style="visibility: hidden;"></a></h2>
+<h3 id="1-system-idle-process">1. System Idle Process<a class="zola-anchor" href="#1-system-idle-process" aria-label="Anchor link for: 1-system-idle-process" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: Không có (Virtual process)</li>
+<li><strong>Đường dẫn</strong>: N/A</li>
+<li><strong>Mô tả</strong>: Process ảo hiển thị tỷ lệ CPU không sử dụng</li>
+<li><strong>PID</strong>: Thường là 0</li>
+<li><strong>Parent Process</strong>: Không có</li>
+<li><strong>CPU Usage</strong>: Cao khi hệ thống rảnh (bình thường)</li>
+<li><strong>Memory Usage</strong>: 0 KB</li>
+<li><strong>Có thể tắt</strong>: KHÔNG</li>
+<li><strong>Mức độ quan trọng</strong>: Critical</li>
+<li><strong>Ghi chú</strong>: Đây không phải process thực sự, CPU% cao là điều tốt</li>
+</ul>
+<h3 id="2-system">2. System<a class="zola-anchor" href="#2-system" aria-label="Anchor link for: 2-system" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: ntoskrnl.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Windows NT Kernel và System</li>
+<li><strong>PID</strong>: Thường là 4</li>
+<li><strong>Parent Process</strong>: Không có</li>
+<li><strong>CPU Usage</strong>: 0-5% (bình thường)</li>
+<li><strong>Memory Usage</strong>: 100-500 MB</li>
+<li><strong>Có thể tắt</strong>: KHÔNG (sẽ BSOD)</li>
+<li><strong>Mức độ quan trọng</strong>: Critical</li>
+<li><strong>Chức năng</strong>:
+<ul>
+<li>Quản lý memory</li>
+<li>I/O operations</li>
+<li>System calls</li>
+<li>Hardware abstraction</li>
+<li>Kernel mode operations</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-registry">3. Registry<a class="zola-anchor" href="#3-registry" aria-label="Anchor link for: 3-registry" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: Không có (Kernel process)</li>
+<li><strong>Đường dẫn</strong>: Kernel space</li>
+<li><strong>Mô tả</strong>: Windows Registry subsystem</li>
+<li><strong>PID</strong>: Thường là 72-120</li>
+<li><strong>Parent Process</strong>: System</li>
+<li><strong>CPU Usage</strong>: 0-1%</li>
+<li><strong>Memory Usage</strong>: 10-50 MB</li>
+<li><strong>Có thể tắt</strong>: KHÔNG</li>
+<li><strong>Mức độ quan trọng</strong>: Critical</li>
+<li><strong>Chức năng</strong>: Quản lý Windows Registry database</li>
+</ul>
+<h3 id="4-smss-exe-session-manager-subsystem">4. smss.exe (Session Manager Subsystem)<a class="zola-anchor" href="#4-smss-exe-session-manager-subsystem" aria-label="Anchor link for: 4-smss-exe-session-manager-subsystem" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: smss.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Session Manager khởi tạo user sessions</li>
+<li><strong>Parent Process</strong>: System</li>
+<li><strong>CPU Usage</strong>: 0%</li>
+<li><strong>Memory Usage</strong>: 1-5 MB</li>
+<li><strong>Có thể tắt</strong>: KHÔNG</li>
+<li><strong>Mức độ quan trọng</strong>: Critical</li>
+<li><strong>Chức năng</strong>:
+<ul>
+<li>Khởi tạo user sessions</li>
+<li>Tạo page files</li>
+<li>Chạy các subsystem processes</li>
+</ul>
+</li>
+</ul>
+<h3 id="5-csrss-exe-client-server-runtime-process">5. csrss.exe (Client Server Runtime Process)<a class="zola-anchor" href="#5-csrss-exe-client-server-runtime-process" aria-label="Anchor link for: 5-csrss-exe-client-server-runtime-process" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: csrss.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Client Server Runtime Subsystem</li>
+<li><strong>Parent Process</strong>: smss.exe</li>
+<li><strong>CPU Usage</strong>: 0-2%</li>
+<li><strong>Memory Usage</strong>: 10-30 MB</li>
+<li><strong>Có thể tắt</strong>: KHÔNG</li>
+<li><strong>Mức độ quan trọng</strong>: Critical</li>
+<li><strong>Chức năng</strong>:
+<ul>
+<li>Win32 console handling</li>
+<li>Process và thread management</li>
+<li>Shutdown functions</li>
+<li>CreateProcess API</li>
+</ul>
+</li>
+</ul>
+<h3 id="6-wininit-exe-windows-initialization-process">6. wininit.exe (Windows Initialization Process)<a class="zola-anchor" href="#6-wininit-exe-windows-initialization-process" aria-label="Anchor link for: 6-wininit-exe-windows-initialization-process" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: wininit.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Windows Initialization Process</li>
+<li><strong>Parent Process</strong>: smss.exe</li>
+<li><strong>CPU Usage</strong>: 0%</li>
+<li><strong>Memory Usage</strong>: 3-10 MB</li>
+<li><strong>Có thể tắt</strong>: KHÔNG</li>
+<li><strong>Mức độ quan trọng</strong>: Critical</li>
+<li><strong>Chức năng</strong>:
+<ul>
+<li>Khởi động services.exe</li>
+<li>Khởi động lsass.exe</li>
+<li>Khởi động lsm.exe</li>
+</ul>
+</li>
+</ul>
+<h3 id="7-winlogon-exe-windows-logon-process">7. winlogon.exe (Windows Logon Process)<a class="zola-anchor" href="#7-winlogon-exe-windows-logon-process" aria-label="Anchor link for: 7-winlogon-exe-windows-logon-process" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: winlogon.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Windows Logon Application</li>
+<li><strong>Parent Process</strong>: smss.exe</li>
+<li><strong>CPU Usage</strong>: 0-1%</li>
+<li><strong>Memory Usage</strong>: 5-15 MB</li>
+<li><strong>Có thể tắt</strong>: KHÔNG</li>
+<li><strong>Mức độ quan trọng</strong>: Critical</li>
+<li><strong>Chức năng</strong>:
+<ul>
+<li>User logon/logoff</li>
+<li>Secure Attention Sequence (Ctrl+Alt+Del)</li>
+<li>Loading user profile</li>
+<li>Screen saver management</li>
+</ul>
+</li>
+</ul>
+<h2 id="b-service-management-processes">B. SERVICE MANAGEMENT PROCESSES<a class="zola-anchor" href="#b-service-management-processes" aria-label="Anchor link for: b-service-management-processes" style="visibility: hidden;"></a></h2>
+<h3 id="8-services-exe-service-control-manager">8. services.exe (Service Control Manager)<a class="zola-anchor" href="#8-services-exe-service-control-manager" aria-label="Anchor link for: 8-services-exe-service-control-manager" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: services.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Services và Controller app</li>
+<li><strong>Parent Process</strong>: wininit.exe</li>
+<li><strong>CPU Usage</strong>: 0-2%</li>
+<li><strong>Memory Usage</strong>: 10-30 MB</li>
+<li><strong>Có thể tắt</strong>: KHÔNG</li>
+<li><strong>Mức độ quan trọng</strong>: Critical</li>
+<li><strong>Chức năng</strong>:
+<ul>
+<li>Khởi động, dừng, quản lý Windows services</li>
+<li>Service database management</li>
+<li>Service dependencies</li>
+</ul>
+</li>
+</ul>
+<h3 id="9-svchost-exe-service-host-process">9. svchost.exe (Service Host Process)<a class="zola-anchor" href="#9-svchost-exe-service-host-process" aria-label="Anchor link for: 9-svchost-exe-service-host-process" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: svchost.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Generic Host Process for Win32 Services</li>
+<li><strong>Parent Process</strong>: services.exe</li>
+<li><strong>Instances</strong>: 15-30+ processes</li>
+<li><strong>CPU Usage</strong>: Varies (0-50% per instance)</li>
+<li><strong>Memory Usage</strong>: 10-200 MB per instance</li>
+<li><strong>Có thể tắt</strong>: Một số có thể (cẩn thận)</li>
+<li><strong>Mức độ quan trọng</strong>: Critical to High</li>
+<li><strong>Services thường chạy</strong>:
+<ul>
+<li><strong>AudioSrv</strong>: Windows Audio service</li>
+<li><strong>BITS</strong>: Background Intelligent Transfer Service</li>
+<li><strong>BrokerInfrastructure</strong>: Background Tasks Infrastructure Service</li>
+<li><strong>CryptSvc</strong>: Cryptographic Services</li>
+<li><strong>DcomLaunch</strong>: DCOM Server Process Launcher</li>
+<li><strong>Dhcp</strong>: DHCP Client</li>
+<li><strong>Dnscache</strong>: DNS Client</li>
+<li><strong>EventLog</strong>: Windows Event Log</li>
+<li><strong>EventSystem</strong>: COM+ Event System</li>
+<li><strong>FontCache</strong>: Windows Font Cache Service</li>
+<li><strong>LanmanServer</strong>: Server service</li>
+<li><strong>LanmanWorkstation</strong>: Workstation service</li>
+<li><strong>MMCSS</strong>: Multimedia Class Scheduler</li>
+<li><strong>NlaSvc</strong>: Network Location Awareness</li>
+<li><strong>nsi</strong>: Network Store Interface Service</li>
+<li><strong>PcaSvc</strong>: Program Compatibility Assistant Service</li>
+<li><strong>PlugPlay</strong>: Plug and Play service</li>
+<li><strong>PolicyAgent</strong>: IPsec Policy Agent</li>
+<li><strong>Power</strong>: Power service</li>
+<li><strong>ProfSvc</strong>: User Profile Service</li>
+<li><strong>RpcEptMapper</strong>: RPC Endpoint Mapper</li>
+<li><strong>RpcSs</strong>: Remote Procedure Call (RPC)</li>
+<li><strong>SamSs</strong>: Security Accounts Manager</li>
+<li><strong>Schedule</strong>: Task Scheduler</li>
+<li><strong>seclogon</strong>: Secondary Logon</li>
+<li><strong>SENS</strong>: System Event Notification Service</li>
+<li><strong>SessionEnv</strong>: Terminal Services Configuration</li>
+<li><strong>ShellHWDetection</strong>: Shell Hardware Detection</li>
+<li><strong>Spooler</strong>: Print Spooler</li>
+<li><strong>Themes</strong>: Themes service</li>
+<li><strong>TrkWks</strong>: Distributed Link Tracking Client</li>
+<li><strong>UxSms</strong>: Desktop Window Manager Session Manager</li>
+<li><strong>Winmgmt</strong>: Windows Management Instrumentation</li>
+<li><strong>WinRM</strong>: Windows Remote Management</li>
+<li><strong>Wlansvc</strong>: WLAN AutoConfig</li>
+<li><strong>WSearch</strong>: Windows Search</li>
+</ul>
+</li>
+</ul>
+<h3 id="10-lsass-exe-local-security-authority-subsystem">10. lsass.exe (Local Security Authority Subsystem)<a class="zola-anchor" href="#10-lsass-exe-local-security-authority-subsystem" aria-label="Anchor link for: 10-lsass-exe-local-security-authority-subsystem" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: lsass.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Local Security Authority Process</li>
+<li><strong>Parent Process</strong>: wininit.exe</li>
+<li><strong>CPU Usage</strong>: 0-5%</li>
+<li><strong>Memory Usage</strong>: 20-100 MB</li>
+<li><strong>Có thể tắt</strong>: KHÔNG</li>
+<li><strong>Mức độ quan trọng</strong>: Critical</li>
+<li><strong>Chức năng</strong>:
+<ul>
+<li>Authentication policies</li>
+<li>Password changes</li>
+<li>Access tokens</li>
+<li>User rights assignments</li>
+<li>Security auditing</li>
+</ul>
+</li>
+</ul>
+<h2 id="c-user-interface-processes">C. USER INTERFACE PROCESSES<a class="zola-anchor" href="#c-user-interface-processes" aria-label="Anchor link for: c-user-interface-processes" style="visibility: hidden;"></a></h2>
+<h3 id="11-explorer-exe-windows-explorer">11. explorer.exe (Windows Explorer)<a class="zola-anchor" href="#11-explorer-exe-windows-explorer" aria-label="Anchor link for: 11-explorer-exe-windows-explorer" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: explorer.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\</li>
+<li><strong>Mô tả</strong>: Windows Explorer/Shell</li>
+<li><strong>Parent Process</strong>: winlogon.exe (thông qua userinit.exe)</li>
+<li><strong>CPU Usage</strong>: 1-10%</li>
+<li><strong>Memory Usage</strong>: 50-200 MB</li>
+<li><strong>Có thể tắt</strong>: CÓ (có thể restart)</li>
+<li><strong>Mức độ quan trọng</strong>: High</li>
+<li><strong>Chức năng</strong>:
+<ul>
+<li>Desktop shell</li>
+<li>Taskbar và Start Menu</li>
+<li>File Explorer</li>
+<li>System tray</li>
+<li>Desktop icons</li>
+</ul>
+</li>
+</ul>
+<h3 id="12-dwm-exe-desktop-window-manager">12. dwm.exe (Desktop Window Manager)<a class="zola-anchor" href="#12-dwm-exe-desktop-window-manager" aria-label="Anchor link for: 12-dwm-exe-desktop-window-manager" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: dwm.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Desktop Window Manager</li>
+<li><strong>Parent Process</strong>: winlogon.exe</li>
+<li><strong>CPU Usage</strong>: 0-15%</li>
+<li><strong>Memory Usage</strong>: 50-300 MB</li>
+<li><strong>GPU Usage</strong>: Moderate to High</li>
+<li><strong>Có thể tắt</strong>: KHÔNG nên</li>
+<li><strong>Mức độ quan trọng</strong>: High</li>
+<li><strong>Chức năng</strong>:
+<ul>
+<li>Window composition</li>
+<li>Aero Glass effects</li>
+<li>Window animations</li>
+<li>Transparency effects</li>
+<li>Multiple monitor support</li>
+</ul>
+</li>
+</ul>
+<h3 id="13-shellexperiencehost-exe">13. ShellExperienceHost.exe<a class="zola-anchor" href="#13-shellexperiencehost-exe" aria-label="Anchor link for: 13-shellexperiencehost-exe" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: ShellExperienceHost.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\SystemApps\ShellExperienceHost_cw5n1h2txyewy\</li>
+<li><strong>Mô tả</strong>: Shell Experience Host cho Windows 11</li>
+<li><strong>Parent Process</strong>: svchost.exe</li>
+<li><strong>CPU Usage</strong>: 1-5%</li>
+<li><strong>Memory Usage</strong>: 30-100 MB</li>
+<li><strong>Có thể tắt</strong>: KHÔNG nên</li>
+<li><strong>Mức độ quan trọng</strong>: High</li>
+<li><strong>Chức năng</strong>:
+<ul>
+<li>Start Menu</li>
+<li>Widgets panel</li>
+<li>Notification Center</li>
+<li>Action Center</li>
+</ul>
+</li>
+</ul>
+<h3 id="14-startmenuexperiencehost-exe">14. StartMenuExperienceHost.exe<a class="zola-anchor" href="#14-startmenuexperiencehost-exe" aria-label="Anchor link for: 14-startmenuexperiencehost-exe" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: StartMenuExperienceHost.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\SystemApps\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\</li>
+<li><strong>Mô tả</strong>: Start Menu Experience Host</li>
+<li><strong>Parent Process</strong>: ApplicationFrameHost.exe</li>
+<li><strong>CPU Usage</strong>: 0-3%</li>
+<li><strong>Memory Usage</strong>: 20-80 MB</li>
+<li><strong>Có thể tắt</strong>: KHÔNG nên</li>
+<li><strong>Mức độ quan trọng</strong>: High</li>
+<li><strong>Chức năng</strong>: Start Menu functionality</li>
+</ul>
+<h3 id="15-searchhost-exe">15. SearchHost.exe<a class="zola-anchor" href="#15-searchhost-exe" aria-label="Anchor link for: 15-searchhost-exe" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: SearchHost.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\SystemApps\Microsoft.Windows.Search_cw5n1h2txyewy\</li>
+<li><strong>Mô tả</strong>: Search Host Process</li>
+<li><strong>Parent Process</strong>: RuntimeBroker.exe</li>
+<li><strong>CPU Usage</strong>: 0-5%</li>
+<li><strong>Memory Usage</strong>: 30-150 MB</li>
+<li><strong>Có thể tắt</strong>: CÓ</li>
+<li><strong>Mức độ quan trọng</strong>: Medium</li>
+<li><strong>Chức năng</strong>: Windows Search UI</li>
+</ul>
+<h3 id="16-textinputhost-exe">16. TextInputHost.exe<a class="zola-anchor" href="#16-textinputhost-exe" aria-label="Anchor link for: 16-textinputhost-exe" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: TextInputHost.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\SystemApps\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\</li>
+<li><strong>Mô tả</strong>: Text Input Host</li>
+<li><strong>Parent Process</strong>: svchost.exe</li>
+<li><strong>CPU Usage</strong>: 0-2%</li>
+<li><strong>Memory Usage</strong>: 10-50 MB</li>
+<li><strong>Có thể tắt</strong>: KHÔNG nên</li>
+<li><strong>Mức độ quan trọng</strong>: Medium</li>
+<li><strong>Chức năng</strong>:
+<ul>
+<li>Touch keyboard</li>
+<li>Handwriting panel</li>
+<li>IME support</li>
+</ul>
+</li>
+</ul>
+<h2 id="d-security-processes">D. SECURITY PROCESSES<a class="zola-anchor" href="#d-security-processes" aria-label="Anchor link for: d-security-processes" style="visibility: hidden;"></a></h2>
+<h3 id="17-msmpeng-exe-windows-defender-antimalware">17. MsMpEng.exe (Windows Defender Antimalware)<a class="zola-anchor" href="#17-msmpeng-exe-windows-defender-antimalware" aria-label="Anchor link for: 17-msmpeng-exe-windows-defender-antimalware" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: MsMpEng.exe</li>
+<li><strong>Đường dẫn</strong>: C:\ProgramData\Microsoft\Windows Defender\Platform[version]\</li>
+<li><strong>Mô tả</strong>: Windows Defender Antimalware Service</li>
+<li><strong>Parent Process</strong>: services.exe</li>
+<li><strong>CPU Usage</strong>: 0-50% (có thể cao khi scan)</li>
+<li><strong>Memory Usage</strong>: 100-500 MB</li>
+<li><strong>Có thể tắt</strong>: CÓ (không khuyến khích)</li>
+<li><strong>Mức độ quan trọng</strong>: High</li>
+<li><strong>Chức năng</strong>:
+<ul>
+<li>Real-time protection</li>
+<li>Malware scanning</li>
+<li>Threat detection</li>
+<li>Quarantine management</li>
+</ul>
+</li>
+</ul>
+<h3 id="18-nissrv-exe-network-inspection-service">18. NisSrv.exe (Network Inspection Service)<a class="zola-anchor" href="#18-nissrv-exe-network-inspection-service" aria-label="Anchor link for: 18-nissrv-exe-network-inspection-service" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: NisSrv.exe</li>
+<li><strong>Đường dẫn</strong>: C:\ProgramData\Microsoft\Windows Defender\Platform[version]\</li>
+<li><strong>Mô tả</strong>: Windows Defender Network Inspection Service</li>
+<li><strong>Parent Process</strong>: services.exe</li>
+<li><strong>CPU Usage</strong>: 0-5%</li>
+<li><strong>Memory Usage</strong>: 10-50 MB</li>
+<li><strong>Có thể tắt</strong>: CÓ</li>
+<li><strong>Mức độ quan trọng</strong>: Medium</li>
+<li><strong>Chức năng</strong>: Network traffic inspection</li>
+</ul>
+<h3 id="19-securityhealthsystray-exe">19. SecurityHealthSystray.exe<a class="zola-anchor" href="#19-securityhealthsystray-exe" aria-label="Anchor link for: 19-securityhealthsystray-exe" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: SecurityHealthSystray.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Windows Security System Tray</li>
+<li><strong>Parent Process</strong>: explorer.exe</li>
+<li><strong>CPU Usage</strong>: 0-1%</li>
+<li><strong>Memory Usage</strong>: 10-30 MB</li>
+<li><strong>Có thể tắt</strong>: CÓ</li>
+<li><strong>Mức độ quan trọng</strong>: Medium</li>
+<li><strong>Chức năng</strong>: Security status notifications</li>
+</ul>
+<h3 id="20-securityhealthservice-exe">20. SecurityHealthService.exe<a class="zola-anchor" href="#20-securityhealthservice-exe" aria-label="Anchor link for: 20-securityhealthservice-exe" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: SecurityHealthService.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Windows Security Health Service</li>
+<li><strong>Parent Process</strong>: services.exe</li>
+<li><strong>CPU Usage</strong>: 0-2%</li>
+<li><strong>Memory Usage</strong>: 5-20 MB</li>
+<li><strong>Có thể tắt</strong>: KHÔNG nên</li>
+<li><strong>Mức độ quan trọng</strong>: High</li>
+<li><strong>Chức năng</strong>: Security center management</li>
+</ul>
+<h2 id="e-network-processes">E. NETWORK PROCESSES<a class="zola-anchor" href="#e-network-processes" aria-label="Anchor link for: e-network-processes" style="visibility: hidden;"></a></h2>
+<h3 id="21-networkuxbroker-exe">21. NetworkUXBroker.exe<a class="zola-anchor" href="#21-networkuxbroker-exe" aria-label="Anchor link for: 21-networkuxbroker-exe" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: NetworkUXBroker.exe</li>
+<li><strong>Đường dẉn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Network UX Broker</li>
+<li><strong>Parent Process</strong>: svchost.exe</li>
+<li><strong>CPU Usage</strong>: 0-2%</li>
+<li><strong>Memory Usage</strong>: 5-20 MB</li>
+<li><strong>Có thể tắt</strong>: KHÔNG nên</li>
+<li><strong>Mức độ quan trọng</strong>: Medium</li>
+<li><strong>Chức năng</strong>: Network connection UI</li>
+</ul>
+<h3 id="22-dashost-exe-device-association-service-host">22. dasHost.exe (Device Association Service Host)<a class="zola-anchor" href="#22-dashost-exe-device-association-service-host" aria-label="Anchor link for: 22-dashost-exe-device-association-service-host" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: dasHost.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Device Association Service Host</li>
+<li><strong>Parent Process</strong>: svchost.exe</li>
+<li><strong>CPU Usage</strong>: 0-1%</li>
+<li><strong>Memory Usage</strong>: 5-15 MB</li>
+<li><strong>Có thể tắt</strong>: CÓ</li>
+<li><strong>Mức độ quan trọng</strong>: Low</li>
+<li><strong>Chức năng</strong>: Device pairing và connection</li>
+</ul>
+<h3 id="23-winnetmon-exe">23. WinNetMon.exe<a class="zola-anchor" href="#23-winnetmon-exe" aria-label="Anchor link for: 23-winnetmon-exe" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: WinNetMon.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Windows Network Data Usage Monitor</li>
+<li><strong>Parent Process</strong>: svchost.exe</li>
+<li><strong>CPU Usage</strong>: 0-1%</li>
+<li><strong>Memory Usage</strong>: 5-15 MB</li>
+<li><strong>Có thể tắt</strong>: CÓ</li>
+<li><strong>Mức độ quan trọng</strong>: Low</li>
+<li><strong>Chức năng</strong>: Network data usage tracking</li>
+</ul>
+<h2 id="f-audio-processes">F. AUDIO PROCESSES<a class="zola-anchor" href="#f-audio-processes" aria-label="Anchor link for: f-audio-processes" style="visibility: hidden;"></a></h2>
+<h3 id="24-audiodg-exe-windows-audio-device-graph-isolation">24. audiodg.exe (Windows Audio Device Graph Isolation)<a class="zola-anchor" href="#24-audiodg-exe-windows-audio-device-graph-isolation" aria-label="Anchor link for: 24-audiodg-exe-windows-audio-device-graph-isolation" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: audiodg.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Windows Audio Device Graph Isolation</li>
+<li><strong>Parent Process</strong>: Không có parent trực tiếp</li>
+<li><strong>CPU Usage</strong>: 0-20% (có thể cao)</li>
+<li><strong>Memory Usage</strong>: 10-100 MB</li>
+<li><strong>Có thể tắt</strong>: KHÔNG nên</li>
+<li><strong>Mức độ quan trọng</strong>: High</li>
+<li><strong>Chức năng</strong>:
+<ul>
+<li>Audio stream processing</li>
+<li>Audio effects processing</li>
+<li>Audio driver isolation</li>
+<li>Per-application audio processing</li>
+</ul>
+</li>
+</ul>
+<h3 id="25-audiosrv-trong-svchost-exe">25. AudioSrv (trong svchost.exe)<a class="zola-anchor" href="#25-audiosrv-trong-svchost-exe" aria-label="Anchor link for: 25-audiosrv-trong-svchost-exe" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>Service Name</strong>: AudioSrv</li>
+<li><strong>Display Name</strong>: Windows Audio</li>
+<li><strong>Mô tả</strong>: Windows Audio Service</li>
+<li><strong>CPU Usage</strong>: 0-5%</li>
+<li><strong>Memory Usage</strong>: Shared with svchost.exe</li>
+<li><strong>Có thể tắt</strong>: CÓ (mất audio)</li>
+<li><strong>Mức độ quan trọng</strong>: High</li>
+<li><strong>Chức năng</strong>:
+<ul>
+<li>Audio device management</li>
+<li>Volume control</li>
+<li>Audio routing</li>
+</ul>
+</li>
+</ul>
+<h3 id="26-audioendpointbuilder-trong-svchost-exe">26. AudioEndpointBuilder (trong svchost.exe)<a class="zola-anchor" href="#26-audioendpointbuilder-trong-svchost-exe" aria-label="Anchor link for: 26-audioendpointbuilder-trong-svchost-exe" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>Service Name</strong>: AudioEndpointBuilder</li>
+<li><strong>Display Name</strong>: Windows Audio Endpoint Builder</li>
+<li><strong>Mô tả</strong>: Audio Endpoint Builder Service</li>
+<li><strong>CPU Usage</strong>: 0-2%</li>
+<li><strong>Memory Usage</strong>: Shared with svchost.exe</li>
+<li><strong>Có thể tắt</strong>: CÓ (ảnh hưởng audio)</li>
+<li><strong>Mức độ quan trọng</strong>: High</li>
+<li><strong>Chức năng</strong>: Audio endpoint management</li>
+</ul>
+<h2 id="g-update-va-maintenance-processes">G. UPDATE VÀ MAINTENANCE PROCESSES<a class="zola-anchor" href="#g-update-va-maintenance-processes" aria-label="Anchor link for: g-update-va-maintenance-processes" style="visibility: hidden;"></a></h2>
+<h3 id="27-tiworker-exe-windows-modules-installer-worker">27. TiWorker.exe (Windows Modules Installer Worker)<a class="zola-anchor" href="#27-tiworker-exe-windows-modules-installer-worker" aria-label="Anchor link for: 27-tiworker-exe-windows-modules-installer-worker" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: TiWorker.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\winsxs\</li>
+<li><strong>Mô tả</strong>: Windows Modules Installer Worker</li>
+<li><strong>Parent Process</strong>: services.exe</li>
+<li><strong>CPU Usage</strong>: 0-100% (khi hoạt động)</li>
+<li><strong>Memory Usage</strong>: 50-500 MB</li>
+<li><strong>Disk Usage</strong>: Rất cao khi hoạt động</li>
+<li><strong>Có thể tắt</strong>: KHÔNG nên</li>
+<li><strong>Mức độ quan trọng</strong>: High</li>
+<li><strong>Chức năng</strong>:
+<ul>
+<li>Windows Update installation</li>
+<li>Optional features installation</li>
+<li>Component cleanup</li>
+<li>System file maintenance</li>
+</ul>
+</li>
+</ul>
+<h3 id="28-wuauclt-exe-windows-update-autoupdate-client">28. wuauclt.exe (Windows Update AutoUpdate Client)<a class="zola-anchor" href="#28-wuauclt-exe-windows-update-autoupdate-client" aria-label="Anchor link for: 28-wuauclt-exe-windows-update-autoupdate-client" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: wuauclt.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Windows Update AutoUpdate Client</li>
+<li><strong>Parent Process</strong>: svchost.exe</li>
+<li><strong>CPU Usage</strong>: 0-30%</li>
+<li><strong>Memory Usage</strong>: 20-100 MB</li>
+<li><strong>Có thể tắt</strong>: CÓ (mất auto update)</li>
+<li><strong>Mức độ quan trọng</strong>: High</li>
+<li><strong>Chức năng</strong>: Windows Update client operations</li>
+</ul>
+<h3 id="29-usoclient-exe-update-session-orchestrator-client">29. UsoClient.exe (Update Session Orchestrator Client)<a class="zola-anchor" href="#29-usoclient-exe-update-session-orchestrator-client" aria-label="Anchor link for: 29-usoclient-exe-update-session-orchestrator-client" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: UsoClient.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Update Session Orchestrator Client</li>
+<li><strong>Parent Process</strong>: services.exe</li>
+<li><strong>CPU Usage</strong>: 0-10%</li>
+<li><strong>Memory Usage</strong>: 10-50 MB</li>
+<li><strong>Có thể tắt</strong>: KHÔNG nên</li>
+<li><strong>Mức độ quan trọng</strong>: High</li>
+<li><strong>Chức năng</strong>: Update orchestration và scheduling</li>
+</ul>
+<h3 id="30-maintenanceservice-exe">30. MaintenanceService.exe<a class="zola-anchor" href="#30-maintenanceservice-exe" aria-label="Anchor link for: 30-maintenanceservice-exe" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: MaintenanceService.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Program Files\Mozilla Maintenance Service\ (nếu có Firefox)</li>
+<li><strong>Mô tả</strong>: Mozilla Maintenance Service</li>
+<li><strong>Parent Process</strong>: services.exe</li>
+<li><strong>CPU Usage</strong>: 0%</li>
+<li><strong>Memory Usage</strong>: 1-5 MB</li>
+<li><strong>Có thể tắt</strong>: CÓ</li>
+<li><strong>Mức độ quan trọng</strong>: Low</li>
+<li><strong>Chức năng</strong>: Firefox update service</li>
+</ul>
+<h2 id="h-storage-va-file-system-processes">H. STORAGE VÀ FILE SYSTEM PROCESSES<a class="zola-anchor" href="#h-storage-va-file-system-processes" aria-label="Anchor link for: h-storage-va-file-system-processes" style="visibility: hidden;"></a></h2>
+<h3 id="31-searchindexer-exe-windows-search-indexer">31. SearchIndexer.exe (Windows Search Indexer)<a class="zola-anchor" href="#31-searchindexer-exe-windows-search-indexer" aria-label="Anchor link for: 31-searchindexer-exe-windows-search-indexer" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: SearchIndexer.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Microsoft Windows Search Indexer</li>
+<li><strong>Parent Process</strong>: services.exe</li>
+<li><strong>CPU Usage</strong>: 0-50% (khi indexing)</li>
+<li><strong>Memory Usage</strong>: 50-500 MB</li>
+<li><strong>Disk Usage</strong>: Cao khi indexing</li>
+<li><strong>Có thể tắt</strong>: CÓ</li>
+<li><strong>Mức độ quan trọng</strong>: Medium</li>
+<li><strong>Chức năng</strong>:
+<ul>
+<li>File content indexing</li>
+<li>Search database maintenance</li>
+<li>Metadata extraction</li>
+</ul>
+</li>
+</ul>
+<h3 id="32-searchprotocolhost-exe">32. SearchProtocolHost.exe<a class="zola-anchor" href="#32-searchprotocolhost-exe" aria-label="Anchor link for: 32-searchprotocolhost-exe" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: SearchProtocolHost.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Microsoft Windows Search Protocol Host</li>
+<li><strong>Parent Process</strong>: SearchIndexer.exe</li>
+<li><strong>CPU Usage</strong>: 0-20%</li>
+<li><strong>Memory Usage</strong>: 10-100 MB</li>
+<li><strong>Có thể tắt</strong>: Tự động tắt</li>
+<li><strong>Mức độ quan trọng</strong>: Medium</li>
+<li><strong>Chức năng</strong>: File parsing cho search index</li>
+</ul>
+<h3 id="33-searchfilterhost-exe">33. SearchFilterHost.exe<a class="zola-anchor" href="#33-searchfilterhost-exe" aria-label="Anchor link for: 33-searchfilterhost-exe" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: SearchFilterHost.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Microsoft Windows Search Filter Host</li>
+<li><strong>Parent Process</strong>: SearchIndexer.exe</li>
+<li><strong>CPU Usage</strong>: 0-30%</li>
+<li><strong>Memory Usage</strong>: 10-200 MB</li>
+<li><strong>Có thể tắt</strong>: Tự động tắt</li>
+<li><strong>Mức độ quan trọng</strong>: Medium</li>
+<li><strong>Chức năng</strong>: Content filtering và extraction</li>
+</ul>
+<h3 id="34-defrag-exe">34. defrag.exe<a class="zola-anchor" href="#34-defrag-exe" aria-label="Anchor link for: 34-defrag-exe" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: defrag.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Disk Defragmenter Utility</li>
+<li><strong>Parent Process</strong>: taskeng.exe hoặc svchost.exe</li>
+<li><strong>CPU Usage</strong>: 0-20%</li>
+<li><strong>Memory Usage</strong>: 10-50 MB</li>
+<li><strong>Disk Usage</strong>: Rất cao khi chạy</li>
+<li><strong>Có thể tắt</strong>: CÓ</li>
+<li><strong>Mức độ quan trọng</strong>: Medium</li>
+<li><strong>Chức năng</strong>: Disk defragmentation và optimization</li>
+</ul>
+<h2 id="i-microsoft-edge-processes">I. MICROSOFT EDGE PROCESSES<a class="zola-anchor" href="#i-microsoft-edge-processes" aria-label="Anchor link for: i-microsoft-edge-processes" style="visibility: hidden;"></a></h2>
+<h3 id="35-msedge-exe-microsoft-edge-browser">35. msedge.exe (Microsoft Edge Browser)<a class="zola-anchor" href="#35-msedge-exe-microsoft-edge-browser" aria-label="Anchor link for: 35-msedge-exe-microsoft-edge-browser" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: msedge.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Program Files (x86)\Microsoft\Edge\Application\</li>
+<li><strong>Mô tả</strong>: Microsoft Edge Web Browser</li>
+<li><strong>Parent Process</strong>: Nhiều instances</li>
+<li><strong>Architecture</strong>: Multi-process (như Chrome)</li>
+<li><strong>CPU Usage</strong>: 0-100% (tùy usage)</li>
+<li><strong>Memory Usage</strong>: 50-1000+ MB</li>
+<li><strong>Có thể tắt</strong>: CÓ</li>
+<li><strong>Mức độ quan trọng</strong>: Low to Medium</li>
+<li><strong>Process types</strong>:
+<ul>
+<li><strong>Browser Process</strong>: Main browser process</li>
+<li><strong>Renderer Process</strong>: Tab content rendering</li>
+<li><strong>GPU Process</strong>: Hardware acceleration</li>
+<li><strong>Utility Process</strong>: Various helper functions</li>
+<li><strong>Extension Process</strong>: Extension hosting</li>
+</ul>
+</li>
+</ul>
+<h3 id="36-msedgewebview2-exe-webview2-runtime">36. msedgewebview2.exe (WebView2 Runtime)<a class="zola-anchor" href="#36-msedgewebview2-exe-webview2-runtime" aria-label="Anchor link for: 36-msedgewebview2-exe-webview2-runtime" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: msedgewebview2.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Program Files (x86)\Microsoft\EdgeWebView\Application\</li>
+<li><strong>Mô tả</strong>: Microsoft Edge WebView2 Runtime</li>
+<li><strong>Parent Process</strong>: Varies</li>
+<li><strong>CPU Usage</strong>: 0-50%</li>
+<li><strong>Memory Usage</strong>: 20-200 MB</li>
+<li><strong>Có thể tắt</strong>: CÓ (có thể ảnh hưởng apps)</li>
+<li><strong>Mức độ quan trọng</strong>: Medium</li>
+<li><strong>Chức năng</strong>: Embedded web content trong apps</li>
+</ul>
+<h2 id="j-runtime-va-broker-processes">J. RUNTIME VÀ BROKER PROCESSES<a class="zola-anchor" href="#j-runtime-va-broker-processes" aria-label="Anchor link for: j-runtime-va-broker-processes" style="visibility: hidden;"></a></h2>
+<h3 id="37-runtimebroker-exe">37. RuntimeBroker.exe<a class="zola-anchor" href="#37-runtimebroker-exe" aria-label="Anchor link for: 37-runtimebroker-exe" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: RuntimeBroker.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Runtime Broker</li>
+<li><strong>Parent Process</strong>: svchost.exe</li>
+<li><strong>Instances</strong>: Multiple</li>
+<li><strong>CPU Usage</strong>: 0-30% per instance</li>
+<li><strong>Memory Usage</strong>: 10-100 MB per instance</li>
+<li><strong>Có thể tắt</strong>: KHÔNG nên</li>
+<li><strong>Mức độ quan trọng</strong>: High</li>
+<li><strong>Chức năng</strong>:
+<ul>
+<li>Universal Windows Platform (UWP) app permissions</li>
+<li>API access brokering</li>
+<li>Resource management for store apps</li>
+</ul>
+</li>
+</ul>
+<h3 id="38-applicationframehost-exe">38. ApplicationFrameHost.exe<a class="zola-anchor" href="#38-applicationframehost-exe" aria-label="Anchor link for: 38-applicationframehost-exe" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: ApplicationFrameHost.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Application Frame Host</li>
+<li><strong>Parent Process</strong>: svchost.exe</li>
+<li><strong>CPU Usage</strong>: 0-20%</li>
+<li><strong>Memory Usage</strong>: 20-200 MB</li>
+<li><strong>Có thể tắt</strong>: KHÔNG nên</li>
+<li><strong>Mức độ quan trọng</strong>: Medium</li>
+<li><strong>Chức năng</strong>: UWP app window management</li>
+</ul>
+<h3 id="39-systemsettingsbroker-exe">39. SystemSettingsBroker.exe<a class="zola-anchor" href="#39-systemsettingsbroker-exe" aria-label="Anchor link for: 39-systemsettingsbroker-exe" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: SystemSettingsBroker.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\ImmersiveControlPanel\</li>
+<li><strong>Mô tả</strong>: System Settings Broker</li>
+<li><strong>Parent Process</strong>: svchost.exe</li>
+<li><strong>CPU Usage</strong>: 0-10%</li>
+<li><strong>Memory Usage</strong>: 10-50 MB</li>
+<li><strong>Có thể tắt</strong>: CÓ</li>
+<li><strong>Mức độ quan trọng</strong>: Medium</li>
+<li><strong>Chức năng</strong>: Windows Settings app broker</li>
+</ul>
+<h3 id="40-backgroundtaskhost-exe">40. backgroundTaskHost.exe<a class="zola-anchor" href="#40-backgroundtaskhost-exe" aria-label="Anchor link for: 40-backgroundtaskhost-exe" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: backgroundTaskHost.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Background Task Host</li>
+<li><strong>Parent Process</strong>: svchost.exe</li>
+<li><strong>Instances</strong>: Multiple</li>
+<li><strong>CPU Usage</strong>: 0-20% per instance</li>
+<li><strong>Memory Usage</strong>: 5-50 MB per instance</li>
+<li><strong>Có thể tắt</strong>: KHÔNG nên</li>
+<li><strong>Mức độ quan trọng</strong>: Medium</li>
+<li><strong>Chức năng</strong>: Background tasks cho UWP apps</li>
+</ul>
+<h2 id="k-system-monitoring-va-wmi-processes">K. SYSTEM MONITORING VÀ WMI PROCESSES<a class="zola-anchor" href="#k-system-monitoring-va-wmi-processes" aria-label="Anchor link for: k-system-monitoring-va-wmi-processes" style="visibility: hidden;"></a></h2>
+<h3 id="41-wmiprvse-exe-wmi-provider-host">41. WmiPrvSE.exe (WMI Provider Host)<a class="zola-anchor" href="#41-wmiprvse-exe-wmi-provider-host" aria-label="Anchor link for: 41-wmiprvse-exe-wmi-provider-host" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: WmiPrvSE.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\wbem\</li>
+<li><strong>Mô tả</strong>: WMI Provider Host</li>
+<li><strong>Parent Process</strong>: svchost.exe (Winmgmt)</li>
+<li><strong>Instances</strong>: Multiple</li>
+<li><strong>CPU Usage</strong>: 0-50% per instance</li>
+<li><strong>Memory Usage</strong>: 10-200 MB per instance</li>
+<li><strong>Có thể tắt</strong>: KHÔNG nên</li>
+<li><strong>Mức độ quan trọng</strong>: High</li>
+<li><strong>Chức năng</strong>:
+<ul>
+<li>WMI data collection</li>
+<li>System monitoring</li>
+<li>Management interface</li>
+<li>Performance counters</li>
+</ul>
+</li>
+</ul>
+<h3 id="42-taskhostw-exe-task-host-window">42. taskhostw.exe (Task Host Window)<a class="zola-anchor" href="#42-taskhostw-exe-task-host-window" aria-label="Anchor link for: 42-taskhostw-exe-task-host-window" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: taskhostw.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Host Process for Windows Tasks</li>
+<li><strong>Parent Process</strong>: services.exe</li>
+<li><strong>Instances</strong>: Multiple</li>
+<li><strong>CPU Usage</strong>: 0-20%</li>
+<li><strong>Memory Usage</strong>: 5-50 MB</li>
+<li><strong>Có thể tắt</strong>: Tự động (task-dependent)</li>
+<li><strong>Mức độ quan trọng</strong>: Medium</li>
+<li><strong>Chức năng</strong>: Host cho Windows scheduled tasks</li>
+</ul>
+<h3 id="43-dllhost-exe-com-surrogate">43. dllhost.exe (COM+ Surrogate)<a class="zola-anchor" href="#43-dllhost-exe-com-surrogate" aria-label="Anchor link for: 43-dllhost-exe-com-surrogate" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: dllhost.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: COM+ Surrogate Process</li>
+<li><strong>Parent Process</strong>: Varies</li>
+<li><strong>Instances</strong>: Multiple</li>
+<li><strong>CPU Usage</strong>: 0-30%</li>
+<li><strong>Memory Usage</strong>: 5-100 MB</li>
+<li><strong>Có thể tắt</strong>: Tự động</li>
+<li><strong>Mức độ quan trọng</strong>: Medium</li>
+<li><strong>Chức năng</strong>:
+<ul>
+<li>COM+ component hosting</li>
+<li>Thumbnail generation</li>
+<li>File property extraction</li>
+</ul>
+</li>
+</ul>
+<h2 id="l-print-va-spooler-processes">L. PRINT VÀ SPOOLER PROCESSES<a class="zola-anchor" href="#l-print-va-spooler-processes" aria-label="Anchor link for: l-print-va-spooler-processes" style="visibility: hidden;"></a></h2>
+<h3 id="44-spoolsv-exe-print-spooler">44. spoolsv.exe (Print Spooler)<a class="zola-anchor" href="#44-spoolsv-exe-print-spooler" aria-label="Anchor link for: 44-spoolsv-exe-print-spooler" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: spoolsv.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Print Spooler Service</li>
+<li><strong>Parent Process</strong>: services.exe</li>
+<li><strong>CPU Usage</strong>: 0-20%</li>
+<li><strong>Memory Usage</strong>: 10-100 MB</li>
+<li><strong>Có thể tắt</strong>: CÓ (mất print function)</li>
+<li><strong>Mức độ quan trọng</strong>: Medium</li>
+<li><strong>Chức năng</strong>:
+<ul>
+<li>Print job management</li>
+<li>Printer driver hosting</li>
+<li>Print queue management</li>
+</ul>
+</li>
+</ul>
+<h3 id="45-splwow64-exe-print-driver-host">45. splwow64.exe (Print Driver Host)<a class="zola-anchor" href="#45-splwow64-exe-print-driver-host" aria-label="Anchor link for: 45-splwow64-exe-print-driver-host" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: splwow64.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\splwow64\</li>
+<li><strong>Mô tả</strong>: Print Driver Host for Applications</li>
+<li><strong>Parent Process</strong>: spoolsv.exe</li>
+<li><strong>CPU Usage</strong>: 0-30%</li>
+<li><strong>Memory Usage</strong>: 5-50 MB</li>
+<li><strong>Có thể tắt</strong>: Tự động</li>
+<li><strong>Mức độ quan trọng</strong>: Medium</li>
+<li><strong>Chức năng</strong>: 32-bit print driver hosting</li>
+</ul>
+<h2 id="m-gaming-va-graphics-processes">M. GAMING VÀ GRAPHICS PROCESSES<a class="zola-anchor" href="#m-gaming-va-graphics-processes" aria-label="Anchor link for: m-gaming-va-graphics-processes" style="visibility: hidden;"></a></h2>
+<h3 id="46-gamebarpresencewriter-exe">46. GameBarPresenceWriter.exe<a class="zola-anchor" href="#46-gamebarpresencewriter-exe" aria-label="Anchor link for: 46-gamebarpresencewriter-exe" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: GameBarPresenceWriter.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Game Bar Presence Writer</li>
+<li><strong>Parent Process</strong>: svchost.exe</li>
+<li><strong>CPU Usage</strong>: 0-5%</li>
+<li><strong>Memory Usage</strong>: 5-20 MB</li>
+<li><strong>Có thể tắt</strong>: CÓ</li>
+<li><strong>Mức độ quan trọng</strong>: Low</li>
+<li><strong>Chức năng</strong>: Game activity tracking</li>
+</ul>
+<h3 id="47-gamebar-exe">47. GameBar.exe<a class="zola-anchor" href="#47-gamebar-exe" aria-label="Anchor link for: 47-gamebar-exe" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: GameBar.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\SystemApps\Microsoft.Xbox.TCUI_8wekyb3d8bbwe\</li>
+<li><strong>Mô tả</strong>: Xbox Game Bar</li>
+<li><strong>Parent Process</strong>: RuntimeBroker.exe</li>
+<li><strong>CPU Usage</strong>: 0-10%</li>
+<li><strong>Memory Usage</strong>: 20-100 MB</li>
+<li><strong>Có thể tắt</strong>: CÓ</li>
+<li><strong>Mức độ quan trọng</strong>: Low</li>
+<li><strong>Chức năng</strong>:
+<ul>
+<li>Game overlay</li>
+<li>Screen recording</li>
+<li>Screenshots</li>
+<li>Performance monitoring</li>
+</ul>
+</li>
+</ul>
+<h3 id="48-xblgamesave-exe">48. XblGameSave.exe<a class="zola-anchor" href="#48-xblgamesave-exe" aria-label="Anchor link for: 48-xblgamesave-exe" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: XblGameSave.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Xbox Live Game Save Service</li>
+<li><strong>Parent Process</strong>: svchost.exe</li>
+<li><strong>CPU Usage</strong>: 0-5%</li>
+<li><strong>Memory Usage</strong>: 5-30 MB</li>
+<li><strong>Có thể tắt</strong>: CÓ</li>
+<li><strong>Mức độ quan trọng</strong>: Low</li>
+<li><strong>Chức năng</strong>: Xbox game save synchronization</li>
+</ul>
+<h2 id="n-communication-va-notification-processes">N. COMMUNICATION VÀ NOTIFICATION PROCESSES<a class="zola-anchor" href="#n-communication-va-notification-processes" aria-label="Anchor link for: n-communication-va-notification-processes" style="visibility: hidden;"></a></h2>
+<h3 id="49-phoneexperiencehost-exe">49. PhoneExperienceHost.exe<a class="zola-anchor" href="#49-phoneexperiencehost-exe" aria-label="Anchor link for: 49-phoneexperiencehost-exe" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: PhoneExperienceHost.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\SystemApps\Microsoft.Windows.PhoneExperienceHost_8wekyb3d8bbwe\</li>
+<li><strong>Mô tả</strong>: Phone Experience Host</li>
+<li><strong>Parent Process</strong>: ApplicationFrameHost.exe</li>
+<li><strong>CPU Usage</strong>: 0-5%</li>
+<li><strong>Memory Usage</strong>: 20-80 MB</li>
+<li><strong>Có thể tắt</strong>: CÓ</li>
+<li><strong>Mức độ quan trọng</strong>: Low</li>
+<li><strong>Chức năng</strong>: Phone integration features</li>
+</ul>
+<h3 id="50-skypehost-exe">50. SkypeHost.exe<a class="zola-anchor" href="#50-skypehost-exe" aria-label="Anchor link for: 50-skypehost-exe" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: SkypeHost.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\SystemApps\Microsoft.SkypeApp_kzf8qxf38zg5c\</li>
+<li><strong>Mô tả</strong>: Skype UWP Host</li>
+<li><strong>Parent Process</strong>: ApplicationFrameHost.exe</li>
+<li><strong>CPU Usage</strong>: 0-20%</li>
+<li><strong>Memory Usage</strong>: 30-150 MB</li>
+<li><strong>Có thể tắt</strong>: CÓ</li>
+<li><strong>Mức độ quan trọng</strong>: Low</li>
+<li><strong>Chức năng</strong>: Skype application host</li>
+</ul>
+<h3 id="51-yourphone-exe">51. YourPhone.exe<a class="zola-anchor" href="#51-yourphone-exe" aria-label="Anchor link for: 51-yourphone-exe" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: YourPhone.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\SystemApps\Microsoft.YourPhone_8wekyb3d8bbwe\</li>
+<li><strong>Mô tả</strong>: Your Phone Companion</li>
+<li><strong>Parent Process</strong>: ApplicationFrameHost.exe</li>
+<li><strong>CPU Usage</strong>: 0-10%</li>
+<li><strong>Memory Usage</strong>: 50-200 MB</li>
+<li><strong>Có thể tắt</strong>: CÓ</li>
+<li><strong>Mức độ quan trọng</strong>: Low</li>
+<li><strong>Chức năng</strong>: Phone-PC integration</li>
+</ul>
+<h2 id="o-accessibility-va-input-processes">O. ACCESSIBILITY VÀ INPUT PROCESSES<a class="zola-anchor" href="#o-accessibility-va-input-processes" aria-label="Anchor link for: o-accessibility-va-input-processes" style="visibility: hidden;"></a></h2>
+<h3 id="52-osk-exe-on-screen-keyboard">52. osk.exe (On-Screen Keyboard)<a class="zola-anchor" href="#52-osk-exe-on-screen-keyboard" aria-label="Anchor link for: 52-osk-exe-on-screen-keyboard" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: osk.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: On-Screen Keyboard</li>
+<li><strong>Parent Process</strong>: explorer.exe</li>
+<li><strong>CPU Usage</strong>: 0-5%</li>
+<li><strong>Memory Usage</strong>: 10-30 MB</li>
+<li><strong>Có thể tắt</strong>: CÓ</li>
+<li><strong>Mức độ quan trọng</strong>: Low</li>
+<li><strong>Chức năng</strong>: Virtual keyboard</li>
+</ul>
+<h3 id="53-narrator-exe">53. narrator.exe<a class="zola-anchor" href="#53-narrator-exe" aria-label="Anchor link for: 53-narrator-exe" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: Narrator.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Microsoft Narrator</li>
+<li><strong>Parent Process</strong>: explorer.exe</li>
+<li><strong>CPU Usage</strong>: 0-15%</li>
+<li><strong>Memory Usage</strong>: 20-100 MB</li>
+<li><strong>Có thể tắt</strong>: CÓ</li>
+<li><strong>Mức độ quan trọng</strong>: Low</li>
+<li><strong>Chức năng</strong>: Screen reader for accessibility</li>
+</ul>
+<h3 id="54-magnify-exe">54. magnify.exe<a class="zola-anchor" href="#54-magnify-exe" aria-label="Anchor link for: 54-magnify-exe" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: magnify.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Microsoft Magnifier</li>
+<li><strong>Parent Process</strong>: explorer.exe</li>
+<li><strong>CPU Usage</strong>: 0-10%</li>
+<li><strong>Memory Usage</strong>: 10-50 MB</li>
+<li><strong>Có thể tắt</strong>: CÓ</li>
+<li><strong>Mức độ quan trọng</strong>: Low</li>
+<li><strong>Chức năng</strong>: Screen magnification tool</li>
+</ul>
+<h2 id="p-driver-va-hardware-processes">P. DRIVER VÀ HARDWARE PROCESSES<a class="zola-anchor" href="#p-driver-va-hardware-processes" aria-label="Anchor link for: p-driver-va-hardware-processes" style="visibility: hidden;"></a></h2>
+<h3 id="55-driverstore-file-repository">55. DriverStore File Repository<a class="zola-anchor" href="#55-driverstore-file-repository" aria-label="Anchor link for: 55-driverstore-file-repository" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>Service Name</strong>: TrustedInstaller</li>
+<li><strong>File thực thi</strong>: TiWorker.exe, TrustedInstaller.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\servicing\</li>
+<li><strong>Mô tả</strong>: Windows Modules Installer</li>
+<li><strong>Parent Process</strong>: services.exe</li>
+<li><strong>CPU Usage</strong>: 0-100% (khi hoạt động)</li>
+<li><strong>Memory Usage</strong>: 50-500 MB</li>
+<li><strong>Có thể tắt</strong>: KHÔNG</li>
+<li><strong>Mức độ quan trọng</strong>: Critical</li>
+<li><strong>Chức năng</strong>:
+<ul>
+<li>Driver installation</li>
+<li>System component updates</li>
+<li>Windows features management</li>
+</ul>
+</li>
+</ul>
+<h3 id="56-pnputil-exe">56. PnPUtil.exe<a class="zola-anchor" href="#56-pnputil-exe" aria-label="Anchor link for: 56-pnputil-exe" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: PnPUtil.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Plug and Play Utility</li>
+<li><strong>Parent Process</strong>: Varies</li>
+<li><strong>CPU Usage</strong>: 0-20%</li>
+<li><strong>Memory Usage</strong>: 5-20 MB</li>
+<li><strong>Có thể tắt</strong>: Tự động</li>
+<li><strong>Mức độ quan trọng</strong>: Medium</li>
+<li><strong>Chức năng</strong>: Driver package management</li>
+</ul>
+<h3 id="57-devicecensus-exe">57. DeviceCensus.exe<a class="zola-anchor" href="#57-devicecensus-exe" aria-label="Anchor link for: 57-devicecensus-exe" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: DeviceCensus.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Device Census</li>
+<li><strong>Parent Process</strong>: Task Scheduler</li>
+<li><strong>CPU Usage</strong>: 0-30%</li>
+<li><strong>Memory Usage</strong>: 10-50 MB</li>
+<li><strong>Có thể tắt</strong>: CÓ</li>
+<li><strong>Mức độ quan trọng</strong>: Low</li>
+<li><strong>Chức năng</strong>: Hardware inventory collection</li>
+</ul>
+<h2 id="q-telemetry-va-diagnostic-processes">Q. TELEMETRY VÀ DIAGNOSTIC PROCESSES<a class="zola-anchor" href="#q-telemetry-va-diagnostic-processes" aria-label="Anchor link for: q-telemetry-va-diagnostic-processes" style="visibility: hidden;"></a></h2>
+<h3 id="58-diagtrack-exe-connected-user-experiences-and-telemetry">58. DiagTrack.exe (Connected User Experiences and Telemetry)<a class="zola-anchor" href="#58-diagtrack-exe-connected-user-experiences-and-telemetry" aria-label="Anchor link for: 58-diagtrack-exe-connected-user-experiences-and-telemetry" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: Chạy trong svchost.exe</li>
+<li><strong>Service Name</strong>: DiagTrack</li>
+<li><strong>Mô tả</strong>: Connected User Experiences and Telemetry</li>
+<li><strong>Parent Process</strong>: services.exe</li>
+<li><strong>CPU Usage</strong>: 0-10%</li>
+<li><strong>Memory Usage</strong>: 20-100 MB</li>
+<li><strong>Có thể tắt</strong>: CÓ (có thể disable)</li>
+<li><strong>Mức độ quan trọng</strong>: Low</li>
+<li><strong>Chức năng</strong>: Telemetry data collection</li>
+</ul>
+<h3 id="59-compattelrunner-exe-microsoft-compatibility-telemetry">59. CompatTelRunner.exe (Microsoft Compatibility Telemetry)<a class="zola-anchor" href="#59-compattelrunner-exe-microsoft-compatibility-telemetry" aria-label="Anchor link for: 59-compattelrunner-exe-microsoft-compatibility-telemetry" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: CompatTelRunner.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Microsoft Compatibility Telemetry</li>
+<li><strong>Parent Process</strong>: Task Scheduler</li>
+<li><strong>CPU Usage</strong>: 0-50% (khi chạy)</li>
+<li><strong>Memory Usage</strong>: 50-300 MB</li>
+<li><strong>Có thể tắt</strong>: CÓ</li>
+<li><strong>Mức độ quan trọng</strong>: Low</li>
+<li><strong>Chức năng</strong>: Compatibility data collection</li>
+</ul>
+<h3 id="60-werfault-exe-windows-error-reporting">60. WerFault.exe (Windows Error Reporting)<a class="zola-anchor" href="#60-werfault-exe-windows-error-reporting" aria-label="Anchor link for: 60-werfault-exe-windows-error-reporting" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: WerFault.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Windows Error Reporting</li>
+<li><strong>Parent Process</strong>: svchost.exe</li>
+<li><strong>CPU Usage</strong>: 0-30%</li>
+<li><strong>Memory Usage</strong>: 10-100 MB</li>
+<li><strong>Có thể tắt</strong>: CÓ</li>
+<li><strong>Mức độ quan trọng</strong>: Medium</li>
+<li><strong>Chức năng</strong>: Error report generation và submission</li>
+</ul>
+<h2 id="r-cortana-va-ai-processes">R. CORTANA VÀ AI PROCESSES<a class="zola-anchor" href="#r-cortana-va-ai-processes" aria-label="Anchor link for: r-cortana-va-ai-processes" style="visibility: hidden;"></a></h2>
+<h3 id="61-searchui-exe-cortana">61. SearchUI.exe (Cortana)<a class="zola-anchor" href="#61-searchui-exe-cortana" aria-label="Anchor link for: 61-searchui-exe-cortana" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: SearchUI.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\SystemApps\Microsoft.Windows.Cortana_cw5n1h2txyewy\</li>
+<li><strong>Mô tả</strong>: Cortana Search UI</li>
+<li><strong>Parent Process</strong>: ApplicationFrameHost.exe</li>
+<li><strong>CPU Usage</strong>: 0-20%</li>
+<li><strong>Memory Usage</strong>: 50-200 MB</li>
+<li><strong>Có thể tắt</strong>: CÓ</li>
+<li><strong>Mức độ quan trọng</strong>: Low</li>
+<li><strong>Chức năng</strong>:
+<ul>
+<li>Voice assistant</li>
+<li>Search interface</li>
+<li>AI-powered assistance</li>
+</ul>
+</li>
+</ul>
+<h3 id="62-cortanaui-exe">62. CortanaUI.exe<a class="zola-anchor" href="#62-cortanaui-exe" aria-label="Anchor link for: 62-cortanaui-exe" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: CortanaUI.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\SystemApps\Microsoft.Windows.Cortana_cw5n1h2txyewy\</li>
+<li><strong>Mô tả</strong>: Cortana UI Process</li>
+<li><strong>Parent Process</strong>: ApplicationFrameHost.exe</li>
+<li><strong>CPU Usage</strong>: 0-15%</li>
+<li><strong>Memory Usage</strong>: 30-150 MB</li>
+<li><strong>Có thể tắt</strong>: CÓ</li>
+<li><strong>Mức độ quan trọng</strong>: Low</li>
+<li><strong>Chức năng</strong>: Cortana user interface</li>
+</ul>
+<h2 id="s-cloud-va-sync-processes">S. CLOUD VÀ SYNC PROCESSES<a class="zola-anchor" href="#s-cloud-va-sync-processes" aria-label="Anchor link for: s-cloud-va-sync-processes" style="visibility: hidden;"></a></h2>
+<h3 id="63-onedrive-exe">63. OneDrive.exe<a class="zola-anchor" href="#63-onedrive-exe" aria-label="Anchor link for: 63-onedrive-exe" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: OneDrive.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Users[Username]\AppData\Local\Microsoft\OneDrive\</li>
+<li><strong>Mô tả</strong>: Microsoft OneDrive</li>
+<li><strong>Parent Process</strong>: explorer.exe</li>
+<li><strong>CPU Usage</strong>: 0-30%</li>
+<li><strong>Memory Usage</strong>: 50-300 MB</li>
+<li><strong>Network Usage</strong>: Variable</li>
+<li><strong>Có thể tắt</strong>: CÓ</li>
+<li><strong>Mức độ quan trọng</strong>: Low to Medium</li>
+<li><strong>Chức năng</strong>:
+<ul>
+<li>File synchronization</li>
+<li>Cloud storage access</li>
+<li>Backup functionality</li>
+</ul>
+</li>
+</ul>
+<h3 id="64-filecoauth-exe">64. FileCoAuth.exe<a class="zola-anchor" href="#64-filecoauth-exe" aria-label="Anchor link for: 64-filecoauth-exe" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: FileCoAuth.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Users[Username]\AppData\Local\Microsoft\OneDrive\</li>
+<li><strong>Mô tả</strong>: Microsoft OneDrive File CoAuthoring</li>
+<li><strong>Parent Process</strong>: OneDrive.exe</li>
+<li><strong>CPU Usage</strong>: 0-10%</li>
+<li><strong>Memory Usage</strong>: 10-50 MB</li>
+<li><strong>Có thể tắt</strong>: CÓ</li>
+<li><strong>Mức độ quan trợng</strong>: Low</li>
+<li><strong>Chức năng</strong>: Real-time collaboration support</li>
+</ul>
+<h2 id="t-virtualization-va-hyper-v-processes">T. VIRTUALIZATION VÀ HYPER-V PROCESSES<a class="zola-anchor" href="#t-virtualization-va-hyper-v-processes" aria-label="Anchor link for: t-virtualization-va-hyper-v-processes" style="visibility: hidden;"></a></h2>
+<h3 id="65-vmms-exe-virtual-machine-management-service">65. vmms.exe (Virtual Machine Management Service)<a class="zola-anchor" href="#65-vmms-exe-virtual-machine-management-service" aria-label="Anchor link for: 65-vmms-exe-virtual-machine-management-service" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: vmms.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Hyper-V Virtual Machine Management Service</li>
+<li><strong>Parent Process</strong>: services.exe</li>
+<li><strong>CPU Usage</strong>: 0-20%</li>
+<li><strong>Memory Usage</strong>: 50-500 MB</li>
+<li><strong>Có thể tắt</strong>: CÓ (nếu không dùng Hyper-V)</li>
+<li><strong>Mức độ quan trọng</strong>: Medium (nếu dùng virtualization)</li>
+<li><strong>Chức năng</strong>: Hyper-V VM management</li>
+</ul>
+<h3 id="66-vmwp-exe-virtual-machine-worker-process">66. vmwp.exe (Virtual Machine Worker Process)<a class="zola-anchor" href="#66-vmwp-exe-virtual-machine-worker-process" aria-label="Anchor link for: 66-vmwp-exe-virtual-machine-worker-process" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: vmwp.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Hyper-V Worker Process</li>
+<li><strong>Parent Process</strong>: vmms.exe</li>
+<li><strong>Instances</strong>: One per VM</li>
+<li><strong>CPU Usage</strong>: Variable (depends on VM load)</li>
+<li><strong>Memory Usage</strong>: Variable (VM memory allocation)</li>
+<li><strong>Có thể tắt</strong>: CÓ (sẽ tắt VM)</li>
+<li><strong>Mức độ quan trọng</strong>: Medium</li>
+<li><strong>Chức năng</strong>: Individual VM execution</li>
+</ul>
+<h3 id="67-vboxsvc-exe-virtualbox-service">67. VBoxSVC.exe (VirtualBox Service)<a class="zola-anchor" href="#67-vboxsvc-exe-virtualbox-service" aria-label="Anchor link for: 67-vboxsvc-exe-virtualbox-service" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: VBoxSVC.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Program Files\Oracle\VirtualBox\</li>
+<li><strong>Mô tả</strong>: VirtualBox Service</li>
+<li><strong>Parent Process</strong>: services.exe</li>
+<li><strong>CPU Usage</strong>: 0-10%</li>
+<li><strong>Memory Usage</strong>: 20-100 MB</li>
+<li><strong>Có thể tắt</strong>: CÓ</li>
+<li><strong>Mức độ quan trọng</strong>: Low (third-party)</li>
+<li><strong>Chức năng</strong>: VirtualBox VM management</li>
+</ul>
+<h2 id="u-additional-system-processes">U. ADDITIONAL SYSTEM PROCESSES<a class="zola-anchor" href="#u-additional-system-processes" aria-label="Anchor link for: u-additional-system-processes" style="visibility: hidden;"></a></h2>
+<h3 id="68-consent-exe-user-account-control">68. consent.exe (User Account Control)<a class="zola-anchor" href="#68-consent-exe-user-account-control" aria-label="Anchor link for: 68-consent-exe-user-account-control" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: consent.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: User Account Control Consent UI</li>
+<li><strong>Parent Process</strong>: winlogon.exe</li>
+<li><strong>CPU Usage</strong>: 0% (khi không active)</li>
+<li><strong>Memory Usage</strong>: 0-20 MB</li>
+<li><strong>Có thể tắt</strong>: KHÔNG nên</li>
+<li><strong>Mức độ quan trọng</strong>: High</li>
+<li><strong>Chức năng</strong>: UAC elevation prompts</li>
+</ul>
+<h3 id="69-logonui-exe">69. LogonUI.exe<a class="zola-anchor" href="#69-logonui-exe" aria-label="Anchor link for: 69-logonui-exe" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: LogonUI.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Windows Logon User Interface Host</li>
+<li><strong>Parent Process</strong>: winlogon.exe</li>
+<li><strong>CPU Usage</strong>: 0-5%</li>
+<li><strong>Memory Usage</strong>: 10-50 MB</li>
+<li><strong>Có thể tắt</strong>: KHÔNG</li>
+<li><strong>Mức độ quan trọng</strong>: Critical</li>
+<li><strong>Chức năng</strong>: Login screen interface</li>
+</ul>
+<h3 id="70-userinit-exe">70. userinit.exe<a class="zola-anchor" href="#70-userinit-exe" aria-label="Anchor link for: 70-userinit-exe" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: userinit.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Userinit Logon Application</li>
+<li><strong>Parent Process</strong>: winlogon.exe</li>
+<li><strong>CPU Usage</strong>: 0% (sau khi complete)</li>
+<li><strong>Memory Usage</strong>: 0 MB (exits after startup)</li>
+<li><strong>Có thể tắt</strong>: Tự động exit</li>
+<li><strong>Mức độ quan trọng</strong>: Critical</li>
+<li><strong>Chức năng</strong>:
+<ul>
+<li>User profile loading</li>
+<li>Shell startup (explorer.exe)</li>
+<li>Logon scripts execution</li>
+</ul>
+</li>
+</ul>
+<h3 id="72-rdpclip-exe-remote-desktop-clipboard">72. rdpclip.exe (Remote Desktop Clipboard)<a class="zola-anchor" href="#72-rdpclip-exe-remote-desktop-clipboard" aria-label="Anchor link for: 72-rdpclip-exe-remote-desktop-clipboard" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: rdpclip.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: RDP Clipboard Monitor</li>
+<li><strong>Parent Process</strong>: Varies</li>
+<li><strong>CPU Usage</strong>: 0-2%</li>
+<li><strong>Memory Usage</strong>: 5-20 MB</li>
+<li><strong>Có thể tắt</strong>: CÓ</li>
+<li><strong>Mức độ quan trọng</strong>: Low</li>
+<li><strong>Chức năng</strong>: Clipboard sharing trong RDP sessions</li>
+</ul>
+<h3 id="73-mstsc-exe-remote-desktop-connection">73. mstsc.exe (Remote Desktop Connection)<a class="zola-anchor" href="#73-mstsc-exe-remote-desktop-connection" aria-label="Anchor link for: 73-mstsc-exe-remote-desktop-connection" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>File thực thi</strong>: mstsc.exe</li>
+<li><strong>Đường dẫn</strong>: C:\Windows\System32\</li>
+<li><strong>Mô tả</strong>: Remote Desktop Connection</li>
+<li><strong>Parent Process</strong>: explorer.exe</li>
+<li><strong>CPU Usage</strong>: 0-30%</li>
+<li><strong>Memory Usage</strong>: 20-200 MB</li>
+<li><strong>Có thể tắt</strong>: CÓ</li>
+<li><strong>Mức độ quan trọng</strong>: Low</li>
+<li><strong>Chức năng</strong>: Remote desktop client</li>
+</ul>
+<h2 id="troubleshooting-va-performance-analysis">TROUBLESHOOTING VÀ PERFORMANCE ANALYSIS<a class="zola-anchor" href="#troubleshooting-va-performance-analysis" aria-label="Anchor link for: troubleshooting-va-performance-analysis" style="visibility: hidden;"></a></h2>
+<h3 id="cong-cu-phan-tich-process">Công cụ phân tích Process<a class="zola-anchor" href="#cong-cu-phan-tich-process" aria-label="Anchor link for: cong-cu-phan-tich-process" style="visibility: hidden;"></a></h3>
+<h4 id="1-task-manager-taskmgr-exe">1. Task Manager (taskmgr.exe)<a class="zola-anchor" href="#1-task-manager-taskmgr-exe" aria-label="Anchor link for: 1-task-manager-taskmgr-exe" style="visibility: hidden;"></a></h4>
+<ul>
+<li><strong>Shortcut</strong>: Ctrl + Shift + Esc</li>
+<li><strong>Tính năng</strong>:
+<ul>
+<li>CPU, Memory, Disk, Network usage</li>
+<li>Process details và command lines</li>
+<li>Services management</li>
+<li>Startup programs</li>
+<li>Performance graphs</li>
+<li>User sessions</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-resource-monitor-resmon-exe">2. Resource Monitor (resmon.exe)<a class="zola-anchor" href="#2-resource-monitor-resmon-exe" aria-label="Anchor link for: 2-resource-monitor-resmon-exe" style="visibility: hidden;"></a></h4>
+<ul>
+<li><strong>Mở từ</strong>: Task Manager &gt; Performance &gt; Open Resource Monitor</li>
+<li><strong>Tính năng</strong>:
+<ul>
+<li>Detailed resource usage per process</li>
+<li>File handles và network connections</li>
+<li>Disk activity monitoring</li>
+<li>Memory usage breakdown</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-process-explorer-microsoft-sysinternals">3. Process Explorer (Microsoft Sysinternals)<a class="zola-anchor" href="#3-process-explorer-microsoft-sysinternals" aria-label="Anchor link for: 3-process-explorer-microsoft-sysinternals" style="visibility: hidden;"></a></h4>
+<ul>
+<li><strong>Download</strong>: <a rel="nofollow noreferrer" href="https://learn.microsoft.com/en-us/sysinternals/downloads/">Microsoft Sysinternals Suite</a></li>
+<li><strong>Tính năng</strong>:
+<ul>
+<li>Process tree hierarchy</li>
+<li>DLL dependencies</li>
+<li>Handle information</li>
+<li>Process strings</li>
+<li>Virus Total integration</li>
+<li>Replace Task Manager option</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-performance-toolkit-wpt">4. Performance Toolkit (WPT)<a class="zola-anchor" href="#4-performance-toolkit-wpt" aria-label="Anchor link for: 4-performance-toolkit-wpt" style="visibility: hidden;"></a></h4>
+<ul>
+<li><strong>Component</strong>: Windows SDK</li>
+<li><strong>Tools</strong>:
+<ul>
+<li><strong>WPA (Windows Performance Analyzer)</strong></li>
+<li><strong>WPR (Windows Performance Recorder)</strong></li>
+<li><strong>Xperf</strong> command line tools</li>
+</ul>
+</li>
+</ul>
+<h3 id="common-performance-issues">Common Performance Issues<a class="zola-anchor" href="#common-performance-issues" aria-label="Anchor link for: common-performance-issues" style="visibility: hidden;"></a></h3>
+<h4 id="high-cpu-usage-scenarios">High CPU Usage Scenarios<a class="zola-anchor" href="#high-cpu-usage-scenarios" aria-label="Anchor link for: high-cpu-usage-scenarios" style="visibility: hidden;"></a></h4>
+<p><strong>1. TiWorker.exe (100% CPU)</strong></p>
+<ul>
+<li><strong>Nguyên nhân</strong>: Windows Update installation</li>
+<li><strong>Giải pháp</strong>:
+<ul>
+<li>Chờ complete (có thể mất vài giờ)</li>
+<li>Check Windows Update status</li>
+<li>Restart if stuck &gt; 4 hours</li>
+<li>Run Windows Update Troubleshooter</li>
+</ul>
+</li>
+</ul>
+<p><strong>2. SearchIndexer.exe (High CPU)</strong></p>
+<ul>
+<li><strong>Nguyên nhân</strong>: Indexing large number of files</li>
+<li><strong>Giải pháp</strong>:
+<ul>
+<li>Temporary disable Windows Search</li>
+<li>Add exclusions for large folders</li>
+<li>Rebuild search index</li>
+<li>Schedule indexing during off-hours</li>
+</ul>
+</li>
+</ul>
+<p><strong>3. MsMpEng.exe (High CPU)</strong></p>
+<ul>
+<li><strong>Nguyên nhân</strong>: Windows Defender scanning</li>
+<li><strong>Giải pháp</strong>:
+<ul>
+<li>Add exclusions for trusted folders</li>
+<li>Schedule scans for low-usage times</li>
+<li>Check for conflicting antivirus</li>
+<li>Temporary disable real-time protection</li>
+</ul>
+</li>
+</ul>
+<p><strong>4. svchost.exe (Multiple high usage)</strong></p>
+<ul>
+<li><strong>Nguyên nhân</strong>: Various services in same host</li>
+<li><strong>Giải pháp</strong>:
+<ul>
+<li>Identify problematic service: <code>tasklist /svc</code></li>
+<li>Use Resource Monitor for details</li>
+<li>Restart specific services</li>
+<li>Check Windows Updates</li>
+</ul>
+</li>
+</ul>
+<h4 id="high-memory-usage-scenarios">High Memory Usage Scenarios<a class="zola-anchor" href="#high-memory-usage-scenarios" aria-label="Anchor link for: high-memory-usage-scenarios" style="visibility: hidden;"></a></h4>
+<p><strong>1. explorer.exe (High Memory)</strong></p>
+<ul>
+<li><strong>Nguyên nhân</strong>:
+<ul>
+<li>Memory leaks</li>
+<li>Too many file thumbnails</li>
+<li>Corrupted shell extensions</li>
+</ul>
+</li>
+<li><strong>Giải pháp</strong>:
+<ul>
+<li>Restart explorer.exe</li>
+<li>Disable thumbnail generation</li>
+<li>Boot in Safe Mode to test</li>
+<li>Check for shell extension conflicts</li>
+</ul>
+</li>
+</ul>
+<p><strong>2. Multiple svchost.exe (High Memory)</strong></p>
+<ul>
+<li><strong>Nguyên nhân</strong>: Service memory leaks</li>
+<li><strong>Giải pháp</strong>:
+<ul>
+<li>Identify services: Process Explorer</li>
+<li>Restart problematic services</li>
+<li>Check Event Logs for errors</li>
+<li>Memory dump analysis</li>
+</ul>
+</li>
+</ul>
+<p><strong>3. RuntimeBroker.exe (High Memory)</strong></p>
+<ul>
+<li><strong>Nguyên nhân</strong>: UWP app issues</li>
+<li><strong>Giải pháp</strong>:
+<ul>
+<li>Close UWP apps</li>
+<li>Reset Windows Store apps</li>
+<li>Check background app permissions</li>
+<li>Disable problematic store apps</li>
+</ul>
+</li>
+</ul>
+<h4 id="disk-usage-100-scenarios">Disk Usage 100% Scenarios<a class="zola-anchor" href="#disk-usage-100-scenarios" aria-label="Anchor link for: disk-usage-100-scenarios" style="visibility: hidden;"></a></h4>
+<p><strong>1. System Process (High Disk)</strong></p>
+<ul>
+<li><strong>Nguyên nhân</strong>:
+<ul>
+<li>Page file activity</li>
+<li>System file corruption</li>
+<li>Driver issues</li>
+</ul>
+</li>
+<li><strong>Giải pháp</strong>:
+<ul>
+<li>Run <code>chkdsk /f</code></li>
+<li>Check page file settings</li>
+<li>Update drivers</li>
+<li>Run <code>sfc /scannow</code></li>
+</ul>
+</li>
+</ul>
+<p><strong>2. Antimalware Service Executable</strong></p>
+<ul>
+<li><strong>Nguyên nhân</strong>: Real-time scanning</li>
+<li><strong>Giải pháp</strong>:
+<ul>
+<li>Add exclusions</li>
+<li>Schedule scans</li>
+<li>Check for conflicts</li>
+<li>Limit CPU usage in Windows Defender</li>
+</ul>
+</li>
+</ul>
+<h3 id="security-analysis">Security Analysis<a class="zola-anchor" href="#security-analysis" aria-label="Anchor link for: security-analysis" style="visibility: hidden;"></a></h3>
+<h4 id="identifying-malicious-processes">Identifying Malicious Processes<a class="zola-anchor" href="#identifying-malicious-processes" aria-label="Anchor link for: identifying-malicious-processes" style="visibility: hidden;"></a></h4>
+<p><strong>Red Flags:</strong></p>
+<ol>
+<li><strong>Unusual locations</strong>: Tiến trình chạy từ thư mục %temp%, %appdata%</li>
+<li><strong>Misspelled names</strong>: Ví dụ "scvhost.exe" thay vì "svchost.exe"</li>
+<li><strong>Multiple instances</strong>: Có quá nhiều tiến trình cùng tên</li>
+<li><strong>High network activity</strong>: Có kết nối ra ngoài không mong đợi</li>
+<li><strong>Missing digital signatures</strong>: File thực thi không có chữ ký</li>
+<li><strong>Unusual parent-child relationships</strong>: Tiến trình cha không đúng</li>
+</ol>
+<p><strong>Verification Steps:</strong></p>
+<ol>
+<li><strong>Check file location</strong>: Right-click &gt; Open file location</li>
+<li><strong>Verify digital signature</strong>: Properties (Thuộc tính) &gt; Digital Signatures (Chữ ký số)</li>
+<li><strong>Upload to VirusTotal</strong>: Kiểm tra độ uy tín của hash</li>
+<li><strong>Check process arguments</strong>: Process Explorer &gt; Properties</li>
+<li><strong>Monitor network activity</strong>: Resource Monitor &gt; Network tab</li>
+</ol>
+<h4 id="common-malware-process-names">Common Malware Process Names<a class="zola-anchor" href="#common-malware-process-names" aria-label="Anchor link for: common-malware-process-names" style="visibility: hidden;"></a></h4>
+<ul>
+<li><strong>Fake svchost.exe</strong>: Không nằm trong System32, tiến trình cha sai</li>
+<li><strong>Fake explorer.exe</strong>: Nhiều phiên bản, vị trí sai</li>
+<li><strong>Random names</strong>: File thực thi có tên vô nghĩa</li>
+<li><strong>System impersonation</strong>: "winlogon32.exe", "lsass32.exe"</li>
+</ul>
+<h3 id="optimization-strategies">Optimization Strategies<a class="zola-anchor" href="#optimization-strategies" aria-label="Anchor link for: optimization-strategies" style="visibility: hidden;"></a></h3>
+<h4 id="startup-optimization">Startup Optimization<a class="zola-anchor" href="#startup-optimization" aria-label="Anchor link for: startup-optimization" style="visibility: hidden;"></a></h4>
+<ol>
+<li>
+<p><strong>Disable unnecessary startup programs</strong>:</p>
+<ul>
+<li>Task Manager &gt; tab Startup</li>
+<li>Disable (Vô hiệu hóa) các chương trình có impact cao</li>
+<li>Dùng <code>msconfig</code> cho các service hệ thống</li>
+</ul>
+</li>
+<li>
+<p><strong>Fast Startup settings</strong>:</p>
+<ul>
+<li>Control Panel &gt; Power Options &gt; Choose what power buttons do</li>
+<li>Cân nhắc tắt khi cần troubleshooting (khắc phục sự cố)</li>
+</ul>
+</li>
+</ol>
+<h4 id="service-optimization">Service Optimization<a class="zola-anchor" href="#service-optimization" aria-label="Anchor link for: service-optimization" style="visibility: hidden;"></a></h4>
+<ol>
+<li>
+<p><strong>Identify unnecessary services</strong>:</p>
+<ul>
+<li>Mở <code>services.msc</code></li>
+<li>Chuyển sang Manual (Thủ công) cho các service không quan trọng</li>
+<li>Không bao giờ tắt các service hệ thống quan trọng</li>
+</ul>
+</li>
+<li>
+<p><strong>Common services to optimize</strong>:</p>
+<ul>
+<li><strong>Windows Search</strong>: Tắt nếu không dùng search</li>
+<li><strong>Fax Service</strong>: Tắt nếu không dùng fax</li>
+<li><strong>Print Spooler</strong>: Tắt nếu không dùng máy in</li>
+<li><strong>Remote Desktop</strong>: Tắt nếu không dùng RDP</li>
+</ul>
+</li>
+</ol>
+<h4 id="memory-management">Memory Management<a class="zola-anchor" href="#memory-management" aria-label="Anchor link for: memory-management" style="visibility: hidden;"></a></h4>
+<ol>
+<li>
+<p><strong>Virtual Memory optimization</strong>:</p>
+<ul>
+<li>Đặt kích thước page file (file hoán trang) thủ công</li>
+<li>Xem xét đặt trên SSD</li>
+<li>Theo dõi mức sử dụng page file</li>
+</ul>
+</li>
+<li>
+<p><strong>Memory cleanup</strong>:</p>
+<ul>
+<li>Khởi động lại thường xuyên</li>
+<li>Tắt ứng dụng không dùng</li>
+<li>Dùng công cụ Memory Cleanup có sẵn</li>
+</ul>
+</li>
+</ol>
+<h3 id="advanced-monitoring">Advanced Monitoring<a class="zola-anchor" href="#advanced-monitoring" aria-label="Anchor link for: advanced-monitoring" style="visibility: hidden;"></a></h3>
+<h4 id="performance-counters">Performance Counters<a class="zola-anchor" href="#performance-counters" aria-label="Anchor link for: performance-counters" style="visibility: hidden;"></a></h4>
+<p>Các chỉ số hữu ích để theo dõi:</p>
+<ul>
+<li><strong>Processor(_Total)% Processor Time</strong>: % thời gian CPU bận</li>
+<li><strong>Memory\Available MBytes</strong>: Dung lượng RAM còn trống</li>
+<li><strong>PhysicalDisk(_Total)% Disk Time</strong>: % thời gian ổ đĩa bận</li>
+<li><strong>Network Interface\Bytes Total/sec</strong>: Tổng băng thông mạng</li>
+<li><strong>Process(ProcessName)\Working Set</strong>: RAM mà tiến trình đang dùng</li>
+</ul>
+<h4 id="event-log-analysis">Event Log Analysis<a class="zola-anchor" href="#event-log-analysis" aria-label="Anchor link for: event-log-analysis" style="visibility: hidden;"></a></h4>
+<p>Các log chính cần theo dõi:</p>
+<ul>
+<li><strong>System Log</strong>: Vấn đề phần cứng và driver</li>
+<li><strong>Application Log</strong>: Lỗi ứng dụng</li>
+<li><strong>Security Log</strong>: Sự kiện xác thực (login/logout)</li>
+<li><strong>Setup Log</strong>: Vấn đề cài đặt</li>
+</ul>
+<h4 id="wmi-queries">WMI Queries<a class="zola-anchor" href="#wmi-queries" aria-label="Anchor link for: wmi-queries" style="visibility: hidden;"></a></h4>
+<p>Các lệnh WMI hữu ích để giám sát tiến trình:</p>
+<pre data-lang="cmd" class="language-cmd z-code"><code class="language-cmd" data-lang="cmd"><span class="z-source z-dosbatch"><span class="z-keyword z-command z-dosbatch">wmic</span> process get Name,ProcessId,PageFileUsage,WorkingSetSize
+</span><span class="z-source z-dosbatch"><span class="z-keyword z-command z-dosbatch">wmic</span> process <span class="z-keyword z-command z-dosbatch">where</span> <span class="z-string z-quoted z-double z-dosbatch"><span class="z-punctuation z-definition z-string z-begin z-dosbatch">&quot;</span>Name=&#39;svchost.exe&#39;<span class="z-punctuation z-definition z-string z-end z-dosbatch">&quot;</span></span> get ProcessId,CommandLine
+</span><span class="z-source z-dosbatch"><span class="z-keyword z-command z-dosbatch">wmic</span> service get Name,State,StartMode,ProcessId
+</span></code></pre>
+<h2 id="best-practices-cho-system-administrators">Best Practices cho System Administrators<a class="zola-anchor" href="#best-practices-cho-system-administrators" aria-label="Anchor link for: best-practices-cho-system-administrators" style="visibility: hidden;"></a></h2>
+<h3 id="daily-monitoring">Daily Monitoring<a class="zola-anchor" href="#daily-monitoring" aria-label="Anchor link for: daily-monitoring" style="visibility: hidden;"></a></h3>
+<ol>
+<li><strong>Kiểm tra biểu đồ hiệu suất trong Task Manager</strong></li>
+<li><strong>Theo dõi Event Logs xem có lỗi không</strong></li>
+<li><strong>Xem các tiến trình sử dụng nhiều tài nguyên</strong></li>
+<li><strong>Kiểm tra nhiệt độ hệ thống và tốc độ quạt</strong></li>
+</ol>
+<h3 id="weekly-maintenance">Weekly Maintenance<a class="zola-anchor" href="#weekly-maintenance" aria-label="Anchor link for: weekly-maintenance" style="visibility: hidden;"></a></h3>
+<ol>
+<li><strong>Quét virus toàn bộ hệ thống</strong></li>
+<li><strong>Dọn dẹp đĩa và chống phân mảnh</strong></li>
+<li><strong>Kiểm tra Windows Update</strong></li>
+<li><strong>Dọn dẹp registry (cẩn thận)</strong></li>
+</ol>
+<h3 id="monthly-reviews">Monthly Reviews<a class="zola-anchor" href="#monthly-reviews" aria-label="Anchor link for: monthly-reviews" style="visibility: hidden;"></a></h3>
+<ol>
+<li><strong>Phân tích xu hướng hiệu suất</strong></li>
+<li><strong>Xem lại các chương trình đã cài</strong></li>
+<li><strong>Kiểm tra các chương trình khởi động</strong></li>
+<li><strong>Cập nhật driver và firmware</strong></li>
+</ol>
+<h3 id="emergency-response">Emergency Response<a class="zola-anchor" href="#emergency-response" aria-label="Anchor link for: emergency-response" style="visibility: hidden;"></a></h3>
+<ol>
+<li>
+<p><strong>High CPU/Memory usage</strong>:</p>
+<ul>
+<li>Xác định tiến trình gây ra</li>
+<li>Kiểm tra malware</li>
+<li>Restart service nếu an toàn</li>
+<li>Khởi động lại máy nếu cần</li>
+</ul>
+</li>
+<li>
+<p><strong>System unresponsive</strong>:</p>
+<ul>
+<li>Ctrl + Alt + Del</li>
+<li>Mở Task Manager &gt; End task</li>
+<li>Khởi động Safe Mode</li>
+<li>System Restore (Phục hồi hệ thống)</li>
+</ul>
+</li>
+<li>
+<p><strong>Suspected malware</strong>:</p>
+<ul>
+<li>Ngắt kết nối mạng</li>
+<li>Boot bằng antivirus rescue disk</li>
+<li>Quét toàn bộ hệ thống</li>
+<li>Cân nhắc restore/reset hệ điều hành</li>
+</ul>
+</li>
+</ol>
+<h2 id="ket-luan">Kết luận<a class="zola-anchor" href="#ket-luan" aria-label="Anchor link for: ket-luan" style="visibility: hidden;"></a></h2>
+<p>Hiểu rõ về các process hệ thống Windows 11 là kỹ năng quan trọng cho:</p>
+<ol>
+<li><strong>System Administrators</strong>: Quản lý và troubleshoot hệ thống hiệu quả</li>
+<li><strong>Power Users</strong>: Tối ưu hóa hiệu suất máy tính cá nhân</li>
+<li><strong>Security Professionals</strong>: Phát hiện và phân tích threats</li>
+<li><strong>Developers</strong>: Hiểu môi trường runtime của applications</li>
+</ol>
+<h3 id="key-takeaways">Key Takeaways:<a class="zola-anchor" href="#key-takeaways" aria-label="Anchor link for: key-takeaways" style="visibility: hidden;"></a></h3>
+<ol>
+<li>
+<p><strong>Không bao giờ end task các Critical system processes</strong> (System, csrss.exe, winlogon.exe, services.exe, lsass.exe)</p>
+</li>
+<li>
+<p><strong>Luôn verify processes trước khi tắt</strong> - Check file location, digital signature, và parent process</p>
+</li>
+<li>
+<p><strong>Monitor resource usage thường xuyên</strong> - Sử dụng Task Manager, Resource Monitor, và Process Explorer</p>
+</li>
+<li>
+<p><strong>Understand normal behavior</strong> - High CPU từ TiWorker.exe during updates là bình thường</p>
+</li>
+<li>
+<p><strong>Keep system updated</strong> - Windows Updates thường fix performance và security issues</p>
+</li>
+<li>
+<p><strong>Use multiple tools</strong> - Task Manager cho overview, Process Explorer cho details, Performance Toolkit cho advanced analysis</p>
+</li>
+<li>
+<p><strong>Document baselines</strong> - Biết performance bình thường để identify issues nhanh hơn</p>
+</li>
+</ol>
+<p>Việc nắm vững kiến thức về các process này sẽ giúp bạn trở thành một Windows power user hoặc system administrator hiệu quả hơn, có khả năng troubleshoot problems nhanh chóng và maintain hệ thống ổn định.</p>
+<hr />
+
+      </article>
+
+      
+      
+
+      
+      
+    </div>
+
+    
+
+
+<footer>
+  <div class="left">
+    <div class="copyright">
+      © 2025 <a href="https:&#x2F;&#x2F;wen.is-a.dev">Wen</a>
+      
+    </div>
+  </div>
+
+  <div class="right">
+    
+    
+    
+    
+
+    <!-- 
+    
+    
+    <button id="theme-toggle" aria-label="theme switch">
+      <span class="moon-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill="currentColor"></path></svg>
+</span>
+      <span class="sun-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z" fill="currentColor"></path></svg>
+</span>
+    </button>
+     -->
+  </div>
+</footer>
+
+
+
+
+  </main>
+</div>
+
+  
+<script src="/js/lightense.min.js"></script>
+
+
+
+  <script src="https://wen.is-a.dev/js/main.js"></script>
+</body>
+
+</html>

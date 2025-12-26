@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  
+
+
+
+<meta name="description" content="Windows Registry: Bộ não điện tử của Windows">
+
+  <title>Windows Registry: Bộ não điện tử của Windows</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="https://wen.is-a.dev/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://wen.is-a.dev/img/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://wen.is-a.dev/img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Ancizar+Sans:ital,wght@0,100..1000;1,100..1000&family=Bitter:ital,wght@0,100..900;1,100..900&family=Indie+Flower&family=Lora:ital,wght@0,400..700;1,400..700&family=Marcellus&display=swap"
+    rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;1,400;1,600&display=swap"
+    rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500..700&display=swap" rel="stylesheet">
+  
+  <style>
+  /* light mode colors */
+  body {
+    /* --primary-color: #5871a2; */
+    --primary-color: #005e05;
+    --primary-pale-color: #5871a233;
+    --primary-decoration-color: #5871a210;
+    --bg-color: #f0f9ff;
+    /* --text-color: #2f3030; */
+    --text-color: #000000;
+    /* --text-pale-color: #767676; */
+    --text-pale-color: #000000;
+    --text-decoration-color: #a9a9a9;
+    --highlight-mark-color: #5f75b020;
+
+    --callout-note-color: #5871a2;
+    --callout-tip-color: #268556;
+    --callout-important-color: #885fc9;
+    --callout-warning-color: #ab6632;
+    --callout-caution-color: #c64e4e;
+  }
+
+  /* dark mode colors */
+  body.dark {
+    /* --primary-color: #6f8fd1; */
+    --primary-color: #ecf16b;
+    --primary-pale-color: #6f8fd166;
+    --primary-decoration-color: #6f8fd112;
+    /* --bg-color: #1c1c1c; */
+    /* --bg-color: #002727; */
+    /* --bg-color: #002333; */
+    --bg-color: #01242E;
+    /* --text-color: #c1c1c1; */
+    --text-color: #ffffff;
+    /* --text-pale-color: #848484; */
+    --text-pale-color: #ffffff;
+    --text-decoration-color: #5f5f5f;
+    --highlight-mark-color: #8296cb3b;
+
+    --callout-note-color: #6f8fd1;
+    --callout-tip-color: #47976f;
+    --callout-important-color: #9776cd;
+    --callout-warning-color: #ad7a52;
+    --callout-caution-color: #d06161;
+  }
+
+  /* typography */
+  body {
+    /* --main-font: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; */
+    --main-font: 'Nunito', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --heading-font: 'Quicksand', 'Lora', 'Bitter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --code-font: 'Cascadia Code', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    --homepage-max-width: 768px;
+    --main-max-width: 768px;
+    --avatar-size: 75px;
+    --font-size: 16px;
+    --line-height: 1.75;
+    --img-border-radius: 0px;
+    --detail-border-radius: 11px;
+    --dark-mode-img-brightness: 0.75;
+    --dark-mode-chart-brightness: 0.75;
+    --inline-code-border-radius: 2px;
+    --inline-code-bg-color: var(--primary-decoration-color);
+    --block-code-border-radius: 0px;
+    --block-code-border-color: var(--primary-color);
+    --detail-border-color: var(--primary-color);
+  }
+
+
+  #name,
+  #id,
+  #left,
+  a.post,
+  a.back-link,
+  a.tag,
+  a.category,
+  .title {
+    font-family: var(--heading-font);
+  }
+
+  span.date {
+    font-family: var(--code-font);
+    color: var(--text-pale-color);
+  }
+
+  .gif-wrapper {
+    text-align: center;
+    margin: 1.5rem 0;
+  }
+
+  .gif-wrapper .intro-gif {
+    max-width: 96%;
+    height: auto;
+    border-radius: 8px;
+  }
+
+  .verified-icon {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 3px;
+    vertical-align: middle;
+  }
+
+  .verified-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .top-nav {
+    width: 100%;
+    padding-bottom: 1em;
+    border-bottom: 1px solid var(--border-color);
+    background: rgba(var(--background-rgb), 0.85);
+    backdrop-filter: blur(8px);
+    border-radius: var(--detail-border-radius);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .top-nav nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+  }
+
+  .nav-left,
+  .nav-center,
+  .nav-right {
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-center {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-top: 1em;
+  }
+
+  .menu-wrapper {
+    position: relative;
+    margin-top: 1.5em;
+  }
+
+  .menu-trigger {
+    font-size: 1.5em;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-color);
+  }
+
+  .menu-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+
+    background: var(--bg-color);
+    font-family: var(--heading-font);
+    border: 1px solid var(--primary-pale-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    min-width: 85px;
+    padding: 0.25em 0;
+    z-index: 2000;
+
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .menu-wrapper.active .menu-dropdown {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+
+  .menu-dropdown a {
+    display: block;
+    padding: 0.6em 1em;
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 0.95em;
+    margin: auto;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  #theme-toggle:hover,
+  #rain-toggle:hover {
+    cursor: pointer;
+  }
+
+  .foot-quote,
+  .section-title {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    text-align: center;
+    display: block;
+    margin-top: 2em;
+  }
+
+  .layout-list .post {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+  }
+
+  .post>span:first-child {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+
+  .post>.date {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .year-heading {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    font-size: 1.5em;
+    font-weight: bold;
+    font-family: var(--heading-font);
+  }
+
+  /* term-caret  */
+  #id.term-caret {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    position: relative;
+    white-space: nowrap;
+  }
+
+  #id.term-caret::after {
+    content: "_";
+
+    margin-left: 4px;
+    animation: blink 1s steps(1, end) infinite;
+    opacity: 1;
+    color: currentColor;
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #id.term-caret::after {
+      animation: none;
+      opacity: 1;
+    }
+  }
+
+  /* typewriter */
+  #id.typewriter {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    white-space: nowrap;
+    border-right: 1ch solid currentColor;
+    /* caret */
+    /* caret blink */
+    animation: caret-blink 1s steps(1, end) infinite;
+  }
+
+  @keyframes caret-blink {
+    50% {
+      border-right-color: transparent;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #id.typewriter {
+      animation: none;
+      border-right-color: currentColor;
+    }
+  }
+
+  /* glitch effect  */
+  #id.glitch {
+    position: relative;
+    display: inline-block;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  #id.glitch::before,
+  #id.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    clip-path: inset(0 0 0 0);
+    opacity: .85;
+  }
+
+  #id.glitch::before {
+    transform: translate(0, 0);
+    mix-blend-mode: screen;
+    text-shadow: 1px 0 0 #f00;
+    /* viền đỏ */
+    animation: glitch-1 2s infinite linear alternate-reverse;
+  }
+
+  #id.glitch::after {
+    transform: translate(0, 0);
+    mix-blend-mode: screen;
+    text-shadow: -1px 0 0 #0ff;
+    /* viền cyan */
+    animation: glitch-2 2.2s infinite linear alternate-reverse;
+  }
+
+  @keyframes glitch-1 {
+    0% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(0, 0);
+    }
+
+    20% {
+      clip-path: inset(10% 0 60% 0);
+      transform: translate(-1px, -1px);
+    }
+
+    40% {
+      clip-path: inset(40% 0 30% 0);
+      transform: translate(1px, 1px);
+    }
+
+    60% {
+      clip-path: inset(20% 0 55% 0);
+      transform: translate(-1px, 0);
+    }
+
+    80% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 1px);
+    }
+
+    100% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(0, 0);
+    }
+  }
+
+  @keyframes glitch-2 {
+    0% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 0);
+    }
+
+    20% {
+      clip-path: inset(40% 0 30% 0);
+      transform: translate(1px, 0);
+    }
+
+    40% {
+      clip-path: inset(10% 0 60% 0);
+      transform: translate(0, -1px);
+    }
+
+    60% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(-1px, 1px);
+    }
+
+    80% {
+      clip-path: inset(20% 0 55% 0);
+      transform: translate(1px, 0);
+    }
+
+    100% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+
+    #id.glitch::before,
+    #id.glitch::after {
+      animation: none;
+    }
+  }
+</style>
+  <link rel="stylesheet" href="https://wen.is-a.dev/main.css">
+  
+
+<link id="hl" rel="stylesheet" type="text/css" href="/hl-light.css" />
+
+
+
+  
+</head>
+
+<body class="post">
+
+  
+  <script>
+    const theme = sessionStorage.getItem('theme');
+    const match = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if ((theme && theme === 'dark') || (!theme && match)) {
+      document.body.classList.add('dark');
+      const hl = document.querySelector('link#hl');
+      if (hl) hl.href = 'https://wen.is-a.dev/hl-dark.css';
+    }
+  </script>
+  
+
+  
+<div id="wrapper">
+  <div id="blank"></div>
+  <aside>
+    
+    
+    
+    <button id="back-to-top" aria-label="back to top">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-up"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+
+    </button>
+    
+  </aside>
+  <main>
+    
+<header class="top-nav">
+  <nav>
+    <!-- Left: Back -->
+    <div class="nav-left">
+      <a href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts" class="back-link">← Back</a>
+    </div>
+
+    <!-- Center: Avatar -->
+    <div class="nav-center">
+      
+      <a href="/">
+        <img src="https://wen.is-a.dev/img/qwe.jpg" alt="avatar" class="avatar">
+      </a>
+      
+    </div>
+
+    <!-- Right: Menu dropdown -->
+    <div class="nav-right">
+
+      <div class="menu-wrapper">
+
+        <button class="menu-trigger" aria-label="menu">
+          &#9776;
+        </button>
+        <div class="menu-dropdown">
+          <a href="https://wen.is-a.dev/posts">POSTS</a>
+          <a href="https://wen.is-a.dev/about">ABOUT</a>
+          <a href="https://wen.is-a.dev/contact">CONTACT</a>
+          
+          
+          
+          
+          
+
+          <a id="theme-toggle" aria-label="theme switch">
+            <span class="moon-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill="currentColor"></path></svg>
+</span>
+            <span class="sun-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z" fill="currentColor"></path></svg>
+</span>
+          </a>
+
+          
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const trigger = document.querySelector(".menu-trigger");
+    const wrapper = document.querySelector(".menu-wrapper");
+
+    if (trigger && wrapper) {
+      trigger.addEventListener("click", () => {
+        wrapper.classList.toggle("active");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!wrapper.contains(e.target)) {
+          wrapper.classList.remove("active");
+        }
+      });
+    }
+  });
+
+</script>
+
+
+    <div>
+      
+      
+      
+      
+      <div id="copy-cfg" style="display: none;" data-copy-icon="&lt;svg xmlns=&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2000&#x2F;svg&quot; viewBox=&quot;0 0 24 24&quot; width=&quot;18&quot; height=&quot;18&quot;&gt;&lt;path d=&quot;M6.9998 6V3C6.9998 2.44772 7.44752 2 7.9998 2H19.9998C20.5521 2 20.9998 2.44772 20.9998 3V17C20.9998 17.5523 20.5521 18 19.9998 18H16.9998V20.9991C16.9998 21.5519 16.5499 22 15.993 22H4.00666C3.45059 22 3 21.5554 3 20.9991L3.0026 7.00087C3.0027 6.44811 3.45264 6 4.00942 6H6.9998ZM5.00242 8L5.00019 20H14.9998V8H5.00242ZM8.9998 6H16.9998V16H18.9998V4H8.9998V6Z&quot; fill=&quot;currentColor&quot;&gt;&lt;&#x2F;path&gt;&lt;&#x2F;svg&gt;
+" data-check-icon="&lt;svg xmlns=&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2000&#x2F;svg&quot; viewBox=&quot;0 0 24 24&quot; width=&quot;18&quot; height=&quot;18&quot;&gt;&lt;path d=&quot;M10.0007 15.1709L19.1931 5.97852L20.6073 7.39273L10.0007 17.9993L3.63672 11.6354L5.05093 10.2212L10.0007 15.1709Z&quot; fill=&quot;currentColor&quot;&gt;&lt;&#x2F;path&gt;&lt;&#x2F;svg&gt;
+">
+      </div>
+      
+      <article class="prose">
+        <h1 class="title">Windows Registry: Bộ não điện tử của Windows</h1>
+        <div id="post-info">
+          <div id="date">
+            <span id="publish">Feb 14, 2025</span>
+            </div>
+
+          
+        </div>
+
+        
+        
+
+        
+
+        <p>Nếu Windows là một con người, thì Registry chính là bộ não của nó - nơi lưu trữ mọi kí ức, sở thích, thói quen, và cả những bí mật tối tăm nhất. Và giống như việc mổ não người, việc "mổ" Registry cũng có thể cứu mạng... hoặc biến máy tính thành một chiếc "gạch" đắt tiền.</p>
+<h2 id="registry-la-gi-va-tai-sao-no-quan-trong">Registry là gì và tại sao nó quan trọng?<a class="zola-anchor" href="#registry-la-gi-va-tai-sao-no-quan-trong" aria-label="Anchor link for: registry-la-gi-va-tai-sao-no-quan-trong" style="visibility: hidden;"></a></h2>
+<p>Windows Registry là một cơ sở dữ liệu phân cấp lưu trữ các cài đặt cấu hình cho hệ điều hành Windows và các ứng dụng. Nó như một "thư viện khổng lồ" chứa mọi thông tin Windows cần để hoạt động - từ màu nền desktop cho đến cách Windows khởi động.</p>
+<p>Registry được thiết kế để thay thế hệ thống INI files rối rắm của Windows cũ. Thay vì có hàng trăm file INI rải rác khắp nơi, Microsoft quyết định tập trung tất cả vào một nơi. Ý tưởng hay, nhưng thực tế nó trở thành một "black hole" thông tin mà ngay cả Microsoft cũng đôi khi không biết có gì bên trong.</p>
+<h2 id="cau-truc-registry-anatomy-cua-bo-nao-windows">Cấu trúc Registry: Anatomy của "bộ não Windows"<a class="zola-anchor" href="#cau-truc-registry-anatomy-cua-bo-nao-windows" aria-label="Anchor link for: cau-truc-registry-anatomy-cua-bo-nao-windows" style="visibility: hidden;"></a></h2>
+<p>Registry có cấu trúc phân cấp giống như file system, nhưng thay vì folders và files, nó có <strong>Keys</strong> và <strong>Values</strong>.</p>
+<h3 id="root-keys-nhung-ngan-chinh-cua-bo-nao">Root Keys - Những "ngăn chính" của bộ não<a class="zola-anchor" href="#root-keys-nhung-ngan-chinh-cua-bo-nao" aria-label="Anchor link for: root-keys-nhung-ngan-chinh-cua-bo-nao" style="visibility: hidden;"></a></h3>
+<p>Registry được chia thành 5 phần chính, mỗi phần có một nhiệm vụ riêng:</p>
+<h4 id="1-hkey-classes-root-hkcr">1. HKEY_CLASSES_ROOT (HKCR)<a class="zola-anchor" href="#1-hkey-classes-root-hkcr" aria-label="Anchor link for: 1-hkey-classes-root-hkcr" style="visibility: hidden;"></a></h4>
+<p>Đây là nơi Windows lưu thông tin về file associations và COM objects. Nó như một "từ điển" cho Windows biết khi bạn double-click file .txt thì mở bằng Notepad, file .mp3 thì mở bằng Windows Media Player (hoặc Spotify nếu bạn không sống trong thế kỷ 20).</p>
+<h4 id="2-hkey-current-user-hkcu">2. HKEY_CURRENT_USER (HKCU)<a class="zola-anchor" href="#2-hkey-current-user-hkcu" aria-label="Anchor link for: 2-hkey-current-user-hkcu" style="visibility: hidden;"></a></h4>
+<p>Đây là "phòng riêng" của user hiện tại. Mọi cài đặt cá nhân - từ wallpaper, theme, đến các preference của ứng dụng - đều được lưu ở đây. Mỗi user có một "phòng riêng" khác nhau.</p>
+<h4 id="3-hkey-local-machine-hklm">3. HKEY_LOCAL_MACHINE (HKLM)<a class="zola-anchor" href="#3-hkey-local-machine-hklm" aria-label="Anchor link for: 3-hkey-local-machine-hklm" style="visibility: hidden;"></a></h4>
+<p>Đây là "trung tâm điều khiển" của toàn bộ máy tính. Chứa thông tin về hardware, installed software, system configuration - những thứ ảnh hưởng đến tất cả users trên máy.</p>
+<h4 id="4-hkey-users-hku">4. HKEY_USERS (HKU)<a class="zola-anchor" href="#4-hkey-users-hku" aria-label="Anchor link for: 4-hkey-users-hku" style="visibility: hidden;"></a></h4>
+<p>Chứa thông tin về tất cả user accounts trên máy. Nó như một "danh bạ" của tất cả những ai từng đăng nhập vào máy tính.</p>
+<h4 id="5-hkey-current-config-hkcc">5. HKEY_CURRENT_CONFIG (HKCC)<a class="zola-anchor" href="#5-hkey-current-config-hkcc" aria-label="Anchor link for: 5-hkey-current-config-hkcc" style="visibility: hidden;"></a></h4>
+<p>Chứa thông tin về hardware configuration hiện tại. Nó như một "snapshot" của hardware setup mà Windows đang sử dụng.</p>
+<h2 id="registry-values-cac-ghi-chu-trong-bo-nao">Registry Values: Các "ghi chú" trong bộ não<a class="zola-anchor" href="#registry-values-cac-ghi-chu-trong-bo-nao" aria-label="Anchor link for: registry-values-cac-ghi-chu-trong-bo-nao" style="visibility: hidden;"></a></h2>
+<p>Registry Values là nơi lưu trữ dữ liệu thực sự. Có nhiều loại values khác nhau:</p>
+<h3 id="1-reg-sz-string-value">1. REG_SZ (String Value)<a class="zola-anchor" href="#1-reg-sz-string-value" aria-label="Anchor link for: 1-reg-sz-string-value" style="visibility: hidden;"></a></h3>
+<p>Lưu trữ text thuần túy. Ví dụ: tên máy tính, đường dẫn đến file.</p>
+<h3 id="2-reg-dword-32-bit-integer">2. REG_DWORD (32-bit Integer)<a class="zola-anchor" href="#2-reg-dword-32-bit-integer" aria-label="Anchor link for: 2-reg-dword-32-bit-integer" style="visibility: hidden;"></a></h3>
+<p>Lưu trữ số nguyên 32-bit. Thường dùng cho các cài đặt on/off (1/0), timeout values, v.v.</p>
+<h3 id="3-reg-qword-64-bit-integer">3. REG_QWORD (64-bit Integer)<a class="zola-anchor" href="#3-reg-qword-64-bit-integer" aria-label="Anchor link for: 3-reg-qword-64-bit-integer" style="visibility: hidden;"></a></h3>
+<p>Phiên bản 64-bit của DWORD. Dành cho những con số "to hơn".</p>
+<h3 id="4-reg-binary">4. REG_BINARY<a class="zola-anchor" href="#4-reg-binary" aria-label="Anchor link for: 4-reg-binary" style="visibility: hidden;"></a></h3>
+<p>Lưu trữ dữ liệu nhị phân. Có thể là gì cũng được - từ icon đến encrypted data.</p>
+<h3 id="5-reg-multi-sz">5. REG_MULTI_SZ<a class="zola-anchor" href="#5-reg-multi-sz" aria-label="Anchor link for: 5-reg-multi-sz" style="visibility: hidden;"></a></h3>
+<p>Lưu trữ nhiều strings trong một value. Như một "danh sách" các text.</p>
+<h3 id="6-reg-expand-sz">6. REG_EXPAND_SZ<a class="zola-anchor" href="#6-reg-expand-sz" aria-label="Anchor link for: 6-reg-expand-sz" style="visibility: hidden;"></a></h3>
+<p>String có thể chứa environment variables. Ví dụ: <code>%SystemRoot%\System32\notepad.exe</code></p>
+<h2 id="cach-truy-cap-registry-nhung-chia-khoa-vao-bo-nao">Cách truy cập Registry: Những "chìa khóa" vào bộ não<a class="zola-anchor" href="#cach-truy-cap-registry-nhung-chia-khoa-vao-bo-nao" aria-label="Anchor link for: cach-truy-cap-registry-nhung-chia-khoa-vao-bo-nao" style="visibility: hidden;"></a></h2>
+<h3 id="method-1-registry-editor-regedit-exe">Method 1: Registry Editor (regedit.exe)<a class="zola-anchor" href="#method-1-registry-editor-regedit-exe" aria-label="Anchor link for: method-1-registry-editor-regedit-exe" style="visibility: hidden;"></a></h3>
+<p>Cách truyền thống và phổ biến nhất:</p>
+<ul>
+<li>Nhấn <code>Win + R</code>, gõ <code>regedit</code></li>
+<li>Hoặc tìm "Registry Editor" trong Start Menu</li>
+<li><strong>Cảnh báo</strong>: Có thể làm hỏng hệ thống nếu không biết mình đang làm gì</li>
+</ul>
+<h3 id="method-2-powershell-cach-cua-dan-pro">Method 2: PowerShell (Cách của dân pro)<a class="zola-anchor" href="#method-2-powershell-cach-cua-dan-pro" aria-label="Anchor link for: method-2-powershell-cach-cua-dan-pro" style="visibility: hidden;"></a></h3>
+<p>PowerShell cung cấp cmdlets để làm việc với Registry:</p>
+<pre data-lang="powershell" class="language-powershell z-code"><code class="language-powershell" data-lang="powershell"><span class="z-source z-powershell"><span class="z-comment z-line z-powershell"><span class="z-punctuation z-definition z-comment z-powershell">#</span> Đọc registry value<span class="z-punctuation z-definition z-comment z-powershell">
+</span></span></span><span class="z-source z-powershell"><span class="z-support z-function z-powershell">Get-ItemProperty</span> <span class="z-keyword z-operator z-assignment z-powershell">-</span>Path <span class="z-string z-quoted z-double z-powershell"><span class="z-punctuation z-definition z-string z-begin z-powershell">&quot;</span>HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion<span class="z-punctuation z-definition z-string z-end z-powershell">&quot;</span></span> <span class="z-keyword z-operator z-assignment z-powershell">-</span>Name <span class="z-string z-quoted z-double z-powershell"><span class="z-punctuation z-definition z-string z-begin z-powershell">&quot;</span>ProductName<span class="z-punctuation z-definition z-string z-end z-powershell">&quot;</span></span>
+</span><span class="z-source z-powershell">
+</span><span class="z-source z-powershell"><span class="z-comment z-line z-powershell"><span class="z-punctuation z-definition z-comment z-powershell">#</span> Tạo registry key mới<span class="z-punctuation z-definition z-comment z-powershell">
+</span></span></span><span class="z-source z-powershell"><span class="z-support z-function z-powershell">New-Item</span> <span class="z-keyword z-operator z-assignment z-powershell">-</span>Path <span class="z-string z-quoted z-double z-powershell"><span class="z-punctuation z-definition z-string z-begin z-powershell">&quot;</span>HKCU:\Software\MyApp<span class="z-punctuation z-definition z-string z-end z-powershell">&quot;</span></span> <span class="z-keyword z-operator z-assignment z-powershell">-</span>Force
+</span><span class="z-source z-powershell">
+</span><span class="z-source z-powershell"><span class="z-comment z-line z-powershell"><span class="z-punctuation z-definition z-comment z-powershell">#</span> Tạo registry value<span class="z-punctuation z-definition z-comment z-powershell">
+</span></span></span><span class="z-source z-powershell"><span class="z-support z-function z-powershell">New-ItemProperty</span> <span class="z-keyword z-operator z-assignment z-powershell">-</span>Path <span class="z-string z-quoted z-double z-powershell"><span class="z-punctuation z-definition z-string z-begin z-powershell">&quot;</span>HKCU:\Software\MyApp<span class="z-punctuation z-definition z-string z-end z-powershell">&quot;</span></span> <span class="z-keyword z-operator z-assignment z-powershell">-</span>Name <span class="z-string z-quoted z-double z-powershell"><span class="z-punctuation z-definition z-string z-begin z-powershell">&quot;</span>Setting1<span class="z-punctuation z-definition z-string z-end z-powershell">&quot;</span></span> <span class="z-keyword z-operator z-assignment z-powershell">-</span>Value <span class="z-string z-quoted z-double z-powershell"><span class="z-punctuation z-definition z-string z-begin z-powershell">&quot;</span>Value1<span class="z-punctuation z-definition z-string z-end z-powershell">&quot;</span></span> <span class="z-keyword z-operator z-assignment z-powershell">-</span>PropertyType String
+</span><span class="z-source z-powershell">
+</span><span class="z-source z-powershell"><span class="z-comment z-line z-powershell"><span class="z-punctuation z-definition z-comment z-powershell">#</span> Xóa registry key<span class="z-punctuation z-definition z-comment z-powershell">
+</span></span></span><span class="z-source z-powershell"><span class="z-support z-function z-powershell">Remove-Item</span> <span class="z-keyword z-operator z-assignment z-powershell">-</span>Path <span class="z-string z-quoted z-double z-powershell"><span class="z-punctuation z-definition z-string z-begin z-powershell">&quot;</span>HKCU:\Software\MyApp<span class="z-punctuation z-definition z-string z-end z-powershell">&quot;</span></span> <span class="z-keyword z-operator z-assignment z-powershell">-</span>Recurse
+</span></code></pre>
+<h3 id="method-3-command-line-reg-exe">Method 3: Command Line (reg.exe)<a class="zola-anchor" href="#method-3-command-line-reg-exe" aria-label="Anchor link for: method-3-command-line-reg-exe" style="visibility: hidden;"></a></h3>
+<p>Sử dụng <code>reg</code> command:</p>
+<pre data-lang="powershell" class="language-powershell z-code"><code class="language-powershell" data-lang="powershell"><span class="z-source z-powershell"><span class="z-comment z-line z-powershell"><span class="z-punctuation z-definition z-comment z-powershell">#</span> Query registry value<span class="z-punctuation z-definition z-comment z-powershell">
+</span></span></span><span class="z-source z-powershell">reg query <span class="z-string z-quoted z-double z-powershell"><span class="z-punctuation z-definition z-string z-begin z-powershell">&quot;</span>HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion<span class="z-punctuation z-definition z-string z-end z-powershell">&quot;</span></span> <span class="z-keyword z-operator z-assignment z-powershell">/</span>v ProductName
+</span><span class="z-source z-powershell">
+</span><span class="z-source z-powershell"><span class="z-comment z-line z-powershell"><span class="z-punctuation z-definition z-comment z-powershell">#</span> Add registry value<span class="z-punctuation z-definition z-comment z-powershell">
+</span></span></span><span class="z-source z-powershell">reg add <span class="z-string z-quoted z-double z-powershell"><span class="z-punctuation z-definition z-string z-begin z-powershell">&quot;</span>HKCU\Software\MyApp<span class="z-punctuation z-definition z-string z-end z-powershell">&quot;</span></span> <span class="z-keyword z-operator z-assignment z-powershell">/</span>v Setting1 <span class="z-keyword z-operator z-assignment z-powershell">/</span>t REG_SZ <span class="z-keyword z-operator z-assignment z-powershell">/</span>d <span class="z-string z-quoted z-double z-powershell"><span class="z-punctuation z-definition z-string z-begin z-powershell">&quot;</span>Value1<span class="z-punctuation z-definition z-string z-end z-powershell">&quot;</span></span>
+</span><span class="z-source z-powershell">
+</span><span class="z-source z-powershell"><span class="z-comment z-line z-powershell"><span class="z-punctuation z-definition z-comment z-powershell">#</span> Delete registry key<span class="z-punctuation z-definition z-comment z-powershell">
+</span></span></span><span class="z-source z-powershell">reg delete <span class="z-string z-quoted z-double z-powershell"><span class="z-punctuation z-definition z-string z-begin z-powershell">&quot;</span>HKCU\Software\MyApp<span class="z-punctuation z-definition z-string z-end z-powershell">&quot;</span></span> <span class="z-keyword z-operator z-assignment z-powershell">/</span>f
+</span></code></pre>
+<h3 id="method-4-programming-apis">Method 4: Programming APIs<a class="zola-anchor" href="#method-4-programming-apis" aria-label="Anchor link for: method-4-programming-apis" style="visibility: hidden;"></a></h3>
+<p>Sử dụng Windows API hoặc .NET Registry classes:</p>
+<pre data-lang="C#" class="language-C# z-code"><code class="language-C#" data-lang="C#"><span class="z-source z-cs"><span class="z-comment z-line z-double-slash z-cs"><span class="z-punctuation z-definition z-comment z-cs">//</span> C# example
+</span></span><span class="z-source z-cs"><span class="z-keyword z-control z-import z-cs">using</span> <span class="z-meta z-path z-cs">Microsoft</span><span class="z-punctuation z-separator z-namespace z-cs">.</span><span class="z-meta z-path z-cs">Win32</span><span class="z-punctuation z-terminator z-cs">;</span>
+</span><span class="z-source z-cs">
+</span><span class="z-source z-cs"><span class="z-support z-type z-cs">RegistryKey</span> <span class="z-variable z-other z-cs">key</span> <span class="z-keyword z-operator z-assignment z-variable z-cs">=</span> <span class="z-variable z-other z-cs">Registry</span><span class="z-punctuation z-accessor z-dot z-cs">.</span><span class="z-variable z-other z-cs">LocalMachine</span><span class="z-punctuation z-accessor z-dot z-cs">.</span><span class="z-meta z-function-call z-cs"><span class="z-variable z-function z-cs">OpenSubKey</span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span></span><span class="z-meta z-function-call z-cs"><span class="z-meta z-group z-cs"><span class="z-string z-quoted z-double z-raw z-cs"><span class="z-punctuation z-definition z-string z-begin z-cs">@&quot;</span>SOFTWARE\Microsoft\Windows NT\CurrentVersion<span class="z-punctuation z-definition z-string z-end z-cs">&quot;</span></span><span class="z-punctuation z-section z-group z-end z-cs">)</span></span></span><span class="z-punctuation z-terminator z-statement z-cs">;</span>
+</span><span class="z-source z-cs"><span class="z-storage z-type z-cs">string</span> <span class="z-variable z-other z-cs">productName</span> <span class="z-keyword z-operator z-assignment z-variable z-cs">=</span> <span class="z-variable z-other z-cs">key</span><span class="z-punctuation z-accessor z-dot z-cs">.</span><span class="z-meta z-function-call z-cs"><span class="z-variable z-function z-cs">GetValue</span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span></span><span class="z-meta z-function-call z-cs"><span class="z-meta z-group z-cs"><span class="z-string z-quoted z-double z-cs"><span class="z-punctuation z-definition z-string z-begin z-cs">&quot;</span>ProductName<span class="z-punctuation z-definition z-string z-end z-cs">&quot;</span></span><span class="z-punctuation z-section z-group z-end z-cs">)</span></span></span><span class="z-punctuation z-accessor z-dot z-cs">.</span><span class="z-meta z-function-call z-cs"><span class="z-variable z-function z-cs">ToString</span><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-begin z-cs">(</span></span></span><span class="z-meta z-function-call z-cs"><span class="z-meta z-group z-cs"><span class="z-punctuation z-section z-group z-end z-cs">)</span></span></span><span class="z-punctuation z-terminator z-statement z-cs">;</span>
+</span></code></pre>
+<h2 id="registry-hives-noi-luu-tru-vat-ly">Registry Hives: Nơi lưu trữ vật lý<a class="zola-anchor" href="#registry-hives-noi-luu-tru-vat-ly" aria-label="Anchor link for: registry-hives-noi-luu-tru-vat-ly" style="visibility: hidden;"></a></h2>
+<p>Registry không phải là một file duy nhất mà được chia thành nhiều <strong>hives</strong> (tổ ong):</p>
+<h3 id="1-sam-security-account-manager">1. SAM (Security Account Manager)<a class="zola-anchor" href="#1-sam-security-account-manager" aria-label="Anchor link for: 1-sam-security-account-manager" style="visibility: hidden;"></a></h3>
+<p>Chứa thông tin về user accounts và passwords. Được bảo vệ nghiêm ngặt.</p>
+<h3 id="2-security">2. SECURITY<a class="zola-anchor" href="#2-security" aria-label="Anchor link for: 2-security" style="visibility: hidden;"></a></h3>
+<p>Chứa security policies và permissions. Cũng được bảo vệ như Fort Knox.</p>
+<h3 id="3-software">3. SOFTWARE<a class="zola-anchor" href="#3-software" aria-label="Anchor link for: 3-software" style="visibility: hidden;"></a></h3>
+<p>Chứa thông tin về installed software cho toàn bộ máy.</p>
+<h3 id="4-system">4. SYSTEM<a class="zola-anchor" href="#4-system" aria-label="Anchor link for: 4-system" style="visibility: hidden;"></a></h3>
+<p>Chứa system configuration, drivers, services.</p>
+<h3 id="5-default">5. DEFAULT<a class="zola-anchor" href="#5-default" aria-label="Anchor link for: 5-default" style="visibility: hidden;"></a></h3>
+<p>Template cho user profiles mới.</p>
+<h3 id="6-ntuser-dat">6. NTUSER.DAT<a class="zola-anchor" href="#6-ntuser-dat" aria-label="Anchor link for: 6-ntuser-dat" style="visibility: hidden;"></a></h3>
+<p>Registry hive của từng user, chứa HKCU data.</p>
+<p>Các hives này được lưu trong:</p>
+<ul>
+<li><code>C:\Windows\System32\Config\</code> (system hives)</li>
+<li><code>C:\Users\&lt;username&gt;\</code> (user hives)</li>
+</ul>
+<h2 id="registry-trong-system-administration">Registry trong System Administration<a class="zola-anchor" href="#registry-trong-system-administration" aria-label="Anchor link for: registry-trong-system-administration" style="visibility: hidden;"></a></h2>
+<h3 id="1-backup-va-restore">1. Backup và Restore<a class="zola-anchor" href="#1-backup-va-restore" aria-label="Anchor link for: 1-backup-va-restore" style="visibility: hidden;"></a></h3>
+<p><strong>Luôn backup trước khi chỉnh sửa Registry!</strong></p>
+<pre data-lang="powershell" class="language-powershell z-code"><code class="language-powershell" data-lang="powershell"><span class="z-source z-powershell"><span class="z-comment z-line z-powershell"><span class="z-punctuation z-definition z-comment z-powershell">#</span> Export entire registry<span class="z-punctuation z-definition z-comment z-powershell">
+</span></span></span><span class="z-source z-powershell">reg export HKLM backup_hklm.reg
+</span><span class="z-source z-powershell">
+</span><span class="z-source z-powershell"><span class="z-comment z-line z-powershell"><span class="z-punctuation z-definition z-comment z-powershell">#</span> Export specific key<span class="z-punctuation z-definition z-comment z-powershell">
+</span></span></span><span class="z-source z-powershell">reg export <span class="z-string z-quoted z-double z-powershell"><span class="z-punctuation z-definition z-string z-begin z-powershell">&quot;</span>HKLM\SOFTWARE\MyApp<span class="z-punctuation z-definition z-string z-end z-powershell">&quot;</span></span> myapp_backup.reg
+</span><span class="z-source z-powershell">
+</span><span class="z-source z-powershell"><span class="z-comment z-line z-powershell"><span class="z-punctuation z-definition z-comment z-powershell">#</span> Import registry file<span class="z-punctuation z-definition z-comment z-powershell">
+</span></span></span><span class="z-source z-powershell">reg import backup_hklm.reg
+</span></code></pre>
+<h3 id="2-group-policy-va-registry">2. Group Policy và Registry<a class="zola-anchor" href="#2-group-policy-va-registry" aria-label="Anchor link for: 2-group-policy-va-registry" style="visibility: hidden;"></a></h3>
+<p>Group Policy thực chất là một interface đẹp để chỉnh sửa Registry. Mỗi policy setting tương ứng với một registry entry.</p>
+<h3 id="3-registry-monitoring">3. Registry Monitoring<a class="zola-anchor" href="#3-registry-monitoring" aria-label="Anchor link for: 3-registry-monitoring" style="visibility: hidden;"></a></h3>
+<p>Sử dụng tools như:</p>
+<ul>
+<li><strong>Process Monitor</strong>: Theo dõi registry access real-time</li>
+<li><strong>Registry Monitor</strong>: Giám sát thay đổi registry</li>
+<li><strong>PowerShell</strong>: Tạo scripts để monitor registry changes</li>
+</ul>
+<h2 id="registry-forensics-va-security">Registry Forensics và Security<a class="zola-anchor" href="#registry-forensics-va-security" aria-label="Anchor link for: registry-forensics-va-security" style="visibility: hidden;"></a></h2>
+<h3 id="1-forensic-analysis">1. Forensic Analysis<a class="zola-anchor" href="#1-forensic-analysis" aria-label="Anchor link for: 1-forensic-analysis" style="visibility: hidden;"></a></h3>
+<p>Registry chứa rất nhiều thông tin forensic quan trọng:</p>
+<ul>
+<li>Recently used files và applications</li>
+<li>USB devices đã kết nối</li>
+<li>Network connections</li>
+<li>User activity timeline</li>
+</ul>
+<h3 id="2-security-implications">2. Security Implications<a class="zola-anchor" href="#2-security-implications" aria-label="Anchor link for: 2-security-implications" style="visibility: hidden;"></a></h3>
+<p>Registry có thể được sử dụng để:</p>
+<ul>
+<li><strong>Persistence</strong>: Malware tạo autorun entries</li>
+<li><strong>Privilege Escalation</strong>: Chỉnh sửa permissions</li>
+<li><strong>Data Hiding</strong>: Lưu trữ malicious data</li>
+<li><strong>System Manipulation</strong>: Thay đổi system behavior</li>
+</ul>
+<h3 id="3-common-attack-vectors">3. Common Attack Vectors<a class="zola-anchor" href="#3-common-attack-vectors" aria-label="Anchor link for: 3-common-attack-vectors" style="visibility: hidden;"></a></h3>
+<pre data-lang="powershell" class="language-powershell z-code"><code class="language-powershell" data-lang="powershell"><span class="z-source z-powershell"><span class="z-comment z-line z-powershell"><span class="z-punctuation z-definition z-comment z-powershell">#</span> Tìm autorun entries (nơi malware thường ẩn)<span class="z-punctuation z-definition z-comment z-powershell">
+</span></span></span><span class="z-source z-powershell"><span class="z-support z-function z-powershell">Get-ItemProperty</span> <span class="z-keyword z-operator z-assignment z-powershell">-</span>Path <span class="z-string z-quoted z-double z-powershell"><span class="z-punctuation z-definition z-string z-begin z-powershell">&quot;</span>HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run<span class="z-punctuation z-definition z-string z-end z-powershell">&quot;</span></span>
+</span><span class="z-source z-powershell"><span class="z-support z-function z-powershell">Get-ItemProperty</span> <span class="z-keyword z-operator z-assignment z-powershell">-</span>Path <span class="z-string z-quoted z-double z-powershell"><span class="z-punctuation z-definition z-string z-begin z-powershell">&quot;</span>HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run<span class="z-punctuation z-definition z-string z-end z-powershell">&quot;</span></span>
+</span><span class="z-source z-powershell">
+</span><span class="z-source z-powershell"><span class="z-comment z-line z-powershell"><span class="z-punctuation z-definition z-comment z-powershell">#</span> Kiểm tra installed programs<span class="z-punctuation z-definition z-comment z-powershell">
+</span></span></span><span class="z-source z-powershell"><span class="z-support z-function z-powershell">Get-ItemProperty</span> <span class="z-keyword z-operator z-assignment z-powershell">-</span>Path <span class="z-string z-quoted z-double z-powershell"><span class="z-punctuation z-definition z-string z-begin z-powershell">&quot;</span>HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*<span class="z-punctuation z-definition z-string z-end z-powershell">&quot;</span></span>
+</span></code></pre>
+<h2 id="registry-optimization-va-maintenance">Registry Optimization và Maintenance<a class="zola-anchor" href="#registry-optimization-va-maintenance" aria-label="Anchor link for: registry-optimization-va-maintenance" style="visibility: hidden;"></a></h2>
+<h3 id="1-registry-cleaners-co-thuc-su-can-thiet">1. Registry Cleaners: Có thực sự cần thiết?<a class="zola-anchor" href="#1-registry-cleaners-co-thuc-su-can-thiet" aria-label="Anchor link for: 1-registry-cleaners-co-thuc-su-can-thiet" style="visibility: hidden;"></a></h3>
+<p>Trái với quảng cáo, Registry hiếm khi cần "cleaning". Windows tự quản lý Registry khá tốt. Registry cleaners đôi khi gây hại nhiều hơn lợi.</p>
+<h3 id="2-performance-impact">2. Performance Impact<a class="zola-anchor" href="#2-performance-impact" aria-label="Anchor link for: 2-performance-impact" style="visibility: hidden;"></a></h3>
+<p>Registry được load vào memory khi boot, vì vậy:</p>
+<ul>
+<li>Registry lớn sẽ đồng nghĩa với boot time lâu hơn</li>
+<li>Nhưng impact không đáng kể trên hardware hiện đại</li>
+<li>Đừng lo lắng về Registry size trừ khi có vấn đề cụ thể</li>
+</ul>
+<h3 id="3-best-practices">3. Best Practices<a class="zola-anchor" href="#3-best-practices" aria-label="Anchor link for: 3-best-practices" style="visibility: hidden;"></a></h3>
+<ol>
+<li><strong>Backup trước khi chỉnh sửa</strong></li>
+<li><strong>Test changes trên máy ảo trước</strong></li>
+<li><strong>Document những thay đổi</strong></li>
+<li><strong>Sử dụng Group Policy thay vì chỉnh sửa Registry trực tiếp</strong></li>
+</ol>
+<h2 id="registry-tweaks-pho-bien">Registry Tweaks phổ biến<a class="zola-anchor" href="#registry-tweaks-pho-bien" aria-label="Anchor link for: registry-tweaks-pho-bien" style="visibility: hidden;"></a></h2>
+<h3 id="1-disable-windows-defender-khong-khuyen-khich">1. Disable Windows Defender (Không khuyến khích)<a class="zola-anchor" href="#1-disable-windows-defender-khong-khuyen-khich" aria-label="Anchor link for: 1-disable-windows-defender-khong-khuyen-khich" style="visibility: hidden;"></a></h3>
+<pre class="z-code"><code><span class="z-text z-plain">[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender]
+</span><span class="z-text z-plain">&quot;DisableAntiSpyware&quot;=dword:00000001
+</span></code></pre>
+<h3 id="2-enable-god-mode">2. Enable God Mode<a class="zola-anchor" href="#2-enable-god-mode" aria-label="Anchor link for: 2-enable-god-mode" style="visibility: hidden;"></a></h3>
+<pre class="z-code"><code><span class="z-text z-plain">[HKEY_CURRENT_USER\Software\Classes\CLSID\{ED7BA470-8E54-465E-825C-99712043E01C}]
+</span><span class="z-text z-plain">@=&quot;All Tasks&quot;
+</span></code></pre>
+<h3 id="3-customize-windows-appearance">3. Customize Windows appearance<a class="zola-anchor" href="#3-customize-windows-appearance" aria-label="Anchor link for: 3-customize-windows-appearance" style="visibility: hidden;"></a></h3>
+<pre class="z-code"><code><span class="z-text z-plain">[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize]
+</span><span class="z-text z-plain">&quot;AppsUseLightTheme&quot;=dword:00000000
+</span><span class="z-text z-plain">&quot;SystemUsesLightTheme&quot;=dword:00000000
+</span></code></pre>
+<h2 id="troubleshooting-registry-issues">Troubleshooting Registry Issues<a class="zola-anchor" href="#troubleshooting-registry-issues" aria-label="Anchor link for: troubleshooting-registry-issues" style="visibility: hidden;"></a></h2>
+<h3 id="1-common-problems">1. Common Problems<a class="zola-anchor" href="#1-common-problems" aria-label="Anchor link for: 1-common-problems" style="visibility: hidden;"></a></h3>
+<ol>
+<li><strong>Corrupted Registry</strong>: Boot issues, system instability</li>
+<li><strong>Permissions Issues</strong>: Cannot modify certain keys</li>
+<li><strong>Missing Keys</strong>: Applications not working properly</li>
+</ol>
+<h3 id="2-recovery-methods">2. Recovery Methods<a class="zola-anchor" href="#2-recovery-methods" aria-label="Anchor link for: 2-recovery-methods" style="visibility: hidden;"></a></h3>
+<ol>
+<li><strong>System Restore</strong>: Rollback registry changes</li>
+<li><strong>Last Known Good Configuration</strong>: Boot with previous working registry</li>
+<li><strong>Registry Backup</strong>: Restore from backup</li>
+<li><strong>Safe Mode</strong>: Access registry when Windows won't boot normally</li>
+</ol>
+<h3 id="3-emergency-recovery">3. Emergency Recovery<a class="zola-anchor" href="#3-emergency-recovery" aria-label="Anchor link for: 3-emergency-recovery" style="visibility: hidden;"></a></h3>
+<ol>
+<li>Boot from Windows PE/Recovery disk</li>
+<li>Navigate to <code>C:\Windows\System32\Config</code></li>
+<li>Replace corrupted hives with backups from <code>C:\Windows\System32\Config\RegBack</code></li>
+</ol>
+<h2 id="registry-programming-va-automation">Registry Programming và Automation<a class="zola-anchor" href="#registry-programming-va-automation" aria-label="Anchor link for: registry-programming-va-automation" style="visibility: hidden;"></a></h2>
+<h3 id="1-powershell-scripts">1. PowerShell Scripts<a class="zola-anchor" href="#1-powershell-scripts" aria-label="Anchor link for: 1-powershell-scripts" style="visibility: hidden;"></a></h3>
+<pre data-lang="powershell" class="language-powershell z-code"><code class="language-powershell" data-lang="powershell"><span class="z-source z-powershell"><span class="z-comment z-line z-powershell"><span class="z-punctuation z-definition z-comment z-powershell">#</span> Function to safely modify registry<span class="z-punctuation z-definition z-comment z-powershell">
+</span></span></span><span class="z-source z-powershell"><span class="z-meta z-function z-powershell"><span class="z-storage z-type z-powershell">function</span> <span class="z-entity z-name z-function z-powershell">Set-RegistryValue</span></span> <span class="z-meta z-scriptblock z-powershell"><span class="z-punctuation z-section z-braces z-begin z-powershell">{</span>
+</span></span><span class="z-source z-powershell"><span class="z-meta z-scriptblock z-powershell">    <span class="z-keyword z-control z-powershell">param</span><span class="z-punctuation z-section z-group z-begin z-powershell">(</span><span class="z-interpolated z-simple z-source z-powershell">
+</span></span></span><span class="z-source z-powershell"><span class="z-meta z-scriptblock z-powershell"><span class="z-interpolated z-simple z-source z-powershell">        <span class="z-punctuation z-section z-bracket z-begin z-powershell">[</span><span class="z-storage z-type z-powershell">string</span><span class="z-punctuation z-section z-bracket z-end z-powershell">]</span><span class="z-variable z-other z-readwrite z-powershell"><span class="z-punctuation z-definition z-variable z-powershell">$</span>Path</span><span class="z-keyword z-operator z-other z-powershell">,</span>
+</span></span></span><span class="z-source z-powershell"><span class="z-meta z-scriptblock z-powershell"><span class="z-interpolated z-simple z-source z-powershell">        <span class="z-punctuation z-section z-bracket z-begin z-powershell">[</span><span class="z-storage z-type z-powershell">string</span><span class="z-punctuation z-section z-bracket z-end z-powershell">]</span><span class="z-variable z-other z-readwrite z-powershell"><span class="z-punctuation z-definition z-variable z-powershell">$</span>Name</span><span class="z-keyword z-operator z-other z-powershell">,</span>
+</span></span></span><span class="z-source z-powershell"><span class="z-meta z-scriptblock z-powershell"><span class="z-interpolated z-simple z-source z-powershell">        <span class="z-punctuation z-section z-bracket z-begin z-powershell">[</span><span class="z-storage z-type z-powershell">string</span><span class="z-punctuation z-section z-bracket z-end z-powershell">]</span><span class="z-variable z-other z-readwrite z-powershell"><span class="z-punctuation z-definition z-variable z-powershell">$</span>Value</span><span class="z-keyword z-operator z-other z-powershell">,</span>
+</span></span></span><span class="z-source z-powershell"><span class="z-meta z-scriptblock z-powershell"><span class="z-interpolated z-simple z-source z-powershell">        <span class="z-punctuation z-section z-bracket z-begin z-powershell">[</span><span class="z-storage z-type z-powershell">string</span><span class="z-punctuation z-section z-bracket z-end z-powershell">]</span><span class="z-variable z-other z-readwrite z-powershell"><span class="z-punctuation z-definition z-variable z-powershell">$</span>Type</span> <span class="z-keyword z-operator z-assignment z-powershell">=</span> <span class="z-string z-quoted z-double z-powershell"><span class="z-punctuation z-definition z-string z-begin z-powershell">&quot;</span>String<span class="z-punctuation z-definition z-string z-end z-powershell">&quot;</span></span>
+</span></span></span><span class="z-source z-powershell"><span class="z-meta z-scriptblock z-powershell"><span class="z-interpolated z-simple z-source z-powershell">    </span><span class="z-punctuation z-section z-group z-end z-powershell">)</span>
+</span></span><span class="z-source z-powershell"><span class="z-meta z-scriptblock z-powershell">    
+</span></span><span class="z-source z-powershell"><span class="z-meta z-scriptblock z-powershell">    <span class="z-keyword z-control z-powershell">try</span> <span class="z-meta z-scriptblock z-powershell"><span class="z-punctuation z-section z-braces z-begin z-powershell">{</span>
+</span></span></span><span class="z-source z-powershell"><span class="z-meta z-scriptblock z-powershell"><span class="z-meta z-scriptblock z-powershell">        <span class="z-keyword z-control z-powershell">if</span> <span class="z-punctuation z-section z-group z-begin z-powershell">(</span><span class="z-interpolated z-simple z-source z-powershell"><span class="z-keyword z-operator z-unary z-powershell">!</span><span class="z-punctuation z-section z-group z-begin z-powershell">(</span><span class="z-interpolated z-simple z-source z-powershell"><span class="z-support z-function z-powershell">Test-Path</span> <span class="z-variable z-other z-readwrite z-powershell"><span class="z-punctuation z-definition z-variable z-powershell">$</span>Path</span></span><span class="z-punctuation z-section z-group z-end z-powershell">)</span></span><span class="z-punctuation z-section z-group z-end z-powershell">)</span> <span class="z-meta z-scriptblock z-powershell"><span class="z-punctuation z-section z-braces z-begin z-powershell">{</span>
+</span></span></span></span><span class="z-source z-powershell"><span class="z-meta z-scriptblock z-powershell"><span class="z-meta z-scriptblock z-powershell"><span class="z-meta z-scriptblock z-powershell">            <span class="z-support z-function z-powershell">New-Item</span> <span class="z-keyword z-operator z-assignment z-powershell">-</span>Path <span class="z-variable z-other z-readwrite z-powershell"><span class="z-punctuation z-definition z-variable z-powershell">$</span>Path</span> <span class="z-keyword z-operator z-assignment z-powershell">-</span>Force <span class="z-keyword z-operator z-other z-powershell">|</span> <span class="z-support z-function z-powershell">Out-Null</span>
+</span></span></span></span><span class="z-source z-powershell"><span class="z-meta z-scriptblock z-powershell"><span class="z-meta z-scriptblock z-powershell"><span class="z-meta z-scriptblock z-powershell">        <span class="z-punctuation z-section z-braces z-end z-powershell">}</span></span>
+</span></span></span><span class="z-source z-powershell"><span class="z-meta z-scriptblock z-powershell"><span class="z-meta z-scriptblock z-powershell">        <span class="z-support z-function z-powershell">New-ItemProperty</span> <span class="z-keyword z-operator z-assignment z-powershell">-</span>Path <span class="z-variable z-other z-readwrite z-powershell"><span class="z-punctuation z-definition z-variable z-powershell">$</span>Path</span> <span class="z-keyword z-operator z-assignment z-powershell">-</span>Name <span class="z-variable z-other z-readwrite z-powershell"><span class="z-punctuation z-definition z-variable z-powershell">$</span>Name</span> <span class="z-keyword z-operator z-assignment z-powershell">-</span>Value <span class="z-variable z-other z-readwrite z-powershell"><span class="z-punctuation z-definition z-variable z-powershell">$</span>Value</span> <span class="z-keyword z-operator z-assignment z-powershell">-</span>PropertyType <span class="z-variable z-other z-readwrite z-powershell"><span class="z-punctuation z-definition z-variable z-powershell">$</span>Type</span> <span class="z-keyword z-operator z-assignment z-powershell">-</span>Force
+</span></span></span><span class="z-source z-powershell"><span class="z-meta z-scriptblock z-powershell"><span class="z-meta z-scriptblock z-powershell">        <span class="z-support z-function z-powershell">Write-Host</span> <span class="z-string z-quoted z-double z-powershell"><span class="z-punctuation z-definition z-string z-begin z-powershell">&quot;</span>Successfully set <span class="z-variable z-other z-readwrite z-powershell"><span class="z-punctuation z-definition z-variable z-powershell">$</span>Name</span> = <span class="z-variable z-other z-readwrite z-powershell"><span class="z-punctuation z-definition z-variable z-powershell">$</span>Value</span> at <span class="z-variable z-other z-readwrite z-powershell"><span class="z-punctuation z-definition z-variable z-powershell">$</span>Path</span><span class="z-punctuation z-definition z-string z-end z-powershell">&quot;</span></span>
+</span></span></span><span class="z-source z-powershell"><span class="z-meta z-scriptblock z-powershell"><span class="z-meta z-scriptblock z-powershell">    <span class="z-punctuation z-section z-braces z-end z-powershell">}</span></span> <span class="z-keyword z-control z-powershell">catch</span> <span class="z-meta z-scriptblock z-powershell"><span class="z-punctuation z-section z-braces z-begin z-powershell">{</span>
+</span></span></span><span class="z-source z-powershell"><span class="z-meta z-scriptblock z-powershell"><span class="z-meta z-scriptblock z-powershell">        <span class="z-support z-function z-powershell">Write-Error</span> <span class="z-string z-quoted z-double z-powershell"><span class="z-punctuation z-definition z-string z-begin z-powershell">&quot;</span>Failed to set registry value: <span class="z-support z-variable z-automatic z-powershell"><span class="z-punctuation z-definition z-variable z-powershell">$</span>_</span><span class="z-punctuation z-definition z-string z-end z-powershell">&quot;</span></span>
+</span></span></span><span class="z-source z-powershell"><span class="z-meta z-scriptblock z-powershell"><span class="z-meta z-scriptblock z-powershell">    <span class="z-punctuation z-section z-braces z-end z-powershell">}</span></span>
+</span></span><span class="z-source z-powershell"><span class="z-meta z-scriptblock z-powershell"><span class="z-punctuation z-section z-braces z-end z-powershell">}</span></span>
+</span></code></pre>
+<h3 id="2-batch-scripts">2. Batch Scripts<a class="zola-anchor" href="#2-batch-scripts" aria-label="Anchor link for: 2-batch-scripts" style="visibility: hidden;"></a></h3>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">@echo</span></span><span class="z-meta z-function-call z-arguments z-shell"> off</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-support z-function z-echo z-shell">echo</span></span><span class="z-meta z-function-call z-arguments z-shell"> Modifying registry...</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">reg</span></span><span class="z-meta z-function-call z-arguments z-shell"> add <span class="z-string z-quoted z-double z-shell"><span class="z-punctuation z-definition z-string z-begin z-shell">&quot;</span>HKCU\Software\MyApp<span class="z-punctuation z-definition z-string z-end z-shell">&quot;</span></span> /v <span class="z-string z-quoted z-double z-shell"><span class="z-punctuation z-definition z-string z-begin z-shell">&quot;</span>Setting1<span class="z-punctuation z-definition z-string z-end z-shell">&quot;</span></span> /t REG_SZ /d <span class="z-string z-quoted z-double z-shell"><span class="z-punctuation z-definition z-string z-begin z-shell">&quot;</span>Value1<span class="z-punctuation z-definition z-string z-end z-shell">&quot;</span></span> /f</span>
+</span><span class="z-source z-shell z-bash"><span class="z-keyword z-control z-conditional z-if z-shell">if</span> <span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell"><span class="z-meta z-group z-expansion z-job z-shell"><span class="z-punctuation z-definition z-variable z-job z-shell">%</span><span class="z-variable z-other z-readwrite z-shell">errorlevel</span></span><span class="z-meta z-group z-expansion z-job z-shell"><span class="z-punctuation z-definition z-variable z-job z-shell">%</span></span></span></span><span class="z-meta z-function-call z-arguments z-shell"> equ 0 (</span>
+</span><span class="z-source z-shell z-bash">    <span class="z-meta z-function-call z-shell"><span class="z-support z-function z-echo z-shell">echo</span></span><span class="z-meta z-function-call z-arguments z-shell"> Registry modification successful</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"></span>) <span class="z-keyword z-control z-conditional z-else z-shell">else</span> <span class="z-punctuation z-definition z-compound z-begin z-shell">(</span>
+</span><span class="z-source z-shell z-bash">    <span class="z-meta z-function-call z-shell"><span class="z-support z-function z-echo z-shell">echo</span></span><span class="z-meta z-function-call z-arguments z-shell"> Registry modification failed</span>
+</span><span class="z-source z-shell z-bash"><span class="z-punctuation z-definition z-compound z-end z-shell">)</span>
+</span></code></pre>
+<h2 id="registry-trong-modern-windows">Registry trong Modern Windows<a class="zola-anchor" href="#registry-trong-modern-windows" aria-label="Anchor link for: registry-trong-modern-windows" style="visibility: hidden;"></a></h2>
+<h3 id="1-windows-10-11-changes">1. Windows 10/11 Changes<a class="zola-anchor" href="#1-windows-10-11-changes" aria-label="Anchor link for: 1-windows-10-11-changes" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>App registration</strong>: UWP apps sử dụng Registry khác biệt</li>
+<li><strong>Virtualization</strong>: Registry virtualization cho compatibility</li>
+<li><strong>Cloud sync</strong>: Một số registry settings được sync qua Microsoft account</li>
+</ul>
+<h3 id="2-container-support">2. Container Support<a class="zola-anchor" href="#2-container-support" aria-label="Anchor link for: 2-container-support" style="visibility: hidden;"></a></h3>
+<p>Windows containers có isolated registry views, cho phép ứng dụng chạy mà không ảnh hưởng đến host registry.</p>
+<h3 id="3-future-directions">3. Future Directions<a class="zola-anchor" href="#3-future-directions" aria-label="Anchor link for: 3-future-directions" style="visibility: hidden;"></a></h3>
+<p>Microsoft đang dần chuyển sang:</p>
+<ul>
+<li><strong>Configuration files</strong>: JSON, XML thay vì Registry</li>
+<li><strong>Group Policy CSP</strong>: Modern management</li>
+<li><strong>Windows Registry API improvements</strong></li>
+</ul>
+<h2 id="ket-luan">Kết luận<a class="zola-anchor" href="#ket-luan" aria-label="Anchor link for: ket-luan" style="visibility: hidden;"></a></h2>
+<p>Windows Registry giống như một con dao rất sắc - trong tay người biết dùng, nó là công cụ mạnh mẽ để customize và troubleshoot Windows. Nhưng trong tay người không có kinh nghiệm, nó có thể biến máy tính thành một "monument" đắt tiền.</p>
+<p>Nhớ những nguyên tắc vàng:</p>
+<ol>
+<li><strong>Backup is your best friend</strong> - Luôn backup trước khi chỉnh sửa</li>
+<li><strong>Knowledge is power</strong> - Hiểu rõ những gì bạn đang làm</li>
+<li><strong>Test first</strong> - Thử nghiệm trên máy ảo trước</li>
+<li><strong>Document everything</strong> - Ghi lại những thay đổi</li>
+</ol>
+<p>Registry không phải là thứ bí ẩn khó hiểu. Nó chỉ là một database lưu trữ cài đặt. Với kiến thức đúng và thái độ cẩn thận, bạn có thể master nó để trở thành một Windows power user thực thụ.</p>
+<p>Và nhớ rằng: "With great power comes great responsibility" - với Registry, power đó có thể khiến bạn trở thành hero... hoặc zero chỉ trong một cú click chuột!</p>
+<hr />
+<p><em>Bài viết này được viết với mục đích giáo dục. Tác giả không chịu trách nhiệm nếu bạn biến máy tính thành gạch sau khi đọc bài này. Hãy backup và test kỹ trước khi áp dụng bất kỳ thay đổi nào!</em></p>
+<hr />
+
+      </article>
+
+      
+      
+
+      
+      
+    </div>
+
+    
+
+
+<footer>
+  <div class="left">
+    <div class="copyright">
+      © 2025 <a href="https:&#x2F;&#x2F;wen.is-a.dev">Wen</a>
+      
+    </div>
+  </div>
+
+  <div class="right">
+    
+    
+    
+    
+
+    <!-- 
+    
+    
+    <button id="theme-toggle" aria-label="theme switch">
+      <span class="moon-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill="currentColor"></path></svg>
+</span>
+      <span class="sun-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z" fill="currentColor"></path></svg>
+</span>
+    </button>
+     -->
+  </div>
+</footer>
+
+
+
+
+  </main>
+</div>
+
+  
+<script src="/js/lightense.min.js"></script>
+
+
+
+  <script src="https://wen.is-a.dev/js/main.js"></script>
+</body>
+
+</html>

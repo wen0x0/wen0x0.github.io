@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  
+
+
+
+<meta name="description" content="Khám phá ECC (Elliptic Curve Cryptography) – công nghệ mã hóa hiện đại với độ bảo mật cao nhưng key size nhỏ gọn, được sử dụng rộng rãi từ smartphone đến blockchain">
+
+  <title>ECC – Nhỏ gọn nhưng mạnh mẽ</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="https://wen.is-a.dev/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://wen.is-a.dev/img/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://wen.is-a.dev/img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Ancizar+Sans:ital,wght@0,100..1000;1,100..1000&family=Bitter:ital,wght@0,100..900;1,100..900&family=Indie+Flower&family=Lora:ital,wght@0,400..700;1,400..700&family=Marcellus&display=swap"
+    rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;1,400;1,600&display=swap"
+    rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500..700&display=swap" rel="stylesheet">
+  
+  <style>
+  /* light mode colors */
+  body {
+    /* --primary-color: #5871a2; */
+    --primary-color: #005e05;
+    --primary-pale-color: #5871a233;
+    --primary-decoration-color: #5871a210;
+    --bg-color: #f0f9ff;
+    /* --text-color: #2f3030; */
+    --text-color: #000000;
+    /* --text-pale-color: #767676; */
+    --text-pale-color: #000000;
+    --text-decoration-color: #a9a9a9;
+    --highlight-mark-color: #5f75b020;
+
+    --callout-note-color: #5871a2;
+    --callout-tip-color: #268556;
+    --callout-important-color: #885fc9;
+    --callout-warning-color: #ab6632;
+    --callout-caution-color: #c64e4e;
+  }
+
+  /* dark mode colors */
+  body.dark {
+    /* --primary-color: #6f8fd1; */
+    --primary-color: #ecf16b;
+    --primary-pale-color: #6f8fd166;
+    --primary-decoration-color: #6f8fd112;
+    /* --bg-color: #1c1c1c; */
+    /* --bg-color: #002727; */
+    /* --bg-color: #002333; */
+    --bg-color: #01242E;
+    /* --text-color: #c1c1c1; */
+    --text-color: #ffffff;
+    /* --text-pale-color: #848484; */
+    --text-pale-color: #ffffff;
+    --text-decoration-color: #5f5f5f;
+    --highlight-mark-color: #8296cb3b;
+
+    --callout-note-color: #6f8fd1;
+    --callout-tip-color: #47976f;
+    --callout-important-color: #9776cd;
+    --callout-warning-color: #ad7a52;
+    --callout-caution-color: #d06161;
+  }
+
+  /* typography */
+  body {
+    /* --main-font: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; */
+    --main-font: 'Nunito', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --heading-font: 'Quicksand', 'Lora', 'Bitter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --code-font: 'Cascadia Code', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    --homepage-max-width: 768px;
+    --main-max-width: 768px;
+    --avatar-size: 75px;
+    --font-size: 16px;
+    --line-height: 1.75;
+    --img-border-radius: 0px;
+    --detail-border-radius: 11px;
+    --dark-mode-img-brightness: 0.75;
+    --dark-mode-chart-brightness: 0.75;
+    --inline-code-border-radius: 2px;
+    --inline-code-bg-color: var(--primary-decoration-color);
+    --block-code-border-radius: 0px;
+    --block-code-border-color: var(--primary-color);
+    --detail-border-color: var(--primary-color);
+  }
+
+
+  #name,
+  #id,
+  #left,
+  a.post,
+  a.back-link,
+  a.tag,
+  a.category,
+  .title {
+    font-family: var(--heading-font);
+  }
+
+  span.date {
+    font-family: var(--code-font);
+    color: var(--text-pale-color);
+  }
+
+  .gif-wrapper {
+    text-align: center;
+    margin: 1.5rem 0;
+  }
+
+  .gif-wrapper .intro-gif {
+    max-width: 96%;
+    height: auto;
+    border-radius: 8px;
+  }
+
+  .verified-icon {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 3px;
+    vertical-align: middle;
+  }
+
+  .verified-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .top-nav {
+    width: 100%;
+    padding-bottom: 1em;
+    border-bottom: 1px solid var(--border-color);
+    background: rgba(var(--background-rgb), 0.85);
+    backdrop-filter: blur(8px);
+    border-radius: var(--detail-border-radius);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .top-nav nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+  }
+
+  .nav-left,
+  .nav-center,
+  .nav-right {
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-center {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-top: 1em;
+  }
+
+  .menu-wrapper {
+    position: relative;
+    margin-top: 1.5em;
+  }
+
+  .menu-trigger {
+    font-size: 1.5em;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-color);
+  }
+
+  .menu-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+
+    background: var(--bg-color);
+    font-family: var(--heading-font);
+    border: 1px solid var(--primary-pale-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    min-width: 85px;
+    padding: 0.25em 0;
+    z-index: 2000;
+
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .menu-wrapper.active .menu-dropdown {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+
+  .menu-dropdown a {
+    display: block;
+    padding: 0.6em 1em;
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 0.95em;
+    margin: auto;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  #theme-toggle:hover,
+  #rain-toggle:hover {
+    cursor: pointer;
+  }
+
+  .foot-quote,
+  .section-title {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    text-align: center;
+    display: block;
+    margin-top: 2em;
+  }
+
+  .layout-list .post {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+  }
+
+  .post>span:first-child {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+
+  .post>.date {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .year-heading {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    font-size: 1.5em;
+    font-weight: bold;
+    font-family: var(--heading-font);
+  }
+
+  /* term-caret  */
+  #id.term-caret {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    position: relative;
+    white-space: nowrap;
+  }
+
+  #id.term-caret::after {
+    content: "_";
+
+    margin-left: 4px;
+    animation: blink 1s steps(1, end) infinite;
+    opacity: 1;
+    color: currentColor;
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #id.term-caret::after {
+      animation: none;
+      opacity: 1;
+    }
+  }
+
+  /* typewriter */
+  #id.typewriter {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    white-space: nowrap;
+    border-right: 1ch solid currentColor;
+    /* caret */
+    /* caret blink */
+    animation: caret-blink 1s steps(1, end) infinite;
+  }
+
+  @keyframes caret-blink {
+    50% {
+      border-right-color: transparent;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #id.typewriter {
+      animation: none;
+      border-right-color: currentColor;
+    }
+  }
+
+  /* glitch effect  */
+  #id.glitch {
+    position: relative;
+    display: inline-block;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  #id.glitch::before,
+  #id.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    clip-path: inset(0 0 0 0);
+    opacity: .85;
+  }
+
+  #id.glitch::before {
+    transform: translate(0, 0);
+    mix-blend-mode: screen;
+    text-shadow: 1px 0 0 #f00;
+    /* viền đỏ */
+    animation: glitch-1 2s infinite linear alternate-reverse;
+  }
+
+  #id.glitch::after {
+    transform: translate(0, 0);
+    mix-blend-mode: screen;
+    text-shadow: -1px 0 0 #0ff;
+    /* viền cyan */
+    animation: glitch-2 2.2s infinite linear alternate-reverse;
+  }
+
+  @keyframes glitch-1 {
+    0% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(0, 0);
+    }
+
+    20% {
+      clip-path: inset(10% 0 60% 0);
+      transform: translate(-1px, -1px);
+    }
+
+    40% {
+      clip-path: inset(40% 0 30% 0);
+      transform: translate(1px, 1px);
+    }
+
+    60% {
+      clip-path: inset(20% 0 55% 0);
+      transform: translate(-1px, 0);
+    }
+
+    80% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 1px);
+    }
+
+    100% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(0, 0);
+    }
+  }
+
+  @keyframes glitch-2 {
+    0% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 0);
+    }
+
+    20% {
+      clip-path: inset(40% 0 30% 0);
+      transform: translate(1px, 0);
+    }
+
+    40% {
+      clip-path: inset(10% 0 60% 0);
+      transform: translate(0, -1px);
+    }
+
+    60% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(-1px, 1px);
+    }
+
+    80% {
+      clip-path: inset(20% 0 55% 0);
+      transform: translate(1px, 0);
+    }
+
+    100% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+
+    #id.glitch::before,
+    #id.glitch::after {
+      animation: none;
+    }
+  }
+</style>
+  <link rel="stylesheet" href="https://wen.is-a.dev/main.css">
+  
+
+<link id="hl" rel="stylesheet" type="text/css" href="/hl-light.css" />
+
+
+
+  
+</head>
+
+<body class="post">
+
+  
+  <script>
+    const theme = sessionStorage.getItem('theme');
+    const match = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if ((theme && theme === 'dark') || (!theme && match)) {
+      document.body.classList.add('dark');
+      const hl = document.querySelector('link#hl');
+      if (hl) hl.href = 'https://wen.is-a.dev/hl-dark.css';
+    }
+  </script>
+  
+
+  
+<div id="wrapper">
+  <div id="blank"></div>
+  <aside>
+    
+    
+    
+    <button id="back-to-top" aria-label="back to top">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-up"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+
+    </button>
+    
+  </aside>
+  <main>
+    
+<header class="top-nav">
+  <nav>
+    <!-- Left: Back -->
+    <div class="nav-left">
+      <a href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts" class="back-link">← Back</a>
+    </div>
+
+    <!-- Center: Avatar -->
+    <div class="nav-center">
+      
+      <a href="/">
+        <img src="https://wen.is-a.dev/img/qwe.jpg" alt="avatar" class="avatar">
+      </a>
+      
+    </div>
+
+    <!-- Right: Menu dropdown -->
+    <div class="nav-right">
+
+      <div class="menu-wrapper">
+
+        <button class="menu-trigger" aria-label="menu">
+          &#9776;
+        </button>
+        <div class="menu-dropdown">
+          <a href="https://wen.is-a.dev/posts">POSTS</a>
+          <a href="https://wen.is-a.dev/about">ABOUT</a>
+          <a href="https://wen.is-a.dev/contact">CONTACT</a>
+          
+          
+          
+          
+          
+
+          <a id="theme-toggle" aria-label="theme switch">
+            <span class="moon-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill="currentColor"></path></svg>
+</span>
+            <span class="sun-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z" fill="currentColor"></path></svg>
+</span>
+          </a>
+
+          
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const trigger = document.querySelector(".menu-trigger");
+    const wrapper = document.querySelector(".menu-wrapper");
+
+    if (trigger && wrapper) {
+      trigger.addEventListener("click", () => {
+        wrapper.classList.toggle("active");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!wrapper.contains(e.target)) {
+          wrapper.classList.remove("active");
+        }
+      });
+    }
+  });
+
+</script>
+
+
+    <div>
+      
+      
+      
+      
+      <div id="copy-cfg" style="display: none;" data-copy-icon="&lt;svg xmlns=&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2000&#x2F;svg&quot; viewBox=&quot;0 0 24 24&quot; width=&quot;18&quot; height=&quot;18&quot;&gt;&lt;path d=&quot;M6.9998 6V3C6.9998 2.44772 7.44752 2 7.9998 2H19.9998C20.5521 2 20.9998 2.44772 20.9998 3V17C20.9998 17.5523 20.5521 18 19.9998 18H16.9998V20.9991C16.9998 21.5519 16.5499 22 15.993 22H4.00666C3.45059 22 3 21.5554 3 20.9991L3.0026 7.00087C3.0027 6.44811 3.45264 6 4.00942 6H6.9998ZM5.00242 8L5.00019 20H14.9998V8H5.00242ZM8.9998 6H16.9998V16H18.9998V4H8.9998V6Z&quot; fill=&quot;currentColor&quot;&gt;&lt;&#x2F;path&gt;&lt;&#x2F;svg&gt;
+" data-check-icon="&lt;svg xmlns=&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2000&#x2F;svg&quot; viewBox=&quot;0 0 24 24&quot; width=&quot;18&quot; height=&quot;18&quot;&gt;&lt;path d=&quot;M10.0007 15.1709L19.1931 5.97852L20.6073 7.39273L10.0007 17.9993L3.63672 11.6354L5.05093 10.2212L10.0007 15.1709Z&quot; fill=&quot;currentColor&quot;&gt;&lt;&#x2F;path&gt;&lt;&#x2F;svg&gt;
+">
+      </div>
+      
+      <article class="prose">
+        <h1 class="title">ECC – Nhỏ gọn nhưng mạnh mẽ</h1>
+        <div id="post-info">
+          <div id="date">
+            <span id="publish">Jun 15, 2025</span>
+            </div>
+
+          
+        </div>
+
+        
+        
+
+        
+
+        <p>Chào bạn! Hôm nay chúng ta sẽ cùng nhau khám phá <strong>ECC (Elliptic Curve Cryptography)</strong> - một trong những công nghệ mã hóa hiện đại và thông minh nhất hiện nay. Nếu bạn từng tự hỏi tại sao smartphone có thể mã hóa mạnh mẽ mà vẫn nhanh như chớp, hoặc Bitcoin làm thế nào để bảo mật với những con số "nhỏ nhắn", thì ECC chính là câu trả lời!</p>
+<h2 id="ecc-la-gi-va-tai-sao-lai-dac-biet">ECC Là Gì Và Tại Sao Lại Đặc Biệt?<a class="zola-anchor" href="#ecc-la-gi-va-tai-sao-lai-dac-biet" aria-label="Anchor link for: ecc-la-gi-va-tai-sao-lai-dac-biet" style="visibility: hidden;"></a></h2>
+<p>Hãy tưởng tượng bạn cần gửi một bức thư bí mật. Với phương pháp mã hóa truyền thống như RSA, bạn cần một chiếc hộp rất lớn và nặng để đảm bảo an toàn. Nhưng với ECC, bạn có thể sử dụng một chiếc hộp nhỏ gọn mà vẫn đảm bảo độ bảo mật tương đương, thậm chí cao hơn.</p>
+<p><strong>ECC (Elliptic Curve Cryptography)</strong> là một phương pháp mã hóa công khai dựa trên tính chất toán học của đường cong elliptic. Điều đặc biệt là ECC có thể đạt được mức độ bảo mật rất cao với key size nhỏ hơn nhiều so với các thuật toán truyền thống.</p>
+<h3 id="so-sanh-key-size-suc-manh-that-su">So Sánh Key Size - Sức Mạnh Thật Sự<a class="zola-anchor" href="#so-sanh-key-size-suc-manh-that-su" aria-label="Anchor link for: so-sanh-key-size-suc-manh-that-su" style="visibility: hidden;"></a></h3>
+<table><thead><tr><th>Mức Bảo Mật</th><th>RSA Key Size</th><th>ECC Key Size</th><th>Tỷ Lệ</th></tr></thead><tbody>
+<tr><td>80-bit</td><td>1024 bit</td><td>160 bit</td><td>6.4:1</td></tr>
+<tr><td>112-bit</td><td>2048 bit</td><td>224 bit</td><td>9.1:1</td></tr>
+<tr><td>128-bit</td><td>3072 bit</td><td>256 bit</td><td>12:1</td></tr>
+<tr><td>192-bit</td><td>7680 bit</td><td>384 bit</td><td>20:1</td></tr>
+<tr><td>256-bit</td><td>15360 bit</td><td>521 bit</td><td>29.5:1</td></tr>
+</tbody></table>
+<p>Nhìn vào bảng này, bạn có thể thấy để đạt bảo mật tương đương RSA 15360 bit, ECC chỉ cần 521 bit - gấp gần 30 lần hiệu quả hơn!</p>
+<h2 id="toan-hoc-dang-sau-ecc-giai-thich-de-hieu">Toán Học Đằng Sau ECC (Giải Thích Dễ Hiểu)<a class="zola-anchor" href="#toan-hoc-dang-sau-ecc-giai-thich-de-hieu" aria-label="Anchor link for: toan-hoc-dang-sau-ecc-giai-thich-de-hieu" style="visibility: hidden;"></a></h2>
+<h3 id="duong-cong-elliptic-la-gi">Đường Cong Elliptic Là Gì?<a class="zola-anchor" href="#duong-cong-elliptic-la-gi" aria-label="Anchor link for: duong-cong-elliptic-la-gi" style="visibility: hidden;"></a></h3>
+<p>Đường cong elliptic không phải là hình ellipse (hình oval) mà chúng ta thường nghĩ! Nó là một đường cong được định nghĩa bởi phương trình toán học:</p>
+<pre class="z-code"><code><span class="z-text z-plain">y² = x³ + ax + b
+</span></code></pre>
+<p>Hình dạng của nó trông giống như một đường cong mượt mà, đối xứng qua trục x.</p>
+<h3 id="phep-cong-tren-duong-cong-tro-ao-thuat-toan-hoc">"Phép Cộng" Trên Đường Cong - Trò Ảo Thuật Toán Học<a class="zola-anchor" href="#phep-cong-tren-duong-cong-tro-ao-thuat-toan-hoc" aria-label="Anchor link for: phep-cong-tren-duong-cong-tro-ao-thuat-toan-hoc" style="visibility: hidden;"></a></h3>
+<p>Đây là phần thú vị nhất! Trong ECC, chúng ta định nghĩa một phép toán đặc biệt gọi là "phép cộng điểm":</p>
+<p><strong>Quy tắc cộng điểm:</strong></p>
+<ol>
+<li>Lấy hai điểm P và Q trên đường cong</li>
+<li>Vẽ đường thẳng qua P và Q</li>
+<li>Đường thẳng này sẽ cắt đường cong tại điểm thứ ba R'</li>
+<li>Lấy điểm đối xứng của R' qua trục x, ta được R</li>
+<li>R chính là kết quả P + Q = R</li>
+</ol>
+<p><strong>Tính chất đặc biệt:</strong></p>
+<ul>
+<li>P + Q = Q + P (tính giao hoán)</li>
+<li>(P + Q) + R = P + (Q + R) (tính kết hợp)</li>
+<li>Tồn tại điểm "không" O (như số 0 trong phép cộng thông thường)</li>
+</ul>
+<h3 id="bai-toan-logarit-roi-rac-tren-duong-cong">Bài Toán Logarit Rời Rạc Trên Đường Cong<a class="zola-anchor" href="#bai-toan-logarit-roi-rac-tren-duong-cong" aria-label="Anchor link for: bai-toan-logarit-roi-rac-tren-duong-cong" style="visibility: hidden;"></a></h3>
+<p>Sức mạnh của ECC nằm ở <strong>Elliptic Curve Discrete Logarithm Problem (ECDLP)</strong>:</p>
+<pre class="z-code"><code><span class="z-text z-plain">Cho trước: P và Q = kP (k lần phép cộng P với chính nó)
+</span><span class="z-text z-plain">Tìm: k = ?
+</span></code></pre>
+<p>Ví dụ đơn giản:</p>
+<ul>
+<li>Biết 2 × 7 = 14 → dễ dàng tính ngược: 14 ÷ 2 = 7</li>
+<li>Nhưng với đường cong elliptic và số lớn, việc tính ngược trở nên cực kỳ khó khăn!</li>
+</ul>
+<h2 id="cach-ecc-hoat-dong-trong-thuc-te">Cách ECC Hoạt Động Trong Thực Tế<a class="zola-anchor" href="#cach-ecc-hoat-dong-trong-thuc-te" aria-label="Anchor link for: cach-ecc-hoat-dong-trong-thuc-te" style="visibility: hidden;"></a></h2>
+<h3 id="1-tao-cap-khoa-ecc">1. Tạo Cặp Khóa ECC<a class="zola-anchor" href="#1-tao-cap-khoa-ecc" aria-label="Anchor link for: 1-tao-cap-khoa-ecc" style="visibility: hidden;"></a></h3>
+<p><strong>Bước 1: Chọn tham số đường cong</strong></p>
+<ul>
+<li>Domain parameters: (p, a, b, G, n, h)</li>
+<li>p: số nguyên tố định nghĩa finite field</li>
+<li>a, b: tham số đường cong y² = x³ + ax + b</li>
+<li>G: điểm generator (base point)</li>
+<li>n: order của điểm G</li>
+<li>h: cofactor</li>
+</ul>
+<p><strong>Bước 2: Tạo khóa</strong></p>
+<ul>
+<li>Chọn số ngẫu nhiên k (1 &lt; k &lt; n) → <strong>Private Key</strong></li>
+<li>Tính Q = k × G → <strong>Public Key</strong></li>
+</ul>
+<h3 id="2-ky-so-voi-ecdsa-elliptic-curve-digital-signature-algorithm">2. Ký Số Với ECDSA (Elliptic Curve Digital Signature Algorithm)<a class="zola-anchor" href="#2-ky-so-voi-ecdsa-elliptic-curve-digital-signature-algorithm" aria-label="Anchor link for: 2-ky-so-voi-ecdsa-elliptic-curve-digital-signature-algorithm" style="visibility: hidden;"></a></h3>
+<p><strong>Quá trình ký:</strong></p>
+<pre class="z-code"><code><span class="z-text z-plain">1. Hash message: h = Hash(message)
+</span><span class="z-text z-plain">2. Chọn số ngẫu nhiên k (1 &lt; k &lt; n)
+</span><span class="z-text z-plain">3. Tính (x₁, y₁) = k × G
+</span><span class="z-text z-plain">4. Tính r = x₁ mod n
+</span><span class="z-text z-plain">5. Tính s = k⁻¹(h + r × private_key) mod n
+</span><span class="z-text z-plain">6. Chữ ký = (r, s)
+</span></code></pre>
+<p><strong>Quá trình xác minh:</strong></p>
+<pre class="z-code"><code><span class="z-text z-plain">1. Hash message: h = Hash(message)
+</span><span class="z-text z-plain">2. Tính w = s⁻¹ mod n
+</span><span class="z-text z-plain">3. Tính u₁ = h × w mod n
+</span><span class="z-text z-plain">4. Tính u₂ = r × w mod n
+</span><span class="z-text z-plain">5. Tính (x₁, y₁) = u₁ × G + u₂ × public_key
+</span><span class="z-text z-plain">6. Chữ ký hợp lệ nếu r = x₁ mod n
+</span></code></pre>
+<h3 id="3-trao-doi-khoa-voi-ecdh-elliptic-curve-diffie-hellman">3. Trao Đổi Khóa Với ECDH (Elliptic Curve Diffie-Hellman)<a class="zola-anchor" href="#3-trao-doi-khoa-voi-ecdh-elliptic-curve-diffie-hellman" aria-label="Anchor link for: 3-trao-doi-khoa-voi-ecdh-elliptic-curve-diffie-hellman" style="visibility: hidden;"></a></h3>
+<p><strong>Kịch bản:</strong> Alice và Bob muốn tạo ra một khóa bí mật chung</p>
+<p><strong>Quá trình:</strong></p>
+<ol>
+<li><strong>Alice:</strong> tạo private key a, public key A = a × G</li>
+<li><strong>Bob:</strong> tạo private key b, public key B = b × G</li>
+<li><strong>Alice và Bob:</strong> trao đổi public key công khai</li>
+<li><strong>Alice:</strong> tính shared secret = a × B = a × (b × G) = ab × G</li>
+<li><strong>Bob:</strong> tính shared secret = b × A = b × (a × G) = ab × G</li>
+<li><strong>Kết quả:</strong> Cả hai đều có cùng shared secret mà không ai khác biết!</li>
+</ol>
+<h2 id="cac-duong-cong-ecc-pho-bien">Các Đường Cong ECC Phổ Biến<a class="zola-anchor" href="#cac-duong-cong-ecc-pho-bien" aria-label="Anchor link for: cac-duong-cong-ecc-pho-bien" style="visibility: hidden;"></a></h2>
+<h3 id="1-secp256k1-ngoi-sao-cua-bitcoin">1. secp256k1 - "Ngôi Sao" Của Bitcoin<a class="zola-anchor" href="#1-secp256k1-ngoi-sao-cua-bitcoin" aria-label="Anchor link for: 1-secp256k1-ngoi-sao-cua-bitcoin" style="visibility: hidden;"></a></h3>
+<pre class="z-code"><code><span class="z-text z-plain">p = 2²⁵⁶ - 2³² - 2⁹ - 2⁸ - 2⁷ - 2⁶ - 2⁴ - 1
+</span><span class="z-text z-plain">y² = x³ + 7
+</span></code></pre>
+<ul>
+<li><strong>Đặc điểm:</strong> Được chọn để tối ưu hóa performance</li>
+<li><strong>Sử dụng:</strong> Bitcoin, Ethereum, nhiều cryptocurrency khác</li>
+</ul>
+<h3 id="2-p-256-secp256r1-nguoi-ban-dong-hanh-cua-nist">2. P-256 (secp256r1) - "Người Bạn Đồng Hành" Của NIST<a class="zola-anchor" href="#2-p-256-secp256r1-nguoi-ban-dong-hanh-cua-nist" aria-label="Anchor link for: 2-p-256-secp256r1-nguoi-ban-dong-hanh-cua-nist" style="visibility: hidden;"></a></h3>
+<pre class="z-code"><code><span class="z-text z-plain">p = 2²⁵⁶ - 2²²⁴ + 2¹⁹² + 2⁹⁶ - 1  
+</span><span class="z-text z-plain">y² = x³ - 3x + b (với b rất phức tạp)
+</span></code></pre>
+<ul>
+<li><strong>Đặc điểm:</strong> Được NIST chuẩn hóa, security level 128-bit</li>
+<li><strong>Sử dụng:</strong> TLS/SSL, Government systems, Enterprise applications</li>
+</ul>
+<h3 id="3-curve25519-toc-do-va-an-toan">3. Curve25519 - "Tốc Độ Và An Toàn"<a class="zola-anchor" href="#3-curve25519-toc-do-va-an-toan" aria-label="Anchor link for: 3-curve25519-toc-do-va-an-toan" style="visibility: hidden;"></a></h3>
+<pre class="z-code"><code><span class="z-text z-plain">Sử dụng Montgomery form: By² = x³ + Ax² + x
+</span></code></pre>
+<ul>
+<li><strong>Đặc điểm:</strong> Thiết kế tối ưu cho tốc độ và an toàn</li>
+<li><strong>Sử dụng:</strong> Signal, WhatsApp, SSH, VPN hiện đại</li>
+</ul>
+<h3 id="4-ed25519-edwards-curve-sieu-toc">4. Ed25519 - "Edwards Curve Siêu Tốc"<a class="zola-anchor" href="#4-ed25519-edwards-curve-sieu-toc" aria-label="Anchor link for: 4-ed25519-edwards-curve-sieu-toc" style="visibility: hidden;"></a></h3>
+<pre class="z-code"><code><span class="z-text z-plain">-x² + y² = 1 - (121665/121666)x²y²
+</span></code></pre>
+<ul>
+<li><strong>Đặc điểm:</strong> Rất nhanh cho digital signature</li>
+<li><strong>Sử dụng:</strong> OpenSSH, Git signing, modern authentication</li>
+</ul>
+<h2 id="uu-diem-vuot-troi-cua-ecc">Ưu Điểm Vượt Trội Của ECC<a class="zola-anchor" href="#uu-diem-vuot-troi-cua-ecc" aria-label="Anchor link for: uu-diem-vuot-troi-cua-ecc" style="visibility: hidden;"></a></h2>
+<h3 id="1-hieu-suat-tuyet-voi">1. Hiệu Suất Tuyệt Vời<a class="zola-anchor" href="#1-hieu-suat-tuyet-voi" aria-label="Anchor link for: 1-hieu-suat-tuyet-voi" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>Tốc độ:</strong> Nhanh hơn RSA 2-10 lần với cùng mức bảo mật</li>
+<li><strong>Băng thông:</strong> Key size nhỏ → truyền tải nhanh hơn</li>
+<li><strong>Pin:</strong> Tiết kiệm năng lượng cho thiết bị di động</li>
+</ul>
+<h3 id="2-bao-mat-manh-me">2. Bảo Mật Mạnh Mẽ<a class="zola-anchor" href="#2-bao-mat-manh-me" aria-label="Anchor link for: 2-bao-mat-manh-me" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>Quantum resistance:</strong> Tương đối kháng lại quantum computer (nhưng không hoàn toàn)</li>
+<li><strong>Mathematical foundation:</strong> Dựa trên bài toán khó đã được nghiên cứu kỹ</li>
+<li><strong>Side-channel resistance:</strong> Một số curve có khả năng chống side-channel attack</li>
+</ul>
+<h3 id="3-kha-nang-mo-rong">3. Khả Năng Mở Rộng<a class="zola-anchor" href="#3-kha-nang-mo-rong" aria-label="Anchor link for: 3-kha-nang-mo-rong" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>IoT friendly:</strong> Phù hợp với thiết bị có tài nguyên hạn chế</li>
+<li><strong>Scalable:</strong> Dễ dàng tăng độ bảo mật bằng cách tăng key size</li>
+</ul>
+<h2 id="ung-dung-thuc-te-cua-ecc">Ứng Dụng Thực Tế Của ECC<a class="zola-anchor" href="#ung-dung-thuc-te-cua-ecc" aria-label="Anchor link for: ung-dung-thuc-te-cua-ecc" style="visibility: hidden;"></a></h2>
+<h3 id="1-cryptocurrency-va-blockchain">1. Cryptocurrency và Blockchain<a class="zola-anchor" href="#1-cryptocurrency-va-blockchain" aria-label="Anchor link for: 1-cryptocurrency-va-blockchain" style="visibility: hidden;"></a></h3>
+<p><strong>Bitcoin:</strong></p>
+<ul>
+<li>Địa chỉ Bitcoin được tạo từ ECDSA public key</li>
+<li>Mỗi transaction đều được ký bằng ECDSA</li>
+<li>Private key 256-bit điều khiển toàn bộ Bitcoin trong wallet</li>
+</ul>
+<p><strong>Smart Contracts:</strong></p>
+<ul>
+<li>Ethereum sử dụng secp256k1 cho account management</li>
+<li>Digital signatures xác thực các transaction</li>
+</ul>
+<h3 id="2-bao-mat-web-tls-ssl">2. Bảo Mật Web (TLS/SSL)<a class="zola-anchor" href="#2-bao-mat-web-tls-ssl" aria-label="Anchor link for: 2-bao-mat-web-tls-ssl" style="visibility: hidden;"></a></h3>
+<pre class="z-code"><code><span class="z-text z-plain">Client Hello → Server Certificate (ECC Public Key) 
+</span><span class="z-text z-plain">→ ECDH Key Exchange → Encrypted Communication
+</span></code></pre>
+<p><strong>Lợi ích:</strong></p>
+<ul>
+<li>Handshake nhanh hơn → website load nhanh hơn</li>
+<li>Tiết kiệm băng thông → chi phí server thấp hơn</li>
+<li>Mobile friendly → trải nghiệm tốt trên điện thoại</li>
+</ul>
+<h3 id="3-messaging-apps">3. Messaging Apps<a class="zola-anchor" href="#3-messaging-apps" aria-label="Anchor link for: 3-messaging-apps" style="visibility: hidden;"></a></h3>
+<p><strong>Signal Protocol:</strong></p>
+<ul>
+<li>X3DH: Extended Triple Diffie-Hellman với Curve25519</li>
+<li>Double Ratchet: Forward secrecy với ECDH</li>
+</ul>
+<p><strong>WhatsApp End-to-End Encryption:</strong></p>
+<ul>
+<li>Curve25519 cho key agreement</li>
+<li>Ed25519 cho authentication</li>
+</ul>
+<h3 id="4-iot-va-embedded-systems">4. IoT và Embedded Systems<a class="zola-anchor" href="#4-iot-va-embedded-systems" aria-label="Anchor link for: 4-iot-va-embedded-systems" style="visibility: hidden;"></a></h3>
+<p><strong>Smart Cards:</strong></p>
+<ul>
+<li>NFC payments sử dụng ECC cho authentication</li>
+<li>Key size nhỏ → phù hợp với memory hạn chế</li>
+</ul>
+<p><strong>Industrial IoT:</strong></p>
+<ul>
+<li>Sensor networks sử dụng ECC cho secure communication</li>
+<li>Low power consumption → pin device tồn tại lâu hơn</li>
+</ul>
+<h3 id="5-government-va-military">5. Government và Military<a class="zola-anchor" href="#5-government-va-military" aria-label="Anchor link for: 5-government-va-military" style="visibility: hidden;"></a></h3>
+<p><strong>Suite B Cryptography (NSA):</strong></p>
+<ul>
+<li>ECDH cho key agreement</li>
+<li>ECDSA cho digital signatures</li>
+<li>Classified communications</li>
+</ul>
+<h2 id="thach-thuc-va-han-che">Thách Thức và Hạn Chế<a class="zola-anchor" href="#thach-thuc-va-han-che" aria-label="Anchor link for: thach-thuc-va-han-che" style="visibility: hidden;"></a></h2>
+<h3 id="1-implementation-complexity">1. Implementation Complexity<a class="zola-anchor" href="#1-implementation-complexity" aria-label="Anchor link for: 1-implementation-complexity" style="visibility: hidden;"></a></h3>
+<p><strong>Side-Channel Attacks:</strong></p>
+<ul>
+<li>Timing attacks: Thời gian thực thi có thể leak information</li>
+<li>Power analysis: Tiêu thụ điện năng có thể reveal private key</li>
+<li><strong>Giải pháp:</strong> Constant-time implementations, blinding techniques</li>
+</ul>
+<p><strong>Invalid Curve Attacks:</strong></p>
+<ul>
+<li>Attacker gửi điểm không thuộc đường cong chính</li>
+<li><strong>Giải pháp:</strong> Validate tất cả input points</li>
+</ul>
+<h3 id="2-quantum-computing-threat">2. Quantum Computing Threat<a class="zola-anchor" href="#2-quantum-computing-threat" aria-label="Anchor link for: 2-quantum-computing-threat" style="visibility: hidden;"></a></h3>
+<p><strong>Shor's Algorithm:</strong></p>
+<ul>
+<li>Quantum computer có thể phá vỡ ECDLP trong polynomial time</li>
+<li>Timeline: 15-30 năm nữa (ước tính)</li>
+<li><strong>Chuẩn bị:</strong> Post-quantum cryptography research</li>
+</ul>
+<h3 id="3-curve-selection-controversy">3. Curve Selection Controversy<a class="zola-anchor" href="#3-curve-selection-controversy" aria-label="Anchor link for: 3-curve-selection-controversy" style="visibility: hidden;"></a></h3>
+<p><strong>NIST Curves:</strong></p>
+<ul>
+<li>Một số lo ngại về "magic constants"</li>
+<li>Khả năng có backdoor (chưa được chứng minh)</li>
+<li><strong>Giải pháp:</strong> Sử dụng openly designed curves như Curve25519</li>
+</ul>
+<h3 id="4-patent-issues-da-het-han">4. Patent Issues (Đã Hết Hạn)<a class="zola-anchor" href="#4-patent-issues-da-het-han" aria-label="Anchor link for: 4-patent-issues-da-het-han" style="visibility: hidden;"></a></h3>
+<ul>
+<li>ECC từng bị patent protection</li>
+<li>Hiện tại đã free để sử dụng</li>
+</ul>
+<h2 id="best-practices-khi-su-dung-ecc">Best Practices Khi Sử Dụng ECC<a class="zola-anchor" href="#best-practices-khi-su-dung-ecc" aria-label="Anchor link for: best-practices-khi-su-dung-ecc" style="visibility: hidden;"></a></h2>
+<h3 id="1-chon-curve-phu-hop">1. Chọn Curve Phù Hợp<a class="zola-anchor" href="#1-chon-curve-phu-hop" aria-label="Anchor link for: 1-chon-curve-phu-hop" style="visibility: hidden;"></a></h3>
+<pre class="z-code"><code><span class="z-text z-plain">- Performance priority: Curve25519, Ed25519
+</span><span class="z-text z-plain">- Standard compliance: P-256, P-384  
+</span><span class="z-text z-plain">- Cryptocurrency: secp256k1
+</span><span class="z-text z-plain">- Legacy compatibility: P-256
+</span></code></pre>
+<h3 id="2-secure-implementation">2. Secure Implementation<a class="zola-anchor" href="#2-secure-implementation" aria-label="Anchor link for: 2-secure-implementation" style="visibility: hidden;"></a></h3>
+<p><strong>Random Number Generation:</strong></p>
+<ul>
+<li>Sử dụng CSPRNG (Cryptographically Secure Pseudo-Random Number Generator)</li>
+<li>Never reuse nonces trong ECDSA</li>
+</ul>
+<p><strong>Key Management:</strong></p>
+<ul>
+<li>Protect private keys với Hardware Security Modules (HSM)</li>
+<li>Implement proper key derivation (như BIP32 cho Bitcoin)</li>
+</ul>
+<p><strong>Validation:</strong></p>
+<pre data-lang="python" class="language-python z-code"><code class="language-python" data-lang="python"><span class="z-source z-python"><span class="z-meta z-function z-python"><span class="z-storage z-type z-function z-python"><span class="z-keyword z-declaration z-function z-python">def</span></span> <span class="z-entity z-name z-function z-python"><span class="z-meta z-generic-name z-python">validate_point</span></span></span><span class="z-meta z-function z-parameters z-python"><span class="z-punctuation z-section z-parameters z-begin z-python">(</span></span><span class="z-meta z-function z-parameters z-python"><span class="z-variable z-parameter z-python">x</span><span class="z-punctuation z-separator z-parameters z-python">,</span> <span class="z-variable z-parameter z-python">y</span><span class="z-punctuation z-separator z-parameters z-python">,</span> <span class="z-variable z-parameter z-python">curve</span><span class="z-punctuation z-section z-parameters z-end z-python">)</span></span><span class="z-meta z-function z-python"><span class="z-punctuation z-section z-function z-begin z-python">:</span></span>
+</span><span class="z-source z-python">    <span class="z-comment z-line z-number-sign z-python"><span class="z-punctuation z-definition z-comment z-python">#</span> Check if point is on curve
+</span></span><span class="z-source z-python">    <span class="z-keyword z-control z-flow z-return z-python">return</span> <span class="z-meta z-group z-python"><span class="z-punctuation z-section z-group z-begin z-python">(</span><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">y</span></span><span class="z-keyword z-operator z-arithmetic z-python">*</span><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">y</span></span><span class="z-punctuation z-section z-group z-end z-python">)</span></span> <span class="z-keyword z-operator z-arithmetic z-python">%</span> <span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">p</span></span> <span class="z-keyword z-operator z-comparison z-python">==</span> <span class="z-meta z-group z-python"><span class="z-punctuation z-section z-group z-begin z-python">(</span><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">x</span></span><span class="z-keyword z-operator z-arithmetic z-python">*</span><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">x</span></span><span class="z-keyword z-operator z-arithmetic z-python">*</span><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">x</span></span> <span class="z-keyword z-operator z-arithmetic z-python">+</span> <span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">curve</span><span class="z-punctuation z-accessor z-dot z-python">.</span><span class="z-meta z-generic-name z-python">a</span></span><span class="z-keyword z-operator z-arithmetic z-python">*</span><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">x</span></span> <span class="z-keyword z-operator z-arithmetic z-python">+</span> <span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">curve</span><span class="z-punctuation z-accessor z-dot z-python">.</span><span class="z-meta z-generic-name z-python">b</span></span><span class="z-punctuation z-section z-group z-end z-python">)</span></span> <span class="z-keyword z-operator z-arithmetic z-python">%</span> <span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">p</span></span>
+</span><span class="z-source z-python">    
+</span><span class="z-source z-python"><span class="z-meta z-function z-python"><span class="z-storage z-type z-function z-python"><span class="z-keyword z-declaration z-function z-python">def</span></span> <span class="z-entity z-name z-function z-python"><span class="z-meta z-generic-name z-python">validate_signature</span></span></span><span class="z-meta z-function z-parameters z-python"><span class="z-punctuation z-section z-parameters z-begin z-python">(</span></span><span class="z-meta z-function z-parameters z-python"><span class="z-variable z-parameter z-python">r</span><span class="z-punctuation z-separator z-parameters z-python">,</span> <span class="z-variable z-parameter z-python">s</span><span class="z-punctuation z-separator z-parameters z-python">,</span> <span class="z-variable z-parameter z-python">curve</span><span class="z-punctuation z-section z-parameters z-end z-python">)</span></span><span class="z-meta z-function z-python"><span class="z-punctuation z-section z-function z-begin z-python">:</span></span>
+</span><span class="z-source z-python">    <span class="z-comment z-line z-number-sign z-python"><span class="z-punctuation z-definition z-comment z-python">#</span> Check signature parameters
+</span></span><span class="z-source z-python">    <span class="z-keyword z-control z-flow z-return z-python">return</span> <span class="z-constant z-numeric z-integer z-decimal z-python">1</span> <span class="z-keyword z-operator z-comparison z-python">&lt;=</span> <span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">r</span></span> <span class="z-keyword z-operator z-comparison z-python">&lt;</span> <span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">curve</span><span class="z-punctuation z-accessor z-dot z-python">.</span><span class="z-meta z-generic-name z-python">n</span></span> <span class="z-keyword z-operator z-logical z-python">and</span> <span class="z-constant z-numeric z-integer z-decimal z-python">1</span> <span class="z-keyword z-operator z-comparison z-python">&lt;=</span> <span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">s</span></span> <span class="z-keyword z-operator z-comparison z-python">&lt;</span> <span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">curve</span><span class="z-punctuation z-accessor z-dot z-python">.</span><span class="z-meta z-generic-name z-python">n</span></span>
+</span></code></pre>
+<h3 id="3-performance-optimization">3. Performance Optimization<a class="zola-anchor" href="#3-performance-optimization" aria-label="Anchor link for: 3-performance-optimization" style="visibility: hidden;"></a></h3>
+<p><strong>Pre-computation:</strong></p>
+<ul>
+<li>Precompute multiples of base point</li>
+<li>Use windowing methods for scalar multiplication</li>
+</ul>
+<p><strong>Hardware Acceleration:</strong></p>
+<ul>
+<li>Leverage CPU instruction sets (như Intel's RDRAND)</li>
+<li>Use dedicated crypto accelerators</li>
+</ul>
+<h2 id="code-examples-python-voi-cryptography-library">Code Examples (Python với cryptography library)<a class="zola-anchor" href="#code-examples-python-voi-cryptography-library" aria-label="Anchor link for: code-examples-python-voi-cryptography-library" style="visibility: hidden;"></a></h2>
+<h3 id="1-tao-key-pair">1. Tạo Key Pair<a class="zola-anchor" href="#1-tao-key-pair" aria-label="Anchor link for: 1-tao-key-pair" style="visibility: hidden;"></a></h3>
+<pre data-lang="python" class="language-python z-code"><code class="language-python" data-lang="python"><span class="z-source z-python"><span class="z-meta z-statement z-import z-python"><span class="z-keyword z-control z-import z-from z-python">from</span></span><span class="z-meta z-statement z-import z-python"><span class="z-meta z-import-source z-python"> <span class="z-meta z-import-path z-python"><span class="z-meta z-import-name z-python">cryptography</span><span class="z-punctuation z-accessor z-dot z-python">.</span><span class="z-meta z-import-name z-python">hazmat</span><span class="z-punctuation z-accessor z-dot z-python">.</span><span class="z-meta z-import-name z-python">primitives</span><span class="z-punctuation z-accessor z-dot z-python">.</span><span class="z-meta z-import-name z-python">asymmetric</span></span> <span class="z-meta z-statement z-import z-python"><span class="z-keyword z-control z-import z-python">import</span></span></span></span><span class="z-meta z-statement z-import z-python"></span><span class="z-meta z-statement z-import z-python"> <span class="z-meta z-generic-name z-python">ec</span></span>
+</span><span class="z-source z-python"><span class="z-meta z-statement z-import z-python"><span class="z-keyword z-control z-import z-from z-python">from</span></span><span class="z-meta z-statement z-import z-python"><span class="z-meta z-import-source z-python"> <span class="z-meta z-import-path z-python"><span class="z-meta z-import-name z-python">cryptography</span><span class="z-punctuation z-accessor z-dot z-python">.</span><span class="z-meta z-import-name z-python">hazmat</span><span class="z-punctuation z-accessor z-dot z-python">.</span><span class="z-meta z-import-name z-python">primitives</span></span> <span class="z-meta z-statement z-import z-python"><span class="z-keyword z-control z-import z-python">import</span></span></span></span><span class="z-meta z-statement z-import z-python"></span><span class="z-meta z-statement z-import z-python"> <span class="z-meta z-generic-name z-python">hashes</span></span>
+</span><span class="z-source z-python">
+</span><span class="z-source z-python"><span class="z-comment z-line z-number-sign z-python"><span class="z-punctuation z-definition z-comment z-python">#</span> Tạo private key
+</span></span><span class="z-source z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">private_key</span></span> <span class="z-keyword z-operator z-assignment z-python">=</span> <span class="z-meta z-function-call z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">ec</span></span><span class="z-meta z-qualified-name z-python"><span class="z-punctuation z-accessor z-dot z-python">.</span></span><span class="z-meta z-qualified-name z-python"><span class="z-variable z-function z-python"><span class="z-meta z-generic-name z-python">generate_private_key</span></span></span></span><span class="z-meta z-function-call z-arguments z-python"><span class="z-punctuation z-section z-arguments z-begin z-python">(</span><span class="z-meta z-function-call z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">ec</span></span><span class="z-meta z-qualified-name z-python"><span class="z-punctuation z-accessor z-dot z-python">.</span></span><span class="z-meta z-qualified-name z-python"><span class="z-variable z-function z-python"><span class="z-meta z-generic-name z-python">SECP256R1</span></span></span></span><span class="z-meta z-function-call z-arguments z-python"><span class="z-punctuation z-section z-arguments z-begin z-python">(</span><span class="z-punctuation z-section z-arguments z-end z-python">)</span></span><span class="z-punctuation z-section z-arguments z-end z-python">)</span></span>
+</span><span class="z-source z-python">
+</span><span class="z-source z-python"><span class="z-comment z-line z-number-sign z-python"><span class="z-punctuation z-definition z-comment z-python">#</span> Lấy public key
+</span></span><span class="z-source z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">public_key</span></span> <span class="z-keyword z-operator z-assignment z-python">=</span> <span class="z-meta z-function-call z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">private_key</span></span><span class="z-meta z-qualified-name z-python"><span class="z-punctuation z-accessor z-dot z-python">.</span></span><span class="z-meta z-qualified-name z-python"><span class="z-variable z-function z-python"><span class="z-meta z-generic-name z-python">public_key</span></span></span></span><span class="z-meta z-function-call z-arguments z-python"><span class="z-punctuation z-section z-arguments z-begin z-python">(</span><span class="z-punctuation z-section z-arguments z-end z-python">)</span></span>
+</span><span class="z-source z-python">
+</span><span class="z-source z-python"><span class="z-meta z-function-call z-python"><span class="z-meta z-qualified-name z-python"><span class="z-variable z-function z-python"><span class="z-support z-function z-builtin z-python">print</span></span></span></span><span class="z-meta z-function-call z-arguments z-python"><span class="z-punctuation z-section z-arguments z-begin z-python">(</span><span class="z-storage z-type z-string z-python">f</span><span class="z-meta z-string z-interpolated z-python"><span class="z-string z-quoted z-double z-python"><span class="z-punctuation z-definition z-string z-begin z-python">&quot;</span></span></span><span class="z-meta z-string z-interpolated z-python"><span class="z-string z-quoted z-double z-python">Private key size: </span><span class="z-meta z-interpolation z-python"><span class="z-punctuation z-section z-interpolation z-begin z-python">{</span><span class="z-source z-python z-embedded"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">private_key</span><span class="z-punctuation z-accessor z-dot z-python">.</span><span class="z-meta z-generic-name z-python">key_size</span></span></span></span><span class="z-meta z-interpolation z-python"><span class="z-punctuation z-section z-interpolation z-end z-python">}</span></span><span class="z-string z-quoted z-double z-python"> bits<span class="z-punctuation z-definition z-string z-end z-python">&quot;</span></span></span><span class="z-punctuation z-section z-arguments z-end z-python">)</span></span>
+</span></code></pre>
+<h3 id="2-digital-signature">2. Digital Signature<a class="zola-anchor" href="#2-digital-signature" aria-label="Anchor link for: 2-digital-signature" style="visibility: hidden;"></a></h3>
+<pre data-lang="python" class="language-python z-code"><code class="language-python" data-lang="python"><span class="z-source z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">message</span></span> <span class="z-keyword z-operator z-assignment z-python">=</span> <span class="z-storage z-type z-string z-python">b</span><span class="z-meta z-string z-python"><span class="z-string z-quoted z-double z-python"><span class="z-punctuation z-definition z-string z-begin z-python">&quot;</span></span></span><span class="z-meta z-string z-python"><span class="z-string z-quoted z-double z-python">Hello ECC World!<span class="z-punctuation z-definition z-string z-end z-python">&quot;</span></span></span>
+</span><span class="z-source z-python">
+</span><span class="z-source z-python"><span class="z-comment z-line z-number-sign z-python"><span class="z-punctuation z-definition z-comment z-python">#</span> Ký message
+</span></span><span class="z-source z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">signature</span></span> <span class="z-keyword z-operator z-assignment z-python">=</span> <span class="z-meta z-function-call z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">private_key</span></span><span class="z-meta z-qualified-name z-python"><span class="z-punctuation z-accessor z-dot z-python">.</span></span><span class="z-meta z-qualified-name z-python"><span class="z-variable z-function z-python"><span class="z-meta z-generic-name z-python">sign</span></span></span></span><span class="z-meta z-function-call z-arguments z-python"><span class="z-punctuation z-section z-arguments z-begin z-python">(</span>
+</span></span><span class="z-source z-python"><span class="z-meta z-function-call z-arguments z-python">    <span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">message</span></span><span class="z-punctuation z-separator z-arguments z-python">,</span>
+</span></span><span class="z-source z-python"><span class="z-meta z-function-call z-arguments z-python">    <span class="z-meta z-function-call z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">ec</span></span><span class="z-meta z-qualified-name z-python"><span class="z-punctuation z-accessor z-dot z-python">.</span></span><span class="z-meta z-qualified-name z-python"><span class="z-variable z-function z-python"><span class="z-meta z-generic-name z-python">ECDSA</span></span></span></span><span class="z-meta z-function-call z-arguments z-python"><span class="z-punctuation z-section z-arguments z-begin z-python">(</span><span class="z-meta z-function-call z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">hashes</span></span><span class="z-meta z-qualified-name z-python"><span class="z-punctuation z-accessor z-dot z-python">.</span></span><span class="z-meta z-qualified-name z-python"><span class="z-variable z-function z-python"><span class="z-meta z-generic-name z-python">SHA256</span></span></span></span><span class="z-meta z-function-call z-arguments z-python"><span class="z-punctuation z-section z-arguments z-begin z-python">(</span><span class="z-punctuation z-section z-arguments z-end z-python">)</span></span><span class="z-punctuation z-section z-arguments z-end z-python">)</span></span>
+</span></span><span class="z-source z-python"><span class="z-meta z-function-call z-arguments z-python"><span class="z-punctuation z-section z-arguments z-end z-python">)</span></span>
+</span><span class="z-source z-python">
+</span><span class="z-source z-python"><span class="z-comment z-line z-number-sign z-python"><span class="z-punctuation z-definition z-comment z-python">#</span> Xác minh signature
+</span></span><span class="z-source z-python"><span class="z-meta z-statement z-exception z-try z-python"><span class="z-keyword z-control z-exception z-try z-python">try</span><span class="z-punctuation z-section z-block z-exception z-try z-python">:</span></span>
+</span><span class="z-source z-python">    <span class="z-meta z-function-call z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">public_key</span></span><span class="z-meta z-qualified-name z-python"><span class="z-punctuation z-accessor z-dot z-python">.</span></span><span class="z-meta z-qualified-name z-python"><span class="z-variable z-function z-python"><span class="z-meta z-generic-name z-python">verify</span></span></span></span><span class="z-meta z-function-call z-arguments z-python"><span class="z-punctuation z-section z-arguments z-begin z-python">(</span><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">signature</span></span><span class="z-punctuation z-separator z-arguments z-python">,</span> <span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">message</span></span><span class="z-punctuation z-separator z-arguments z-python">,</span> <span class="z-meta z-function-call z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">ec</span></span><span class="z-meta z-qualified-name z-python"><span class="z-punctuation z-accessor z-dot z-python">.</span></span><span class="z-meta z-qualified-name z-python"><span class="z-variable z-function z-python"><span class="z-meta z-generic-name z-python">ECDSA</span></span></span></span><span class="z-meta z-function-call z-arguments z-python"><span class="z-punctuation z-section z-arguments z-begin z-python">(</span><span class="z-meta z-function-call z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">hashes</span></span><span class="z-meta z-qualified-name z-python"><span class="z-punctuation z-accessor z-dot z-python">.</span></span><span class="z-meta z-qualified-name z-python"><span class="z-variable z-function z-python"><span class="z-meta z-generic-name z-python">SHA256</span></span></span></span><span class="z-meta z-function-call z-arguments z-python"><span class="z-punctuation z-section z-arguments z-begin z-python">(</span><span class="z-punctuation z-section z-arguments z-end z-python">)</span></span><span class="z-punctuation z-section z-arguments z-end z-python">)</span></span><span class="z-punctuation z-section z-arguments z-end z-python">)</span></span>
+</span><span class="z-source z-python">    <span class="z-meta z-function-call z-python"><span class="z-meta z-qualified-name z-python"><span class="z-variable z-function z-python"><span class="z-support z-function z-builtin z-python">print</span></span></span></span><span class="z-meta z-function-call z-arguments z-python"><span class="z-punctuation z-section z-arguments z-begin z-python">(</span><span class="z-meta z-string z-python"><span class="z-string z-quoted z-double z-python"><span class="z-punctuation z-definition z-string z-begin z-python">&quot;</span></span></span><span class="z-meta z-string z-python"><span class="z-string z-quoted z-double z-python">Signature verified!<span class="z-punctuation z-definition z-string z-end z-python">&quot;</span></span></span><span class="z-punctuation z-section z-arguments z-end z-python">)</span></span>
+</span><span class="z-source z-python"><span class="z-meta z-statement z-exception z-catch z-python"><span class="z-keyword z-control z-exception z-catch z-python">except</span><span class="z-punctuation z-section z-block z-exception z-catch z-python">:</span></span>
+</span><span class="z-source z-python">    <span class="z-meta z-function-call z-python"><span class="z-meta z-qualified-name z-python"><span class="z-variable z-function z-python"><span class="z-support z-function z-builtin z-python">print</span></span></span></span><span class="z-meta z-function-call z-arguments z-python"><span class="z-punctuation z-section z-arguments z-begin z-python">(</span><span class="z-meta z-string z-python"><span class="z-string z-quoted z-double z-python"><span class="z-punctuation z-definition z-string z-begin z-python">&quot;</span></span></span><span class="z-meta z-string z-python"><span class="z-string z-quoted z-double z-python">Invalid signature!<span class="z-punctuation z-definition z-string z-end z-python">&quot;</span></span></span><span class="z-punctuation z-section z-arguments z-end z-python">)</span></span>
+</span></code></pre>
+<h3 id="3-ecdh-key-exchange">3. ECDH Key Exchange<a class="zola-anchor" href="#3-ecdh-key-exchange" aria-label="Anchor link for: 3-ecdh-key-exchange" style="visibility: hidden;"></a></h3>
+<pre data-lang="python" class="language-python z-code"><code class="language-python" data-lang="python"><span class="z-source z-python"><span class="z-comment z-line z-number-sign z-python"><span class="z-punctuation z-definition z-comment z-python">#</span> Alice tạo key pair
+</span></span><span class="z-source z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">alice_private</span></span> <span class="z-keyword z-operator z-assignment z-python">=</span> <span class="z-meta z-function-call z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">ec</span></span><span class="z-meta z-qualified-name z-python"><span class="z-punctuation z-accessor z-dot z-python">.</span></span><span class="z-meta z-qualified-name z-python"><span class="z-variable z-function z-python"><span class="z-meta z-generic-name z-python">generate_private_key</span></span></span></span><span class="z-meta z-function-call z-arguments z-python"><span class="z-punctuation z-section z-arguments z-begin z-python">(</span><span class="z-meta z-function-call z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">ec</span></span><span class="z-meta z-qualified-name z-python"><span class="z-punctuation z-accessor z-dot z-python">.</span></span><span class="z-meta z-qualified-name z-python"><span class="z-variable z-function z-python"><span class="z-meta z-generic-name z-python">SECP256R1</span></span></span></span><span class="z-meta z-function-call z-arguments z-python"><span class="z-punctuation z-section z-arguments z-begin z-python">(</span><span class="z-punctuation z-section z-arguments z-end z-python">)</span></span><span class="z-punctuation z-section z-arguments z-end z-python">)</span></span>
+</span><span class="z-source z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">alice_public</span></span> <span class="z-keyword z-operator z-assignment z-python">=</span> <span class="z-meta z-function-call z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">alice_private</span></span><span class="z-meta z-qualified-name z-python"><span class="z-punctuation z-accessor z-dot z-python">.</span></span><span class="z-meta z-qualified-name z-python"><span class="z-variable z-function z-python"><span class="z-meta z-generic-name z-python">public_key</span></span></span></span><span class="z-meta z-function-call z-arguments z-python"><span class="z-punctuation z-section z-arguments z-begin z-python">(</span><span class="z-punctuation z-section z-arguments z-end z-python">)</span></span>
+</span><span class="z-source z-python">
+</span><span class="z-source z-python"><span class="z-comment z-line z-number-sign z-python"><span class="z-punctuation z-definition z-comment z-python">#</span> Bob tạo key pair  
+</span></span><span class="z-source z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">bob_private</span></span> <span class="z-keyword z-operator z-assignment z-python">=</span> <span class="z-meta z-function-call z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">ec</span></span><span class="z-meta z-qualified-name z-python"><span class="z-punctuation z-accessor z-dot z-python">.</span></span><span class="z-meta z-qualified-name z-python"><span class="z-variable z-function z-python"><span class="z-meta z-generic-name z-python">generate_private_key</span></span></span></span><span class="z-meta z-function-call z-arguments z-python"><span class="z-punctuation z-section z-arguments z-begin z-python">(</span><span class="z-meta z-function-call z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">ec</span></span><span class="z-meta z-qualified-name z-python"><span class="z-punctuation z-accessor z-dot z-python">.</span></span><span class="z-meta z-qualified-name z-python"><span class="z-variable z-function z-python"><span class="z-meta z-generic-name z-python">SECP256R1</span></span></span></span><span class="z-meta z-function-call z-arguments z-python"><span class="z-punctuation z-section z-arguments z-begin z-python">(</span><span class="z-punctuation z-section z-arguments z-end z-python">)</span></span><span class="z-punctuation z-section z-arguments z-end z-python">)</span></span>
+</span><span class="z-source z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">bob_public</span></span> <span class="z-keyword z-operator z-assignment z-python">=</span> <span class="z-meta z-function-call z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">bob_private</span></span><span class="z-meta z-qualified-name z-python"><span class="z-punctuation z-accessor z-dot z-python">.</span></span><span class="z-meta z-qualified-name z-python"><span class="z-variable z-function z-python"><span class="z-meta z-generic-name z-python">public_key</span></span></span></span><span class="z-meta z-function-call z-arguments z-python"><span class="z-punctuation z-section z-arguments z-begin z-python">(</span><span class="z-punctuation z-section z-arguments z-end z-python">)</span></span>
+</span><span class="z-source z-python">
+</span><span class="z-source z-python"><span class="z-comment z-line z-number-sign z-python"><span class="z-punctuation z-definition z-comment z-python">#</span> Alice tính shared secret
+</span></span><span class="z-source z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">alice_shared</span></span> <span class="z-keyword z-operator z-assignment z-python">=</span> <span class="z-meta z-function-call z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">alice_private</span></span><span class="z-meta z-qualified-name z-python"><span class="z-punctuation z-accessor z-dot z-python">.</span></span><span class="z-meta z-qualified-name z-python"><span class="z-variable z-function z-python"><span class="z-meta z-generic-name z-python">exchange</span></span></span></span><span class="z-meta z-function-call z-arguments z-python"><span class="z-punctuation z-section z-arguments z-begin z-python">(</span><span class="z-meta z-function-call z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">ec</span></span><span class="z-meta z-qualified-name z-python"><span class="z-punctuation z-accessor z-dot z-python">.</span></span><span class="z-meta z-qualified-name z-python"><span class="z-variable z-function z-python"><span class="z-meta z-generic-name z-python">ECDH</span></span></span></span><span class="z-meta z-function-call z-arguments z-python"><span class="z-punctuation z-section z-arguments z-begin z-python">(</span><span class="z-punctuation z-section z-arguments z-end z-python">)</span></span><span class="z-punctuation z-separator z-arguments z-python">,</span> <span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">bob_public</span></span><span class="z-punctuation z-section z-arguments z-end z-python">)</span></span>
+</span><span class="z-source z-python">
+</span><span class="z-source z-python"><span class="z-comment z-line z-number-sign z-python"><span class="z-punctuation z-definition z-comment z-python">#</span> Bob tính shared secret
+</span></span><span class="z-source z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">bob_shared</span></span> <span class="z-keyword z-operator z-assignment z-python">=</span> <span class="z-meta z-function-call z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">bob_private</span></span><span class="z-meta z-qualified-name z-python"><span class="z-punctuation z-accessor z-dot z-python">.</span></span><span class="z-meta z-qualified-name z-python"><span class="z-variable z-function z-python"><span class="z-meta z-generic-name z-python">exchange</span></span></span></span><span class="z-meta z-function-call z-arguments z-python"><span class="z-punctuation z-section z-arguments z-begin z-python">(</span><span class="z-meta z-function-call z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">ec</span></span><span class="z-meta z-qualified-name z-python"><span class="z-punctuation z-accessor z-dot z-python">.</span></span><span class="z-meta z-qualified-name z-python"><span class="z-variable z-function z-python"><span class="z-meta z-generic-name z-python">ECDH</span></span></span></span><span class="z-meta z-function-call z-arguments z-python"><span class="z-punctuation z-section z-arguments z-begin z-python">(</span><span class="z-punctuation z-section z-arguments z-end z-python">)</span></span><span class="z-punctuation z-separator z-arguments z-python">,</span> <span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">alice_public</span></span><span class="z-punctuation z-section z-arguments z-end z-python">)</span></span>
+</span><span class="z-source z-python">
+</span><span class="z-source z-python"><span class="z-comment z-line z-number-sign z-python"><span class="z-punctuation z-definition z-comment z-python">#</span> Kiểm tra
+</span></span><span class="z-source z-python"><span class="z-keyword z-control z-flow z-assert z-python">assert</span> <span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">alice_shared</span></span> <span class="z-keyword z-operator z-comparison z-python">==</span> <span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">bob_shared</span></span>
+</span><span class="z-source z-python"><span class="z-meta z-function-call z-python"><span class="z-meta z-qualified-name z-python"><span class="z-variable z-function z-python"><span class="z-support z-function z-builtin z-python">print</span></span></span></span><span class="z-meta z-function-call z-arguments z-python"><span class="z-punctuation z-section z-arguments z-begin z-python">(</span><span class="z-meta z-string z-python"><span class="z-string z-quoted z-double z-python"><span class="z-punctuation z-definition z-string z-begin z-python">&quot;</span></span></span><span class="z-meta z-string z-python"><span class="z-string z-quoted z-double z-python">Shared secret established!<span class="z-punctuation z-definition z-string z-end z-python">&quot;</span></span></span><span class="z-punctuation z-section z-arguments z-end z-python">)</span></span>
+</span></code></pre>
+<h2 id="tuong-lai-cua-ecc">Tương Lai Của ECC<a class="zola-anchor" href="#tuong-lai-cua-ecc" aria-label="Anchor link for: tuong-lai-cua-ecc" style="visibility: hidden;"></a></h2>
+<h3 id="1-post-quantum-cryptography">1. Post-Quantum Cryptography<a class="zola-anchor" href="#1-post-quantum-cryptography" aria-label="Anchor link for: 1-post-quantum-cryptography" style="visibility: hidden;"></a></h3>
+<p>Mặc dù ECC hiện tại rất mạnh, nhưng quantum computing sẽ là thách thức lớn:</p>
+<p><strong>Timeline:</strong></p>
+<ul>
+<li><strong>Hiện tại - 2030:</strong> ECC vẫn an toàn</li>
+<li><strong>2030 - 2040:</strong> Thời kỳ chuyển đổi sang post-quantum</li>
+<li><strong>2040+:</strong> Post-quantum cryptography trở thành chuẩn</li>
+</ul>
+<p><strong>Hybrid Solutions:</strong>
+Kết hợp ECC với post-quantum algorithms để đảm bảo backward compatibility.</p>
+<h3 id="2-hardware-integration">2. Hardware Integration<a class="zola-anchor" href="#2-hardware-integration" aria-label="Anchor link for: 2-hardware-integration" style="visibility: hidden;"></a></h3>
+<p><strong>Dedicated ECC Processors:</strong></p>
+<ul>
+<li>Chip chuyên dụng cho ECC operations</li>
+<li>Tích hợp vào CPU, GPU, và IoT devices</li>
+</ul>
+<p><strong>TEE Integration:</strong></p>
+<ul>
+<li>Trusted Execution Environment với ECC support</li>
+<li>Secure enclaves cho key management</li>
+</ul>
+<h3 id="3-new-applications">3. New Applications<a class="zola-anchor" href="#3-new-applications" aria-label="Anchor link for: 3-new-applications" style="visibility: hidden;"></a></h3>
+<p><strong>Privacy-Preserving Technologies:</strong></p>
+<ul>
+<li>Zero-knowledge proofs với ECC</li>
+<li>Homomorphic encryption improvements</li>
+</ul>
+<p><strong>Decentralized Identity:</strong></p>
+<ul>
+<li>Self-sovereign identity với ECC</li>
+<li>Blockchain-based authentication</li>
+</ul>
+<h2 id="ket-luan">Kết Luận<a class="zola-anchor" href="#ket-luan" aria-label="Anchor link for: ket-luan" style="visibility: hidden;"></a></h2>
+<p>ECC đã chứng minh mình là một trong những đột phá quan trọng nhất trong lịch sử cryptography. Với khả năng cung cấp bảo mật mạnh mẽ trong một package nhỏ gọn, ECC đã trở thành xương sống của internet hiện đại.</p>
+<p><strong>Những điểm cần nhớ:</strong></p>
+<ul>
+<li><strong>Hiệu quả:</strong> Key size nhỏ nhưng bảo mật cao</li>
+<li><strong>Linh hoạt:</strong> Phù hợp từ smartphone đến supercomputer</li>
+<li><strong>Thực tế:</strong> Được sử dụng rộng rãi trong mọi ngành</li>
+<li><strong>Tương lai:</strong> Vẫn là lựa chọn tốt cho 10-15 năm tới</li>
+</ul>
+<p>Dù bạn là developer, security engineer, hay đơn giản chỉ là người yêu thích công nghệ, hiểu về ECC sẽ giúp bạn:</p>
+<ul>
+<li>Đánh giá đúng các giải pháp bảo mật</li>
+<li>Implement crypto một cách an toàn</li>
+<li>Chuẩn bị cho tương lai của cybersecurity</li>
+</ul>
+<p>ECC không chỉ là một algorithm - nó là minh chứng cho sức mạnh của toán học trong việc bảo vệ thế giới số của chúng ta!</p>
+<hr />
+
+      </article>
+
+      
+      
+
+      
+      
+    </div>
+
+    
+
+
+<footer>
+  <div class="left">
+    <div class="copyright">
+      © 2025 <a href="https:&#x2F;&#x2F;wen.is-a.dev">Wen</a>
+      
+    </div>
+  </div>
+
+  <div class="right">
+    
+    
+    
+    
+
+    <!-- 
+    
+    
+    <button id="theme-toggle" aria-label="theme switch">
+      <span class="moon-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill="currentColor"></path></svg>
+</span>
+      <span class="sun-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z" fill="currentColor"></path></svg>
+</span>
+    </button>
+     -->
+  </div>
+</footer>
+
+
+
+
+  </main>
+</div>
+
+  
+<script src="/js/lightense.min.js"></script>
+
+
+
+  <script src="https://wen.is-a.dev/js/main.js"></script>
+</body>
+
+</html>

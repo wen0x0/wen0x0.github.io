@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  
+
+
+
+<meta name="description" content="Agile, Scrum, Waterfall và các mô hình làm việc khác đã định hình cách con người xây dựng phần mềm. Cùng tìm hiểu chi tiết đặc điểm, quy trình và ưu nhược điểm của từng mô hình.">
+
+  <title>Khám phá các mô hình làm việc phổ biến trong phát triển phần mềm</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="https://wen.is-a.dev/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://wen.is-a.dev/img/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://wen.is-a.dev/img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Ancizar+Sans:ital,wght@0,100..1000;1,100..1000&family=Bitter:ital,wght@0,100..900;1,100..900&family=Indie+Flower&family=Lora:ital,wght@0,400..700;1,400..700&family=Marcellus&display=swap"
+    rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;1,400;1,600&display=swap"
+    rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500..700&display=swap" rel="stylesheet">
+  
+  <style>
+  /* light mode colors */
+  body {
+    /* --primary-color: #5871a2; */
+    --primary-color: #005e05;
+    --primary-pale-color: #5871a233;
+    --primary-decoration-color: #5871a210;
+    --bg-color: #f0f9ff;
+    /* --text-color: #2f3030; */
+    --text-color: #000000;
+    /* --text-pale-color: #767676; */
+    --text-pale-color: #000000;
+    --text-decoration-color: #a9a9a9;
+    --highlight-mark-color: #5f75b020;
+
+    --callout-note-color: #5871a2;
+    --callout-tip-color: #268556;
+    --callout-important-color: #885fc9;
+    --callout-warning-color: #ab6632;
+    --callout-caution-color: #c64e4e;
+  }
+
+  /* dark mode colors */
+  body.dark {
+    /* --primary-color: #6f8fd1; */
+    --primary-color: #ecf16b;
+    --primary-pale-color: #6f8fd166;
+    --primary-decoration-color: #6f8fd112;
+    /* --bg-color: #1c1c1c; */
+    /* --bg-color: #002727; */
+    /* --bg-color: #002333; */
+    --bg-color: #01242E;
+    /* --text-color: #c1c1c1; */
+    --text-color: #ffffff;
+    /* --text-pale-color: #848484; */
+    --text-pale-color: #ffffff;
+    --text-decoration-color: #5f5f5f;
+    --highlight-mark-color: #8296cb3b;
+
+    --callout-note-color: #6f8fd1;
+    --callout-tip-color: #47976f;
+    --callout-important-color: #9776cd;
+    --callout-warning-color: #ad7a52;
+    --callout-caution-color: #d06161;
+  }
+
+  /* typography */
+  body {
+    /* --main-font: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; */
+    --main-font: 'Nunito', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --heading-font: 'Quicksand', 'Lora', 'Bitter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --code-font: 'Cascadia Code', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    --homepage-max-width: 768px;
+    --main-max-width: 768px;
+    --avatar-size: 75px;
+    --font-size: 16px;
+    --line-height: 1.75;
+    --img-border-radius: 0px;
+    --detail-border-radius: 11px;
+    --dark-mode-img-brightness: 0.75;
+    --dark-mode-chart-brightness: 0.75;
+    --inline-code-border-radius: 2px;
+    --inline-code-bg-color: var(--primary-decoration-color);
+    --block-code-border-radius: 0px;
+    --block-code-border-color: var(--primary-color);
+    --detail-border-color: var(--primary-color);
+  }
+
+
+  #name,
+  #id,
+  #left,
+  a.post,
+  a.back-link,
+  a.tag,
+  a.category,
+  .title {
+    font-family: var(--heading-font);
+  }
+
+  span.date {
+    font-family: var(--code-font);
+    color: var(--text-pale-color);
+  }
+
+  .gif-wrapper {
+    text-align: center;
+    margin: 1.5rem 0;
+  }
+
+  .gif-wrapper .intro-gif {
+    max-width: 96%;
+    height: auto;
+    border-radius: 8px;
+  }
+
+  .verified-icon {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 3px;
+    vertical-align: middle;
+  }
+
+  .verified-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .top-nav {
+    width: 100%;
+    padding-bottom: 1em;
+    border-bottom: 1px solid var(--border-color);
+    background: rgba(var(--background-rgb), 0.85);
+    backdrop-filter: blur(8px);
+    border-radius: var(--detail-border-radius);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .top-nav nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+  }
+
+  .nav-left,
+  .nav-center,
+  .nav-right {
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-center {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-top: 1em;
+  }
+
+  .menu-wrapper {
+    position: relative;
+    margin-top: 1.5em;
+  }
+
+  .menu-trigger {
+    font-size: 1.5em;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-color);
+  }
+
+  .menu-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+
+    background: var(--bg-color);
+    font-family: var(--heading-font);
+    border: 1px solid var(--primary-pale-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    min-width: 85px;
+    padding: 0.25em 0;
+    z-index: 2000;
+
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .menu-wrapper.active .menu-dropdown {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+
+  .menu-dropdown a {
+    display: block;
+    padding: 0.6em 1em;
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 0.95em;
+    margin: auto;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  #theme-toggle:hover,
+  #rain-toggle:hover {
+    cursor: pointer;
+  }
+
+  .foot-quote,
+  .section-title {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    text-align: center;
+    display: block;
+    margin-top: 2em;
+  }
+
+  .layout-list .post {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+  }
+
+  .post>span:first-child {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+
+  .post>.date {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .year-heading {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    font-size: 1.5em;
+    font-weight: bold;
+    font-family: var(--heading-font);
+  }
+
+  /* term-caret  */
+  #id.term-caret {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    position: relative;
+    white-space: nowrap;
+  }
+
+  #id.term-caret::after {
+    content: "_";
+
+    margin-left: 4px;
+    animation: blink 1s steps(1, end) infinite;
+    opacity: 1;
+    color: currentColor;
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #id.term-caret::after {
+      animation: none;
+      opacity: 1;
+    }
+  }
+
+  /* typewriter */
+  #id.typewriter {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    white-space: nowrap;
+    border-right: 1ch solid currentColor;
+    /* caret */
+    /* caret blink */
+    animation: caret-blink 1s steps(1, end) infinite;
+  }
+
+  @keyframes caret-blink {
+    50% {
+      border-right-color: transparent;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #id.typewriter {
+      animation: none;
+      border-right-color: currentColor;
+    }
+  }
+
+  /* glitch effect  */
+  #id.glitch {
+    position: relative;
+    display: inline-block;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  #id.glitch::before,
+  #id.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    clip-path: inset(0 0 0 0);
+    opacity: .85;
+  }
+
+  #id.glitch::before {
+    transform: translate(0, 0);
+    mix-blend-mode: screen;
+    text-shadow: 1px 0 0 #f00;
+    /* viền đỏ */
+    animation: glitch-1 2s infinite linear alternate-reverse;
+  }
+
+  #id.glitch::after {
+    transform: translate(0, 0);
+    mix-blend-mode: screen;
+    text-shadow: -1px 0 0 #0ff;
+    /* viền cyan */
+    animation: glitch-2 2.2s infinite linear alternate-reverse;
+  }
+
+  @keyframes glitch-1 {
+    0% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(0, 0);
+    }
+
+    20% {
+      clip-path: inset(10% 0 60% 0);
+      transform: translate(-1px, -1px);
+    }
+
+    40% {
+      clip-path: inset(40% 0 30% 0);
+      transform: translate(1px, 1px);
+    }
+
+    60% {
+      clip-path: inset(20% 0 55% 0);
+      transform: translate(-1px, 0);
+    }
+
+    80% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 1px);
+    }
+
+    100% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(0, 0);
+    }
+  }
+
+  @keyframes glitch-2 {
+    0% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 0);
+    }
+
+    20% {
+      clip-path: inset(40% 0 30% 0);
+      transform: translate(1px, 0);
+    }
+
+    40% {
+      clip-path: inset(10% 0 60% 0);
+      transform: translate(0, -1px);
+    }
+
+    60% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(-1px, 1px);
+    }
+
+    80% {
+      clip-path: inset(20% 0 55% 0);
+      transform: translate(1px, 0);
+    }
+
+    100% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+
+    #id.glitch::before,
+    #id.glitch::after {
+      animation: none;
+    }
+  }
+</style>
+  <link rel="stylesheet" href="https://wen.is-a.dev/main.css">
+  
+
+<link id="hl" rel="stylesheet" type="text/css" href="/hl-light.css" />
+
+
+
+  
+</head>
+
+<body class="post">
+
+  
+  <script>
+    const theme = sessionStorage.getItem('theme');
+    const match = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if ((theme && theme === 'dark') || (!theme && match)) {
+      document.body.classList.add('dark');
+      const hl = document.querySelector('link#hl');
+      if (hl) hl.href = 'https://wen.is-a.dev/hl-dark.css';
+    }
+  </script>
+  
+
+  
+<div id="wrapper">
+  <div id="blank"></div>
+  <aside>
+    
+    
+    
+    <button id="back-to-top" aria-label="back to top">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-up"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+
+    </button>
+    
+  </aside>
+  <main>
+    
+<header class="top-nav">
+  <nav>
+    <!-- Left: Back -->
+    <div class="nav-left">
+      <a href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts" class="back-link">← Back</a>
+    </div>
+
+    <!-- Center: Avatar -->
+    <div class="nav-center">
+      
+      <a href="/">
+        <img src="https://wen.is-a.dev/img/qwe.jpg" alt="avatar" class="avatar">
+      </a>
+      
+    </div>
+
+    <!-- Right: Menu dropdown -->
+    <div class="nav-right">
+
+      <div class="menu-wrapper">
+
+        <button class="menu-trigger" aria-label="menu">
+          &#9776;
+        </button>
+        <div class="menu-dropdown">
+          <a href="https://wen.is-a.dev/posts">POSTS</a>
+          <a href="https://wen.is-a.dev/about">ABOUT</a>
+          <a href="https://wen.is-a.dev/contact">CONTACT</a>
+          
+          
+          
+          
+          
+
+          <a id="theme-toggle" aria-label="theme switch">
+            <span class="moon-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill="currentColor"></path></svg>
+</span>
+            <span class="sun-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z" fill="currentColor"></path></svg>
+</span>
+          </a>
+
+          
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const trigger = document.querySelector(".menu-trigger");
+    const wrapper = document.querySelector(".menu-wrapper");
+
+    if (trigger && wrapper) {
+      trigger.addEventListener("click", () => {
+        wrapper.classList.toggle("active");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!wrapper.contains(e.target)) {
+          wrapper.classList.remove("active");
+        }
+      });
+    }
+  });
+
+</script>
+
+
+    <div>
+      
+      
+      
+      
+      <div id="copy-cfg" style="display: none;" data-copy-icon="&lt;svg xmlns=&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2000&#x2F;svg&quot; viewBox=&quot;0 0 24 24&quot; width=&quot;18&quot; height=&quot;18&quot;&gt;&lt;path d=&quot;M6.9998 6V3C6.9998 2.44772 7.44752 2 7.9998 2H19.9998C20.5521 2 20.9998 2.44772 20.9998 3V17C20.9998 17.5523 20.5521 18 19.9998 18H16.9998V20.9991C16.9998 21.5519 16.5499 22 15.993 22H4.00666C3.45059 22 3 21.5554 3 20.9991L3.0026 7.00087C3.0027 6.44811 3.45264 6 4.00942 6H6.9998ZM5.00242 8L5.00019 20H14.9998V8H5.00242ZM8.9998 6H16.9998V16H18.9998V4H8.9998V6Z&quot; fill=&quot;currentColor&quot;&gt;&lt;&#x2F;path&gt;&lt;&#x2F;svg&gt;
+" data-check-icon="&lt;svg xmlns=&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2000&#x2F;svg&quot; viewBox=&quot;0 0 24 24&quot; width=&quot;18&quot; height=&quot;18&quot;&gt;&lt;path d=&quot;M10.0007 15.1709L19.1931 5.97852L20.6073 7.39273L10.0007 17.9993L3.63672 11.6354L5.05093 10.2212L10.0007 15.1709Z&quot; fill=&quot;currentColor&quot;&gt;&lt;&#x2F;path&gt;&lt;&#x2F;svg&gt;
+">
+      </div>
+      
+      <article class="prose">
+        <h1 class="title">Khám phá các mô hình làm việc phổ biến trong phát triển phần mềm</h1>
+        <div id="post-info">
+          <div id="date">
+            <span id="publish">Sep 22, 2025</span>
+            </div>
+
+          
+        </div>
+
+        
+        
+
+        
+
+        <p>Trong ngành phát triển phần mềm, cách chúng ta tổ chức công việc và quản lý dự án ảnh hưởng trực tiếp đến chất lượng sản phẩm, tiến độ và sự hài lòng của khách hàng.<br />
+Trải qua nhiều năm, các mô hình làm việc như Waterfall, Agile, Scrum, hay Kanban đã ra đời, mỗi mô hình mang một triết lý và cách tiếp cận khác nhau.</p>
+<p>Bài viết này giúp bạn hiểu rõ hơn từng mô hình — từ quy trình, đặc điểm cho đến ưu và nhược điểm — để chọn ra phương pháp phù hợp nhất với dự án của mình.</p>
+<hr />
+<h2 id="1-mo-hinh-waterfall-quy-trinh-thac-nuoc-truyen-thong">1. Mô hình Waterfall – Quy trình thác nước truyền thống<a class="zola-anchor" href="#1-mo-hinh-waterfall-quy-trinh-thac-nuoc-truyen-thong" aria-label="Anchor link for: 1-mo-hinh-waterfall-quy-trinh-thac-nuoc-truyen-thong" style="visibility: hidden;"></a></h2>
+<h3 id="khai-niem">Khái niệm<a class="zola-anchor" href="#khai-niem" aria-label="Anchor link for: khai-niem" style="visibility: hidden;"></a></h3>
+<p>Waterfall (thác nước) là mô hình phát triển phần mềm tuyến tính, trong đó công việc diễn ra theo từng giai đoạn cụ thể và giai đoạn sau chỉ bắt đầu khi giai đoạn trước hoàn tất.</p>
+<h3 id="cac-giai-doan-chinh">Các giai đoạn chính<a class="zola-anchor" href="#cac-giai-doan-chinh" aria-label="Anchor link for: cac-giai-doan-chinh" style="visibility: hidden;"></a></h3>
+<ol>
+<li><strong>Phân tích yêu cầu (Requirement Analysis)</strong> – Thu thập và ghi chép yêu cầu từ khách hàng.</li>
+<li><strong>Thiết kế hệ thống (System Design)</strong> – Lên kiến trúc phần mềm, cơ sở dữ liệu và giao diện.</li>
+<li><strong>Triển khai (Implementation)</strong> – Lập trình theo thiết kế.</li>
+<li><strong>Kiểm thử (Testing)</strong> – Kiểm tra toàn bộ hệ thống, phát hiện lỗi.</li>
+<li><strong>Triển khai &amp; Bảo trì (Deployment &amp; Maintenance)</strong> – Cài đặt phần mềm và hỗ trợ sau triển khai.</li>
+</ol>
+<h3 id="uu-diem">Ưu điểm<a class="zola-anchor" href="#uu-diem" aria-label="Anchor link for: uu-diem" style="visibility: hidden;"></a></h3>
+<ul>
+<li>Dễ quản lý, đặc biệt với dự án có yêu cầu rõ ràng, ít thay đổi.</li>
+<li>Có tài liệu chi tiết cho từng bước, dễ đào tạo nhân viên mới.</li>
+<li>Tiến độ và chi phí được xác định sớm.</li>
+</ul>
+<h3 id="han-che">Hạn chế<a class="zola-anchor" href="#han-che" aria-label="Anchor link for: han-che" style="visibility: hidden;"></a></h3>
+<ul>
+<li>Không linh hoạt — nếu có thay đổi, phải quay lại từ đầu.</li>
+<li>Phản hồi của khách hàng chỉ có sau khi hoàn thành sản phẩm.</li>
+<li>Khó phát hiện sớm các vấn đề trong quá trình phát triển.</li>
+</ul>
+<hr />
+<h2 id="2-mo-hinh-agile-linh-hoat-va-thich-ung-voi-thay-doi">2. Mô hình Agile – Linh hoạt và thích ứng với thay đổi<a class="zola-anchor" href="#2-mo-hinh-agile-linh-hoat-va-thich-ung-voi-thay-doi" aria-label="Anchor link for: 2-mo-hinh-agile-linh-hoat-va-thich-ung-voi-thay-doi" style="visibility: hidden;"></a></h2>
+<h3 id="khai-niem-1">Khái niệm<a class="zola-anchor" href="#khai-niem-1" aria-label="Anchor link for: khai-niem-1" style="visibility: hidden;"></a></h3>
+<p>Agile là triết lý làm việc linh hoạt giúp nhóm phát triển thích ứng nhanh với thay đổi và liên tục cải tiến sản phẩm.<br />
+Agile ra đời để khắc phục nhược điểm của Waterfall, nơi mọi thứ quá cứng nhắc.</p>
+<h3 id="tu-tuong-cot-loi-agile-manifesto">Tư tưởng cốt lõi (Agile Manifesto)<a class="zola-anchor" href="#tu-tuong-cot-loi-agile-manifesto" aria-label="Anchor link for: tu-tuong-cot-loi-agile-manifesto" style="visibility: hidden;"></a></h3>
+<p>Agile nhấn mạnh 4 giá trị chính:</p>
+<ul>
+<li>Con người và sự tương tác <strong>quan trọng hơn</strong> quy trình và công cụ.</li>
+<li>Phần mềm hoạt động được <strong>quan trọng hơn</strong> tài liệu chi tiết.</li>
+<li>Hợp tác với khách hàng <strong>quan trọng hơn</strong> đàm phán hợp đồng.</li>
+<li>Phản hồi với thay đổi <strong>quan trọng hơn</strong> việc bám sát kế hoạch.</li>
+</ul>
+<h3 id="cach-lam-viec">Cách làm việc<a class="zola-anchor" href="#cach-lam-viec" aria-label="Anchor link for: cach-lam-viec" style="visibility: hidden;"></a></h3>
+<ul>
+<li>Dự án được chia thành các vòng lặp ngắn (iteration), thường kéo dài 1–4 tuần.</li>
+<li>Sau mỗi vòng, nhóm đánh giá kết quả, nhận phản hồi và điều chỉnh kế hoạch.</li>
+<li>Các thành viên trong nhóm tự tổ chức và chịu trách nhiệm lẫn nhau.</li>
+</ul>
+<h3 id="uu-diem-1">Ưu điểm<a class="zola-anchor" href="#uu-diem-1" aria-label="Anchor link for: uu-diem-1" style="visibility: hidden;"></a></h3>
+<ul>
+<li>Linh hoạt, dễ thích ứng với thay đổi.</li>
+<li>Sản phẩm được cải thiện liên tục.</li>
+<li>Giao tiếp nhóm và sự minh bạch cao.</li>
+</ul>
+<h3 id="nhuoc-diem">Nhược điểm<a class="zola-anchor" href="#nhuoc-diem" aria-label="Anchor link for: nhuoc-diem" style="visibility: hidden;"></a></h3>
+<ul>
+<li>Cần đội ngũ có kỷ luật và khả năng tự quản.</li>
+<li>Khó ước lượng thời gian và chi phí tổng thể.</li>
+<li>Không phù hợp với khách hàng yêu cầu kế hoạch cố định.</li>
+</ul>
+<hr />
+<h2 id="3-mo-hinh-scrum-cu-the-hoa-agile">3. Mô hình Scrum – Cụ thể hóa Agile<a class="zola-anchor" href="#3-mo-hinh-scrum-cu-the-hoa-agile" aria-label="Anchor link for: 3-mo-hinh-scrum-cu-the-hoa-agile" style="visibility: hidden;"></a></h2>
+<h3 id="khai-niem-2">Khái niệm<a class="zola-anchor" href="#khai-niem-2" aria-label="Anchor link for: khai-niem-2" style="visibility: hidden;"></a></h3>
+<p>Scrum là một framework cụ thể trong Agile, giúp quản lý và chia nhỏ công việc trong các vòng lặp ngắn gọi là Sprint (thường 2–4 tuần).</p>
+<h3 id="cac-vai-tro-trong-scrum">Các vai trò trong Scrum<a class="zola-anchor" href="#cac-vai-tro-trong-scrum" aria-label="Anchor link for: cac-vai-tro-trong-scrum" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>Product Owner</strong> – đại diện khách hàng, ưu tiên các tính năng trong Product Backlog.</li>
+<li><strong>Scrum Master</strong> – hướng dẫn nhóm tuân thủ quy tắc Scrum, gỡ bỏ trở ngại.</li>
+<li><strong>Development Team</strong> – nhóm kỹ sư, kiểm thử viên, thiết kế, phát triển sản phẩm.</li>
+</ul>
+<h3 id="quy-trinh-scrum">Quy trình Scrum<a class="zola-anchor" href="#quy-trinh-scrum" aria-label="Anchor link for: quy-trinh-scrum" style="visibility: hidden;"></a></h3>
+<ol>
+<li><strong>Sprint Planning</strong> – lập kế hoạch cho Sprint.</li>
+<li><strong>Daily Scrum</strong> – họp nhanh 15 phút mỗi ngày để cập nhật tiến độ.</li>
+<li><strong>Sprint Review</strong> – trình bày kết quả cho khách hàng hoặc stakeholder.</li>
+<li><strong>Sprint Retrospective</strong> – cùng nhìn lại và cải thiện quy trình.</li>
+</ol>
+<h3 id="uu-diem-2">Ưu điểm<a class="zola-anchor" href="#uu-diem-2" aria-label="Anchor link for: uu-diem-2" style="visibility: hidden;"></a></h3>
+<ul>
+<li>Cải thiện khả năng phản hồi nhanh với thay đổi.</li>
+<li>Tăng tính chủ động, tinh thần nhóm.</li>
+<li>Giúp khách hàng thấy sản phẩm dần hoàn thiện qua từng Sprint.</li>
+</ul>
+<h3 id="nhuoc-diem-1">Nhược điểm<a class="zola-anchor" href="#nhuoc-diem-1" aria-label="Anchor link for: nhuoc-diem-1" style="visibility: hidden;"></a></h3>
+<ul>
+<li>Dễ thất bại nếu không hiểu rõ nguyên tắc Scrum.</li>
+<li>Không phù hợp nếu nhóm thiếu sự cam kết hoặc ổn định.</li>
+<li>Cần thời gian làm quen ban đầu.</li>
+</ul>
+<hr />
+<h2 id="4-mo-hinh-kanban-quan-ly-cong-viec-truc-quan">4. Mô hình Kanban – Quản lý công việc trực quan<a class="zola-anchor" href="#4-mo-hinh-kanban-quan-ly-cong-viec-truc-quan" aria-label="Anchor link for: 4-mo-hinh-kanban-quan-ly-cong-viec-truc-quan" style="visibility: hidden;"></a></h2>
+<h3 id="khai-niem-3">Khái niệm<a class="zola-anchor" href="#khai-niem-3" aria-label="Anchor link for: khai-niem-3" style="visibility: hidden;"></a></h3>
+<p>Kanban là phương pháp quản lý dòng công việc (workflow) dựa trên trực quan hóa tiến độ.<br />
+Các công việc được thể hiện trên bảng Kanban, thường chia thành các cột:<br />
+<strong>“Việc cần làm (To Do)” – “Đang làm (In Progress)” – “Hoàn thành (Done)”</strong>.</p>
+<h3 id="cach-hoat-dong">Cách hoạt động<a class="zola-anchor" href="#cach-hoat-dong" aria-label="Anchor link for: cach-hoat-dong" style="visibility: hidden;"></a></h3>
+<ul>
+<li>Khi bắt đầu công việc, thẻ được di chuyển từ “To Do” sang “In Progress”.</li>
+<li>Khi hoàn thành, thẻ chuyển sang “Done”.</li>
+<li>Giới hạn số lượng công việc đang làm (<strong>WIP limit</strong>) để tránh quá tải.</li>
+</ul>
+<h3 id="uu-diem-3">Ưu điểm<a class="zola-anchor" href="#uu-diem-3" aria-label="Anchor link for: uu-diem-3" style="visibility: hidden;"></a></h3>
+<ul>
+<li>Dễ triển khai, trực quan, ai cũng hiểu được.</li>
+<li>Linh hoạt, không ràng buộc thời gian như Scrum.</li>
+<li>Giúp phát hiện tắc nghẽn trong quy trình sớm.</li>
+</ul>
+<h3 id="nhuoc-diem-2">Nhược điểm<a class="zola-anchor" href="#nhuoc-diem-2" aria-label="Anchor link for: nhuoc-diem-2" style="visibility: hidden;"></a></h3>
+<ul>
+<li>Không có cấu trúc cố định, dễ rối nếu thiếu kỷ luật.</li>
+<li>Khó theo dõi tiến độ dài hạn.</li>
+</ul>
+<hr />
+<h2 id="5-mot-so-mo-hinh-khac">5. Một số mô hình khác<a class="zola-anchor" href="#5-mot-so-mo-hinh-khac" aria-label="Anchor link for: 5-mot-so-mo-hinh-khac" style="visibility: hidden;"></a></h2>
+<h3 id="v-model-verification-validation">V-Model (Verification &amp; Validation)<a class="zola-anchor" href="#v-model-verification-validation" aria-label="Anchor link for: v-model-verification-validation" style="visibility: hidden;"></a></h3>
+<p>Là phiên bản mở rộng của Waterfall, chú trọng song song giữa phát triển và kiểm thử.<br />
+Ví dụ: mỗi giai đoạn phát triển đều có giai đoạn kiểm thử tương ứng.</p>
+<h3 id="spiral-model">Spiral Model<a class="zola-anchor" href="#spiral-model" aria-label="Anchor link for: spiral-model" style="visibility: hidden;"></a></h3>
+<p>Kết hợp giữa Waterfall và phát triển lặp, nhấn mạnh vào quản lý rủi ro.<br />
+Phù hợp với dự án lớn, có nhiều yếu tố chưa chắc chắn.</p>
+<h3 id="hybrid-model-agile-waterfall">Hybrid Model (Agile + Waterfall)<a class="zola-anchor" href="#hybrid-model-agile-waterfall" aria-label="Anchor link for: hybrid-model-agile-waterfall" style="visibility: hidden;"></a></h3>
+<p>Là mô hình lai, thường được dùng trong doanh nghiệp lớn:</p>
+<ul>
+<li>Phần lập kế hoạch theo Waterfall.</li>
+<li>Phần phát triển chia nhỏ theo Agile hoặc Scrum.</li>
+</ul>
+<hr />
+<h2 id="6-bang-so-sanh-tong-quan">6. Bảng so sánh tổng quan<a class="zola-anchor" href="#6-bang-so-sanh-tong-quan" aria-label="Anchor link for: 6-bang-so-sanh-tong-quan" style="visibility: hidden;"></a></h2>
+<table><thead><tr><th>Tiêu chí</th><th>Waterfall</th><th>Agile</th><th>Scrum</th><th>Kanban</th></tr></thead><tbody>
+<tr><td><strong>Cách làm việc</strong></td><td>Tuyến tính, theo giai đoạn</td><td>Linh hoạt, lặp lại</td><td>Lặp lại theo Sprint</td><td>Liên tục, trực quan</td></tr>
+<tr><td><strong>Phản hồi khách hàng</strong></td><td>Sau khi hoàn thành</td><td>Liên tục</td><td>Sau mỗi Sprint</td><td>Liên tục</td></tr>
+<tr><td><strong>Phù hợp với</strong></td><td>Dự án cố định, ít thay đổi</td><td>Dự án cần linh hoạt</td><td>Nhóm phát triển sản phẩm</td><td>Quy trình cải tiến liên tục</td></tr>
+<tr><td><strong>Ưu điểm nổi bật</strong></td><td>Dễ quản lý</td><td>Linh hoạt</td><td>Minh bạch, tự quản</td><td>Đơn giản, trực quan</td></tr>
+<tr><td><strong>Nhược điểm chính</strong></td><td>Thiếu linh hoạt</td><td>Khó đoán thời gian</td><td>Dễ hiểu sai quy trình</td><td>Dễ rối nếu không kiểm soát</td></tr>
+</tbody></table>
+<hr />
+<h2 id="7-ket-luan">7. Kết luận<a class="zola-anchor" href="#7-ket-luan" aria-label="Anchor link for: 7-ket-luan" style="visibility: hidden;"></a></h2>
+<p>Không có mô hình nào hoàn hảo cho mọi dự án.<br />
+Việc lựa chọn mô hình phụ thuộc vào:</p>
+<ul>
+<li>Quy mô nhóm và kinh nghiệm.</li>
+<li>Mức độ thay đổi yêu cầu.</li>
+<li>Văn hóa doanh nghiệp và khách hàng.</li>
+</ul>
+<p><strong>Waterfall</strong> phù hợp với môi trường ổn định.<br />
+<strong>Agile/Scrum</strong> giúp nhóm thích ứng nhanh, tạo giá trị sớm.<br />
+<strong>Kanban</strong> lại lý tưởng cho quy trình cải tiến liên tục.</p>
+<p>Hiểu rõ từng mô hình sẽ giúp bạn chọn được cách làm việc phù hợp nhất để đạt hiệu quả tối đa trong phát triển phần mềm.</p>
+
+      </article>
+
+      
+      
+
+      
+      
+    </div>
+
+    
+
+
+<footer>
+  <div class="left">
+    <div class="copyright">
+      © 2025 <a href="https:&#x2F;&#x2F;wen.is-a.dev">Wen</a>
+      
+    </div>
+  </div>
+
+  <div class="right">
+    
+    
+    
+    
+
+    <!-- 
+    
+    
+    <button id="theme-toggle" aria-label="theme switch">
+      <span class="moon-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill="currentColor"></path></svg>
+</span>
+      <span class="sun-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z" fill="currentColor"></path></svg>
+</span>
+    </button>
+     -->
+  </div>
+</footer>
+
+
+
+
+  </main>
+</div>
+
+  
+<script src="/js/lightense.min.js"></script>
+
+
+
+  <script src="https://wen.is-a.dev/js/main.js"></script>
+</body>
+
+</html>

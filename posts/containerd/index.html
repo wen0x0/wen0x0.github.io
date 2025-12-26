@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  
+
+
+
+<meta name="description" content="Tìm hiểu về containerd, container runtime đằng sau Docker và Kubernetes">
+
+  <title>containerd – Runtime container cốt lõi của hệ sinh thái container</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="https://wen.is-a.dev/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://wen.is-a.dev/img/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://wen.is-a.dev/img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Ancizar+Sans:ital,wght@0,100..1000;1,100..1000&family=Bitter:ital,wght@0,100..900;1,100..900&family=Indie+Flower&family=Lora:ital,wght@0,400..700;1,400..700&family=Marcellus&display=swap"
+    rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;1,400;1,600&display=swap"
+    rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500..700&display=swap" rel="stylesheet">
+  
+  <style>
+  /* light mode colors */
+  body {
+    /* --primary-color: #5871a2; */
+    --primary-color: #005e05;
+    --primary-pale-color: #5871a233;
+    --primary-decoration-color: #5871a210;
+    --bg-color: #f0f9ff;
+    /* --text-color: #2f3030; */
+    --text-color: #000000;
+    /* --text-pale-color: #767676; */
+    --text-pale-color: #000000;
+    --text-decoration-color: #a9a9a9;
+    --highlight-mark-color: #5f75b020;
+
+    --callout-note-color: #5871a2;
+    --callout-tip-color: #268556;
+    --callout-important-color: #885fc9;
+    --callout-warning-color: #ab6632;
+    --callout-caution-color: #c64e4e;
+  }
+
+  /* dark mode colors */
+  body.dark {
+    /* --primary-color: #6f8fd1; */
+    --primary-color: #ecf16b;
+    --primary-pale-color: #6f8fd166;
+    --primary-decoration-color: #6f8fd112;
+    /* --bg-color: #1c1c1c; */
+    /* --bg-color: #002727; */
+    /* --bg-color: #002333; */
+    --bg-color: #01242E;
+    /* --text-color: #c1c1c1; */
+    --text-color: #ffffff;
+    /* --text-pale-color: #848484; */
+    --text-pale-color: #ffffff;
+    --text-decoration-color: #5f5f5f;
+    --highlight-mark-color: #8296cb3b;
+
+    --callout-note-color: #6f8fd1;
+    --callout-tip-color: #47976f;
+    --callout-important-color: #9776cd;
+    --callout-warning-color: #ad7a52;
+    --callout-caution-color: #d06161;
+  }
+
+  /* typography */
+  body {
+    /* --main-font: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; */
+    --main-font: 'Nunito', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --heading-font: 'Quicksand', 'Lora', 'Bitter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --code-font: 'Cascadia Code', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    --homepage-max-width: 768px;
+    --main-max-width: 768px;
+    --avatar-size: 75px;
+    --font-size: 16px;
+    --line-height: 1.75;
+    --img-border-radius: 0px;
+    --detail-border-radius: 11px;
+    --dark-mode-img-brightness: 0.75;
+    --dark-mode-chart-brightness: 0.75;
+    --inline-code-border-radius: 2px;
+    --inline-code-bg-color: var(--primary-decoration-color);
+    --block-code-border-radius: 0px;
+    --block-code-border-color: var(--primary-color);
+    --detail-border-color: var(--primary-color);
+  }
+
+
+  #name,
+  #id,
+  #left,
+  a.post,
+  a.back-link,
+  a.tag,
+  a.category,
+  .title {
+    font-family: var(--heading-font);
+  }
+
+  span.date {
+    font-family: var(--code-font);
+    color: var(--text-pale-color);
+  }
+
+  .gif-wrapper {
+    text-align: center;
+    margin: 1.5rem 0;
+  }
+
+  .gif-wrapper .intro-gif {
+    max-width: 96%;
+    height: auto;
+    border-radius: 8px;
+  }
+
+  .verified-icon {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 3px;
+    vertical-align: middle;
+  }
+
+  .verified-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .top-nav {
+    width: 100%;
+    padding-bottom: 1em;
+    border-bottom: 1px solid var(--border-color);
+    background: rgba(var(--background-rgb), 0.85);
+    backdrop-filter: blur(8px);
+    border-radius: var(--detail-border-radius);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .top-nav nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+  }
+
+  .nav-left,
+  .nav-center,
+  .nav-right {
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-center {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-top: 1em;
+  }
+
+  .menu-wrapper {
+    position: relative;
+    margin-top: 1.5em;
+  }
+
+  .menu-trigger {
+    font-size: 1.5em;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-color);
+  }
+
+  .menu-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+
+    background: var(--bg-color);
+    font-family: var(--heading-font);
+    border: 1px solid var(--primary-pale-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    min-width: 85px;
+    padding: 0.25em 0;
+    z-index: 2000;
+
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .menu-wrapper.active .menu-dropdown {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+
+  .menu-dropdown a {
+    display: block;
+    padding: 0.6em 1em;
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 0.95em;
+    margin: auto;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  #theme-toggle:hover,
+  #rain-toggle:hover {
+    cursor: pointer;
+  }
+
+  .foot-quote,
+  .section-title {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    text-align: center;
+    display: block;
+    margin-top: 2em;
+  }
+
+  .layout-list .post {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+  }
+
+  .post>span:first-child {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+
+  .post>.date {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .year-heading {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    font-size: 1.5em;
+    font-weight: bold;
+    font-family: var(--heading-font);
+  }
+
+  /* term-caret  */
+  #id.term-caret {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    position: relative;
+    white-space: nowrap;
+  }
+
+  #id.term-caret::after {
+    content: "_";
+
+    margin-left: 4px;
+    animation: blink 1s steps(1, end) infinite;
+    opacity: 1;
+    color: currentColor;
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #id.term-caret::after {
+      animation: none;
+      opacity: 1;
+    }
+  }
+
+  /* typewriter */
+  #id.typewriter {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    white-space: nowrap;
+    border-right: 1ch solid currentColor;
+    /* caret */
+    /* caret blink */
+    animation: caret-blink 1s steps(1, end) infinite;
+  }
+
+  @keyframes caret-blink {
+    50% {
+      border-right-color: transparent;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #id.typewriter {
+      animation: none;
+      border-right-color: currentColor;
+    }
+  }
+
+  /* glitch effect  */
+  #id.glitch {
+    position: relative;
+    display: inline-block;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  #id.glitch::before,
+  #id.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    clip-path: inset(0 0 0 0);
+    opacity: .85;
+  }
+
+  #id.glitch::before {
+    transform: translate(0, 0);
+    mix-blend-mode: screen;
+    text-shadow: 1px 0 0 #f00;
+    /* viền đỏ */
+    animation: glitch-1 2s infinite linear alternate-reverse;
+  }
+
+  #id.glitch::after {
+    transform: translate(0, 0);
+    mix-blend-mode: screen;
+    text-shadow: -1px 0 0 #0ff;
+    /* viền cyan */
+    animation: glitch-2 2.2s infinite linear alternate-reverse;
+  }
+
+  @keyframes glitch-1 {
+    0% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(0, 0);
+    }
+
+    20% {
+      clip-path: inset(10% 0 60% 0);
+      transform: translate(-1px, -1px);
+    }
+
+    40% {
+      clip-path: inset(40% 0 30% 0);
+      transform: translate(1px, 1px);
+    }
+
+    60% {
+      clip-path: inset(20% 0 55% 0);
+      transform: translate(-1px, 0);
+    }
+
+    80% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 1px);
+    }
+
+    100% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(0, 0);
+    }
+  }
+
+  @keyframes glitch-2 {
+    0% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 0);
+    }
+
+    20% {
+      clip-path: inset(40% 0 30% 0);
+      transform: translate(1px, 0);
+    }
+
+    40% {
+      clip-path: inset(10% 0 60% 0);
+      transform: translate(0, -1px);
+    }
+
+    60% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(-1px, 1px);
+    }
+
+    80% {
+      clip-path: inset(20% 0 55% 0);
+      transform: translate(1px, 0);
+    }
+
+    100% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+
+    #id.glitch::before,
+    #id.glitch::after {
+      animation: none;
+    }
+  }
+</style>
+  <link rel="stylesheet" href="https://wen.is-a.dev/main.css">
+  
+
+<link id="hl" rel="stylesheet" type="text/css" href="/hl-light.css" />
+
+
+
+  
+</head>
+
+<body class="post">
+
+  
+  <script>
+    const theme = sessionStorage.getItem('theme');
+    const match = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if ((theme && theme === 'dark') || (!theme && match)) {
+      document.body.classList.add('dark');
+      const hl = document.querySelector('link#hl');
+      if (hl) hl.href = 'https://wen.is-a.dev/hl-dark.css';
+    }
+  </script>
+  
+
+  
+<div id="wrapper">
+  <div id="blank"></div>
+  <aside>
+    
+    
+    
+    <button id="back-to-top" aria-label="back to top">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-up"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+
+    </button>
+    
+  </aside>
+  <main>
+    
+<header class="top-nav">
+  <nav>
+    <!-- Left: Back -->
+    <div class="nav-left">
+      <a href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts" class="back-link">← Back</a>
+    </div>
+
+    <!-- Center: Avatar -->
+    <div class="nav-center">
+      
+      <a href="/">
+        <img src="https://wen.is-a.dev/img/qwe.jpg" alt="avatar" class="avatar">
+      </a>
+      
+    </div>
+
+    <!-- Right: Menu dropdown -->
+    <div class="nav-right">
+
+      <div class="menu-wrapper">
+
+        <button class="menu-trigger" aria-label="menu">
+          &#9776;
+        </button>
+        <div class="menu-dropdown">
+          <a href="https://wen.is-a.dev/posts">POSTS</a>
+          <a href="https://wen.is-a.dev/about">ABOUT</a>
+          <a href="https://wen.is-a.dev/contact">CONTACT</a>
+          
+          
+          
+          
+          
+
+          <a id="theme-toggle" aria-label="theme switch">
+            <span class="moon-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill="currentColor"></path></svg>
+</span>
+            <span class="sun-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z" fill="currentColor"></path></svg>
+</span>
+          </a>
+
+          
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const trigger = document.querySelector(".menu-trigger");
+    const wrapper = document.querySelector(".menu-wrapper");
+
+    if (trigger && wrapper) {
+      trigger.addEventListener("click", () => {
+        wrapper.classList.toggle("active");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!wrapper.contains(e.target)) {
+          wrapper.classList.remove("active");
+        }
+      });
+    }
+  });
+
+</script>
+
+
+    <div>
+      
+      
+      
+      
+      <div id="copy-cfg" style="display: none;" data-copy-icon="&lt;svg xmlns=&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2000&#x2F;svg&quot; viewBox=&quot;0 0 24 24&quot; width=&quot;18&quot; height=&quot;18&quot;&gt;&lt;path d=&quot;M6.9998 6V3C6.9998 2.44772 7.44752 2 7.9998 2H19.9998C20.5521 2 20.9998 2.44772 20.9998 3V17C20.9998 17.5523 20.5521 18 19.9998 18H16.9998V20.9991C16.9998 21.5519 16.5499 22 15.993 22H4.00666C3.45059 22 3 21.5554 3 20.9991L3.0026 7.00087C3.0027 6.44811 3.45264 6 4.00942 6H6.9998ZM5.00242 8L5.00019 20H14.9998V8H5.00242ZM8.9998 6H16.9998V16H18.9998V4H8.9998V6Z&quot; fill=&quot;currentColor&quot;&gt;&lt;&#x2F;path&gt;&lt;&#x2F;svg&gt;
+" data-check-icon="&lt;svg xmlns=&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2000&#x2F;svg&quot; viewBox=&quot;0 0 24 24&quot; width=&quot;18&quot; height=&quot;18&quot;&gt;&lt;path d=&quot;M10.0007 15.1709L19.1931 5.97852L20.6073 7.39273L10.0007 17.9993L3.63672 11.6354L5.05093 10.2212L10.0007 15.1709Z&quot; fill=&quot;currentColor&quot;&gt;&lt;&#x2F;path&gt;&lt;&#x2F;svg&gt;
+">
+      </div>
+      
+      <article class="prose">
+        <h1 class="title">containerd – Runtime container cốt lõi của hệ sinh thái container</h1>
+        <div id="post-info">
+          <div id="date">
+            <span id="publish">Nov 15, 2025</span>
+            </div>
+
+          
+        </div>
+
+        
+        
+
+        
+
+        <p>containerd là một container runtime được thiết kế để quản lý vòng đời của container trên Linux và Windows. Ban đầu là một phần của Docker, containerd hiện là một dự án độc lập thuộc Cloud Native Computing Foundation (CNCF) và được sử dụng rộng rãi trong các hệ thống như Kubernetes.</p>
+<h2 id="containerd-la-gi">containerd là gì?<a class="zola-anchor" href="#containerd-la-gi" aria-label="Anchor link for: containerd-la-gi" style="visibility: hidden;"></a></h2>
+<p>containerd hoạt động như một service chạy ngầm (daemon), đảm nhiệm các nhiệm vụ cốt lõi: pull và lưu trữ container image, quản lý storage, tạo và chạy container, giám sát trạng thái container. Khác với Docker, containerd tập trung vào chức năng runtime thuần túy, không bao gồm các công cụ như Docker CLI hay Docker Compose.</p>
+<p>Điểm đặc biệt của containerd là thiết kế modular và lightweight. Nó cung cấp API ổn định thông qua gRPC, cho phép các orchestrator như Kubernetes hoặc Docker Engine tích hợp dễ dàng. containerd tuân thủ các chuẩn OCI (Open Container Initiative), đảm bảo tính tương thích và khả năng thay thế giữa các runtime khác nhau.</p>
+<h2 id="lich-su-phat-trien">Lịch sử phát triển<a class="zola-anchor" href="#lich-su-phat-trien" aria-label="Anchor link for: lich-su-phat-trien" style="visibility: hidden;"></a></h2>
+<p>Năm 2016, Docker Inc. quyết định tách containerd ra khỏi Docker Engine và đóng góp cho CNCF. Quyết định này xuất phát từ nhu cầu tạo ra một runtime trung lập, không phụ thuộc vendor, có thể được sử dụng bởi nhiều platform khác nhau. Năm 2019, containerd đạt trạng thái graduated trong CNCF, đánh dấu sự trưởng thành và sẵn sàng cho production.</p>
+<p>Một cột mốc quan trọng là khi Kubernetes 1.20 (2020) deprecated Docker shim và từ Kubernetes 1.24 (2022), Docker runtime bị loại bỏ hoàn toàn. containerd trở thành một trong những runtime được khuyến nghị chính thức, cùng với CRI-O.</p>
+<h2 id="vi-tri-trong-container-stack">Vị trí trong container stack<a class="zola-anchor" href="#vi-tri-trong-container-stack" aria-label="Anchor link for: vi-tri-trong-container-stack" style="visibility: hidden;"></a></h2>
+<p>containerd nằm ở layer giữa trong container stack, kết nối high-level orchestration với low-level kernel features:</p>
+<p><strong>Kernel Layer</strong> cung cấp các primitives như namespaces (để cô lập processes, network, filesystem), cgroups (để giới hạn resources), capabilities (quản lý privileges), và seccomp (filter system calls).</p>
+<p><strong>Low-level Runtime Layer</strong> là nơi runc hoặc các OCI-compliant runtime khác tương tác trực tiếp với kernel để tạo và khởi chạy container, thiết lập namespaces và cgroups.</p>
+<p><strong>containerd Layer</strong> quản lý các chức năng cấp cao như image management, storage, networking, và container lifecycle. Nó cung cấp API ổn định cho các layer trên.</p>
+<p><strong>Orchestration Layer</strong> là nơi Kubernetes, Docker Engine, hoặc các platform khác sử dụng containerd thông qua gRPC API hoặc CRI plugin.</p>
+<h2 id="kien-truc-va-thanh-phan-chinh">Kiến trúc và thành phần chính<a class="zola-anchor" href="#kien-truc-va-thanh-phan-chinh" aria-label="Anchor link for: kien-truc-va-thanh-phan-chinh" style="visibility: hidden;"></a></h2>
+<p>containerd được thiết kế theo kiến trúc plugin-based, cho phép mở rộng linh hoạt. Core daemon nhẹ và các chức năng được triển khai thông qua plugin system.</p>
+<h3 id="content-store">Content Store<a class="zola-anchor" href="#content-store" aria-label="Anchor link for: content-store" style="visibility: hidden;"></a></h3>
+<p>Content Store lưu trữ các image layers dưới dạng content-addressable, nghĩa là mỗi piece of data được định danh bằng SHA256 hash của nội dung. Điều này mang lại ba lợi ích lớn: deduplication (layers giống nhau chỉ lưu một lần), integrity verification (phát hiện corruption ngay lập tức), và immutability (content không thể bị modify sau khi lưu).</p>
+<p>Content store được tổ chức trong thư mục <code>/var/lib/containerd/io.containerd.content.v1.content/</code> với cấu trúc phân cấp theo SHA256 digest. Khi nhiều images share cùng base layers, những layers đó chỉ được lưu trữ một lần, tiết kiệm đáng kể disk space.</p>
+<h3 id="snapshot-service">Snapshot Service<a class="zola-anchor" href="#snapshot-service" aria-label="Anchor link for: snapshot-service" style="visibility: hidden;"></a></h3>
+<p>Snapshot Service quản lý filesystem layers cho containers. Nó sử dụng các công nghệ như overlayfs, btrfs, hoặc zfs để tạo layered filesystem. Với overlayfs (snapshotter phổ biến nhất), các read-only image layers được stack làm lowerdir, và một writable layer (upperdir) được tạo cho container. Khi container ghi file, overlayfs sử dụng copy-on-write: file từ lowerdir được copy sang upperdir trước khi modification.</p>
+<p>Snapshotter cho phép tạo container nhanh chóng vì không cần copy toàn bộ filesystem, chỉ cần tạo một writable layer mới trên các existing layers.</p>
+<h3 id="task-service">Task Service<a class="zola-anchor" href="#task-service" aria-label="Anchor link for: task-service" style="visibility: hidden;"></a></h3>
+<p>Task Service quản lý các running container processes. Một "task" đại diện cho một container đang chạy với PID cụ thể. Service này theo dõi trạng thái container, thu thập metrics (CPU, memory, I/O usage), và xử lý lifecycle events như start, stop, kill.</p>
+<h3 id="metadata-store">Metadata Store<a class="zola-anchor" href="#metadata-store" aria-label="Anchor link for: metadata-store" style="visibility: hidden;"></a></h3>
+<p>Metadata Store lưu trữ thông tin về images, containers, snapshots và các resources khác. Metadata được persist vào database (thường là BoltDB) để đảm bảo dữ liệu không bị mất khi containerd restart. Metadata bao gồm image labels, creation time, snapshot references, và configuration.</p>
+<h3 id="shim-architecture">Shim Architecture<a class="zola-anchor" href="#shim-architecture" aria-label="Anchor link for: shim-architecture" style="visibility: hidden;"></a></h3>
+<p>containerd-shim là một innovation quan trọng. Mỗi container có một shim process riêng đóng vai trò trung gian giữa containerd daemon và container process. Điều này mang lại nhiều lợi ích: containerd daemon có thể restart hoặc upgrade mà không kill containers, shim tiếp tục monitor container process và forward stdio (stdin/stdout/stderr), xử lý signals (SIGTERM, SIGKILL) từ containerd đến container.</p>
+<p>Shim là lightweight process, chỉ consume minimal resources nhưng cung cấp essential functionality. Nhờ shim, container lifecycle hoàn toàn độc lập với containerd daemon lifecycle.</p>
+<h2 id="image-management-chi-tiet">Image management chi tiết<a class="zola-anchor" href="#image-management-chi-tiet" aria-label="Anchor link for: image-management-chi-tiet" style="visibility: hidden;"></a></h2>
+<h3 id="oci-image-specification">OCI Image Specification<a class="zola-anchor" href="#oci-image-specification" aria-label="Anchor link for: oci-image-specification" style="visibility: hidden;"></a></h3>
+<p>containerd tuân thủ OCI Image Specification, định nghĩa cách packaging và distribution của container images. Một OCI image bao gồm:</p>
+<p><strong>Image Manifest</strong> mô tả cấu trúc image với danh sách layers và config object. Manifest được định danh bằng digest.</p>
+<p><strong>Image Configuration</strong> là JSON object chứa metadata như architecture, OS, environment variables, entrypoint, và command.</p>
+<p><strong>Filesystem Layers</strong> là các tar archives chứa filesystem changes, được stack lên nhau để tạo complete filesystem.</p>
+<h3 id="image-pull-process">Image Pull Process<a class="zola-anchor" href="#image-pull-process" aria-label="Anchor link for: image-pull-process" style="visibility: hidden;"></a></h3>
+<p>Khi bạn pull một image, containerd thực hiện các bước:</p>
+<p>Đầu tiên, resolve image reference (ví dụ <code>nginx:latest</code>) thành registry URL và manifest digest. Sau đó fetch manifest từ registry, parse để lấy danh sách layers. containerd download các layers song song nếu chưng chưa tồn tại trong content store, kiểm tra digest trước để tránh duplicate work. Sau khi download, verify SHA256 của mỗi layer để đảm bảo integrity. Cuối cùng, snapshotter unpack các layers và tạo snapshot hierarchy, cập nhật metadata store với thông tin về image.</p>
+<h2 id="container-lifecycle-management">Container lifecycle management<a class="zola-anchor" href="#container-lifecycle-management" aria-label="Anchor link for: container-lifecycle-management" style="visibility: hidden;"></a></h2>
+<h3 id="tao-container">Tạo container<a class="zola-anchor" href="#tao-container" aria-label="Anchor link for: tao-container" style="visibility: hidden;"></a></h3>
+<p>Process tạo container gồm nhiều giai đoạn:</p>
+<p><strong>Container Object Creation</strong>: Client gọi API với container spec (bao gồm image reference, runtime name, configuration options). containerd tạo container entry trong metadata store nhưng chưa start process.</p>
+<p><strong>Snapshot Preparation</strong>: Snapshotter tạo active snapshot từ image's committed snapshot. Với overlayfs, điều này có nghĩa tạo upperdir (writable layer) và merged mountpoint.</p>
+<p><strong>OCI Runtime Spec Generation</strong>: containerd generate OCI runtime specification (config.json) từ container config. Spec này define namespaces, cgroups, mounts, và security settings.</p>
+<p><strong>Runtime Plugin Selection</strong>: Dựa trên runtime name, containerd chọn runtime plugin phù hợp (runc, kata, gvisor).</p>
+<h3 id="chay-container">Chạy container<a class="zola-anchor" href="#chay-container" aria-label="Anchor link for: chay-container" style="visibility: hidden;"></a></h3>
+<p><strong>Task Creation</strong>: Client gọi API để tạo task từ container. Task đại diện cho running instance.</p>
+<p><strong>Shim Process</strong>: containerd spawn containerd-shim process. Shim đóng vai trò trung gian, cho phép daemon restart mà không ảnh hưởng containers.</p>
+<p><strong>Runtime Invocation</strong>: Shim gọi low-level runtime (runc) để create và start container. runc thực thi OCI spec, setup namespaces, cgroups, và exec entrypoint.</p>
+<p><strong>Process Monitoring</strong>: Shim monitor container process, forward stdio, collect exit status, và publish events về containerd daemon.</p>
+<h3 id="container-states">Container states<a class="zola-anchor" href="#container-states" aria-label="Anchor link for: container-states" style="visibility: hidden;"></a></h3>
+<p>containerd định nghĩa các trạng thái rõ ràng:</p>
+<p><strong>Created</strong>: Container object tồn tại với configuration nhưng chưa có running process.</p>
+<p><strong>Running</strong>: Task đang active với PID hợp lệ, process đang execute.</p>
+<p><strong>Paused</strong>: Container process bị pause sử dụng cgroups freezer, memory state được preserve.</p>
+<p><strong>Stopped</strong>: Task đã exit với exit code, process không còn tồn tại nhưng container object vẫn available.</p>
+<p><strong>Deleted</strong>: Container object đã bị xóa khỏi metadata store.</p>
+<h2 id="runtime-integration">Runtime integration<a class="zola-anchor" href="#runtime-integration" aria-label="Anchor link for: runtime-integration" style="visibility: hidden;"></a></h2>
+<h3 id="runc-reference-implementation">runc - Reference Implementation<a class="zola-anchor" href="#runc-reference-implementation" aria-label="Anchor link for: runc-reference-implementation" style="visibility: hidden;"></a></h3>
+<p>runc là reference implementation của OCI runtime spec, được sử dụng làm default runtime bởi containerd. Khi containerd gọi runc, nó thực hiện:</p>
+<p><strong>Namespace Creation</strong>: runc tạo các Linux namespaces để isolate container. PID namespace cho phép container có init process là PID 1. Network namespace cung cấp network stack riêng. Mount namespace isolate filesystem. UTS namespace cho hostname riêng. IPC và User namespace cung cấp thêm layers of isolation.</p>
+<p><strong>Cgroup Configuration</strong>: runc configure cgroups để limit resources như CPU time, memory, I/O bandwidth, và số lượng processes.</p>
+<p><strong>Filesystem Setup</strong>: runc mount rootfs từ snapshot location vào container namespace, setup essential mounts như <code>/proc</code>, <code>/sys</code>, <code>/dev</code>.</p>
+<p><strong>Security</strong>: runc drop unnecessary capabilities, setup seccomp profiles, apply AppArmor/SELinux labels để harden container security.</p>
+<h3 id="alternative-runtimes">Alternative Runtimes<a class="zola-anchor" href="#alternative-runtimes" aria-label="Anchor link for: alternative-runtimes" style="visibility: hidden;"></a></h3>
+<p>containerd hỗ trợ nhiều runtime thông qua runtime v2 API:</p>
+<p><strong>Kata Containers</strong> chạy mỗi container trong lightweight VM riêng, cung cấp stronger isolation với kernel riêng. Phù hợp cho multi-tenant environments hoặc untrusted workloads.</p>
+<p><strong>gVisor</strong> là user-space kernel implementation, intercept syscalls và emulate kernel behavior. Giảm kernel attack surface nhưng trade một chút performance.</p>
+<h2 id="container-runtime-interface-cri">Container Runtime Interface (CRI)<a class="zola-anchor" href="#container-runtime-interface-cri" aria-label="Anchor link for: container-runtime-interface-cri" style="visibility: hidden;"></a></h2>
+<p>CRI là plugin interface cho phép Kubernetes sử dụng các container runtimes khác nhau. containerd có built-in CRI plugin, làm nó trở thành CRI-compliant runtime trực tiếp.</p>
+<h3 id="pod-sandbox">Pod Sandbox<a class="zola-anchor" href="#pod-sandbox" aria-label="Anchor link for: pod-sandbox" style="visibility: hidden;"></a></h3>
+<p>Trong Kubernetes, một Pod được map đến một PodSandbox. containerd implement sandbox bằng pause container - một container minimal chạy pause binary để hold network namespace. Các containers trong pod share network và IPC namespaces thông qua pause container này.</p>
+<p>Khi kubelet gọi <code>RunPodSandbox</code>, containerd pull pause image, tạo pause container với network namespace, setup CNI networking cho sandbox, rồi return sandbox ID.</p>
+<h3 id="container-trong-pod">Container trong Pod<a class="zola-anchor" href="#container-trong-pod" aria-label="Anchor link for: container-trong-pod" style="visibility: hidden;"></a></h3>
+<p>Khi kubelet cần tạo container trong pod, nó gọi <code>CreateContainer</code> với container config và sandbox ID. containerd chuyển đổi CRI config sang internal spec, set container để join network namespace của sandbox, mount volumes và secrets, rồi tạo container object. Sau đó kubelet gọi <code>StartContainer</code> để containerd tạo task và start process.</p>
+<h2 id="networking-voi-cni">Networking với CNI<a class="zola-anchor" href="#networking-voi-cni" aria-label="Anchor link for: networking-voi-cni" style="visibility: hidden;"></a></h2>
+<p>containerd không implement networking mà rely on CNI (Container Network Interface) plugins. Khi container được tạo với network namespace riêng, containerd invoke CNI plugin với configuration. Plugin thực hiện các tác vụ như tạo veth pair (một end trong container, một end trên host), attach host end vào bridge, configure IP address và routes, enable IP forwarding và NAT rules nếu cần.</p>
+<p>Popular CNI plugins bao gồm:</p>
+<p><strong>bridge</strong> tạo Linux bridge và connect containers qua veth pairs, simple và efficient cho single-host.</p>
+<p><strong>flannel</strong> là overlay network cho multi-host connectivity, popular trong Kubernetes.</p>
+<p><strong>calico</strong> cung cấp advanced networking với BGP routing, network policies, và security features.</p>
+<h2 id="security-features">Security features<a class="zola-anchor" href="#security-features" aria-label="Anchor link for: security-features" style="visibility: hidden;"></a></h2>
+<p>containerd cung cấp nhiều lớp bảo mật:</p>
+<p><strong>Namespaces Isolation</strong>: Linux namespaces isolate processes, network, filesystem. Containers không thể see hoặc affect processes bên ngoài.</p>
+<p><strong>Cgroups Resource Limits</strong>: Prevent containers từ consuming excessive resources, limit CPU, memory, I/O.</p>
+<p><strong>Capabilities</strong>: containerd drop dangerous capabilities như CAP_SYS_ADMIN, CAP_NET_ADMIN mặc định, chỉ giữ lại những capabilities cần thiết.</p>
+<p><strong>Seccomp Profiles</strong>: Filter system calls, block dangerous syscalls như reboot, mount, kernel module operations.</p>
+<p><strong>AppArmor/SELinux</strong>: Mandatory Access Control systems cung cấp additional security layer với profile-based hoặc label-based restrictions.</p>
+<p><strong>Rootless Mode</strong>: Cho phép run containerd và containers hoàn toàn unprivileged, attacker escape container chỉ gain unprivileged user permissions.</p>
+<h2 id="command-line-tools">Command line tools<a class="zola-anchor" href="#command-line-tools" aria-label="Anchor link for: command-line-tools" style="visibility: hidden;"></a></h2>
+<p><strong>ctr</strong> là official CLI tool của containerd, cung cấp low-level access đến containerd API. Ví dụ: <code>ctr images pull</code>, <code>ctr run</code>, <code>ctr containers ls</code>.</p>
+<p><strong>nerdctl</strong> là tool thân thiện hơn, tương thích với Docker CLI syntax nhưng hoạt động với containerd. Nó cung cấp trải nghiệm quen thuộc cho những ai đã sử dụng Docker: <code>nerdctl run</code>, <code>nerdctl build</code>, <code>nerdctl compose</code>.</p>
+<p><strong>crictl</strong> là tool debug cho CRI, hữu ích khi troubleshoot Kubernetes nodes: <code>crictl pods</code>, <code>crictl ps</code>, <code>crictl logs</code>.</p>
+<h2 id="so-sanh-voi-docker">So sánh với Docker<a class="zola-anchor" href="#so-sanh-voi-docker" aria-label="Anchor link for: so-sanh-voi-docker" style="visibility: hidden;"></a></h2>
+<p>Docker là platform hoàn chỉnh với nhiều tools và features cho developers: Docker CLI thân thiện, Docker Compose cho multi-container apps, Docker Desktop với GUI. Docker Engine sử dụng containerd bên dưới nhưng thêm layer abstraction và utilities.</p>
+<p>containerd, ngược lại, là runtime thuần túy tập trung vào việc chạy containers hiệu quả. Trong production và Kubernetes, sử dụng trực tiếp containerd loại bỏ các layer không cần thiết, giảm overhead, cải thiện performance và giảm attack surface.</p>
+<h2 id="tai-sao-containerd-quan-trong">Tại sao containerd quan trọng?<a class="zola-anchor" href="#tai-sao-containerd-quan-trong" aria-label="Anchor link for: tai-sao-containerd-quan-trong" style="visibility: hidden;"></a></h2>
+<p>containerd đã trở thành tiêu chuẩn de facto cho container runtime trong môi trường cloud-native. Với thiết kế modular, hiệu suất cao, tính ổn định production-ready, và sự hỗ trợ mạnh mẽ từ cộng đồng CNCF, containerd là lựa chọn lý tưởng cho cả development và production.</p>
+<p>Hiểu về containerd không chỉ giúp bạn làm việc hiệu quả hơn với containers mà còn cung cấp nền tảng vững chắc để tối ưu hóa infrastructure, troubleshoot issues, và xây dựng các giải pháp container customized. Trong thời đại cloud-native, containerd là một trong những building blocks không thể thiếu của modern infrastructure.</p>
+
+      </article>
+
+      
+      
+
+      
+      
+    </div>
+
+    
+
+
+<footer>
+  <div class="left">
+    <div class="copyright">
+      © 2025 <a href="https:&#x2F;&#x2F;wen.is-a.dev">Wen</a>
+      
+    </div>
+  </div>
+
+  <div class="right">
+    
+    
+    
+    
+
+    <!-- 
+    
+    
+    <button id="theme-toggle" aria-label="theme switch">
+      <span class="moon-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill="currentColor"></path></svg>
+</span>
+      <span class="sun-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z" fill="currentColor"></path></svg>
+</span>
+    </button>
+     -->
+  </div>
+</footer>
+
+
+
+
+  </main>
+</div>
+
+  
+<script src="/js/lightense.min.js"></script>
+
+
+
+  <script src="https://wen.is-a.dev/js/main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  
+
+
+
+<meta name="description" content="You don&#x27;t have to be great to start, but you have to start to be great">
+
+  <title>Trở thành &quot;phù thủy&quot; với Regular Expression??</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="https://wen.is-a.dev/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://wen.is-a.dev/img/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://wen.is-a.dev/img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Ancizar+Sans:ital,wght@0,100..1000;1,100..1000&family=Bitter:ital,wght@0,100..900;1,100..900&family=Indie+Flower&family=Lora:ital,wght@0,400..700;1,400..700&family=Marcellus&display=swap"
+    rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;1,400;1,600&display=swap"
+    rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500..700&display=swap" rel="stylesheet">
+  
+  <style>
+  /* light mode colors */
+  body {
+    /* --primary-color: #5871a2; */
+    --primary-color: #005e05;
+    --primary-pale-color: #5871a233;
+    --primary-decoration-color: #5871a210;
+    --bg-color: #f0f9ff;
+    /* --text-color: #2f3030; */
+    --text-color: #000000;
+    /* --text-pale-color: #767676; */
+    --text-pale-color: #000000;
+    --text-decoration-color: #a9a9a9;
+    --highlight-mark-color: #5f75b020;
+
+    --callout-note-color: #5871a2;
+    --callout-tip-color: #268556;
+    --callout-important-color: #885fc9;
+    --callout-warning-color: #ab6632;
+    --callout-caution-color: #c64e4e;
+  }
+
+  /* dark mode colors */
+  body.dark {
+    /* --primary-color: #6f8fd1; */
+    --primary-color: #ecf16b;
+    --primary-pale-color: #6f8fd166;
+    --primary-decoration-color: #6f8fd112;
+    /* --bg-color: #1c1c1c; */
+    /* --bg-color: #002727; */
+    /* --bg-color: #002333; */
+    --bg-color: #01242E;
+    /* --text-color: #c1c1c1; */
+    --text-color: #ffffff;
+    /* --text-pale-color: #848484; */
+    --text-pale-color: #ffffff;
+    --text-decoration-color: #5f5f5f;
+    --highlight-mark-color: #8296cb3b;
+
+    --callout-note-color: #6f8fd1;
+    --callout-tip-color: #47976f;
+    --callout-important-color: #9776cd;
+    --callout-warning-color: #ad7a52;
+    --callout-caution-color: #d06161;
+  }
+
+  /* typography */
+  body {
+    /* --main-font: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; */
+    --main-font: 'Nunito', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --heading-font: 'Quicksand', 'Lora', 'Bitter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --code-font: 'Cascadia Code', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    --homepage-max-width: 768px;
+    --main-max-width: 768px;
+    --avatar-size: 75px;
+    --font-size: 16px;
+    --line-height: 1.75;
+    --img-border-radius: 0px;
+    --detail-border-radius: 11px;
+    --dark-mode-img-brightness: 0.75;
+    --dark-mode-chart-brightness: 0.75;
+    --inline-code-border-radius: 2px;
+    --inline-code-bg-color: var(--primary-decoration-color);
+    --block-code-border-radius: 0px;
+    --block-code-border-color: var(--primary-color);
+    --detail-border-color: var(--primary-color);
+  }
+
+
+  #name,
+  #id,
+  #left,
+  a.post,
+  a.back-link,
+  a.tag,
+  a.category,
+  .title {
+    font-family: var(--heading-font);
+  }
+
+  span.date {
+    font-family: var(--code-font);
+    color: var(--text-pale-color);
+  }
+
+  .gif-wrapper {
+    text-align: center;
+    margin: 1.5rem 0;
+  }
+
+  .gif-wrapper .intro-gif {
+    max-width: 96%;
+    height: auto;
+    border-radius: 8px;
+  }
+
+  .verified-icon {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 3px;
+    vertical-align: middle;
+  }
+
+  .verified-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .top-nav {
+    width: 100%;
+    padding-bottom: 1em;
+    border-bottom: 1px solid var(--border-color);
+    background: rgba(var(--background-rgb), 0.85);
+    backdrop-filter: blur(8px);
+    border-radius: var(--detail-border-radius);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .top-nav nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+  }
+
+  .nav-left,
+  .nav-center,
+  .nav-right {
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-center {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-top: 1em;
+  }
+
+  .menu-wrapper {
+    position: relative;
+    margin-top: 1.5em;
+  }
+
+  .menu-trigger {
+    font-size: 1.5em;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-color);
+  }
+
+  .menu-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+
+    background: var(--bg-color);
+    font-family: var(--heading-font);
+    border: 1px solid var(--primary-pale-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    min-width: 85px;
+    padding: 0.25em 0;
+    z-index: 2000;
+
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .menu-wrapper.active .menu-dropdown {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+
+  .menu-dropdown a {
+    display: block;
+    padding: 0.6em 1em;
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 0.95em;
+    margin: auto;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  #theme-toggle:hover,
+  #rain-toggle:hover {
+    cursor: pointer;
+  }
+
+  .foot-quote,
+  .section-title {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    text-align: center;
+    display: block;
+    margin-top: 2em;
+  }
+
+  .layout-list .post {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+  }
+
+  .post>span:first-child {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+
+  .post>.date {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .year-heading {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    font-size: 1.5em;
+    font-weight: bold;
+    font-family: var(--heading-font);
+  }
+
+  /* term-caret  */
+  #id.term-caret {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    position: relative;
+    white-space: nowrap;
+  }
+
+  #id.term-caret::after {
+    content: "_";
+
+    margin-left: 4px;
+    animation: blink 1s steps(1, end) infinite;
+    opacity: 1;
+    color: currentColor;
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #id.term-caret::after {
+      animation: none;
+      opacity: 1;
+    }
+  }
+
+  /* typewriter */
+  #id.typewriter {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    white-space: nowrap;
+    border-right: 1ch solid currentColor;
+    /* caret */
+    /* caret blink */
+    animation: caret-blink 1s steps(1, end) infinite;
+  }
+
+  @keyframes caret-blink {
+    50% {
+      border-right-color: transparent;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #id.typewriter {
+      animation: none;
+      border-right-color: currentColor;
+    }
+  }
+
+  /* glitch effect  */
+  #id.glitch {
+    position: relative;
+    display: inline-block;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  #id.glitch::before,
+  #id.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    clip-path: inset(0 0 0 0);
+    opacity: .85;
+  }
+
+  #id.glitch::before {
+    transform: translate(0, 0);
+    mix-blend-mode: screen;
+    text-shadow: 1px 0 0 #f00;
+    /* viền đỏ */
+    animation: glitch-1 2s infinite linear alternate-reverse;
+  }
+
+  #id.glitch::after {
+    transform: translate(0, 0);
+    mix-blend-mode: screen;
+    text-shadow: -1px 0 0 #0ff;
+    /* viền cyan */
+    animation: glitch-2 2.2s infinite linear alternate-reverse;
+  }
+
+  @keyframes glitch-1 {
+    0% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(0, 0);
+    }
+
+    20% {
+      clip-path: inset(10% 0 60% 0);
+      transform: translate(-1px, -1px);
+    }
+
+    40% {
+      clip-path: inset(40% 0 30% 0);
+      transform: translate(1px, 1px);
+    }
+
+    60% {
+      clip-path: inset(20% 0 55% 0);
+      transform: translate(-1px, 0);
+    }
+
+    80% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 1px);
+    }
+
+    100% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(0, 0);
+    }
+  }
+
+  @keyframes glitch-2 {
+    0% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 0);
+    }
+
+    20% {
+      clip-path: inset(40% 0 30% 0);
+      transform: translate(1px, 0);
+    }
+
+    40% {
+      clip-path: inset(10% 0 60% 0);
+      transform: translate(0, -1px);
+    }
+
+    60% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(-1px, 1px);
+    }
+
+    80% {
+      clip-path: inset(20% 0 55% 0);
+      transform: translate(1px, 0);
+    }
+
+    100% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+
+    #id.glitch::before,
+    #id.glitch::after {
+      animation: none;
+    }
+  }
+</style>
+  <link rel="stylesheet" href="https://wen.is-a.dev/main.css">
+  
+
+<link id="hl" rel="stylesheet" type="text/css" href="/hl-light.css" />
+
+
+
+  
+</head>
+
+<body class="post">
+
+  
+  <script>
+    const theme = sessionStorage.getItem('theme');
+    const match = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if ((theme && theme === 'dark') || (!theme && match)) {
+      document.body.classList.add('dark');
+      const hl = document.querySelector('link#hl');
+      if (hl) hl.href = 'https://wen.is-a.dev/hl-dark.css';
+    }
+  </script>
+  
+
+  
+<div id="wrapper">
+  <div id="blank"></div>
+  <aside>
+    
+    
+    
+    <button id="back-to-top" aria-label="back to top">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-up"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+
+    </button>
+    
+  </aside>
+  <main>
+    
+<header class="top-nav">
+  <nav>
+    <!-- Left: Back -->
+    <div class="nav-left">
+      <a href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts" class="back-link">← Back</a>
+    </div>
+
+    <!-- Center: Avatar -->
+    <div class="nav-center">
+      
+      <a href="/">
+        <img src="https://wen.is-a.dev/img/qwe.jpg" alt="avatar" class="avatar">
+      </a>
+      
+    </div>
+
+    <!-- Right: Menu dropdown -->
+    <div class="nav-right">
+
+      <div class="menu-wrapper">
+
+        <button class="menu-trigger" aria-label="menu">
+          &#9776;
+        </button>
+        <div class="menu-dropdown">
+          <a href="https://wen.is-a.dev/posts">POSTS</a>
+          <a href="https://wen.is-a.dev/about">ABOUT</a>
+          <a href="https://wen.is-a.dev/contact">CONTACT</a>
+          
+          
+          
+          
+          
+
+          <a id="theme-toggle" aria-label="theme switch">
+            <span class="moon-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill="currentColor"></path></svg>
+</span>
+            <span class="sun-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z" fill="currentColor"></path></svg>
+</span>
+          </a>
+
+          
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const trigger = document.querySelector(".menu-trigger");
+    const wrapper = document.querySelector(".menu-wrapper");
+
+    if (trigger && wrapper) {
+      trigger.addEventListener("click", () => {
+        wrapper.classList.toggle("active");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!wrapper.contains(e.target)) {
+          wrapper.classList.remove("active");
+        }
+      });
+    }
+  });
+
+</script>
+
+
+    <div>
+      
+      
+      
+      
+      <div id="copy-cfg" style="display: none;" data-copy-icon="&lt;svg xmlns=&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2000&#x2F;svg&quot; viewBox=&quot;0 0 24 24&quot; width=&quot;18&quot; height=&quot;18&quot;&gt;&lt;path d=&quot;M6.9998 6V3C6.9998 2.44772 7.44752 2 7.9998 2H19.9998C20.5521 2 20.9998 2.44772 20.9998 3V17C20.9998 17.5523 20.5521 18 19.9998 18H16.9998V20.9991C16.9998 21.5519 16.5499 22 15.993 22H4.00666C3.45059 22 3 21.5554 3 20.9991L3.0026 7.00087C3.0027 6.44811 3.45264 6 4.00942 6H6.9998ZM5.00242 8L5.00019 20H14.9998V8H5.00242ZM8.9998 6H16.9998V16H18.9998V4H8.9998V6Z&quot; fill=&quot;currentColor&quot;&gt;&lt;&#x2F;path&gt;&lt;&#x2F;svg&gt;
+" data-check-icon="&lt;svg xmlns=&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2000&#x2F;svg&quot; viewBox=&quot;0 0 24 24&quot; width=&quot;18&quot; height=&quot;18&quot;&gt;&lt;path d=&quot;M10.0007 15.1709L19.1931 5.97852L20.6073 7.39273L10.0007 17.9993L3.63672 11.6354L5.05093 10.2212L10.0007 15.1709Z&quot; fill=&quot;currentColor&quot;&gt;&lt;&#x2F;path&gt;&lt;&#x2F;svg&gt;
+">
+      </div>
+      
+      <article class="prose">
+        <h1 class="title">Trở thành &quot;phù thủy&quot; với Regular Expression??</h1>
+        <div id="post-info">
+          <div id="date">
+            <span id="publish">Mar 02, 2024</span>
+            </div>
+
+          
+        </div>
+
+        
+        
+
+        
+
+        <blockquote>
+<p>"Some people, when confronted with a problem, think 'I know, I'll use regular expressions.' Now they have two problems." - Jamie Zawinski</p>
+</blockquote>
+<p>Chào mừng các bạn đến với thế giới kỳ diệu của Regular Expressions (Regex) - nơi mà một dòng code có thể khiến bạn cảm thấy như thiên tài trong 5 phút, rồi sau đó muốn đập đầu vào tường trong 5 tiếng tiếp theo.</p>
+<h2 id="regex-la-gi-tai-sao-chung-ta-can-no">Regex Là Gì? Tại Sao Chúng Ta Cần Nó?<a class="zola-anchor" href="#regex-la-gi-tai-sao-chung-ta-can-no" aria-label="Anchor link for: regex-la-gi-tai-sao-chung-ta-can-no" style="visibility: hidden;"></a></h2>
+<p>Regular Expression, hay gọi tắt là Regex (đọc là "REG-ex", không phải "re-GEKS" như một số bạn vẫn đọc), là một chuỗi ký tự đặc biệt được sử dụng để tìm kiếm và xử lý văn bản. Nó giống như một chiếc dao Swiss Army - vô cùng hữu ích nhưng cũng rất dễ tự cắn tay mình.</p>
+<p>Tại sao chúng ta cần Regex? Bởi vì đôi khi bạn cần tìm tất cả email trong một đống text, hoặc validate số điện thoại, hoặc đơn giản là muốn khoe với đồng nghiệp rằng bạn có thể viết được những dòng code trông như mật mã CIA.</p>
+<h2 id="cu-phap-co-ban-bang-chu-cai-cua-quy-du">Cú Pháp Cơ Bản - Bảng Chữ Cái Của Quỷ Dữ<a class="zola-anchor" href="#cu-phap-co-ban-bang-chu-cai-cua-quy-du" aria-label="Anchor link for: cu-phap-co-ban-bang-chu-cai-cua-quy-du" style="visibility: hidden;"></a></h2>
+<h3 id="ky-tu-literal-literal-characters">Ký Tự Literal (Literal Characters)<a class="zola-anchor" href="#ky-tu-literal-literal-characters" aria-label="Anchor link for: ky-tu-literal-literal-characters" style="visibility: hidden;"></a></h3>
+<p>Đây là phần dễ nhất. Nếu bạn muốn tìm chữ "hello", bạn chỉ cần viết:</p>
+<pre class="z-code"><code><span class="z-text z-plain">hello
+</span></code></pre>
+<p>Easy peasy, lemon squeezy! Nhưng đừng vội mừng, chúng ta mới chỉ bắt đầu thôi.</p>
+<h3 id="metacharacters-nhung-ky-tu-dac-biet">Metacharacters - Những Ký Tự Đặc Biệt<a class="zola-anchor" href="#metacharacters-nhung-ky-tu-dac-biet" aria-label="Anchor link for: metacharacters-nhung-ky-tu-dac-biet" style="visibility: hidden;"></a></h3>
+<p>Đây là lúc mọi thứ bắt đầu trở nên... thú vị:</p>
+<ul>
+<li><code>.</code> - Match bất kỳ ký tự nào (trừ newline). Nó như một wildcard trong game bài.</li>
+<li><code>*</code> - Match 0 hoặc nhiều ký tự trước đó. Giống như người yêu cũ, có thể có hoặc không.</li>
+<li><code>+</code> - Match 1 hoặc nhiều ký tự trước đó. Ít nhất phải có một cái.</li>
+<li><code>?</code> - Match 0 hoặc 1 ký tự trước đó. Có hay không cũng được.</li>
+<li><code>^</code> - Bắt đầu của chuỗi. Như lời mở đầu trong một bài thuyết trình.</li>
+<li><code>$</code> - Kết thúc của chuỗi. Như lời kết trong một bài thuyết trình.</li>
+</ul>
+<h3 id="character-classes-hoi-nhung-ky-tu-dac-biet">Character Classes - Hội Những Ký Tự Đặc Biệt<a class="zola-anchor" href="#character-classes-hoi-nhung-ky-tu-dac-biet" aria-label="Anchor link for: character-classes-hoi-nhung-ky-tu-dac-biet" style="visibility: hidden;"></a></h3>
+<pre class="z-code"><code><span class="z-text z-plain">[abc]     # Match a, b, hoặc c
+</span><span class="z-text z-plain">[a-z]     # Match bất kỳ chữ thường nào
+</span><span class="z-text z-plain">[A-Z]     # Match bất kỳ chữ hoa nào
+</span><span class="z-text z-plain">[0-9]     # Match bất kỳ số nào
+</span><span class="z-text z-plain">[^abc]    # Match bất kỳ ký tự nào NGOẠI TRỪ a, b, c
+</span></code></pre>
+<h3 id="predefined-character-classes-nhung-shortcut-cuu-mang">Predefined Character Classes - Những Shortcut Cứu Mạng<a class="zola-anchor" href="#predefined-character-classes-nhung-shortcut-cuu-mang" aria-label="Anchor link for: predefined-character-classes-nhung-shortcut-cuu-mang" style="visibility: hidden;"></a></h3>
+<pre class="z-code"><code><span class="z-text z-plain">\d        # Digit [0-9] - Số
+</span><span class="z-text z-plain">\w        # Word character [a-zA-Z0-9_] - Ký tự từ
+</span><span class="z-text z-plain">\s        # Whitespace - Khoảng trắng
+</span><span class="z-text z-plain">\D        # Không phải số
+</span><span class="z-text z-plain">\W        # Không phải ký tự từ
+</span><span class="z-text z-plain">\S        # Không phải khoảng trắng
+</span></code></pre>
+<h2 id="quantifiers-nhung-ke-dem-so">Quantifiers - Những Kẻ Đếm Số<a class="zola-anchor" href="#quantifiers-nhung-ke-dem-so" aria-label="Anchor link for: quantifiers-nhung-ke-dem-so" style="visibility: hidden;"></a></h2>
+<p>Quantifiers cho phép bạn chỉ định bao nhiều lần một pattern xuất hiện:</p>
+<pre class="z-code"><code><span class="z-text z-plain">{n}       # Chính xác n lần
+</span><span class="z-text z-plain">{n,}      # Ít nhất n lần
+</span><span class="z-text z-plain">{n,m}     # Từ n đến m lần
+</span></code></pre>
+<p>Ví dụ:</p>
+<pre class="z-code"><code><span class="z-text z-plain">\d{3}     # Chính xác 3 số (như 123)
+</span><span class="z-text z-plain">\d{3,5}   # Từ 3 đến 5 số (như 123, 1234, hoặc 12345)
+</span><span class="z-text z-plain">\d{3,}    # Ít nhất 3 số (như 123, 1234, 12345, ...)
+</span></code></pre>
+<h2 id="groups-va-capturing-nghe-thuat-bat-bang-chung">Groups và Capturing - Nghệ Thuật Bắt Bằng Chứng<a class="zola-anchor" href="#groups-va-capturing-nghe-thuat-bat-bang-chung" aria-label="Anchor link for: groups-va-capturing-nghe-thuat-bat-bang-chung" style="visibility: hidden;"></a></h2>
+<p>Parentheses <code>()</code> tạo ra groups, cho phép bạn:</p>
+<ol>
+<li>Nhóm các phần của pattern lại với nhau</li>
+<li>Capture (bắt) nội dung để sử dụng sau này</li>
+</ol>
+<pre class="z-code"><code><span class="z-text z-plain">(abc)+                   # Match &quot;abc&quot;, &quot;abcabc&quot;, &quot;abcabcabc&quot;, ...
+</span><span class="z-text z-plain">(\d{3})-(\d{3})-(\d{4})  # Match số điện thoại US format và capture các phần
+</span></code></pre>
+<h3 id="non-capturing-groups">Non-capturing Groups<a class="zola-anchor" href="#non-capturing-groups" aria-label="Anchor link for: non-capturing-groups" style="visibility: hidden;"></a></h3>
+<p>Đôi khi bạn muốn nhóm nhưng không muốn capture:</p>
+<pre class="z-code"><code><span class="z-text z-plain">(?:abc)+        # Nhóm &quot;abc&quot; nhưng không capture
+</span></code></pre>
+<h2 id="alternation-su-lua-chon">Alternation - Sự Lựa Chọn<a class="zola-anchor" href="#alternation-su-lua-chon" aria-label="Anchor link for: alternation-su-lua-chon" style="visibility: hidden;"></a></h2>
+<p>Dấu <code>|</code> hoạt động như "OR":</p>
+<pre class="z-code"><code><span class="z-text z-plain">cat|dog         # Match &quot;cat&quot; hoặc &quot;dog&quot;
+</span><span class="z-text z-plain">(jpg|png|gif)   # Match các định dạng ảnh
+</span></code></pre>
+<h2 id="lookahead-va-lookbehind-nhin-truoc-nhin-sau">Lookahead và Lookbehind - Nhìn Trước Nhìn Sau<a class="zola-anchor" href="#lookahead-va-lookbehind-nhin-truoc-nhin-sau" aria-label="Anchor link for: lookahead-va-lookbehind-nhin-truoc-nhin-sau" style="visibility: hidden;"></a></h2>
+<p>Đây là phần high-level, dành cho những ai muốn flexing:</p>
+<pre class="z-code"><code><span class="z-text z-plain">(?=...)     # Positive lookahead - Có cái gì đó phía sau
+</span><span class="z-text z-plain">(?!...)     # Negative lookahead - Không có cái gì đó phía sau
+</span><span class="z-text z-plain">(?&lt;=...)    # Positive lookbehind - Có cái gì đó phía trước
+</span><span class="z-text z-plain">(?&lt;!...)    # Negative lookbehind - Không có cài gì đó phía trước
+</span></code></pre>
+<h2 id="nhung-pattern-thuc-te-tu-ly-thuyet-den-thuc-hanh">Những Pattern Thực Tế - Từ Lý Thuyết Đến Thực Hành<a class="zola-anchor" href="#nhung-pattern-thuc-te-tu-ly-thuyet-den-thuc-hanh" aria-label="Anchor link for: nhung-pattern-thuc-te-tu-ly-thuyet-den-thuc-hanh" style="visibility: hidden;"></a></h2>
+<h3 id="validate-email-co-ban">Validate Email (Cơ Bản)<a class="zola-anchor" href="#validate-email-co-ban" aria-label="Anchor link for: validate-email-co-ban" style="visibility: hidden;"></a></h3>
+<pre class="z-code"><code><span class="z-text z-plain">^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
+</span></code></pre>
+<p><em>Lưu ý: Đây chỉ là version cơ bản. Email validation thực sự phức tạp hơn nhiều và có thể khiến bạn mất ngủ.</em></p>
+<h3 id="so-dien-thoai-viet-nam">Số Điện Thoại Việt Nam<a class="zola-anchor" href="#so-dien-thoai-viet-nam" aria-label="Anchor link for: so-dien-thoai-viet-nam" style="visibility: hidden;"></a></h3>
+<pre class="z-code"><code><span class="z-text z-plain">^(0|\+84)(3|5|7|8|9)\d{8}$
+</span></code></pre>
+<h3 id="tim-url">Tìm URL<a class="zola-anchor" href="#tim-url" aria-label="Anchor link for: tim-url" style="visibility: hidden;"></a></h3>
+<pre class="z-code"><code><span class="z-text z-plain">https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&amp;//=]*)
+</span></code></pre>
+<h3 id="validate-mat-khau-manh">Validate Mật Khẩu Mạnh<a class="zola-anchor" href="#validate-mat-khau-manh" aria-label="Anchor link for: validate-mat-khau-manh" style="visibility: hidden;"></a></h3>
+<pre class="z-code"><code><span class="z-text z-plain">^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&amp;])[A-Za-z\d@$!%*?&amp;]{8,}$
+</span></code></pre>
+<p>Regex này yêu cầu:</p>
+<ul>
+<li>Ít nhất 1 chữ thường</li>
+<li>Ít nhất 1 chữ hoa</li>
+<li>Ít nhất 1 số</li>
+<li>Ít nhất 1 ký tự đặc biệt</li>
+<li>Tối thiểu 8 ký tự</li>
+</ul>
+<h2 id="flags-nhung-modifier-huu-ich">Flags - Những Modifier Hữu Ích<a class="zola-anchor" href="#flags-nhung-modifier-huu-ich" aria-label="Anchor link for: flags-nhung-modifier-huu-ich" style="visibility: hidden;"></a></h2>
+<p>Flags thay đổi cách regex hoạt động:</p>
+<ul>
+<li><code>i</code> - Case insensitive (không phân biệt hoa thường)</li>
+<li><code>g</code> - Global (tìm tất cả matches, không chỉ cái đầu tiên)</li>
+<li><code>m</code> - Multiline (^ và $ match đầu/cuối mỗi dòng)</li>
+<li><code>s</code> - Dotall (. match cả newline)</li>
+</ul>
+<p>Ví dụ trong JavaScript:</p>
+<pre data-lang="javascript" class="language-javascript z-code"><code class="language-javascript" data-lang="javascript"><span class="z-source z-ts"><span class="z-meta z-var z-expr z-ts"><span class="z-storage z-type z-ts">const</span> <span class="z-meta z-var-single-variable z-expr z-ts"><span class="z-meta z-definition z-variable z-ts"><span class="z-variable z-other z-constant z-ts">regex</span></span> </span><span class="z-keyword z-operator z-assignment z-ts">=</span><span class="z-string z-regexp z-ts"> <span class="z-punctuation z-definition z-string z-begin z-ts">/</span>hello<span class="z-punctuation z-definition z-string z-end z-ts">/</span><span class="z-keyword z-other z-ts">gi</span></span></span><span class="z-punctuation z-terminator z-statement z-ts">;</span>  <span class="z-comment z-line z-double-slash z-ts"><span class="z-punctuation z-definition z-comment z-ts">//</span></span><span class="z-comment z-line z-double-slash z-ts"> Global và case insensitive</span>
+</span></code></pre>
+<h2 id="debugging-regex-khi-moi-thu-do-vo">Debugging Regex - Khi Mọi Thứ Đổ Vỡ<a class="zola-anchor" href="#debugging-regex-khi-moi-thu-do-vo" aria-label="Anchor link for: debugging-regex-khi-moi-thu-do-vo" style="visibility: hidden;"></a></h2>
+<p>Regex debugging là một nghệ thuật. Dưới đây là một số tips:</p>
+<h3 id="su-dung-online-tools">Sử dụng Online Tools<a class="zola-anchor" href="#su-dung-online-tools" aria-label="Anchor link for: su-dung-online-tools" style="visibility: hidden;"></a></h3>
+<ul>
+<li><a rel="nofollow noreferrer" href="https://regex101.com">Regex101.com</a> - Tốt nhất, có explain từng phần</li>
+<li><a rel="nofollow noreferrer" href="https://regexr.com">RegExr.com</a> - Đẹp và dễ sử dụng</li>
+<li><a rel="nofollow noreferrer" href="https://regexpal.com">RegexPal.com</a> - Đơn giản và nhanh</li>
+</ul>
+<h3 id="break-it-down">Break It Down<a class="zola-anchor" href="#break-it-down" aria-label="Anchor link for: break-it-down" style="visibility: hidden;"></a></h3>
+<p>Đừng viết một regex dài 50 ký tự trong một lần. Bắt đầu đơn giản rồi từ từ thêm vào:</p>
+<pre class="z-code"><code><span class="z-text z-plain"># Bước 1: Match email cơ bản
+</span><span class="z-text z-plain">\w+@\w+
+</span><span class="z-text z-plain">
+</span><span class="z-text z-plain"># Bước 2: Thêm domain extension
+</span><span class="z-text z-plain">\w+@\w+\.\w+
+</span><span class="z-text z-plain">
+</span><span class="z-text z-plain"># Bước 3: Cho phép dấu chấm trong username
+</span><span class="z-text z-plain">[\w.]+@\w+\.\w+
+</span><span class="z-text z-plain">
+</span><span class="z-text z-plain"># Tiếp tục...
+</span></code></pre>
+<h3 id="comment-your-regex">Comment Your Regex<a class="zola-anchor" href="#comment-your-regex" aria-label="Anchor link for: comment-your-regex" style="visibility: hidden;"></a></h3>
+<p>Trong một số ngôn ngữ, bạn có thể comment regex:</p>
+<pre class="z-code"><code><span class="z-text z-plain">(?x)            # Enable verbose mode
+</span><span class="z-text z-plain">^               # Start of string
+</span><span class="z-text z-plain">[\w._%+-]+      # Username part
+</span><span class="z-text z-plain">@               # At symbol
+</span><span class="z-text z-plain">[\w.-]+         # Domain name
+</span><span class="z-text z-plain">\.              # Dot
+</span><span class="z-text z-plain">[A-Z]{2,}       # Top level domain
+</span><span class="z-text z-plain">$               # End of string
+</span></code></pre>
+<h2 id="performance-khi-regex-chay-cham-nhu-rua">Performance - Khi Regex Chạy Chậm Như Rùa<a class="zola-anchor" href="#performance-khi-regex-chay-cham-nhu-rua" aria-label="Anchor link for: performance-khi-regex-chay-cham-nhu-rua" style="visibility: hidden;"></a></h2>
+<p>Regex có thể rất chậm nếu không được viết cẩn thận:</p>
+<h3 id="catastrophic-backtracking">Catastrophic Backtracking<a class="zola-anchor" href="#catastrophic-backtracking" aria-label="Anchor link for: catastrophic-backtracking" style="visibility: hidden;"></a></h3>
+<p>Tránh những pattern như này:</p>
+<pre class="z-code"><code><span class="z-text z-plain">(a+)+b          # ĐỪng làm thế này!
+</span></code></pre>
+<h3 id="su-dung-non-greedy-quantifiers">Sử dụng Non-greedy Quantifiers<a class="zola-anchor" href="#su-dung-non-greedy-quantifiers" aria-label="Anchor link for: su-dung-non-greedy-quantifiers" style="visibility: hidden;"></a></h3>
+<pre class="z-code"><code><span class="z-text z-plain">.*?             # Non-greedy, dừng sớm nhất có thể
+</span><span class="z-text z-plain">.*              # Greedy, match càng nhiều càng tốt
+</span></code></pre>
+<h3 id="anchor-your-patterns">Anchor Your Patterns<a class="zola-anchor" href="#anchor-your-patterns" aria-label="Anchor link for: anchor-your-patterns" style="visibility: hidden;"></a></h3>
+<pre class="z-code"><code><span class="z-text z-plain">^pattern$       # Tốt
+</span><span class="z-text z-plain">pattern         # Không tốt
+</span></code></pre>
+<h2 id="nhung-loi-thuong-gap-hall-of-shame">Những Lỗi Thường Gặp - Hall of Shame<a class="zola-anchor" href="#nhung-loi-thuong-gap-hall-of-shame" aria-label="Anchor link for: nhung-loi-thuong-gap-hall-of-shame" style="visibility: hidden;"></a></h2>
+<h3 id="quen-escape-metacharacters">Quên Escape Metacharacters<a class="zola-anchor" href="#quen-escape-metacharacters" aria-label="Anchor link for: quen-escape-metacharacters" style="visibility: hidden;"></a></h3>
+<pre class="z-code"><code><span class="z-text z-plain"># Sai
+</span><span class="z-text z-plain">3.14
+</span><span class="z-text z-plain">
+</span><span class="z-text z-plain"># Đúng  
+</span><span class="z-text z-plain">3\.14
+</span></code></pre>
+<h3 id="khong-su-dung-raw-strings-trong-python">Không Sử Dụng Raw Strings (trong Python)<a class="zola-anchor" href="#khong-su-dung-raw-strings-trong-python" aria-label="Anchor link for: khong-su-dung-raw-strings-trong-python" style="visibility: hidden;"></a></h3>
+<pre data-lang="python" class="language-python z-code"><code class="language-python" data-lang="python"><span class="z-source z-python"><span class="z-comment z-line z-number-sign z-python"><span class="z-punctuation z-definition z-comment z-python">#</span> Sai
+</span></span><span class="z-source z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">pattern</span></span> <span class="z-keyword z-operator z-assignment z-python">=</span> <span class="z-meta z-string z-python"><span class="z-string z-quoted z-double z-python"><span class="z-punctuation z-definition z-string z-begin z-python">&quot;</span></span></span><span class="z-meta z-string z-python"><span class="z-string z-quoted z-double z-python"><span class="z-invalid z-deprecated z-character z-escape z-python">\d</span>+<span class="z-punctuation z-definition z-string z-end z-python">&quot;</span></span></span>
+</span><span class="z-source z-python">
+</span><span class="z-source z-python"><span class="z-comment z-line z-number-sign z-python"><span class="z-punctuation z-definition z-comment z-python">#</span> Đúng
+</span></span><span class="z-source z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">pattern</span></span> <span class="z-keyword z-operator z-assignment z-python">=</span> <span class="z-storage z-type z-string z-python">r</span><span class="z-meta z-string z-python"><span class="z-string z-quoted z-double z-python"><span class="z-punctuation z-definition z-string z-begin z-python">&quot;</span></span></span><span class="z-meta z-string z-python"><span class="z-string z-quoted z-double z-python"><span class="z-source z-regexp z-python"><span class="z-constant z-character z-character-class z-regexp">\d</span><span class="z-keyword z-operator z-quantifier z-regexp">+</span></span><span class="z-punctuation z-definition z-string z-end z-python">&quot;</span></span></span>
+</span></code></pre>
+<h3 id="nghi-regex-la-silver-bullet">Nghĩ Regex Là Silver Bullet<a class="zola-anchor" href="#nghi-regex-la-silver-bullet" aria-label="Anchor link for: nghi-regex-la-silver-bullet" style="visibility: hidden;"></a></h3>
+<p>Không phải mọi thứ đều cần regex. Đôi khi <code>string.contains()</code> đã đủ rồi.</p>
+<h2 id="regex-trong-cac-ngon-ngu-khac-nhau">Regex Trong Các Ngôn Ngữ Khác Nhau<a class="zola-anchor" href="#regex-trong-cac-ngon-ngu-khac-nhau" aria-label="Anchor link for: regex-trong-cac-ngon-ngu-khac-nhau" style="visibility: hidden;"></a></h2>
+<h3 id="javascript">JavaScript<a class="zola-anchor" href="#javascript" aria-label="Anchor link for: javascript" style="visibility: hidden;"></a></h3>
+<pre data-lang="javascript" class="language-javascript z-code"><code class="language-javascript" data-lang="javascript"><span class="z-source z-ts"><span class="z-meta z-var z-expr z-ts"><span class="z-storage z-type z-ts">const</span> <span class="z-meta z-var-single-variable z-expr z-ts"><span class="z-meta z-definition z-variable z-ts"><span class="z-variable z-other z-constant z-ts">pattern</span></span> </span><span class="z-keyword z-operator z-assignment z-ts">=</span><span class="z-string z-regexp z-ts"> <span class="z-punctuation z-definition z-string z-begin z-ts">/</span><span class="z-constant z-other z-character-class z-regexp">\d</span><span class="z-keyword z-operator z-quantifier z-regexp">+</span><span class="z-punctuation z-definition z-string z-end z-ts">/</span><span class="z-keyword z-other z-ts">g</span></span></span><span class="z-punctuation z-terminator z-statement z-ts">;</span>
+</span><span class="z-source z-ts"><span class="z-meta z-var z-expr z-ts"><span class="z-storage z-type z-ts">const</span> <span class="z-meta z-var-single-variable z-expr z-ts"><span class="z-meta z-definition z-variable z-ts"><span class="z-variable z-other z-constant z-ts">text</span></span> </span><span class="z-keyword z-operator z-assignment z-ts">=</span> <span class="z-string z-quoted z-double z-ts"><span class="z-punctuation z-definition z-string z-begin z-ts">&quot;</span>I have 5 apples and 3 oranges<span class="z-punctuation z-definition z-string z-end z-ts">&quot;</span></span></span><span class="z-punctuation z-terminator z-statement z-ts">;</span>
+</span><span class="z-source z-ts"><span class="z-meta z-var z-expr z-ts"><span class="z-storage z-type z-ts">const</span> <span class="z-meta z-var-single-variable z-expr z-ts"><span class="z-meta z-definition z-variable z-ts"><span class="z-variable z-other z-constant z-ts">numbers</span></span> </span><span class="z-keyword z-operator z-assignment z-ts">=</span> <span class="z-meta z-function-call z-ts"><span class="z-variable z-other z-object z-ts">text</span><span class="z-punctuation z-accessor z-ts">.</span><span class="z-support z-function z-ts">match</span></span><span class="z-meta z-brace z-round z-ts">(</span><span class="z-variable z-other z-readwrite z-ts">pattern</span><span class="z-meta z-brace z-round z-ts">)</span></span><span class="z-punctuation z-terminator z-statement z-ts">;</span> <span class="z-comment z-line z-double-slash z-ts"><span class="z-punctuation z-definition z-comment z-ts">//</span></span><span class="z-comment z-line z-double-slash z-ts"> [&#39;5&#39;, &#39;3&#39;]</span>
+</span></code></pre>
+<h3 id="python">Python<a class="zola-anchor" href="#python" aria-label="Anchor link for: python" style="visibility: hidden;"></a></h3>
+<pre data-lang="python" class="language-python z-code"><code class="language-python" data-lang="python"><span class="z-source z-python"><span class="z-meta z-statement z-import z-python"><span class="z-keyword z-control z-import z-python">import</span> <span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">re</span></span></span>
+</span><span class="z-source z-python">
+</span><span class="z-source z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">pattern</span></span> <span class="z-keyword z-operator z-assignment z-python">=</span> <span class="z-storage z-type z-string z-python">r</span><span class="z-meta z-string z-python"><span class="z-string z-quoted z-single z-python"><span class="z-punctuation z-definition z-string z-begin z-python">&#39;</span></span></span><span class="z-meta z-string z-python"><span class="z-string z-quoted z-single z-python"><span class="z-source z-regexp z-python"><span class="z-constant z-character z-character-class z-regexp">\d</span><span class="z-keyword z-operator z-quantifier z-regexp">+</span></span><span class="z-punctuation z-definition z-string z-end z-python">&#39;</span></span></span>
+</span><span class="z-source z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">text</span></span> <span class="z-keyword z-operator z-assignment z-python">=</span> <span class="z-meta z-string z-python"><span class="z-string z-quoted z-double z-python"><span class="z-punctuation z-definition z-string z-begin z-python">&quot;</span></span></span><span class="z-meta z-string z-python"><span class="z-string z-quoted z-double z-python">I have 5 apples and 3 oranges<span class="z-punctuation z-definition z-string z-end z-python">&quot;</span></span></span>
+</span><span class="z-source z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">numbers</span></span> <span class="z-keyword z-operator z-assignment z-python">=</span> <span class="z-meta z-function-call z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">re</span></span><span class="z-meta z-qualified-name z-python"><span class="z-punctuation z-accessor z-dot z-python">.</span></span><span class="z-meta z-qualified-name z-python"><span class="z-variable z-function z-python"><span class="z-meta z-generic-name z-python">findall</span></span></span></span><span class="z-meta z-function-call z-arguments z-python"><span class="z-punctuation z-section z-arguments z-begin z-python">(</span><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">pattern</span></span><span class="z-punctuation z-separator z-arguments z-python">,</span> <span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">text</span></span><span class="z-punctuation z-section z-arguments z-end z-python">)</span></span>  <span class="z-comment z-line z-number-sign z-python"><span class="z-punctuation z-definition z-comment z-python">#</span> [&#39;5&#39;, &#39;3&#39;]
+</span></span></code></pre>
+<h3 id="java">Java<a class="zola-anchor" href="#java" aria-label="Anchor link for: java" style="visibility: hidden;"></a></h3>
+<pre data-lang="java" class="language-java z-code"><code class="language-java" data-lang="java"><span class="z-source z-java"><span class="z-support z-class z-java">Pattern</span> pattern <span class="z-meta z-assignment z-rhs z-java"><span class="z-keyword z-operator z-assignment z-java">=</span> <span class="z-support z-class z-java">Pattern</span><span class="z-punctuation z-accessor z-dot z-java">.</span><span class="z-meta z-function-call z-java"><span class="z-variable z-function z-java">compile</span><span class="z-punctuation z-section z-parens z-begin z-java">(</span><span class="z-string z-quoted z-double z-java"><span class="z-punctuation z-definition z-string z-begin z-java">&quot;</span><span class="z-constant z-character z-escape z-java">\\</span>d+<span class="z-punctuation z-definition z-string z-end z-java">&quot;</span></span><span class="z-punctuation z-section z-parens z-end z-java">)</span></span></span><span class="z-punctuation z-terminator z-java">;</span>
+</span><span class="z-source z-java"><span class="z-support z-class z-java">Matcher</span> matcher <span class="z-meta z-assignment z-rhs z-java"><span class="z-keyword z-operator z-assignment z-java">=</span> pattern<span class="z-punctuation z-accessor z-dot z-java">.</span><span class="z-meta z-function-call z-java"><span class="z-variable z-function z-java">matcher</span><span class="z-punctuation z-section z-parens z-begin z-java">(</span><span class="z-string z-quoted z-double z-java"><span class="z-punctuation z-definition z-string z-begin z-java">&quot;</span>I have 5 apples and 3 oranges<span class="z-punctuation z-definition z-string z-end z-java">&quot;</span></span><span class="z-punctuation z-section z-parens z-end z-java">)</span></span></span><span class="z-punctuation z-terminator z-java">;</span>
+</span><span class="z-source z-java"><span class="z-keyword z-control z-loop z-while z-java">while</span> <span class="z-meta z-parens z-java"><span class="z-punctuation z-section z-parens z-begin z-java">(</span>matcher<span class="z-punctuation z-accessor z-dot z-java">.</span><span class="z-meta z-function-call z-java"><span class="z-variable z-function z-java">find</span><span class="z-punctuation z-section z-parens z-begin z-java">(</span><span class="z-punctuation z-section z-parens z-end z-java">)</span></span><span class="z-punctuation z-section z-parens z-end z-java">)</span></span> <span class="z-meta z-block z-java"><span class="z-punctuation z-section z-block z-begin z-java">{</span>
+</span></span><span class="z-source z-java"><span class="z-meta z-block z-java">    <span class="z-support z-class z-java">System</span><span class="z-punctuation z-accessor z-dot z-java">.</span>out<span class="z-punctuation z-accessor z-dot z-java">.</span><span class="z-meta z-function-call z-java"><span class="z-variable z-function z-java">println</span><span class="z-punctuation z-section z-parens z-begin z-java">(</span>matcher<span class="z-punctuation z-accessor z-dot z-java">.</span><span class="z-meta z-function-call z-java"><span class="z-variable z-function z-java">group</span><span class="z-punctuation z-section z-parens z-begin z-java">(</span><span class="z-punctuation z-section z-parens z-end z-java">)</span></span><span class="z-punctuation z-section z-parens z-end z-java">)</span></span><span class="z-punctuation z-terminator z-java">;</span>
+</span></span><span class="z-source z-java"><span class="z-meta z-block z-java"><span class="z-punctuation z-section z-block z-end z-java">}</span></span>
+</span></code></pre>
+<h3 id="php">PHP<a class="zola-anchor" href="#php" aria-label="Anchor link for: php" style="visibility: hidden;"></a></h3>
+<pre data-lang="php" class="language-php z-code"><code class="language-php" data-lang="php"><span class="z-embedding z-php"><span class="z-text z-html z-basic">$pattern = &#39;/\d+/&#39;;
+</span></span><span class="z-embedding z-php"><span class="z-text z-html z-basic">$text = &quot;I have 5 apples and 3 oranges&quot;;
+</span></span><span class="z-embedding z-php"><span class="z-text z-html z-basic">preg_match_all($pattern, $text, $matches);
+</span></span><span class="z-embedding z-php"><span class="z-text z-html z-basic">print_r($matches[0]); // Array([&#39;5&#39;, &#39;3&#39;])
+</span></span></code></pre>
+<h2 id="best-practices-lam-sao-de-khong-bi-dong-nghiep-ghet">Best Practices - Làm Sao Để Không Bị Đồng Nghiệp Ghét<a class="zola-anchor" href="#best-practices-lam-sao-de-khong-bi-dong-nghiep-ghet" aria-label="Anchor link for: best-practices-lam-sao-de-khong-bi-dong-nghiep-ghet" style="visibility: hidden;"></a></h2>
+<h3 id="ten-bien-co-y-nghia">Tên Biến Có Ý Nghĩa<a class="zola-anchor" href="#ten-bien-co-y-nghia" aria-label="Anchor link for: ten-bien-co-y-nghia" style="visibility: hidden;"></a></h3>
+<pre data-lang="javascript" class="language-javascript z-code"><code class="language-javascript" data-lang="javascript"><span class="z-source z-ts"><span class="z-comment z-line z-double-slash z-ts"><span class="z-punctuation z-definition z-comment z-ts">//</span></span><span class="z-comment z-line z-double-slash z-ts"> Tệ</span>
+</span><span class="z-source z-ts"><span class="z-meta z-var z-expr z-ts"><span class="z-storage z-type z-ts">const</span> <span class="z-meta z-var-single-variable z-expr z-ts"><span class="z-meta z-definition z-variable z-ts"><span class="z-variable z-other z-constant z-ts">p</span></span> </span><span class="z-keyword z-operator z-assignment z-ts">=</span><span class="z-string z-regexp z-ts"> <span class="z-punctuation z-definition z-string z-begin z-ts">/</span><span class="z-constant z-other z-character-class z-regexp">\d</span><span class="z-keyword z-operator z-quantifier z-regexp">{3}</span>-<span class="z-constant z-other z-character-class z-regexp">\d</span><span class="z-keyword z-operator z-quantifier z-regexp">{3}</span>-<span class="z-constant z-other z-character-class z-regexp">\d</span><span class="z-keyword z-operator z-quantifier z-regexp">{4}</span><span class="z-punctuation z-definition z-string z-end z-ts">/</span></span></span><span class="z-punctuation z-terminator z-statement z-ts">;</span>
+</span><span class="z-source z-ts">
+</span><span class="z-source z-ts"><span class="z-comment z-line z-double-slash z-ts"><span class="z-punctuation z-definition z-comment z-ts">//</span></span><span class="z-comment z-line z-double-slash z-ts"> Tốt</span>
+</span><span class="z-source z-ts"><span class="z-meta z-var z-expr z-ts"><span class="z-storage z-type z-ts">const</span> <span class="z-meta z-var-single-variable z-expr z-ts"><span class="z-meta z-definition z-variable z-ts"><span class="z-variable z-other z-constant z-ts">phoneNumberPattern</span></span> </span><span class="z-keyword z-operator z-assignment z-ts">=</span><span class="z-string z-regexp z-ts"> <span class="z-punctuation z-definition z-string z-begin z-ts">/</span><span class="z-constant z-other z-character-class z-regexp">\d</span><span class="z-keyword z-operator z-quantifier z-regexp">{3}</span>-<span class="z-constant z-other z-character-class z-regexp">\d</span><span class="z-keyword z-operator z-quantifier z-regexp">{3}</span>-<span class="z-constant z-other z-character-class z-regexp">\d</span><span class="z-keyword z-operator z-quantifier z-regexp">{4}</span><span class="z-punctuation z-definition z-string z-end z-ts">/</span></span></span><span class="z-punctuation z-terminator z-statement z-ts">;</span>
+</span></code></pre>
+<h3 id="comment-cho-regex-phuc-tap">Comment Cho Regex Phức Tạp<a class="zola-anchor" href="#comment-cho-regex-phuc-tap" aria-label="Anchor link for: comment-cho-regex-phuc-tap" style="visibility: hidden;"></a></h3>
+<pre data-lang="javascript" class="language-javascript z-code"><code class="language-javascript" data-lang="javascript"><span class="z-source z-ts"><span class="z-meta z-var z-expr z-ts"><span class="z-storage z-type z-ts">const</span> <span class="z-meta z-var-single-variable z-expr z-ts"><span class="z-meta z-definition z-variable z-ts"><span class="z-variable z-other z-constant z-ts">emailPattern</span></span> </span><span class="z-keyword z-operator z-assignment z-ts">=</span><span class="z-string z-regexp z-ts"> <span class="z-punctuation z-definition z-string z-begin z-ts">/</span><span class="z-keyword z-control z-anchor z-regexp">^</span><span class="z-constant z-other z-character-class z-set z-regexp"><span class="z-punctuation z-definition z-character-class z-regexp">[</span><span class="z-constant z-other z-character-class z-range z-regexp">a-z</span><span class="z-constant z-other z-character-class z-range z-regexp">A-Z</span><span class="z-constant z-other z-character-class z-range z-regexp">0-9</span><span class="z-constant z-other z-character-class z-regexp">.</span>_%+-<span class="z-punctuation z-definition z-character-class z-regexp">]</span></span><span class="z-keyword z-operator z-quantifier z-regexp">+</span>@<span class="z-constant z-other z-character-class z-set z-regexp"><span class="z-punctuation z-definition z-character-class z-regexp">[</span><span class="z-constant z-other z-character-class z-range z-regexp">a-z</span><span class="z-constant z-other z-character-class z-range z-regexp">A-Z</span><span class="z-constant z-other z-character-class z-range z-regexp">0-9</span><span class="z-constant z-other z-character-class z-regexp">.</span>-<span class="z-punctuation z-definition z-character-class z-regexp">]</span></span><span class="z-keyword z-operator z-quantifier z-regexp">+</span><span class="z-constant z-character z-escape z-backslash z-regexp">\.</span><span class="z-constant z-other z-character-class z-set z-regexp"><span class="z-punctuation z-definition z-character-class z-regexp">[</span><span class="z-constant z-other z-character-class z-range z-regexp">a-z</span><span class="z-constant z-other z-character-class z-range z-regexp">A-Z</span><span class="z-punctuation z-definition z-character-class z-regexp">]</span></span><span class="z-keyword z-operator z-quantifier z-regexp">{2,}</span><span class="z-keyword z-control z-anchor z-regexp">$</span><span class="z-punctuation z-definition z-string z-end z-ts">/</span></span></span><span class="z-punctuation z-terminator z-statement z-ts">;</span>
+</span><span class="z-source z-ts"><span class="z-comment z-line z-double-slash z-ts"><span class="z-punctuation z-definition z-comment z-ts">//</span></span><span class="z-comment z-line z-double-slash z-ts"> Matches standard email format: username@domain.tld</span>
+</span></code></pre>
+<h3 id="validate-input-truoc-khi-regex">Validate Input Trước Khi Regex<a class="zola-anchor" href="#validate-input-truoc-khi-regex" aria-label="Anchor link for: validate-input-truoc-khi-regex" style="visibility: hidden;"></a></h3>
+<pre data-lang="javascript" class="language-javascript z-code"><code class="language-javascript" data-lang="javascript"><span class="z-source z-ts"><span class="z-keyword z-control z-conditional z-ts">if</span> <span class="z-meta z-brace z-round z-ts">(</span><span class="z-keyword z-operator z-expression z-typeof z-ts">typeof</span> <span class="z-variable z-other z-readwrite z-ts">input</span> <span class="z-keyword z-operator z-comparison z-ts">!==</span> <span class="z-string z-quoted z-single z-ts"><span class="z-punctuation z-definition z-string z-begin z-ts">&#39;</span>string<span class="z-punctuation z-definition z-string z-end z-ts">&#39;</span></span> <span class="z-keyword z-operator z-logical z-ts">||</span> <span class="z-variable z-other z-object z-ts">input</span><span class="z-punctuation z-accessor z-ts">.</span><span class="z-support z-variable z-property z-ts">length</span> <span class="z-keyword z-operator z-comparison z-ts">===</span> <span class="z-constant z-numeric z-decimal z-ts">0</span><span class="z-meta z-brace z-round z-ts">)</span> <span class="z-meta z-block z-ts"><span class="z-punctuation z-definition z-block z-ts">{</span>
+</span></span><span class="z-source z-ts"><span class="z-meta z-block z-ts">    <span class="z-keyword z-control z-flow z-ts">return</span> <span class="z-constant z-language z-boolean z-false z-ts">false</span><span class="z-punctuation z-terminator z-statement z-ts">;</span>
+</span></span><span class="z-source z-ts"><span class="z-meta z-block z-ts"><span class="z-punctuation z-definition z-block z-ts">}</span></span>
+</span><span class="z-source z-ts"><span class="z-keyword z-control z-flow z-ts">return</span> <span class="z-meta z-function-call z-ts"><span class="z-variable z-other z-object z-ts">emailPattern</span><span class="z-punctuation z-accessor z-ts">.</span><span class="z-support z-function z-ts">test</span></span><span class="z-meta z-brace z-round z-ts">(</span><span class="z-variable z-other z-readwrite z-ts">input</span><span class="z-meta z-brace z-round z-ts">)</span><span class="z-punctuation z-terminator z-statement z-ts">;</span>
+</span></code></pre>
+<h3 id="su-dung-compiled-regex-cho-performance">Sử dụng Compiled Regex Cho Performance<a class="zola-anchor" href="#su-dung-compiled-regex-cho-performance" aria-label="Anchor link for: su-dung-compiled-regex-cho-performance" style="visibility: hidden;"></a></h3>
+<pre data-lang="python" class="language-python z-code"><code class="language-python" data-lang="python"><span class="z-source z-python"><span class="z-comment z-line z-number-sign z-python"><span class="z-punctuation z-definition z-comment z-python">#</span> Tệ - compile mỗi lần
+</span></span><span class="z-source z-python"><span class="z-meta z-statement z-loop z-for z-python"><span class="z-keyword z-control z-loop z-for z-python">for</span> <span class="z-meta z-generic-name z-python">item</span> <span class="z-keyword z-control z-loop z-for z-in z-python">in</span></span><span class="z-meta z-statement z-loop z-for z-python"> <span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">items</span></span></span><span class="z-meta z-statement z-loop z-for z-python"><span class="z-punctuation z-section z-block z-loop z-for z-python">:</span></span>
+</span><span class="z-source z-python">    <span class="z-meta z-statement z-conditional z-if z-python"><span class="z-keyword z-control z-conditional z-if z-python">if</span> <span class="z-meta z-function-call z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">re</span></span><span class="z-meta z-qualified-name z-python"><span class="z-punctuation z-accessor z-dot z-python">.</span></span><span class="z-meta z-qualified-name z-python"><span class="z-variable z-function z-python"><span class="z-meta z-generic-name z-python">match</span></span></span></span><span class="z-meta z-function-call z-arguments z-python"><span class="z-punctuation z-section z-arguments z-begin z-python">(</span><span class="z-storage z-type z-string z-python">r</span><span class="z-meta z-string z-python"><span class="z-string z-quoted z-single z-python"><span class="z-punctuation z-definition z-string z-begin z-python">&#39;</span></span></span><span class="z-meta z-string z-python"><span class="z-string z-quoted z-single z-python"><span class="z-source z-regexp z-python"><span class="z-constant z-character z-character-class z-regexp">\d</span><span class="z-keyword z-operator z-quantifier z-regexp">+</span></span><span class="z-punctuation z-definition z-string z-end z-python">&#39;</span></span></span><span class="z-punctuation z-separator z-arguments z-python">,</span> <span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">item</span></span><span class="z-punctuation z-section z-arguments z-end z-python">)</span></span><span class="z-punctuation z-section z-block z-conditional z-if z-python">:</span></span>
+</span><span class="z-source z-python">        <span class="z-comment z-line z-number-sign z-python"><span class="z-punctuation z-definition z-comment z-python">#</span> do something
+</span></span><span class="z-source z-python">
+</span><span class="z-source z-python"><span class="z-comment z-line z-number-sign z-python"><span class="z-punctuation z-definition z-comment z-python">#</span> Tốt - compile một lần
+</span></span><span class="z-source z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">pattern</span></span> <span class="z-keyword z-operator z-assignment z-python">=</span> <span class="z-meta z-function-call z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">re</span></span><span class="z-meta z-qualified-name z-python"><span class="z-punctuation z-accessor z-dot z-python">.</span></span><span class="z-meta z-qualified-name z-python"><span class="z-variable z-function z-python"><span class="z-meta z-generic-name z-python">compile</span></span></span></span><span class="z-meta z-function-call z-arguments z-python"><span class="z-punctuation z-section z-arguments z-begin z-python">(</span><span class="z-storage z-type z-string z-python">r</span><span class="z-meta z-string z-python"><span class="z-string z-quoted z-single z-python"><span class="z-punctuation z-definition z-string z-begin z-python">&#39;</span></span></span><span class="z-meta z-string z-python"><span class="z-string z-quoted z-single z-python"><span class="z-source z-regexp z-python"><span class="z-constant z-character z-character-class z-regexp">\d</span><span class="z-keyword z-operator z-quantifier z-regexp">+</span></span><span class="z-punctuation z-definition z-string z-end z-python">&#39;</span></span></span><span class="z-punctuation z-section z-arguments z-end z-python">)</span></span>
+</span><span class="z-source z-python"><span class="z-meta z-statement z-loop z-for z-python"><span class="z-keyword z-control z-loop z-for z-python">for</span> <span class="z-meta z-generic-name z-python">item</span> <span class="z-keyword z-control z-loop z-for z-in z-python">in</span></span><span class="z-meta z-statement z-loop z-for z-python"> <span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">items</span></span></span><span class="z-meta z-statement z-loop z-for z-python"><span class="z-punctuation z-section z-block z-loop z-for z-python">:</span></span>
+</span><span class="z-source z-python">    <span class="z-meta z-statement z-conditional z-if z-python"><span class="z-keyword z-control z-conditional z-if z-python">if</span> <span class="z-meta z-function-call z-python"><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">pattern</span></span><span class="z-meta z-qualified-name z-python"><span class="z-punctuation z-accessor z-dot z-python">.</span></span><span class="z-meta z-qualified-name z-python"><span class="z-variable z-function z-python"><span class="z-meta z-generic-name z-python">match</span></span></span></span><span class="z-meta z-function-call z-arguments z-python"><span class="z-punctuation z-section z-arguments z-begin z-python">(</span><span class="z-meta z-qualified-name z-python"><span class="z-meta z-generic-name z-python">item</span></span><span class="z-punctuation z-section z-arguments z-end z-python">)</span></span><span class="z-punctuation z-section z-block z-conditional z-if z-python">:</span></span>
+</span><span class="z-source z-python">        <span class="z-comment z-line z-number-sign z-python"><span class="z-punctuation z-definition z-comment z-python">#</span> do something
+</span></span></code></pre>
+<h2 id="ket-luan">Kết Luận<a class="zola-anchor" href="#ket-luan" aria-label="Anchor link for: ket-luan" style="visibility: hidden;"></a></h2>
+<p>Regex là một công cụ mạnh mẽ, nhưng hãy nhớ:</p>
+<ol>
+<li><strong>Đơn giản là tốt nhất</strong> - Nếu có thể làm bằng string methods thông thường, hãy làm vậy</li>
+<li><strong>Có thể đọc được quan trọng hơn ngắn gọn</strong> - Đồng nghiệp tương lai (bao gồm chính bạn) sẽ cảm ơn</li>
+<li><strong>Test thoroughly</strong> - Regex có thể có những edge cases bất ngờ</li>
+<li><strong>Biết khi nào nên dừng</strong> - Đừng cố gắng giải quyết mọi thứ bằng regex</li>
+</ol>
+<hr />
+<p><em>P.S: Nếu bạn có thể đọc hiểu regex này<br />
+<code>^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$</code><br />
+mà không cần tra Google, thì chúc mừng - bạn đã officially trở thành regex ninja!</em></p>
+<hr />
+
+      </article>
+
+      
+      
+
+      
+      
+    </div>
+
+    
+
+
+<footer>
+  <div class="left">
+    <div class="copyright">
+      © 2025 <a href="https:&#x2F;&#x2F;wen.is-a.dev">Wen</a>
+      
+    </div>
+  </div>
+
+  <div class="right">
+    
+    
+    
+    
+
+    <!-- 
+    
+    
+    <button id="theme-toggle" aria-label="theme switch">
+      <span class="moon-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill="currentColor"></path></svg>
+</span>
+      <span class="sun-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z" fill="currentColor"></path></svg>
+</span>
+    </button>
+     -->
+  </div>
+</footer>
+
+
+
+
+  </main>
+</div>
+
+  
+<script src="/js/lightense.min.js"></script>
+
+
+
+  <script src="https://wen.is-a.dev/js/main.js"></script>
+</body>
+
+</html>

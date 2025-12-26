@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  
+
+
+
+<meta name="description" content="Mô hình OSI và TCP&#x2F;IP: Bản thiết kế bí mật của thế giới Internet">
+
+  <title>Mô hình OSI và TCP&#x2F;IP: Bản thiết kế bí mật của thế giới Internet</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="https://wen.is-a.dev/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://wen.is-a.dev/img/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://wen.is-a.dev/img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Ancizar+Sans:ital,wght@0,100..1000;1,100..1000&family=Bitter:ital,wght@0,100..900;1,100..900&family=Indie+Flower&family=Lora:ital,wght@0,400..700;1,400..700&family=Marcellus&display=swap"
+    rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;1,400;1,600&display=swap"
+    rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500..700&display=swap" rel="stylesheet">
+  
+  <style>
+  /* light mode colors */
+  body {
+    /* --primary-color: #5871a2; */
+    --primary-color: #005e05;
+    --primary-pale-color: #5871a233;
+    --primary-decoration-color: #5871a210;
+    --bg-color: #f0f9ff;
+    /* --text-color: #2f3030; */
+    --text-color: #000000;
+    /* --text-pale-color: #767676; */
+    --text-pale-color: #000000;
+    --text-decoration-color: #a9a9a9;
+    --highlight-mark-color: #5f75b020;
+
+    --callout-note-color: #5871a2;
+    --callout-tip-color: #268556;
+    --callout-important-color: #885fc9;
+    --callout-warning-color: #ab6632;
+    --callout-caution-color: #c64e4e;
+  }
+
+  /* dark mode colors */
+  body.dark {
+    /* --primary-color: #6f8fd1; */
+    --primary-color: #ecf16b;
+    --primary-pale-color: #6f8fd166;
+    --primary-decoration-color: #6f8fd112;
+    /* --bg-color: #1c1c1c; */
+    /* --bg-color: #002727; */
+    /* --bg-color: #002333; */
+    --bg-color: #01242E;
+    /* --text-color: #c1c1c1; */
+    --text-color: #ffffff;
+    /* --text-pale-color: #848484; */
+    --text-pale-color: #ffffff;
+    --text-decoration-color: #5f5f5f;
+    --highlight-mark-color: #8296cb3b;
+
+    --callout-note-color: #6f8fd1;
+    --callout-tip-color: #47976f;
+    --callout-important-color: #9776cd;
+    --callout-warning-color: #ad7a52;
+    --callout-caution-color: #d06161;
+  }
+
+  /* typography */
+  body {
+    /* --main-font: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; */
+    --main-font: 'Nunito', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --heading-font: 'Quicksand', 'Lora', 'Bitter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --code-font: 'Cascadia Code', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    --homepage-max-width: 768px;
+    --main-max-width: 768px;
+    --avatar-size: 75px;
+    --font-size: 16px;
+    --line-height: 1.75;
+    --img-border-radius: 0px;
+    --detail-border-radius: 11px;
+    --dark-mode-img-brightness: 0.75;
+    --dark-mode-chart-brightness: 0.75;
+    --inline-code-border-radius: 2px;
+    --inline-code-bg-color: var(--primary-decoration-color);
+    --block-code-border-radius: 0px;
+    --block-code-border-color: var(--primary-color);
+    --detail-border-color: var(--primary-color);
+  }
+
+
+  #name,
+  #id,
+  #left,
+  a.post,
+  a.back-link,
+  a.tag,
+  a.category,
+  .title {
+    font-family: var(--heading-font);
+  }
+
+  span.date {
+    font-family: var(--code-font);
+    color: var(--text-pale-color);
+  }
+
+  .gif-wrapper {
+    text-align: center;
+    margin: 1.5rem 0;
+  }
+
+  .gif-wrapper .intro-gif {
+    max-width: 96%;
+    height: auto;
+    border-radius: 8px;
+  }
+
+  .verified-icon {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 3px;
+    vertical-align: middle;
+  }
+
+  .verified-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .top-nav {
+    width: 100%;
+    padding-bottom: 1em;
+    border-bottom: 1px solid var(--border-color);
+    background: rgba(var(--background-rgb), 0.85);
+    backdrop-filter: blur(8px);
+    border-radius: var(--detail-border-radius);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .top-nav nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+  }
+
+  .nav-left,
+  .nav-center,
+  .nav-right {
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-center {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-top: 1em;
+  }
+
+  .menu-wrapper {
+    position: relative;
+    margin-top: 1.5em;
+  }
+
+  .menu-trigger {
+    font-size: 1.5em;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-color);
+  }
+
+  .menu-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+
+    background: var(--bg-color);
+    font-family: var(--heading-font);
+    border: 1px solid var(--primary-pale-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    min-width: 85px;
+    padding: 0.25em 0;
+    z-index: 2000;
+
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .menu-wrapper.active .menu-dropdown {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+
+  .menu-dropdown a {
+    display: block;
+    padding: 0.6em 1em;
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 0.95em;
+    margin: auto;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  #theme-toggle:hover,
+  #rain-toggle:hover {
+    cursor: pointer;
+  }
+
+  .foot-quote,
+  .section-title {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    text-align: center;
+    display: block;
+    margin-top: 2em;
+  }
+
+  .layout-list .post {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+  }
+
+  .post>span:first-child {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+
+  .post>.date {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .year-heading {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    font-size: 1.5em;
+    font-weight: bold;
+    font-family: var(--heading-font);
+  }
+
+  /* term-caret  */
+  #id.term-caret {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    position: relative;
+    white-space: nowrap;
+  }
+
+  #id.term-caret::after {
+    content: "_";
+
+    margin-left: 4px;
+    animation: blink 1s steps(1, end) infinite;
+    opacity: 1;
+    color: currentColor;
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #id.term-caret::after {
+      animation: none;
+      opacity: 1;
+    }
+  }
+
+  /* typewriter */
+  #id.typewriter {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    white-space: nowrap;
+    border-right: 1ch solid currentColor;
+    /* caret */
+    /* caret blink */
+    animation: caret-blink 1s steps(1, end) infinite;
+  }
+
+  @keyframes caret-blink {
+    50% {
+      border-right-color: transparent;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #id.typewriter {
+      animation: none;
+      border-right-color: currentColor;
+    }
+  }
+
+  /* glitch effect  */
+  #id.glitch {
+    position: relative;
+    display: inline-block;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  #id.glitch::before,
+  #id.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    clip-path: inset(0 0 0 0);
+    opacity: .85;
+  }
+
+  #id.glitch::before {
+    transform: translate(0, 0);
+    mix-blend-mode: screen;
+    text-shadow: 1px 0 0 #f00;
+    /* viền đỏ */
+    animation: glitch-1 2s infinite linear alternate-reverse;
+  }
+
+  #id.glitch::after {
+    transform: translate(0, 0);
+    mix-blend-mode: screen;
+    text-shadow: -1px 0 0 #0ff;
+    /* viền cyan */
+    animation: glitch-2 2.2s infinite linear alternate-reverse;
+  }
+
+  @keyframes glitch-1 {
+    0% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(0, 0);
+    }
+
+    20% {
+      clip-path: inset(10% 0 60% 0);
+      transform: translate(-1px, -1px);
+    }
+
+    40% {
+      clip-path: inset(40% 0 30% 0);
+      transform: translate(1px, 1px);
+    }
+
+    60% {
+      clip-path: inset(20% 0 55% 0);
+      transform: translate(-1px, 0);
+    }
+
+    80% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 1px);
+    }
+
+    100% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(0, 0);
+    }
+  }
+
+  @keyframes glitch-2 {
+    0% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 0);
+    }
+
+    20% {
+      clip-path: inset(40% 0 30% 0);
+      transform: translate(1px, 0);
+    }
+
+    40% {
+      clip-path: inset(10% 0 60% 0);
+      transform: translate(0, -1px);
+    }
+
+    60% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(-1px, 1px);
+    }
+
+    80% {
+      clip-path: inset(20% 0 55% 0);
+      transform: translate(1px, 0);
+    }
+
+    100% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+
+    #id.glitch::before,
+    #id.glitch::after {
+      animation: none;
+    }
+  }
+</style>
+  <link rel="stylesheet" href="https://wen.is-a.dev/main.css">
+  
+
+<link id="hl" rel="stylesheet" type="text/css" href="/hl-light.css" />
+
+
+
+  
+</head>
+
+<body class="post">
+
+  
+  <script>
+    const theme = sessionStorage.getItem('theme');
+    const match = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if ((theme && theme === 'dark') || (!theme && match)) {
+      document.body.classList.add('dark');
+      const hl = document.querySelector('link#hl');
+      if (hl) hl.href = 'https://wen.is-a.dev/hl-dark.css';
+    }
+  </script>
+  
+
+  
+<div id="wrapper">
+  <div id="blank"></div>
+  <aside>
+    
+    
+    
+    <button id="back-to-top" aria-label="back to top">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-up"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+
+    </button>
+    
+  </aside>
+  <main>
+    
+<header class="top-nav">
+  <nav>
+    <!-- Left: Back -->
+    <div class="nav-left">
+      <a href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts" class="back-link">← Back</a>
+    </div>
+
+    <!-- Center: Avatar -->
+    <div class="nav-center">
+      
+      <a href="/">
+        <img src="https://wen.is-a.dev/img/qwe.jpg" alt="avatar" class="avatar">
+      </a>
+      
+    </div>
+
+    <!-- Right: Menu dropdown -->
+    <div class="nav-right">
+
+      <div class="menu-wrapper">
+
+        <button class="menu-trigger" aria-label="menu">
+          &#9776;
+        </button>
+        <div class="menu-dropdown">
+          <a href="https://wen.is-a.dev/posts">POSTS</a>
+          <a href="https://wen.is-a.dev/about">ABOUT</a>
+          <a href="https://wen.is-a.dev/contact">CONTACT</a>
+          
+          
+          
+          
+          
+
+          <a id="theme-toggle" aria-label="theme switch">
+            <span class="moon-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill="currentColor"></path></svg>
+</span>
+            <span class="sun-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z" fill="currentColor"></path></svg>
+</span>
+          </a>
+
+          
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const trigger = document.querySelector(".menu-trigger");
+    const wrapper = document.querySelector(".menu-wrapper");
+
+    if (trigger && wrapper) {
+      trigger.addEventListener("click", () => {
+        wrapper.classList.toggle("active");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!wrapper.contains(e.target)) {
+          wrapper.classList.remove("active");
+        }
+      });
+    }
+  });
+
+</script>
+
+
+    <div>
+      
+      
+      
+      
+      <div id="copy-cfg" style="display: none;" data-copy-icon="&lt;svg xmlns=&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2000&#x2F;svg&quot; viewBox=&quot;0 0 24 24&quot; width=&quot;18&quot; height=&quot;18&quot;&gt;&lt;path d=&quot;M6.9998 6V3C6.9998 2.44772 7.44752 2 7.9998 2H19.9998C20.5521 2 20.9998 2.44772 20.9998 3V17C20.9998 17.5523 20.5521 18 19.9998 18H16.9998V20.9991C16.9998 21.5519 16.5499 22 15.993 22H4.00666C3.45059 22 3 21.5554 3 20.9991L3.0026 7.00087C3.0027 6.44811 3.45264 6 4.00942 6H6.9998ZM5.00242 8L5.00019 20H14.9998V8H5.00242ZM8.9998 6H16.9998V16H18.9998V4H8.9998V6Z&quot; fill=&quot;currentColor&quot;&gt;&lt;&#x2F;path&gt;&lt;&#x2F;svg&gt;
+" data-check-icon="&lt;svg xmlns=&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2000&#x2F;svg&quot; viewBox=&quot;0 0 24 24&quot; width=&quot;18&quot; height=&quot;18&quot;&gt;&lt;path d=&quot;M10.0007 15.1709L19.1931 5.97852L20.6073 7.39273L10.0007 17.9993L3.63672 11.6354L5.05093 10.2212L10.0007 15.1709Z&quot; fill=&quot;currentColor&quot;&gt;&lt;&#x2F;path&gt;&lt;&#x2F;svg&gt;
+">
+      </div>
+      
+      <article class="prose">
+        <h1 class="title">Mô hình OSI và TCP&#x2F;IP: Bản thiết kế bí mật của thế giới Internet</h1>
+        <div id="post-info">
+          <div id="date">
+            <span id="publish">May 19, 2025</span>
+            </div>
+
+          
+        </div>
+
+        
+        
+
+        
+
+        <p>Nếu bạn đang đọc bài này, chắc hẳn bạn đã từng nghe đến hai cái tên "huyền thoại" trong làng mạng máy tính: <strong>OSI</strong> và <strong>TCP/IP</strong>. Hai anh chàng này giống như Batman và Superman của thế giới networking - cùng cứu thế giới (internet), nhưng có phong cách hoàn toàn khác nhau.</p>
+<p>Hôm nay, chúng ta sẽ cùng phân tích từng lớp, từng gói tin để xem ai mới thực sự là "ông hoàng" của mạng máy tính. Spoiler alert: Kết quả có thể khiến bạn bất ngờ!</p>
+<h2 id="mo-hinh-osi-anh-chang-hoan-hao-tren-giay">Mô hình OSI: Anh chàng hoàn hảo... trên giấy<a class="zola-anchor" href="#mo-hinh-osi-anh-chang-hoan-hao-tren-giay" aria-label="Anchor link for: mo-hinh-osi-anh-chang-hoan-hao-tren-giay" style="visibility: hidden;"></a></h2>
+<h3 id="gioi-thieu-ve-osi">Giới thiệu về OSI<a class="zola-anchor" href="#gioi-thieu-ve-osi" aria-label="Anchor link for: gioi-thieu-ve-osi" style="visibility: hidden;"></a></h3>
+<p><strong>OSI (Open Systems Interconnection)</strong> ra đời năm 1984 như một "siêu phẩm" được thiết kế bởi ISO (International Organization for Standardization). Nó được tạo ra với tham vọng lớn: trở thành chuẩn mực vàng cho mọi giao thức mạng trên thế giới.</p>
+<p>Mô hình OSI có 7 tầng (layer), mỗi tầng có nhiệm vụ riêng biệt và rõ ràng. Nghe có vẻ hoàn hảo phải không? Vâng, quá hoàn hảo đến mức... thực tế không ai dùng!</p>
+<h3 id="7-tang-cua-mo-hinh-osi">7 tầng của mô hình OSI<a class="zola-anchor" href="#7-tang-cua-mo-hinh-osi" aria-label="Anchor link for: 7-tang-cua-mo-hinh-osi" style="visibility: hidden;"></a></h3>
+<h4 id="1-physical-layer-tang-vat-ly">1. Physical Layer (Tầng Vật lý)<a class="zola-anchor" href="#1-physical-layer-tang-vat-ly" aria-label="Anchor link for: 1-physical-layer-tang-vat-ly" style="visibility: hidden;"></a></h4>
+<ul>
+<li><strong>Nhiệm vụ</strong>: Truyền dữ liệu dưới dạng bit (0 và 1) qua môi trường vật lý</li>
+<li><strong>Ví dụ</strong>: Cáp mạng, sóng radio, ánh sáng trong cáp quang</li>
+<li><strong>Kiểu như</strong>: Nhân viên bưu điện - chỉ lo chuyển thư mà không quan tâm nội dung</li>
+</ul>
+<h4 id="2-data-link-layer-tang-lien-ket-du-lieu">2. Data Link Layer (Tầng Liên kết dữ liệu)<a class="zola-anchor" href="#2-data-link-layer-tang-lien-ket-du-lieu" aria-label="Anchor link for: 2-data-link-layer-tang-lien-ket-du-lieu" style="visibility: hidden;"></a></h4>
+<ul>
+<li><strong>Nhiệm vụ</strong>: Đảm bảo truyền dữ liệu tin cậy giữa hai nút mạng trực tiếp</li>
+<li><strong>Giao thức</strong>: Ethernet, Wi-Fi, PPP</li>
+<li><strong>Kiểu như</strong>: Nhân viên kiểm soát chất lượng - đảm bảo gói hàng không bị hỏng</li>
+</ul>
+<h4 id="3-network-layer-tang-mang">3. Network Layer (Tầng Mạng)<a class="zola-anchor" href="#3-network-layer-tang-mang" aria-label="Anchor link for: 3-network-layer-tang-mang" style="visibility: hidden;"></a></h4>
+<ul>
+<li><strong>Nhiệm vụ</strong>: Định tuyến gói tin từ nguồn đến đích qua nhiều mạng</li>
+<li><strong>Giao thức</strong>: IP, ICMP, OSPF, BGP</li>
+<li><strong>Kiểu như</strong>: Hệ thống GPS - tìm đường tốt nhất để đến đích</li>
+</ul>
+<h4 id="4-transport-layer-tang-giao-van">4. Transport Layer (Tầng Giao vận)<a class="zola-anchor" href="#4-transport-layer-tang-giao-van" aria-label="Anchor link for: 4-transport-layer-tang-giao-van" style="visibility: hidden;"></a></h4>
+<ul>
+<li><strong>Nhiệm vụ</strong>: Đảm bảo truyền dữ liệu tin cậy end-to-end</li>
+<li><strong>Giao thức</strong>: TCP, UDP</li>
+<li><strong>Kiểu như</strong>: Công ty vận chuyển - đảm bảo hàng hóa được giao đúng và đủ</li>
+</ul>
+<h4 id="5-session-layer-tang-phien">5. Session Layer (Tầng Phiên)<a class="zola-anchor" href="#5-session-layer-tang-phien" aria-label="Anchor link for: 5-session-layer-tang-phien" style="visibility: hidden;"></a></h4>
+<ul>
+<li><strong>Nhiệm vụ</strong>: Quản lý phiên kết nối giữa các ứng dụng</li>
+<li><strong>Giao thức</strong>: NetBIOS, RPC, SQL sessions</li>
+<li><strong>Kiểu như</strong>: Lễ tân khách sạn - quản lý việc check-in/check-out</li>
+</ul>
+<h4 id="6-presentation-layer-tang-trinh-bay">6. Presentation Layer (Tầng Trình bày)<a class="zola-anchor" href="#6-presentation-layer-tang-trinh-bay" aria-label="Anchor link for: 6-presentation-layer-tang-trinh-bay" style="visibility: hidden;"></a></h4>
+<ul>
+<li><strong>Nhiệm vụ</strong>: Mã hóa, giải mã, nén dữ liệu</li>
+<li><strong>Giao thức</strong>: SSL/TLS, JPEG, GIF, ASCII</li>
+<li><strong>Kiểu như</strong>: Thông dịch viên - chuyển đổi ngôn ngữ cho mọi người hiểu</li>
+</ul>
+<h4 id="7-application-layer-tang-ung-dung">7. Application Layer (Tầng Ứng dụng)<a class="zola-anchor" href="#7-application-layer-tang-ung-dung" aria-label="Anchor link for: 7-application-layer-tang-ung-dung" style="visibility: hidden;"></a></h4>
+<ul>
+<li><strong>Nhiệm vụ</strong>: Cung cấp dịch vụ mạng cho ứng dụng người dùng</li>
+<li><strong>Giao thức</strong>: HTTP, FTP, SMTP, DNS</li>
+<li><strong>Kiểu như</strong>: Nhân viên bán hàng - tương tác trực tiếp với khách hàng</li>
+</ul>
+<h3 id="tai-sao-osi-lai-that-bai">Tại sao OSI lại "thất bại"?<a class="zola-anchor" href="#tai-sao-osi-lai-that-bai" aria-label="Anchor link for: tai-sao-osi-lai-that-bai" style="visibility: hidden;"></a></h3>
+<p>Mô hình OSI giống như một chiếc xe Ferrari được thiết kế hoàn hảo, nhưng... quá phức tạp để sản xuất hàng loạt. Trong khi các kỹ sư còn đang tranh cãi về cách implement tầng Session và Presentation, thì TCP/IP đã lặng lẽ "chiếm lĩnh" internet rồi.</p>
+<h2 id="mo-hinh-tcp-ip-anh-hung-thuc-dung">Mô hình TCP/IP: Anh hùng thực dụng<a class="zola-anchor" href="#mo-hinh-tcp-ip-anh-hung-thuc-dung" aria-label="Anchor link for: mo-hinh-tcp-ip-anh-hung-thuc-dung" style="visibility: hidden;"></a></h2>
+<h3 id="gioi-thieu-ve-tcp-ip">Giới thiệu về TCP/IP<a class="zola-anchor" href="#gioi-thieu-ve-tcp-ip" aria-label="Anchor link for: gioi-thieu-ve-tcp-ip" style="visibility: hidden;"></a></h3>
+<p><strong>TCP/IP (Transmission Control Protocol/Internet Protocol)</strong> ra đời từ những năm 1970 trong dự án ARPANET của Bộ Quốc phòng Mỹ. Không giống như OSI với tham vọng lớn, TCP/IP được sinh ra với mục tiêu đơn giản: "Làm sao để mạng máy tính hoạt động được!"</p>
+<p>Và đoán xem? Nó đã thành công rực rỡ!</p>
+<h3 id="4-tang-cua-mo-hinh-tcp-ip">4 tầng của mô hình TCP/IP<a class="zola-anchor" href="#4-tang-cua-mo-hinh-tcp-ip" aria-label="Anchor link for: 4-tang-cua-mo-hinh-tcp-ip" style="visibility: hidden;"></a></h3>
+<h4 id="1-network-access-layer-tang-truy-cap-mang">1. Network Access Layer (Tầng Truy cập mạng)<a class="zola-anchor" href="#1-network-access-layer-tang-truy-cap-mang" aria-label="Anchor link for: 1-network-access-layer-tang-truy-cap-mang" style="visibility: hidden;"></a></h4>
+<ul>
+<li><strong>Tương đương OSI</strong>: Physical + Data Link</li>
+<li><strong>Nhiệm vụ</strong>: Xử lý việc truyền dữ liệu qua mạng vật lý</li>
+<li><strong>Triết lý</strong>: "Đừng quan tâm HOW, chỉ cần nó WORK!"</li>
+</ul>
+<h4 id="2-internet-layer-tang-internet">2. Internet Layer (Tầng Internet)<a class="zola-anchor" href="#2-internet-layer-tang-internet" aria-label="Anchor link for: 2-internet-layer-tang-internet" style="visibility: hidden;"></a></h4>
+<ul>
+<li><strong>Tương đương OSI</strong>: Network Layer</li>
+<li><strong>Giao thức chính</strong>: IP (IPv4, IPv6)</li>
+<li><strong>Nhiệm vụ</strong>: Định tuyến gói tin qua internet</li>
+<li><strong>Triết lý</strong>: "Best effort" - cố gắng hết sức nhưng không đảm bảo</li>
+</ul>
+<h4 id="3-transport-layer-tang-giao-van">3. Transport Layer (Tầng Giao vận)<a class="zola-anchor" href="#3-transport-layer-tang-giao-van" aria-label="Anchor link for: 3-transport-layer-tang-giao-van" style="visibility: hidden;"></a></h4>
+<ul>
+<li><strong>Tương đương OSI</strong>: Transport Layer</li>
+<li><strong>Giao thức chính</strong>: TCP, UDP</li>
+<li><strong>Nhiệm vụ</strong>: Đảm bảo giao tiếp tin cậy (hoặc không) giữa các ứng dụng</li>
+</ul>
+<h4 id="4-application-layer-tang-ung-dung">4. Application Layer (Tầng Ứng dụng)<a class="zola-anchor" href="#4-application-layer-tang-ung-dung" aria-label="Anchor link for: 4-application-layer-tang-ung-dung" style="visibility: hidden;"></a></h4>
+<ul>
+<li><strong>Tương đương OSI</strong>: Session + Presentation + Application</li>
+<li><strong>Giao thức</strong>: HTTP, HTTPS, FTP, SMTP, DNS, SSH...</li>
+<li><strong>Triết lý</strong>: "Gộp chung cho đơn giản!"</li>
+</ul>
+<h3 id="tai-sao-tcp-ip-lai-thanh-cong">Tại sao TCP/IP lại "thành công"?<a class="zola-anchor" href="#tai-sao-tcp-ip-lai-thanh-cong" aria-label="Anchor link for: tai-sao-tcp-ip-lai-thanh-cong" style="visibility: hidden;"></a></h3>
+<p>TCP/IP thành công vì nó là "minimum viable product" của thế giới mạng. Thay vì cố gắng hoàn hảo từ đầu, nó chọn cách "ship early, improve later". Kết quả? Cả thế giới đang dùng internet dựa trên TCP/IP!</p>
+<h2 id="so-sanh-chi-tiet-osi-vs-tcp-ip">So sánh chi tiết: OSI vs TCP/IP<a class="zola-anchor" href="#so-sanh-chi-tiet-osi-vs-tcp-ip" aria-label="Anchor link for: so-sanh-chi-tiet-osi-vs-tcp-ip" style="visibility: hidden;"></a></h2>
+<h3 id="bang-so-sanh-nhanh">Bảng so sánh nhanh<a class="zola-anchor" href="#bang-so-sanh-nhanh" aria-label="Anchor link for: bang-so-sanh-nhanh" style="visibility: hidden;"></a></h3>
+<table><thead><tr><th>Tiêu chí</th><th>OSI</th><th>TCP/IP</th></tr></thead><tbody>
+<tr><td>Số tầng</td><td>7</td><td>4</td></tr>
+<tr><td>Thiết kế</td><td>Lý thuyết trước, thực hành sau</td><td>Thực hành trước, lý thuyết sau</td></tr>
+<tr><td>Độ phức tạp</td><td>Cao</td><td>Thấp</td></tr>
+<tr><td>Tính thực tế</td><td>Thấp</td><td>Cao</td></tr>
+<tr><td>Adoption</td><td>Gần như 0%</td><td>~100%</td></tr>
+<tr><td>Tính linh hoạt</td><td>Kém</td><td>Tốt</td></tr>
+</tbody></table>
+<h3 id="uu-diem-cua-osi">Ưu điểm của OSI<a class="zola-anchor" href="#uu-diem-cua-osi" aria-label="Anchor link for: uu-diem-cua-osi" style="visibility: hidden;"></a></h3>
+<ol>
+<li><strong>Rõ ràng và chi tiết</strong>: Mỗi tầng có nhiệm vụ cụ thể, không chồng chéo</li>
+<li><strong>Tính giáo dục cao</strong>: Tuyệt vời để học và hiểu về mạng máy tính</li>
+<li><strong>Chuẩn hóa tốt</strong>: Mọi thứ đều được định nghĩa rõ ràng</li>
+<li><strong>Khả năng troubleshooting</strong>: Dễ dàng xác định lỗi ở tầng nào</li>
+</ol>
+<h3 id="uu-diem-cua-tcp-ip">Ưu điểm của TCP/IP<a class="zola-anchor" href="#uu-diem-cua-tcp-ip" aria-label="Anchor link for: uu-diem-cua-tcp-ip" style="visibility: hidden;"></a></h3>
+<ol>
+<li><strong>Thực tế và hiệu quả</strong>: Được thiết kế để hoạt động trong môi trường thực</li>
+<li><strong>Đơn giản hơn</strong>: Ít tầng hơn, dễ implement hơn</li>
+<li><strong>Linh hoạt</strong>: Có thể adapt với nhiều công nghệ mạng khác nhau</li>
+<li><strong>Đã được chứng minh</strong>: Cả internet đang chạy trên nó!</li>
+</ol>
+<h3 id="nhuoc-diem-cua-osi">Nhược điểm của OSI<a class="zola-anchor" href="#nhuoc-diem-cua-osi" aria-label="Anchor link for: nhuoc-diem-cua-osi" style="visibility: hidden;"></a></h3>
+<ol>
+<li><strong>Quá phức tạp</strong>: 7 tầng đôi khi là "overkill"</li>
+<li><strong>Thiếu tính thực tế</strong>: Một số tầng khó implement trong thực tế</li>
+<li><strong>Đến muộn</strong>: Khi OSI ra đời, TCP/IP đã "chiếm lĩnh" thị trường</li>
+<li><strong>Hiệu suất</strong>: Overhead cao hơn do nhiều tầng</li>
+</ol>
+<h3 id="nhuoc-diem-cua-tcp-ip">Nhược điểm của TCP/IP<a class="zola-anchor" href="#nhuoc-diem-cua-tcp-ip" aria-label="Anchor link for: nhuoc-diem-cua-tcp-ip" style="visibility: hidden;"></a></h3>
+<ol>
+<li><strong>Thiếu chuẩn hóa</strong>: Một số khía cạnh không được định nghĩa rõ ràng</li>
+<li><strong>Khó mở rộng</strong>: Thiết kế ban đầu không dự đoán được sự phát triển của internet</li>
+<li><strong>Bảo mật</strong>: Bảo mật không được tích hợp từ đầu (phải thêm sau)</li>
+<li><strong>Tính giáo dục</strong>: Không rõ ràng như OSI để học tập</li>
+</ol>
+<h2 id="cac-giao-thuc-quan-trong">Các giao thức quan trọng<a class="zola-anchor" href="#cac-giao-thuc-quan-trong" aria-label="Anchor link for: cac-giao-thuc-quan-trong" style="visibility: hidden;"></a></h2>
+<h3 id="tang-internet-tcp-ip">Tầng Internet (TCP/IP)<a class="zola-anchor" href="#tang-internet-tcp-ip" aria-label="Anchor link for: tang-internet-tcp-ip" style="visibility: hidden;"></a></h3>
+<h4 id="ipv4-internet-protocol-version-4">IPv4 (Internet Protocol version 4)<a class="zola-anchor" href="#ipv4-internet-protocol-version-4" aria-label="Anchor link for: ipv4-internet-protocol-version-4" style="visibility: hidden;"></a></h4>
+<ul>
+<li><strong>Địa chỉ</strong>: 32-bit (ví dụ: 192.168.1.1)</li>
+<li><strong>Vấn đề</strong>: Sắp hết địa chỉ (chỉ có ~4.3 tỷ địa chỉ)</li>
+<li><strong>Giải pháp</strong>: NAT, IPv6</li>
+</ul>
+<h4 id="ipv6-internet-protocol-version-6">IPv6 (Internet Protocol version 6)<a class="zola-anchor" href="#ipv6-internet-protocol-version-6" aria-label="Anchor link for: ipv6-internet-protocol-version-6" style="visibility: hidden;"></a></h4>
+<ul>
+<li><strong>Địa chỉ</strong>: 128-bit (ví dụ: 2001:db8::1)</li>
+<li><strong>Ưu điểm</strong>: Không giới hạn địa chỉ, bảo mật tốt hơn</li>
+<li><strong>Vấn đề</strong>: Adoption chậm (vẫn chưa đến 50% toàn cầu)</li>
+</ul>
+<h3 id="tang-transport-tcp-ip">Tầng Transport (TCP/IP)<a class="zola-anchor" href="#tang-transport-tcp-ip" aria-label="Anchor link for: tang-transport-tcp-ip" style="visibility: hidden;"></a></h3>
+<h4 id="tcp-transmission-control-protocol">TCP (Transmission Control Protocol)<a class="zola-anchor" href="#tcp-transmission-control-protocol" aria-label="Anchor link for: tcp-transmission-control-protocol" style="visibility: hidden;"></a></h4>
+<ul>
+<li><strong>Đặc điểm</strong>: Connection-oriented, reliable</li>
+<li><strong>Cơ chế</strong>: 3-way handshake, flow control, error correction</li>
+<li><strong>Sử dụng</strong>: Web browsing, email, file transfer</li>
+<li><strong>Kiểu như</strong>: Dịch vụ chuyển phát nhanh - đảm bảo giao hàng</li>
+</ul>
+<h4 id="udp-user-datagram-protocol">UDP (User Datagram Protocol)<a class="zola-anchor" href="#udp-user-datagram-protocol" aria-label="Anchor link for: udp-user-datagram-protocol" style="visibility: hidden;"></a></h4>
+<ul>
+<li><strong>Đặc điểm</strong>: Connectionless, unreliable nhưng nhanh</li>
+<li><strong>Cơ chế</strong>: Fire and forget</li>
+<li><strong>Sử dụng</strong>: DNS, streaming, online gaming</li>
+<li><strong>Kiểu như</strong>: Ném bóng - ném xong thì thôi, ai hứng được thì hứng</li>
+</ul>
+<h3 id="tang-application-tcp-ip">Tầng Application (TCP/IP)<a class="zola-anchor" href="#tang-application-tcp-ip" aria-label="Anchor link for: tang-application-tcp-ip" style="visibility: hidden;"></a></h3>
+<h4 id="http-https">HTTP/HTTPS<a class="zola-anchor" href="#http-https" aria-label="Anchor link for: http-https" style="visibility: hidden;"></a></h4>
+<ul>
+<li><strong>Mục đích</strong>: Truyền tải web content</li>
+<li><strong>Port</strong>: 80 (HTTP), 443 (HTTPS)</li>
+<li><strong>Đặc điểm</strong>: Stateless, request-response</li>
+</ul>
+<h4 id="dns-domain-name-system">DNS (Domain Name System)<a class="zola-anchor" href="#dns-domain-name-system" aria-label="Anchor link for: dns-domain-name-system" style="visibility: hidden;"></a></h4>
+<ul>
+<li><strong>Mục đích</strong>: Chuyển đổi tên miền thành địa chỉ IP</li>
+<li><strong>Kiểu như</strong>: Danh bạ điện thoại của internet</li>
+<li><strong>Port</strong>: 53</li>
+</ul>
+<h4 id="ftp-sftp">FTP/SFTP<a class="zola-anchor" href="#ftp-sftp" aria-label="Anchor link for: ftp-sftp" style="visibility: hidden;"></a></h4>
+<ul>
+<li><strong>Mục đích</strong>: Truyền file</li>
+<li><strong>Port</strong>: 21 (FTP), 22 (SFTP)</li>
+<li><strong>Đặc điểm</strong>: FTP không an toàn, SFTP được mã hóa</li>
+</ul>
+<h2 id="ung-dung-thuc-te">Ứng dụng thực tế<a class="zola-anchor" href="#ung-dung-thuc-te" aria-label="Anchor link for: ung-dung-thuc-te" style="visibility: hidden;"></a></h2>
+<h3 id="khi-nao-dung-osi">Khi nào dùng OSI?<a class="zola-anchor" href="#khi-nao-dung-osi" aria-label="Anchor link for: khi-nao-dung-osi" style="visibility: hidden;"></a></h3>
+<ol>
+<li><strong>Giáo dục</strong>: Học và dạy về mạng máy tính</li>
+<li><strong>Troubleshooting</strong>: Phân tích lỗi mạng theo từng tầng</li>
+<li><strong>Thiết kế hệ thống</strong>: Tham khảo kiến trúc tổng thể</li>
+<li><strong>Standardization</strong>: Phát triển giao thức mới</li>
+</ol>
+<h3 id="khi-nao-dung-tcp-ip">Khi nào dùng TCP/IP?<a class="zola-anchor" href="#khi-nao-dung-tcp-ip" aria-label="Anchor link for: khi-nao-dung-tcp-ip" style="visibility: hidden;"></a></h3>
+<ol>
+<li><strong>Mọi lúc mọi nơi</strong>: Vì internet chạy trên TCP/IP</li>
+<li><strong>Phát triển ứng dụng</strong>: Tất cả app networking đều dựa trên TCP/IP</li>
+<li><strong>Thiết kế mạng</strong>: Mọi mạng hiện đại đều dùng TCP/IP</li>
+<li><strong>Cloud computing</strong>: Toàn bộ cloud infrastructure dựa trên TCP/IP</li>
+</ol>
+<h2 id="tuong-lai-cua-networking">Tương lai của networking<a class="zola-anchor" href="#tuong-lai-cua-networking" aria-label="Anchor link for: tuong-lai-cua-networking" style="visibility: hidden;"></a></h2>
+<h3 id="xu-huong-hien-tai">Xu hướng hiện tại<a class="zola-anchor" href="#xu-huong-hien-tai" aria-label="Anchor link for: xu-huong-hien-tai" style="visibility: hidden;"></a></h3>
+<ol>
+<li><strong>IPv6 adoption</strong>: Từ từ thay thế IPv4</li>
+<li><strong>HTTP/3</strong>: Dựa trên QUIC protocol (UDP)</li>
+<li><strong>5G và IoT</strong>: Đòi hỏi networking linh hoạt hơn</li>
+<li><strong>Edge computing</strong>: Mạng phân tán và low-latency</li>
+</ol>
+<h3 id="nhung-thach-thuc-moi">Những thách thức mới<a class="zola-anchor" href="#nhung-thach-thuc-moi" aria-label="Anchor link for: nhung-thach-thuc-moi" style="visibility: hidden;"></a></h3>
+<ol>
+<li><strong>Bảo mật</strong>: Zero-trust networking</li>
+<li><strong>Hiệu suất</strong>: Ultra-low latency applications</li>
+<li><strong>Khả năng mở rộng</strong>: Billions of IoT devices</li>
+<li><strong>Sustainability</strong>: Green networking</li>
+</ol>
+<h2 id="ket-luan-ai-la-nguoi-chien-thang">Kết luận: Ai là người chiến thắng?<a class="zola-anchor" href="#ket-luan-ai-la-nguoi-chien-thang" aria-label="Anchor link for: ket-luan-ai-la-nguoi-chien-thang" style="visibility: hidden;"></a></h2>
+<p>Sau cuộc phân tích "khốc liệt" này, chúng ta có thể kết luận:</p>
+<p><strong>OSI</strong> là anh chàng hoàn hảo trên giấy - thiết kế đẹp, logic rõ ràng, phù hợp để học tập và hiểu về mạng máy tính. Nó giống như một cuốn sách giáo khoa tuyệt vời.</p>
+<p><strong>TCP/IP</strong> là anh hùng thực dụng - không hoàn hảo nhưng hiệu quả, không đẹp nhưng hoạt động. Nó giống như một chiếc xe tải - không sang trọng nhưng làm được việc.</p>
+<p>Vậy ai thắng? <strong>TCP/IP</strong> thắng về mặt thực tế (cả thế giới đang dùng), nhưng <strong>OSI</strong> thắng về mặt giáo dục (mọi network engineer đều phải học).</p>
+<p>Thực ra, đây không phải là cuộc chiến mà là sự bổ sung. OSI giúp chúng ta hiểu, TCP/IP giúp chúng ta làm. Hai anh chàng này cùng tồn tại và cùng đóng góp vào thế giới mạng máy tính tuyệt vời như hôm nay.</p>
+<hr />
+<p><em>P/S: Nếu bạn là sinh viên IT, hãy học kỹ OSI để hiểu lý thuyết, nhưng đừng quên thực hành với TCP/IP để có thể làm việc thực tế. Nếu bạn là network engineer, hãy dùng TCP/IP để làm việc, nhưng đừng quên OSI để troubleshoot. Cả hai đều quan trọng, just like Batman and Superman!</em></p>
+<hr />
+
+      </article>
+
+      
+      
+
+      
+      
+    </div>
+
+    
+
+
+<footer>
+  <div class="left">
+    <div class="copyright">
+      © 2025 <a href="https:&#x2F;&#x2F;wen.is-a.dev">Wen</a>
+      
+    </div>
+  </div>
+
+  <div class="right">
+    
+    
+    
+    
+
+    <!-- 
+    
+    
+    <button id="theme-toggle" aria-label="theme switch">
+      <span class="moon-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill="currentColor"></path></svg>
+</span>
+      <span class="sun-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z" fill="currentColor"></path></svg>
+</span>
+    </button>
+     -->
+  </div>
+</footer>
+
+
+
+
+  </main>
+</div>
+
+  
+<script src="/js/lightense.min.js"></script>
+
+
+
+  <script src="https://wen.is-a.dev/js/main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  
+
+
+
+<meta name="description" content="Cùng tham quan Unix&#x2F;Linux Directory Hierarchy">
+
+  <title>Cùng tham quan Unix&#x2F;Linux Directory Hierarchy</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="https://wen.is-a.dev/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://wen.is-a.dev/img/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://wen.is-a.dev/img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Ancizar+Sans:ital,wght@0,100..1000;1,100..1000&family=Bitter:ital,wght@0,100..900;1,100..900&family=Indie+Flower&family=Lora:ital,wght@0,400..700;1,400..700&family=Marcellus&display=swap"
+    rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;1,400;1,600&display=swap"
+    rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500..700&display=swap" rel="stylesheet">
+  
+  <style>
+  /* light mode colors */
+  body {
+    /* --primary-color: #5871a2; */
+    --primary-color: #005e05;
+    --primary-pale-color: #5871a233;
+    --primary-decoration-color: #5871a210;
+    --bg-color: #f0f9ff;
+    /* --text-color: #2f3030; */
+    --text-color: #000000;
+    /* --text-pale-color: #767676; */
+    --text-pale-color: #000000;
+    --text-decoration-color: #a9a9a9;
+    --highlight-mark-color: #5f75b020;
+
+    --callout-note-color: #5871a2;
+    --callout-tip-color: #268556;
+    --callout-important-color: #885fc9;
+    --callout-warning-color: #ab6632;
+    --callout-caution-color: #c64e4e;
+  }
+
+  /* dark mode colors */
+  body.dark {
+    /* --primary-color: #6f8fd1; */
+    --primary-color: #ecf16b;
+    --primary-pale-color: #6f8fd166;
+    --primary-decoration-color: #6f8fd112;
+    /* --bg-color: #1c1c1c; */
+    /* --bg-color: #002727; */
+    /* --bg-color: #002333; */
+    --bg-color: #01242E;
+    /* --text-color: #c1c1c1; */
+    --text-color: #ffffff;
+    /* --text-pale-color: #848484; */
+    --text-pale-color: #ffffff;
+    --text-decoration-color: #5f5f5f;
+    --highlight-mark-color: #8296cb3b;
+
+    --callout-note-color: #6f8fd1;
+    --callout-tip-color: #47976f;
+    --callout-important-color: #9776cd;
+    --callout-warning-color: #ad7a52;
+    --callout-caution-color: #d06161;
+  }
+
+  /* typography */
+  body {
+    /* --main-font: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; */
+    --main-font: 'Nunito', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --heading-font: 'Quicksand', 'Lora', 'Bitter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --code-font: 'Cascadia Code', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    --homepage-max-width: 768px;
+    --main-max-width: 768px;
+    --avatar-size: 75px;
+    --font-size: 16px;
+    --line-height: 1.75;
+    --img-border-radius: 0px;
+    --detail-border-radius: 11px;
+    --dark-mode-img-brightness: 0.75;
+    --dark-mode-chart-brightness: 0.75;
+    --inline-code-border-radius: 2px;
+    --inline-code-bg-color: var(--primary-decoration-color);
+    --block-code-border-radius: 0px;
+    --block-code-border-color: var(--primary-color);
+    --detail-border-color: var(--primary-color);
+  }
+
+
+  #name,
+  #id,
+  #left,
+  a.post,
+  a.back-link,
+  a.tag,
+  a.category,
+  .title {
+    font-family: var(--heading-font);
+  }
+
+  span.date {
+    font-family: var(--code-font);
+    color: var(--text-pale-color);
+  }
+
+  .gif-wrapper {
+    text-align: center;
+    margin: 1.5rem 0;
+  }
+
+  .gif-wrapper .intro-gif {
+    max-width: 96%;
+    height: auto;
+    border-radius: 8px;
+  }
+
+  .verified-icon {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 3px;
+    vertical-align: middle;
+  }
+
+  .verified-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .top-nav {
+    width: 100%;
+    padding-bottom: 1em;
+    border-bottom: 1px solid var(--border-color);
+    background: rgba(var(--background-rgb), 0.85);
+    backdrop-filter: blur(8px);
+    border-radius: var(--detail-border-radius);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .top-nav nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+  }
+
+  .nav-left,
+  .nav-center,
+  .nav-right {
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-center {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-top: 1em;
+  }
+
+  .menu-wrapper {
+    position: relative;
+    margin-top: 1.5em;
+  }
+
+  .menu-trigger {
+    font-size: 1.5em;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-color);
+  }
+
+  .menu-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+
+    background: var(--bg-color);
+    font-family: var(--heading-font);
+    border: 1px solid var(--primary-pale-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    min-width: 85px;
+    padding: 0.25em 0;
+    z-index: 2000;
+
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .menu-wrapper.active .menu-dropdown {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+
+  .menu-dropdown a {
+    display: block;
+    padding: 0.6em 1em;
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 0.95em;
+    margin: auto;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  #theme-toggle:hover,
+  #rain-toggle:hover {
+    cursor: pointer;
+  }
+
+  .foot-quote,
+  .section-title {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    text-align: center;
+    display: block;
+    margin-top: 2em;
+  }
+
+  .layout-list .post {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+  }
+
+  .post>span:first-child {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+
+  .post>.date {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .year-heading {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    font-size: 1.5em;
+    font-weight: bold;
+    font-family: var(--heading-font);
+  }
+
+  /* term-caret  */
+  #id.term-caret {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    position: relative;
+    white-space: nowrap;
+  }
+
+  #id.term-caret::after {
+    content: "_";
+
+    margin-left: 4px;
+    animation: blink 1s steps(1, end) infinite;
+    opacity: 1;
+    color: currentColor;
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #id.term-caret::after {
+      animation: none;
+      opacity: 1;
+    }
+  }
+
+  /* typewriter */
+  #id.typewriter {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    white-space: nowrap;
+    border-right: 1ch solid currentColor;
+    /* caret */
+    /* caret blink */
+    animation: caret-blink 1s steps(1, end) infinite;
+  }
+
+  @keyframes caret-blink {
+    50% {
+      border-right-color: transparent;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #id.typewriter {
+      animation: none;
+      border-right-color: currentColor;
+    }
+  }
+
+  /* glitch effect  */
+  #id.glitch {
+    position: relative;
+    display: inline-block;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  #id.glitch::before,
+  #id.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    clip-path: inset(0 0 0 0);
+    opacity: .85;
+  }
+
+  #id.glitch::before {
+    transform: translate(0, 0);
+    mix-blend-mode: screen;
+    text-shadow: 1px 0 0 #f00;
+    /* viền đỏ */
+    animation: glitch-1 2s infinite linear alternate-reverse;
+  }
+
+  #id.glitch::after {
+    transform: translate(0, 0);
+    mix-blend-mode: screen;
+    text-shadow: -1px 0 0 #0ff;
+    /* viền cyan */
+    animation: glitch-2 2.2s infinite linear alternate-reverse;
+  }
+
+  @keyframes glitch-1 {
+    0% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(0, 0);
+    }
+
+    20% {
+      clip-path: inset(10% 0 60% 0);
+      transform: translate(-1px, -1px);
+    }
+
+    40% {
+      clip-path: inset(40% 0 30% 0);
+      transform: translate(1px, 1px);
+    }
+
+    60% {
+      clip-path: inset(20% 0 55% 0);
+      transform: translate(-1px, 0);
+    }
+
+    80% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 1px);
+    }
+
+    100% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(0, 0);
+    }
+  }
+
+  @keyframes glitch-2 {
+    0% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 0);
+    }
+
+    20% {
+      clip-path: inset(40% 0 30% 0);
+      transform: translate(1px, 0);
+    }
+
+    40% {
+      clip-path: inset(10% 0 60% 0);
+      transform: translate(0, -1px);
+    }
+
+    60% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(-1px, 1px);
+    }
+
+    80% {
+      clip-path: inset(20% 0 55% 0);
+      transform: translate(1px, 0);
+    }
+
+    100% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+
+    #id.glitch::before,
+    #id.glitch::after {
+      animation: none;
+    }
+  }
+</style>
+  <link rel="stylesheet" href="https://wen.is-a.dev/main.css">
+  
+
+<link id="hl" rel="stylesheet" type="text/css" href="/hl-light.css" />
+
+
+
+  
+</head>
+
+<body class="post">
+
+  
+  <script>
+    const theme = sessionStorage.getItem('theme');
+    const match = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if ((theme && theme === 'dark') || (!theme && match)) {
+      document.body.classList.add('dark');
+      const hl = document.querySelector('link#hl');
+      if (hl) hl.href = 'https://wen.is-a.dev/hl-dark.css';
+    }
+  </script>
+  
+
+  
+<div id="wrapper">
+  <div id="blank"></div>
+  <aside>
+    
+    
+    
+    <button id="back-to-top" aria-label="back to top">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-up"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+
+    </button>
+    
+  </aside>
+  <main>
+    
+<header class="top-nav">
+  <nav>
+    <!-- Left: Back -->
+    <div class="nav-left">
+      <a href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts" class="back-link">← Back</a>
+    </div>
+
+    <!-- Center: Avatar -->
+    <div class="nav-center">
+      
+      <a href="/">
+        <img src="https://wen.is-a.dev/img/qwe.jpg" alt="avatar" class="avatar">
+      </a>
+      
+    </div>
+
+    <!-- Right: Menu dropdown -->
+    <div class="nav-right">
+
+      <div class="menu-wrapper">
+
+        <button class="menu-trigger" aria-label="menu">
+          &#9776;
+        </button>
+        <div class="menu-dropdown">
+          <a href="https://wen.is-a.dev/posts">POSTS</a>
+          <a href="https://wen.is-a.dev/about">ABOUT</a>
+          <a href="https://wen.is-a.dev/contact">CONTACT</a>
+          
+          
+          
+          
+          
+
+          <a id="theme-toggle" aria-label="theme switch">
+            <span class="moon-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill="currentColor"></path></svg>
+</span>
+            <span class="sun-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z" fill="currentColor"></path></svg>
+</span>
+          </a>
+
+          
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const trigger = document.querySelector(".menu-trigger");
+    const wrapper = document.querySelector(".menu-wrapper");
+
+    if (trigger && wrapper) {
+      trigger.addEventListener("click", () => {
+        wrapper.classList.toggle("active");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!wrapper.contains(e.target)) {
+          wrapper.classList.remove("active");
+        }
+      });
+    }
+  });
+
+</script>
+
+
+    <div>
+      
+      
+      
+      
+      <div id="copy-cfg" style="display: none;" data-copy-icon="&lt;svg xmlns=&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2000&#x2F;svg&quot; viewBox=&quot;0 0 24 24&quot; width=&quot;18&quot; height=&quot;18&quot;&gt;&lt;path d=&quot;M6.9998 6V3C6.9998 2.44772 7.44752 2 7.9998 2H19.9998C20.5521 2 20.9998 2.44772 20.9998 3V17C20.9998 17.5523 20.5521 18 19.9998 18H16.9998V20.9991C16.9998 21.5519 16.5499 22 15.993 22H4.00666C3.45059 22 3 21.5554 3 20.9991L3.0026 7.00087C3.0027 6.44811 3.45264 6 4.00942 6H6.9998ZM5.00242 8L5.00019 20H14.9998V8H5.00242ZM8.9998 6H16.9998V16H18.9998V4H8.9998V6Z&quot; fill=&quot;currentColor&quot;&gt;&lt;&#x2F;path&gt;&lt;&#x2F;svg&gt;
+" data-check-icon="&lt;svg xmlns=&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2000&#x2F;svg&quot; viewBox=&quot;0 0 24 24&quot; width=&quot;18&quot; height=&quot;18&quot;&gt;&lt;path d=&quot;M10.0007 15.1709L19.1931 5.97852L20.6073 7.39273L10.0007 17.9993L3.63672 11.6354L5.05093 10.2212L10.0007 15.1709Z&quot; fill=&quot;currentColor&quot;&gt;&lt;&#x2F;path&gt;&lt;&#x2F;svg&gt;
+">
+      </div>
+      
+      <article class="prose">
+        <h1 class="title">Cùng tham quan Unix&#x2F;Linux Directory Hierarchy</h1>
+        <div id="post-info">
+          <div id="date">
+            <span id="publish">Mar 20, 2024</span>
+            </div>
+
+          
+        </div>
+
+        
+        
+
+        
+
+        <p>Bạn có bao giờ cảm thấy như một du khách lạc lối trong một thành phố xa lạ khi mở terminal lần đầu tiên không? Nhìn vào cấu trúc thư mục của Linux/Unix, bạn có thể nghĩ: "Tại sao lại có <code>/usr</code>, <code>/var</code>, <code>/opt</code>? Ai đặt tên những cái này vậy?"</p>
+<p>Hôm nay, chúng ta sẽ cùng nhau khám phá "bản đồ thành phố" này - tìm hiểu về Filesystem Hierarchy Standard (FHS) và ý nghĩa của từng "khu phố" trong hệ thống Unix/Linux. Đây không chỉ là một cuộc tham quan, mà còn là hành trình hiểu được triết lý thiết kế của những người tiên phong đã tạo nên nền tảng của thế giới công nghệ hiện đại.</p>
+<h2 id="gioi-thieu-ve-filesystem-hierarchy-standard-fhs">Giới thiệu về Filesystem Hierarchy Standard (FHS)<a class="zola-anchor" href="#gioi-thieu-ve-filesystem-hierarchy-standard-fhs" aria-label="Anchor link for: gioi-thieu-ve-filesystem-hierarchy-standard-fhs" style="visibility: hidden;"></a></h2>
+<p>Trước khi bắt đầu cuộc hành trình, chúng ta cần hiểu rằng cấu trúc thư mục Unix/Linux tuân theo một tiêu chuẩn gọi là FHS. Đây như "quy hoạch đô thị" của thế giới Unix - mọi thứ đều có vị trí và mục đích riêng, không ai muốn sống trong một thành phố hỗn loạn cả.</p>
+<p>FHS được thiết kế với những nguyên tắc:</p>
+<ul>
+<li><strong>Tính nhất quán</strong>: Cùng một loại file thì nằm ở cùng một nơi</li>
+<li><strong>Khả năng dự đoán</strong>: Bạn biết tìm gì ở đâu</li>
+<li><strong>Tính bảo mật</strong>: Phân quyền rõ ràng cho từng khu vực</li>
+<li><strong>Khả năng chia sẻ</strong>: Một số thư mục có thể được mount từ xa</li>
+</ul>
+<p>Bây giờ, hãy cùng khám phá từng "địa danh" trong thành phố Unix/Linux!</p>
+<h2 id="root-vua-cua-moi-thu-muc"><code>/</code> - Root: Vua của mọi thư mục<a class="zola-anchor" href="#root-vua-cua-moi-thu-muc" aria-label="Anchor link for: root-vua-cua-moi-thu-muc" style="visibility: hidden;"></a></h2>
+<pre class="z-code"><code><span class="z-text z-plain">/
+</span><span class="z-text z-plain">├── bin/
+</span><span class="z-text z-plain">├── boot/
+</span><span class="z-text z-plain">├── dev/
+</span><span class="z-text z-plain">├── etc/
+</span><span class="z-text z-plain">├── home/
+</span><span class="z-text z-plain">├── lib/
+</span><span class="z-text z-plain">├── media/
+</span><span class="z-text z-plain">├── mnt/
+</span><span class="z-text z-plain">├── opt/
+</span><span class="z-text z-plain">├── proc/
+</span><span class="z-text z-plain">├── root/
+</span><span class="z-text z-plain">├── run/
+</span><span class="z-text z-plain">├── sbin/
+</span><span class="z-text z-plain">├── srv/
+</span><span class="z-text z-plain">├── sys/
+</span><span class="z-text z-plain">├── tmp/
+</span><span class="z-text z-plain">├── usr/
+</span><span class="z-text z-plain">└── var/
+</span></code></pre>
+<p>Root directory (<code>/</code>) là "thủ đô" của hệ thống - nơi mà mọi thứ khác bắt đầu. Nó như điểm gốc tọa độ (0,0) trong toán học, tất cả các đường dẫn đều bắt đầu từ đây.</p>
+<p><strong>Đặc điểm quan trọng:</strong></p>
+<ul>
+<li>Chỉ có root user mới có quyền ghi vào thư mục này</li>
+<li>Không bao giờ được xóa (trừ khi bạn muốn hệ thống "bay màu")</li>
+<li>Chứa các thư mục hệ thống quan trọng nhất</li>
+</ul>
+<h2 id="bin-binary-kho-vu-khi-co-ban"><code>/bin</code> - Binary: Kho vũ khí cơ bản<a class="zola-anchor" href="#bin-binary-kho-vu-khi-co-ban" aria-label="Anchor link for: bin-binary-kho-vu-khi-co-ban" style="visibility: hidden;"></a></h2>
+<p>Thư mục <code>/bin</code> chứa các chương trình (binary executables) cần thiết cho tất cả user, kể cả khi hệ thống ở chế độ single-user. Đây như "hộp công cụ cơ bản" mà ai cũng cần.</p>
+<p><strong>Những cư dân nổi tiếng:</strong></p>
+<ul>
+<li><code>ls</code> - liệt kê file (như "xem có gì trong phòng")</li>
+<li><code>cp</code> - copy file (máy photocopy của command line)</li>
+<li><code>mv</code> - move/rename file (dịch vụ chuyển nhà)</li>
+<li><code>rm</code> - remove file (lệnh "tiêu hủy" nguy hiểm nhất)</li>
+<li><code>cat</code> - hiển thị nội dung file (không phải mèo đâu!)</li>
+<li><code>grep</code> - tìm kiếm text (thám tử siêu đẳng)</li>
+<li><code>bash</code> - shell interpreter (người thông dịch)</li>
+</ul>
+<p><strong>Triết lý thiết kế:</strong> Chỉ chứa những command thiết yếu cho system recovery và basic operations.</p>
+<h2 id="sbin-system-binary-phong-lam-viec-cua-quan-tri-vien"><code>/sbin</code> - System Binary: Phòng làm việc của quản trị viên<a class="zola-anchor" href="#sbin-system-binary-phong-lam-viec-cua-quan-tri-vien" aria-label="Anchor link for: sbin-system-binary-phong-lam-viec-cua-quan-tri-vien" style="visibility: hidden;"></a></h2>
+<p>Nếu <code>/bin</code> là hộp công cụ cho mọi người, thì <code>/sbin</code> là "phòng làm việc riêng của sếp" - chứa các command chỉ dành cho system administrator.</p>
+<p><strong>Những "công cụ quyền lực":</strong></p>
+<ul>
+<li><code>fdisk</code> - quản lý partition (như chia đất)</li>
+<li><code>fsck</code> - kiểm tra filesystem (bác sĩ chẩn đoán ổ cứng)</li>
+<li><code>mount</code>/<code>umount</code> - gắn/tháo filesystem</li>
+<li><code>iptables</code> - quản lý firewall (lính canh mạng)</li>
+<li><code>systemctl</code> - quản lý services (điều khiển các dịch vụ)</li>
+</ul>
+<p><strong>Lưu ý:</strong> Các command này thường cần quyền root để chạy.</p>
+<h2 id="usr-unix-system-resources-khu-thuong-mai-sam-uat"><code>/usr</code> - Unix System Resources: Khu thương mại sầm uất<a class="zola-anchor" href="#usr-unix-system-resources-khu-thuong-mai-sam-uat" aria-label="Anchor link for: usr-unix-system-resources-khu-thuong-mai-sam-uat" style="visibility: hidden;"></a></h2>
+<p>Đây có lẽ là thư mục có tên "misleading" nhất! <code>/usr</code> không phải viết tắt của "user" mà là "Unix System Resources". Nó như "khu thương mại" của hệ thống - chứa hầu hết các ứng dụng và dữ liệu không thay đổi.</p>
+<h3 id="usr-bin-cho-ung-dung-chinh"><code>/usr/bin</code> - Chợ ứng dụng chính<a class="zola-anchor" href="#usr-bin-cho-ung-dung-chinh" aria-label="Anchor link for: usr-bin-cho-ung-dung-chinh" style="visibility: hidden;"></a></h3>
+<p>Chứa hầu hết các command và ứng dụng mà user thường dùng:</p>
+<ul>
+<li>Text editors: <code>vim</code>, <code>nano</code>, <code>emacs</code></li>
+<li>Compilers: <code>gcc</code>, <code>python</code>, <code>node</code></li>
+<li>Network tools: <code>wget</code>, <code>curl</code>, <code>ssh</code></li>
+<li>Development tools: <code>git</code>, <code>make</code>, <code>gdb</code></li>
+</ul>
+<h3 id="usr-sbin-phong-lam-viec-mo-rong-cua-admin"><code>/usr/sbin</code> - Phòng làm việc mở rộng của admin<a class="zola-anchor" href="#usr-sbin-phong-lam-viec-mo-rong-cua-admin" aria-label="Anchor link for: usr-sbin-phong-lam-viec-mo-rong-cua-admin" style="visibility: hidden;"></a></h3>
+<p>Các system administration tools không thiết yếu cho system recovery:</p>
+<ul>
+<li><code>cron</code> - scheduler (thư ký đặt lịch)</li>
+<li><code>nginx</code>, <code>apache</code> - web servers</li>
+<li>Network configuration tools</li>
+</ul>
+<h3 id="usr-lib-thu-vien-chung"><code>/usr/lib</code> - Thư viện chung<a class="zola-anchor" href="#usr-lib-thu-vien-chung" aria-label="Anchor link for: usr-lib-thu-vien-chung" style="visibility: hidden;"></a></h3>
+<p>Chứa shared libraries (.so files) mà các ứng dụng cần:</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">/usr/lib/</span></span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">├──</span></span><span class="z-meta z-function-call z-arguments z-shell"> x86_64-linux-gnu/    <span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Libraries for 64-bit</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">├──</span></span><span class="z-meta z-function-call z-arguments z-shell"> python3.8/           <span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Python modules</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">├──</span></span><span class="z-meta z-function-call z-arguments z-shell"> gcc/                 <span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Compiler libraries</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">└──</span></span><span class="z-meta z-function-call z-arguments z-shell"> systemd/             <span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> System service files</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span></span></code></pre>
+<h3 id="usr-local-khu-dan-cu-cao-cap"><code>/usr/local</code> - Khu dân cư cao cấp<a class="zola-anchor" href="#usr-local-khu-dan-cu-cao-cap" aria-label="Anchor link for: usr-local-khu-dan-cu-cao-cap" style="visibility: hidden;"></a></h3>
+<p>Đây là nơi cài đặt software do admin compile từ source code, không phải từ package manager:</p>
+<ul>
+<li><code>/usr/local/bin</code> - Custom executables</li>
+<li><code>/usr/local/lib</code> - Custom libraries</li>
+<li><code>/usr/local/share</code> - Custom shared data</li>
+</ul>
+<p><strong>Triết lý:</strong> "Locally installed software" - không bị ghi đè khi update hệ thống.</p>
+<h3 id="usr-share-kho-du-lieu-chung"><code>/usr/share</code> - Kho dữ liệu chung<a class="zola-anchor" href="#usr-share-kho-du-lieu-chung" aria-label="Anchor link for: usr-share-kho-du-lieu-chung" style="visibility: hidden;"></a></h3>
+<p>Chứa architecture-independent data:</p>
+<ul>
+<li>Documentation: <code>/usr/share/doc</code>, <code>/usr/share/man</code></li>
+<li>Icons và themes: <code>/usr/share/icons</code>, <code>/usr/share/themes</code></li>
+<li>Fonts: <code>/usr/share/fonts</code></li>
+<li>Application data: config templates, example files</li>
+</ul>
+<h2 id="var-variable-khu-vuc-nang-dong"><code>/var</code> - Variable: Khu vực năng động<a class="zola-anchor" href="#var-variable-khu-vuc-nang-dong" aria-label="Anchor link for: var-variable-khu-vuc-nang-dong" style="visibility: hidden;"></a></h2>
+<p>Tên <code>/var</code> xuất phát từ "variable" - nơi lưu trữ dữ liệu thay đổi liên tục trong quá trình hoạt động của hệ thống.</p>
+<h3 id="var-log-nha-kho-ho-so"><code>/var/log</code> - Nhà kho hồ sơ<a class="zola-anchor" href="#var-log-nha-kho-ho-so" aria-label="Anchor link for: var-log-nha-kho-ho-so" style="visibility: hidden;"></a></h3>
+<p>Tất cả log files đều "sinh sống" tại đây:</p>
+<ul>
+<li><code>/var/log/syslog</code> - System messages (nhật ký chung)</li>
+<li><code>/var/log/auth.log</code> - Authentication logs (ai đăng nhập khi nào)</li>
+<li><code>/var/log/apache2/</code> - Web server logs</li>
+<li><code>/var/log/mysql/</code> - Database logs</li>
+</ul>
+<p><strong>Mẹo hay:</strong> <code>tail -f /var/log/syslog</code> để theo dõi log real-time.</p>
+<h3 id="var-cache-kho-chua-tam-thoi"><code>/var/cache</code> - Kho chứa tạm thời<a class="zola-anchor" href="#var-cache-kho-chua-tam-thoi" aria-label="Anchor link for: var-cache-kho-chua-tam-thoi" style="visibility: hidden;"></a></h3>
+<p>Cache files để tăng tốc độ:</p>
+<ul>
+<li>Package manager cache: <code>/var/cache/apt</code></li>
+<li>Application cache data</li>
+<li>Thumbnail images</li>
+</ul>
+<h3 id="var-tmp-bai-rac-ben-vung"><code>/var/tmp</code> - Bãi rác "bền vững"<a class="zola-anchor" href="#var-tmp-bai-rac-ben-vung" aria-label="Anchor link for: var-tmp-bai-rac-ben-vung" style="visibility: hidden;"></a></h3>
+<p>Khác với <code>/tmp</code>, files trong <code>/var/tmp</code> tồn tại lâu hơn (qua reboot):</p>
+<ul>
+<li>Temporary files cần giữ lâu</li>
+<li>Incomplete downloads</li>
+<li>Work-in-progress data</li>
+</ul>
+<h3 id="var-spool-hang-doi-cong-viec"><code>/var/spool</code> - Hàng đợi công việc<a class="zola-anchor" href="#var-spool-hang-doi-cong-viec" aria-label="Anchor link for: var-spool-hang-doi-cong-viec" style="visibility: hidden;"></a></h3>
+<p>"Spool" là nơi xếp hàng chờ xử lý:</p>
+<ul>
+<li><code>/var/spool/mail</code> - Email queue</li>
+<li><code>/var/spool/cron</code> - Scheduled jobs</li>
+<li><code>/var/spool/cups</code> - Print queue</li>
+</ul>
+<h3 id="var-lib-kho-du-lieu-ung-dung"><code>/var/lib</code> - Kho dữ liệu ứng dụng<a class="zola-anchor" href="#var-lib-kho-du-lieu-ung-dung" aria-label="Anchor link for: var-lib-kho-du-lieu-ung-dung" style="visibility: hidden;"></a></h3>
+<p>Application state information:</p>
+<ul>
+<li><code>/var/lib/mysql</code> - Database files</li>
+<li><code>/var/lib/docker</code> - Container data</li>
+<li><code>/var/lib/systemd</code> - Service state</li>
+</ul>
+<h2 id="etc-et-cetera-trung-tam-dieu-hanh"><code>/etc</code> - Et Cetera: Trung tâm điều hành<a class="zola-anchor" href="#etc-et-cetera-trung-tam-dieu-hanh" aria-label="Anchor link for: etc-et-cetera-trung-tam-dieu-hanh" style="visibility: hidden;"></a></h2>
+<p>Tên <code>/etc</code> có nhiều giả thuyết, nhưng thông dụng nhất là "Et Cetera" (và những thứ khác). Đây là "trung tâm điều hành" chứa tất cả configuration files.</p>
+<h3 id="nhung-file-config-quan-trong">Những file config quan trọng:<a class="zola-anchor" href="#nhung-file-config-quan-trong" aria-label="Anchor link for: nhung-file-config-quan-trong" style="visibility: hidden;"></a></h3>
+<p><strong>System Configuration:</strong></p>
+<ul>
+<li><code>/etc/passwd</code> - User account info (không chứa password thật!)</li>
+<li><code>/etc/shadow</code> - Encrypted passwords</li>
+<li><code>/etc/group</code> - Group information</li>
+<li><code>/etc/hosts</code> - Local DNS mapping</li>
+<li><code>/etc/fstab</code> - Filesystem mount points</li>
+</ul>
+<p><strong>Network Configuration:</strong></p>
+<ul>
+<li><code>/etc/network/interfaces</code> (Debian/Ubuntu)</li>
+<li><code>/etc/resolv.conf</code> - DNS servers</li>
+<li><code>/etc/ssh/sshd_config</code> - SSH daemon config</li>
+</ul>
+<p><strong>Service Configuration:</strong></p>
+<ul>
+<li><code>/etc/apache2/</code> - Web server config</li>
+<li><code>/etc/mysql/</code> - Database config</li>
+<li><code>/etc/nginx/</code> - Reverse proxy config</li>
+</ul>
+<p><strong>Startup Configuration:</strong></p>
+<ul>
+<li><code>/etc/rc.local</code> - Local startup script (legacy)</li>
+<li><code>/etc/systemd/</code> - Modern service management</li>
+</ul>
+<h2 id="home-khu-dan-cu"><code>/home</code> - Khu dân cư<a class="zola-anchor" href="#home-khu-dan-cu" aria-label="Anchor link for: home-khu-dan-cu" style="visibility: hidden;"></a></h2>
+<p>Mỗi user (trừ root) có một "căn nhà" riêng trong <code>/home</code>:</p>
+<pre class="z-code"><code><span class="z-text z-plain">/home/
+</span><span class="z-text z-plain">├── alice/
+</span><span class="z-text z-plain">│   ├── Documents/
+</span><span class="z-text z-plain">│   ├── Downloads/
+</span><span class="z-text z-plain">│   ├── Desktop/
+</span><span class="z-text z-plain">│   └── .bashrc          # Personal shell config
+</span><span class="z-text z-plain">├── bob/
+</span><span class="z-text z-plain">└── charlie/
+</span></code></pre>
+<p><strong>Đặc điểm:</strong></p>
+<ul>
+<li>User chỉ có full control trong home directory của mình</li>
+<li>Chứa personal files, settings, và projects</li>
+<li>Hidden files (bắt đầu bằng <code>.</code>) chứa user-specific configurations</li>
+</ul>
+<h2 id="root-lau-dai-cua-vua"><code>/root</code> - Lâu đài của vua<a class="zola-anchor" href="#root-lau-dai-cua-vua" aria-label="Anchor link for: root-lau-dai-cua-vua" style="visibility: hidden;"></a></h2>
+<p>Home directory của root user - không nằm trong <code>/home</code> để đảm bảo root luôn có thể truy cập ngay cả khi <code>/home</code> có vấn đề.</p>
+<p><strong>Tại sao tách biệt?</strong></p>
+<ul>
+<li>Security: Isolated từ user directories</li>
+<li>Reliability: Luôn available ngay cả khi filesystem có lỗi</li>
+<li>Simplicity: Đường dẫn ngắn và dễ nhớ</li>
+</ul>
+<h2 id="tmp-bai-rac-tam-thoi"><code>/tmp</code> - Bãi rác tạm thời<a class="zola-anchor" href="#tmp-bai-rac-tam-thoi" aria-label="Anchor link for: tmp-bai-rac-tam-thoi" style="visibility: hidden;"></a></h2>
+<p>Temporary files storage - "bãi rác" được dọn dẹp thường xuyên:</p>
+<ul>
+<li>Thường được clear khi reboot</li>
+<li>Any user có thể ghi (với sticky bit set)</li>
+<li>Không nên lưu dữ liệu quan trọng</li>
+</ul>
+<p><strong>Ví dụ sử dụng:</strong></p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Tạo temp file</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">mktemp</span></span><span class="z-meta z-function-call z-arguments z-shell"> /tmp/mywork.XXXXXX</span>
+</span><span class="z-source z-shell z-bash">
+</span><span class="z-source z-shell z-bash"><span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Extract archive to temp location  </span><span class="z-comment z-line z-number-sign z-shell">
+</span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">tar</span></span><span class="z-meta z-function-call z-arguments z-shell"><span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>xzf</span> archive.tar.gz<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>C</span> /tmp</span>
+</span></code></pre>
+<h2 id="opt-optional-khu-do-thi-moi"><code>/opt</code> - Optional: Khu đô thị mới<a class="zola-anchor" href="#opt-optional-khu-do-thi-moi" aria-label="Anchor link for: opt-optional-khu-do-thi-moi" style="visibility: hidden;"></a></h2>
+<p>Dành cho "optional software packages" - thường là commercial software hoặc self-contained applications:</p>
+<pre class="z-code"><code><span class="z-text z-plain">/opt/
+</span><span class="z-text z-plain">├── google/
+</span><span class="z-text z-plain">│   └── chrome/
+</span><span class="z-text z-plain">├── oracle/
+</span><span class="z-text z-plain">│   └── java/
+</span><span class="z-text z-plain">└── teamviewer/
+</span></code></pre>
+<p><strong>Triết lý:</strong> Mỗi package có thư mục riêng, không "làm bẩn" filesystem standard.</p>
+<h2 id="boot-garage-khoi-dong"><code>/boot</code> - Garage khởi động<a class="zola-anchor" href="#boot-garage-khoi-dong" aria-label="Anchor link for: boot-garage-khoi-dong" style="visibility: hidden;"></a></h2>
+<p>Chứa files cần thiết để boot hệ thống:</p>
+<ul>
+<li><code>vmlinuz</code> - Linux kernel</li>
+<li><code>initrd.img</code> - Initial RAM disk</li>
+<li><code>grub/</code> - Bootloader configuration</li>
+<li><code>System.map</code> - Kernel symbol table</li>
+</ul>
+<p><strong>Cảnh báo:</strong> Đừng xóa gì trong này trừ khi bạn muốn hệ thống không boot được!</p>
+<h2 id="dev-device-cong-giao-tiep-thiet-bi"><code>/dev</code> - Device: Cổng giao tiếp thiết bị<a class="zola-anchor" href="#dev-device-cong-giao-tiep-thiet-bi" aria-label="Anchor link for: dev-device-cong-giao-tiep-thiet-bi" style="visibility: hidden;"></a></h2>
+<p>Unix triết lý "everything is a file" được thể hiện rõ ở <code>/dev</code> - nơi hardware devices được represent as files:</p>
+<h3 id="block-devices-storage">Block Devices (Storage):<a class="zola-anchor" href="#block-devices-storage" aria-label="Anchor link for: block-devices-storage" style="visibility: hidden;"></a></h3>
+<ul>
+<li><code>/dev/sda</code>, <code>/dev/sdb</code> - SATA drives</li>
+<li><code>/dev/nvme0n1</code> - NVMe SSD</li>
+<li><code>/dev/loop0</code> - Loopback device</li>
+</ul>
+<h3 id="character-devices">Character Devices:<a class="zola-anchor" href="#character-devices" aria-label="Anchor link for: character-devices" style="visibility: hidden;"></a></h3>
+<ul>
+<li><code>/dev/tty</code> - Current terminal</li>
+<li><code>/dev/null</code> - "Black hole" (loại bỏ output)</li>
+<li><code>/dev/zero</code> - Infinite zeros</li>
+<li><code>/dev/random</code> - Random number generator</li>
+</ul>
+<h3 id="special-files">Special Files:<a class="zola-anchor" href="#special-files" aria-label="Anchor link for: special-files" style="visibility: hidden;"></a></h3>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Discard output</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-support z-function z-command z-shell">command</span></span><span class="z-meta z-function-call z-arguments z-shell"> <span class="z-keyword z-operator z-assignment z-redirection z-shell">&gt;</span> /dev/null <span class="z-constant z-numeric z-integer z-decimal z-file-descriptor z-shell">2</span><span class="z-keyword z-operator z-assignment z-redirection z-shell">&gt;&amp;</span><span class="z-constant z-numeric z-integer z-decimal z-file-descriptor z-shell">1</span></span>
+</span><span class="z-source z-shell z-bash">
+</span><span class="z-source z-shell z-bash"><span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Generate random data</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">dd</span></span><span class="z-meta z-function-call z-arguments z-shell"> if=/dev/random of=keyfile bs=1024 count=1</span>
+</span><span class="z-source z-shell z-bash">
+</span><span class="z-source z-shell z-bash"><span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Create large sparse file</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">dd</span></span><span class="z-meta z-function-call z-arguments z-shell"> if=/dev/zero of=bigfile bs=1M count=1000</span>
+</span></code></pre>
+<h2 id="proc-process-cua-so-nhin-vao-he-thong"><code>/proc</code> - Process: Cửa sổ nhìn vào hệ thống<a class="zola-anchor" href="#proc-process-cua-so-nhin-vao-he-thong" aria-label="Anchor link for: proc-process-cua-so-nhin-vao-he-thong" style="visibility: hidden;"></a></h2>
+<p>Đây là pseudo-filesystem - không phải files thật mà là interface để truy cập kernel information:</p>
+<h3 id="system-information">System Information:<a class="zola-anchor" href="#system-information" aria-label="Anchor link for: system-information" style="visibility: hidden;"></a></h3>
+<ul>
+<li><code>/proc/cpuinfo</code> - CPU details</li>
+<li><code>/proc/meminfo</code> - Memory usage</li>
+<li><code>/proc/version</code> - Kernel version</li>
+<li><code>/proc/uptime</code> - System uptime</li>
+</ul>
+<h3 id="process-information">Process Information:<a class="zola-anchor" href="#process-information" aria-label="Anchor link for: process-information" style="visibility: hidden;"></a></h3>
+<ul>
+<li><code>/proc/[PID]/</code> - Process-specific info</li>
+<li><code>/proc/[PID]/cmdline</code> - Command arguments</li>
+<li><code>/proc/[PID]/environ</code> - Environment variables</li>
+<li><code>/proc/[PID]/fd/</code> - File descriptors</li>
+</ul>
+<p><strong>Ví dụ thực tế:</strong></p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Xem CPU info</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">cat</span></span><span class="z-meta z-function-call z-arguments z-shell"> /proc/cpuinfo</span> <span class="z-keyword z-operator z-logical z-pipe z-shell">|</span> <span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">grep</span></span><span class="z-meta z-function-call z-arguments z-shell"> <span class="z-string z-quoted z-double z-shell"><span class="z-punctuation z-definition z-string z-begin z-shell">&quot;</span>model name<span class="z-punctuation z-definition z-string z-end z-shell">&quot;</span></span></span>
+</span><span class="z-source z-shell z-bash">
+</span><span class="z-source z-shell z-bash"><span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Xem memory usage</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">cat</span></span><span class="z-meta z-function-call z-arguments z-shell"> /proc/meminfo</span> <span class="z-keyword z-operator z-logical z-pipe z-shell">|</span> <span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">grep</span></span><span class="z-meta z-function-call z-arguments z-shell"> <span class="z-string z-quoted z-double z-shell"><span class="z-punctuation z-definition z-string z-begin z-shell">&quot;</span>MemTotal\|MemFree<span class="z-punctuation z-definition z-string z-end z-shell">&quot;</span></span></span>
+</span><span class="z-source z-shell z-bash">
+</span><span class="z-source z-shell z-bash"><span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Xem process command line</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">cat</span></span><span class="z-meta z-function-call z-arguments z-shell"> /proc/1234/cmdline</span>
+</span></code></pre>
+<h2 id="sys-system-cua-so-hardware"><code>/sys</code> - System: Cửa sổ hardware<a class="zola-anchor" href="#sys-system-cua-so-hardware" aria-label="Anchor link for: sys-system-cua-so-hardware" style="visibility: hidden;"></a></h2>
+<p>Sysfs - modern interface để tương tác với kernel và hardware:</p>
+<ul>
+<li><code>/sys/class/</code> - Device classes (network, block, etc.)</li>
+<li><code>/sys/devices/</code> - Device tree</li>
+<li><code>/sys/kernel/</code> - Kernel parameters</li>
+<li><code>/sys/power/</code> - Power management</li>
+</ul>
+<p><strong>Ví dụ:</strong></p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Xem network interfaces</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">ls</span></span><span class="z-meta z-function-call z-arguments z-shell"> /sys/class/net/</span>
+</span><span class="z-source z-shell z-bash">
+</span><span class="z-source z-shell z-bash"><span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Control LED (nếu có quyền)</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-support z-function z-echo z-shell">echo</span></span><span class="z-meta z-function-call z-arguments z-shell"> 1 <span class="z-keyword z-operator z-assignment z-redirection z-shell">&gt;</span> /sys/class/leds/power/brightness</span>
+</span></code></pre>
+<h2 id="run-runtime-thong-tin-thoi-gian-thuc"><code>/run</code> - Runtime: Thông tin thời gian thực<a class="zola-anchor" href="#run-runtime-thong-tin-thoi-gian-thuc" aria-label="Anchor link for: run-runtime-thong-tin-thoi-gian-thuc" style="visibility: hidden;"></a></h2>
+<p>Chứa runtime information từ khi boot:</p>
+<ul>
+<li><code>/run/systemd/</code> - Systemd runtime data</li>
+<li><code>/run/user/[UID]/</code> - User session data</li>
+<li><code>/run/lock/</code> - Lock files</li>
+<li>Process ID files (<code>.pid</code>)</li>
+</ul>
+<p><strong>Đặc điểm:</strong> Thường là tmpfs (RAM-based filesystem).</p>
+<h2 id="media-va-mnt-mount-points-bai-do-thiet-bi"><code>/media</code> và <code>/mnt</code> - Mount Points: Bãi đỗ thiết bị<a class="zola-anchor" href="#media-va-mnt-mount-points-bai-do-thiet-bi" aria-label="Anchor link for: media-va-mnt-mount-points-bai-do-thiet-bi" style="visibility: hidden;"></a></h2>
+<h3 id="media-tu-dong-mount"><code>/media</code> - Tự động mount<a class="zola-anchor" href="#media-tu-dong-mount" aria-label="Anchor link for: media-tu-dong-mount" style="visibility: hidden;"></a></h3>
+<p>Modern systems tự động mount removable media:</p>
+<pre class="z-code"><code><span class="z-text z-plain">/media/
+</span><span class="z-text z-plain">├── cdrom/
+</span><span class="z-text z-plain">└── usb0/
+</span></code></pre>
+<h3 id="mnt-manual-mount"><code>/mnt</code> - Manual mount<a class="zola-anchor" href="#mnt-manual-mount" aria-label="Anchor link for: mnt-manual-mount" style="visibility: hidden;"></a></h3>
+<p>Traditional mount point cho admin:</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Mount USB drive manually</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> mount /dev/sdb1 /mnt/usb</span>
+</span><span class="z-source z-shell z-bash">
+</span><span class="z-source z-shell z-bash"><span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Mount network share</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> mount<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>t</span> nfs server:/path /mnt/nfs</span>
+</span></code></pre>
+<h2 id="srv-service-data-kho-du-lieu-dich-vu"><code>/srv</code> - Service Data: Kho dữ liệu dịch vụ<a class="zola-anchor" href="#srv-service-data-kho-du-lieu-dich-vu" aria-label="Anchor link for: srv-service-data-kho-du-lieu-dich-vu" style="visibility: hidden;"></a></h2>
+<p>Chứa site-specific data served by system:</p>
+<ul>
+<li><code>/srv/www/</code> - Web server content</li>
+<li><code>/srv/ftp/</code> - FTP server files</li>
+<li><code>/srv/git/</code> - Git repositories</li>
+</ul>
+<p><strong>Triết lý:</strong> Tách biệt service data khỏi application code.</p>
+<h2 id="lib-va-lib64-libraries-thu-vien-he-thong"><code>/lib</code> và <code>/lib64</code> - Libraries: Thư viện hệ thống<a class="zola-anchor" href="#lib-va-lib64-libraries-thu-vien-he-thong" aria-label="Anchor link for: lib-va-lib64-libraries-thu-vien-he-thong" style="visibility: hidden;"></a></h2>
+<p>Essential shared libraries cần thiết cho programs trong <code>/bin</code> và <code>/sbin</code>:</p>
+<ul>
+<li><code>/lib/modules/</code> - Kernel modules</li>
+<li><code>/lib/systemd/</code> - Systemd components</li>
+<li><code>/lib64/</code> - 64-bit libraries (trên một số systems)</li>
+</ul>
+<p><strong>Dynamic Linking:</strong></p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Xem library dependencies</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">ldd</span></span><span class="z-meta z-function-call z-arguments z-shell"> /bin/ls</span>
+</span><span class="z-source z-shell z-bash">
+</span><span class="z-source z-shell z-bash"><span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Library cache</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">ldconfig</span></span>
+</span></code></pre>
+<h2 id="nhung-thu-muc-it-gap-nhung-dang-biet">Những thư mục ít gặp nhưng đáng biết<a class="zola-anchor" href="#nhung-thu-muc-it-gap-nhung-dang-biet" aria-label="Anchor link for: nhung-thu-muc-it-gap-nhung-dang-biet" style="visibility: hidden;"></a></h2>
+<h3 id="lost-found-do-that-lac"><code>/lost+found</code> - Đồ thất lạc<a class="zola-anchor" href="#lost-found-do-that-lac" aria-label="Anchor link for: lost-found-do-that-lac" style="visibility: hidden;"></a></h3>
+<p>Chỉ có trên ext2/3/4 filesystems - chứa files recovered sau filesystem check.</p>
+<h3 id="selinux-security-enhanced-linux"><code>/selinux</code> - Security Enhanced Linux<a class="zola-anchor" href="#selinux-security-enhanced-linux" aria-label="Anchor link for: selinux-security-enhanced-linux" style="visibility: hidden;"></a></h3>
+<p>Nếu SELinux được enable, đây là mount point cho selinuxfs.</p>
+<h2 id="best-practices-va-luu-y-quan-trong">Best Practices và lưu ý quan trọng<a class="zola-anchor" href="#best-practices-va-luu-y-quan-trong" aria-label="Anchor link for: best-practices-va-luu-y-quan-trong" style="visibility: hidden;"></a></h2>
+<h3 id="quyen-truy-cap">Quyền truy cập<a class="zola-anchor" href="#quyen-truy-cap" aria-label="Anchor link for: quyen-truy-cap" style="visibility: hidden;"></a></h3>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Xem permissions</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">ls</span></span><span class="z-meta z-function-call z-arguments z-shell"><span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>la</span> /</span>
+</span><span class="z-source z-shell z-bash">
+</span><span class="z-source z-shell z-bash"><span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Một số thư mục quan trọng và permissions</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">drwxr-xr-x</span></span><span class="z-meta z-function-call z-arguments z-shell">  /bin     <span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Executable by all</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">drwxr-xr-x</span></span><span class="z-meta z-function-call z-arguments z-shell">  /etc     <span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Readable by all</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">drwx------</span></span><span class="z-meta z-function-call z-arguments z-shell">  /root    <span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Only root access</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">drwxrwxrwt</span></span><span class="z-meta z-function-call z-arguments z-shell">  /tmp     <span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Sticky bit - special permissions</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span></span></code></pre>
+<h3 id="filesystem-types">Filesystem types<a class="zola-anchor" href="#filesystem-types" aria-label="Anchor link for: filesystem-types" style="visibility: hidden;"></a></h3>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Xem mounted filesystems</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">df</span></span><span class="z-meta z-function-call z-arguments z-shell"><span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>T</span></span>
+</span><span class="z-source z-shell z-bash">
+</span><span class="z-source z-shell z-bash"><span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Mount information</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">cat</span></span><span class="z-meta z-function-call z-arguments z-shell"> /proc/mounts</span>
+</span></code></pre>
+<h3 id="disk-usage-monitoring">Disk usage monitoring<a class="zola-anchor" href="#disk-usage-monitoring" aria-label="Anchor link for: disk-usage-monitoring" style="visibility: hidden;"></a></h3>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Check disk usage</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">du</span></span><span class="z-meta z-function-call z-arguments z-shell"><span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>sh</span> /var/log/<span class="z-keyword z-operator z-regexp z-quantifier z-shell">*</span></span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">du</span></span><span class="z-meta z-function-call z-arguments z-shell"><span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>sh</span> /usr/<span class="z-keyword z-operator z-regexp z-quantifier z-shell">*</span></span>
+</span><span class="z-source z-shell z-bash">
+</span><span class="z-source z-shell z-bash"><span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Find large files</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">find</span></span><span class="z-meta z-function-call z-arguments z-shell"> /<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>size</span> +100M<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>type</span> f <span class="z-constant z-numeric z-integer z-decimal z-file-descriptor z-shell">2</span><span class="z-keyword z-operator z-assignment z-redirection z-shell">&gt;</span>/dev/null</span>
+</span></code></pre>
+<h3 id="backup-considerations">Backup considerations<a class="zola-anchor" href="#backup-considerations" aria-label="Anchor link for: backup-considerations" style="visibility: hidden;"></a></h3>
+<p><strong>Critical directories to backup:</strong></p>
+<ul>
+<li><code>/etc</code> - System configuration</li>
+<li><code>/home</code> - User data</li>
+<li><code>/var/lib</code> - Application data</li>
+<li><code>/opt</code> - Optional software</li>
+</ul>
+<p><strong>Don't backup:</strong></p>
+<ul>
+<li><code>/proc</code>, <code>/sys</code>, <code>/dev</code> - Virtual filesystems</li>
+<li><code>/tmp</code> - Temporary files</li>
+<li><code>/var/cache</code> - Cache data</li>
+</ul>
+<h2 id="troubleshooting-thong-qua-filesystem">Troubleshooting thông qua filesystem<a class="zola-anchor" href="#troubleshooting-thong-qua-filesystem" aria-label="Anchor link for: troubleshooting-thong-qua-filesystem" style="visibility: hidden;"></a></h2>
+<h3 id="system-won-t-boot">System won't boot<a class="zola-anchor" href="#system-won-t-boot" aria-label="Anchor link for: system-won-t-boot" style="visibility: hidden;"></a></h3>
+<p>Kiểm tra:</p>
+<ul>
+<li><code>/boot</code> - Kernel files</li>
+<li><code>/etc/fstab</code> - Mount configuration</li>
+<li><code>/var/log/</code> - Boot logs</li>
+</ul>
+<h3 id="disk-full">Disk full<a class="zola-anchor" href="#disk-full" aria-label="Anchor link for: disk-full" style="visibility: hidden;"></a></h3>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Find what&#39;s using space</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">df</span></span><span class="z-meta z-function-call z-arguments z-shell"><span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>h</span></span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">du</span></span><span class="z-meta z-function-call z-arguments z-shell"><span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>sh</span> /<span class="z-keyword z-operator z-regexp z-quantifier z-shell">*</span></span> <span class="z-keyword z-operator z-logical z-pipe z-shell">|</span> <span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sort</span></span><span class="z-meta z-function-call z-arguments z-shell"><span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>hr</span></span>
+</span><span class="z-source z-shell z-bash">
+</span><span class="z-source z-shell z-bash"><span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Clean up</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> apt-get clean           <span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Package cache</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> journalctl<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> --</span>vacuum-time</span><span class="z-keyword z-operator z-assignment z-option z-shell">=</span>30d  <span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> System logs</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span></span></code></pre>
+<h3 id="permission-issues">Permission issues<a class="zola-anchor" href="#permission-issues" aria-label="Anchor link for: permission-issues" style="visibility: hidden;"></a></h3>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Reset home directory permissions</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> chown<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>R</span> user:user /home/user</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> chmod<span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>R</span> 755 /home/user</span>
+</span></code></pre>
+<h2 id="su-khac-biet-giua-cac-distributions">Sự khác biệt giữa các distributions<a class="zola-anchor" href="#su-khac-biet-giua-cac-distributions" aria-label="Anchor link for: su-khac-biet-giua-cac-distributions" style="visibility: hidden;"></a></h2>
+<h3 id="red-hat-centos-fedora">Red Hat/CentOS/Fedora<a class="zola-anchor" href="#red-hat-centos-fedora" aria-label="Anchor link for: red-hat-centos-fedora" style="visibility: hidden;"></a></h3>
+<ul>
+<li>Network config: <code>/etc/sysconfig/network-scripts/</code></li>
+<li>Service management: Systemd (modern) hoặc SysV init (legacy)</li>
+</ul>
+<h3 id="debian-ubuntu">Debian/Ubuntu<a class="zola-anchor" href="#debian-ubuntu" aria-label="Anchor link for: debian-ubuntu" style="visibility: hidden;"></a></h3>
+<ul>
+<li>Network config: <code>/etc/network/interfaces</code> hoặc Netplan</li>
+<li>Package cache: <code>/var/cache/apt/</code></li>
+</ul>
+<h3 id="arch-linux">Arch Linux<a class="zola-anchor" href="#arch-linux" aria-label="Anchor link for: arch-linux" style="visibility: hidden;"></a></h3>
+<ul>
+<li>Package manager cache: <code>/var/cache/pacman/</code></li>
+<li>System config: Follows FHS closely</li>
+</ul>
+<h3 id="macos-darwin">macOS (Darwin)<a class="zola-anchor" href="#macos-darwin" aria-label="Anchor link for: macos-darwin" style="visibility: hidden;"></a></h3>
+<ul>
+<li>Similar structure nhưng có additions:
+<ul>
+<li><code>/Applications</code> - GUI applications</li>
+<li><code>/System</code> - System files</li>
+<li><code>/Users</code> thay vì <code>/home</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="tuong-lai-cua-filesystem-hierarchy">Tương lai của filesystem hierarchy<a class="zola-anchor" href="#tuong-lai-cua-filesystem-hierarchy" aria-label="Anchor link for: tuong-lai-cua-filesystem-hierarchy" style="visibility: hidden;"></a></h2>
+<h3 id="container-era-changes">Container era changes:<a class="zola-anchor" href="#container-era-changes" aria-label="Anchor link for: container-era-changes" style="visibility: hidden;"></a></h3>
+<ul>
+<li>Immutable filesystems</li>
+<li>Overlay filesystems</li>
+<li>Container-specific directories</li>
+</ul>
+<h3 id="cloud-native-considerations">Cloud-native considerations:<a class="zola-anchor" href="#cloud-native-considerations" aria-label="Anchor link for: cloud-native-considerations" style="visibility: hidden;"></a></h3>
+<ul>
+<li><code>/etc</code> configurations via ConfigMaps</li>
+<li>Persistent volumes for data</li>
+<li>Ephemeral storage patterns</li>
+</ul>
+<h2 id="ket-luan">Kết luận<a class="zola-anchor" href="#ket-luan" aria-label="Anchor link for: ket-luan" style="visibility: hidden;"></a></h2>
+<p>Hiểu về cấu trúc thư mục Unix/Linux không chỉ giúp bạn navigate hệ thống một cách hiệu quả, mà còn hiểu sâu về triết lý thiết kế đằng sau những quyết định này. Mỗi thư mục đều có lý do tồn tại và vai trò riêng trong "sinh thái hệ thống".</p>
+<p>Từ <code>/bin</code> với những công cụ thiết yếu, <code>/etc</code> với configurations quan trọng, đến <code>/var</code> với dữ liệu động, và <code>/usr</code> với ứng dụng phong phú - tất cả tạo nên một hệ thống có tổ chức, dễ bảo trì và scale.</p>
+<p>Nhớ rằng, filesystem hierarchy không chỉ là quy tắc mà còn là ngôn ngữ chung giúp system administrators trên khắp thế giới có thể hiểu và làm việc với bất kỳ hệ thống Unix/Linux nào. Đây chính là sức mạnh của standardization!</p>
+<p><strong>Lời khuyên cuối:</strong> Hãy dành thời gian explore từng thư mục, đọc man pages (<code>man hier</code>), và thực hành. Filesystem mastery là foundation cho mọi kỹ năng system administration sau này.</p>
+<p><em>"In Unix, everything is a file, and every file has its place."</em></p>
+<hr />
+
+      </article>
+
+      
+      
+
+      
+      
+    </div>
+
+    
+
+
+<footer>
+  <div class="left">
+    <div class="copyright">
+      © 2025 <a href="https:&#x2F;&#x2F;wen.is-a.dev">Wen</a>
+      
+    </div>
+  </div>
+
+  <div class="right">
+    
+    
+    
+    
+
+    <!-- 
+    
+    
+    <button id="theme-toggle" aria-label="theme switch">
+      <span class="moon-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill="currentColor"></path></svg>
+</span>
+      <span class="sun-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z" fill="currentColor"></path></svg>
+</span>
+    </button>
+     -->
+  </div>
+</footer>
+
+
+
+
+  </main>
+</div>
+
+  
+<script src="/js/lightense.min.js"></script>
+
+
+
+  <script src="https://wen.is-a.dev/js/main.js"></script>
+</body>
+
+</html>

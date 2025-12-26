@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  
+
+
+
+<meta name="description" content="OWASP Web Security Testing Guide: Học đi, đừng đợi bị hack">
+
+  <title>OWASP Web Security Testing Guide: Học đi, đừng đợi bị hack</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="https://wen.is-a.dev/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://wen.is-a.dev/img/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://wen.is-a.dev/img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Ancizar+Sans:ital,wght@0,100..1000;1,100..1000&family=Bitter:ital,wght@0,100..900;1,100..900&family=Indie+Flower&family=Lora:ital,wght@0,400..700;1,400..700&family=Marcellus&display=swap"
+    rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;1,400;1,600&display=swap"
+    rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500..700&display=swap" rel="stylesheet">
+  
+  <style>
+  /* light mode colors */
+  body {
+    /* --primary-color: #5871a2; */
+    --primary-color: #005e05;
+    --primary-pale-color: #5871a233;
+    --primary-decoration-color: #5871a210;
+    --bg-color: #f0f9ff;
+    /* --text-color: #2f3030; */
+    --text-color: #000000;
+    /* --text-pale-color: #767676; */
+    --text-pale-color: #000000;
+    --text-decoration-color: #a9a9a9;
+    --highlight-mark-color: #5f75b020;
+
+    --callout-note-color: #5871a2;
+    --callout-tip-color: #268556;
+    --callout-important-color: #885fc9;
+    --callout-warning-color: #ab6632;
+    --callout-caution-color: #c64e4e;
+  }
+
+  /* dark mode colors */
+  body.dark {
+    /* --primary-color: #6f8fd1; */
+    --primary-color: #ecf16b;
+    --primary-pale-color: #6f8fd166;
+    --primary-decoration-color: #6f8fd112;
+    /* --bg-color: #1c1c1c; */
+    /* --bg-color: #002727; */
+    /* --bg-color: #002333; */
+    --bg-color: #01242E;
+    /* --text-color: #c1c1c1; */
+    --text-color: #ffffff;
+    /* --text-pale-color: #848484; */
+    --text-pale-color: #ffffff;
+    --text-decoration-color: #5f5f5f;
+    --highlight-mark-color: #8296cb3b;
+
+    --callout-note-color: #6f8fd1;
+    --callout-tip-color: #47976f;
+    --callout-important-color: #9776cd;
+    --callout-warning-color: #ad7a52;
+    --callout-caution-color: #d06161;
+  }
+
+  /* typography */
+  body {
+    /* --main-font: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; */
+    --main-font: 'Nunito', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --heading-font: 'Quicksand', 'Lora', 'Bitter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --code-font: 'Cascadia Code', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    --homepage-max-width: 768px;
+    --main-max-width: 768px;
+    --avatar-size: 75px;
+    --font-size: 16px;
+    --line-height: 1.75;
+    --img-border-radius: 0px;
+    --detail-border-radius: 11px;
+    --dark-mode-img-brightness: 0.75;
+    --dark-mode-chart-brightness: 0.75;
+    --inline-code-border-radius: 2px;
+    --inline-code-bg-color: var(--primary-decoration-color);
+    --block-code-border-radius: 0px;
+    --block-code-border-color: var(--primary-color);
+    --detail-border-color: var(--primary-color);
+  }
+
+
+  #name,
+  #id,
+  #left,
+  a.post,
+  a.back-link,
+  a.tag,
+  a.category,
+  .title {
+    font-family: var(--heading-font);
+  }
+
+  span.date {
+    font-family: var(--code-font);
+    color: var(--text-pale-color);
+  }
+
+  .gif-wrapper {
+    text-align: center;
+    margin: 1.5rem 0;
+  }
+
+  .gif-wrapper .intro-gif {
+    max-width: 96%;
+    height: auto;
+    border-radius: 8px;
+  }
+
+  .verified-icon {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 3px;
+    vertical-align: middle;
+  }
+
+  .verified-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .top-nav {
+    width: 100%;
+    padding-bottom: 1em;
+    border-bottom: 1px solid var(--border-color);
+    background: rgba(var(--background-rgb), 0.85);
+    backdrop-filter: blur(8px);
+    border-radius: var(--detail-border-radius);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .top-nav nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+  }
+
+  .nav-left,
+  .nav-center,
+  .nav-right {
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-center {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-top: 1em;
+  }
+
+  .menu-wrapper {
+    position: relative;
+    margin-top: 1.5em;
+  }
+
+  .menu-trigger {
+    font-size: 1.5em;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-color);
+  }
+
+  .menu-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+
+    background: var(--bg-color);
+    font-family: var(--heading-font);
+    border: 1px solid var(--primary-pale-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    min-width: 85px;
+    padding: 0.25em 0;
+    z-index: 2000;
+
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .menu-wrapper.active .menu-dropdown {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+
+  .menu-dropdown a {
+    display: block;
+    padding: 0.6em 1em;
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 0.95em;
+    margin: auto;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  #theme-toggle:hover,
+  #rain-toggle:hover {
+    cursor: pointer;
+  }
+
+  .foot-quote,
+  .section-title {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    text-align: center;
+    display: block;
+    margin-top: 2em;
+  }
+
+  .layout-list .post {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+  }
+
+  .post>span:first-child {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+
+  .post>.date {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .year-heading {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    font-size: 1.5em;
+    font-weight: bold;
+    font-family: var(--heading-font);
+  }
+
+  /* term-caret  */
+  #id.term-caret {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    position: relative;
+    white-space: nowrap;
+  }
+
+  #id.term-caret::after {
+    content: "_";
+
+    margin-left: 4px;
+    animation: blink 1s steps(1, end) infinite;
+    opacity: 1;
+    color: currentColor;
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #id.term-caret::after {
+      animation: none;
+      opacity: 1;
+    }
+  }
+
+  /* typewriter */
+  #id.typewriter {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    white-space: nowrap;
+    border-right: 1ch solid currentColor;
+    /* caret */
+    /* caret blink */
+    animation: caret-blink 1s steps(1, end) infinite;
+  }
+
+  @keyframes caret-blink {
+    50% {
+      border-right-color: transparent;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #id.typewriter {
+      animation: none;
+      border-right-color: currentColor;
+    }
+  }
+
+  /* glitch effect  */
+  #id.glitch {
+    position: relative;
+    display: inline-block;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  #id.glitch::before,
+  #id.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    clip-path: inset(0 0 0 0);
+    opacity: .85;
+  }
+
+  #id.glitch::before {
+    transform: translate(0, 0);
+    mix-blend-mode: screen;
+    text-shadow: 1px 0 0 #f00;
+    /* viền đỏ */
+    animation: glitch-1 2s infinite linear alternate-reverse;
+  }
+
+  #id.glitch::after {
+    transform: translate(0, 0);
+    mix-blend-mode: screen;
+    text-shadow: -1px 0 0 #0ff;
+    /* viền cyan */
+    animation: glitch-2 2.2s infinite linear alternate-reverse;
+  }
+
+  @keyframes glitch-1 {
+    0% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(0, 0);
+    }
+
+    20% {
+      clip-path: inset(10% 0 60% 0);
+      transform: translate(-1px, -1px);
+    }
+
+    40% {
+      clip-path: inset(40% 0 30% 0);
+      transform: translate(1px, 1px);
+    }
+
+    60% {
+      clip-path: inset(20% 0 55% 0);
+      transform: translate(-1px, 0);
+    }
+
+    80% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 1px);
+    }
+
+    100% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(0, 0);
+    }
+  }
+
+  @keyframes glitch-2 {
+    0% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 0);
+    }
+
+    20% {
+      clip-path: inset(40% 0 30% 0);
+      transform: translate(1px, 0);
+    }
+
+    40% {
+      clip-path: inset(10% 0 60% 0);
+      transform: translate(0, -1px);
+    }
+
+    60% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(-1px, 1px);
+    }
+
+    80% {
+      clip-path: inset(20% 0 55% 0);
+      transform: translate(1px, 0);
+    }
+
+    100% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+
+    #id.glitch::before,
+    #id.glitch::after {
+      animation: none;
+    }
+  }
+</style>
+  <link rel="stylesheet" href="https://wen.is-a.dev/main.css">
+  
+
+<link id="hl" rel="stylesheet" type="text/css" href="/hl-light.css" />
+
+
+
+  
+</head>
+
+<body class="post">
+
+  
+  <script>
+    const theme = sessionStorage.getItem('theme');
+    const match = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if ((theme && theme === 'dark') || (!theme && match)) {
+      document.body.classList.add('dark');
+      const hl = document.querySelector('link#hl');
+      if (hl) hl.href = 'https://wen.is-a.dev/hl-dark.css';
+    }
+  </script>
+  
+
+  
+<div id="wrapper">
+  <div id="blank"></div>
+  <aside>
+    
+    
+    
+    <button id="back-to-top" aria-label="back to top">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-up"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+
+    </button>
+    
+  </aside>
+  <main>
+    
+<header class="top-nav">
+  <nav>
+    <!-- Left: Back -->
+    <div class="nav-left">
+      <a href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts" class="back-link">← Back</a>
+    </div>
+
+    <!-- Center: Avatar -->
+    <div class="nav-center">
+      
+      <a href="/">
+        <img src="https://wen.is-a.dev/img/qwe.jpg" alt="avatar" class="avatar">
+      </a>
+      
+    </div>
+
+    <!-- Right: Menu dropdown -->
+    <div class="nav-right">
+
+      <div class="menu-wrapper">
+
+        <button class="menu-trigger" aria-label="menu">
+          &#9776;
+        </button>
+        <div class="menu-dropdown">
+          <a href="https://wen.is-a.dev/posts">POSTS</a>
+          <a href="https://wen.is-a.dev/about">ABOUT</a>
+          <a href="https://wen.is-a.dev/contact">CONTACT</a>
+          
+          
+          
+          
+          
+
+          <a id="theme-toggle" aria-label="theme switch">
+            <span class="moon-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill="currentColor"></path></svg>
+</span>
+            <span class="sun-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z" fill="currentColor"></path></svg>
+</span>
+          </a>
+
+          
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const trigger = document.querySelector(".menu-trigger");
+    const wrapper = document.querySelector(".menu-wrapper");
+
+    if (trigger && wrapper) {
+      trigger.addEventListener("click", () => {
+        wrapper.classList.toggle("active");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!wrapper.contains(e.target)) {
+          wrapper.classList.remove("active");
+        }
+      });
+    }
+  });
+
+</script>
+
+
+    <div>
+      
+      
+      
+      
+      <div id="copy-cfg" style="display: none;" data-copy-icon="&lt;svg xmlns=&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2000&#x2F;svg&quot; viewBox=&quot;0 0 24 24&quot; width=&quot;18&quot; height=&quot;18&quot;&gt;&lt;path d=&quot;M6.9998 6V3C6.9998 2.44772 7.44752 2 7.9998 2H19.9998C20.5521 2 20.9998 2.44772 20.9998 3V17C20.9998 17.5523 20.5521 18 19.9998 18H16.9998V20.9991C16.9998 21.5519 16.5499 22 15.993 22H4.00666C3.45059 22 3 21.5554 3 20.9991L3.0026 7.00087C3.0027 6.44811 3.45264 6 4.00942 6H6.9998ZM5.00242 8L5.00019 20H14.9998V8H5.00242ZM8.9998 6H16.9998V16H18.9998V4H8.9998V6Z&quot; fill=&quot;currentColor&quot;&gt;&lt;&#x2F;path&gt;&lt;&#x2F;svg&gt;
+" data-check-icon="&lt;svg xmlns=&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2000&#x2F;svg&quot; viewBox=&quot;0 0 24 24&quot; width=&quot;18&quot; height=&quot;18&quot;&gt;&lt;path d=&quot;M10.0007 15.1709L19.1931 5.97852L20.6073 7.39273L10.0007 17.9993L3.63672 11.6354L5.05093 10.2212L10.0007 15.1709Z&quot; fill=&quot;currentColor&quot;&gt;&lt;&#x2F;path&gt;&lt;&#x2F;svg&gt;
+">
+      </div>
+      
+      <article class="prose">
+        <h1 class="title">OWASP Web Security Testing Guide: Học đi, đừng đợi bị hack</h1>
+        <div id="post-info">
+          <div id="date">
+            <span id="publish">Sep 07, 2024</span>
+            </div>
+
+          
+        </div>
+
+        
+        
+
+        
+
+        <p>Nếu bạn là một web developer và chưa từng nghe về OWASP Web Security Testing Guide (WSTG), thì xin chúc mừng - bạn vừa khám phá ra lý do tại sao website của bạn bị hack nhiều hơn cả số lần bạn quên tắt máy lạnh khi đi làm.</p>
+<h2 id="owasp-wstg-la-cai-gi-the">OWASP WSTG Là Cái Gì Thế?<a class="zola-anchor" href="#owasp-wstg-la-cai-gi-the" aria-label="Anchor link for: owasp-wstg-la-cai-gi-the" style="visibility: hidden;"></a></h2>
+<p>OWASP Web Security Testing Guide không phải là một cuốn sách giáo khoa khô khan mà bạn có thể dùng làm gối đầu giường. Đây là một tài liệu comprehensive (toàn diện) được phát triển bởi cộng đồng OWASP (Open Web Application Security Project) - những người có niềm đam mê lạ lùng với việc tìm lỗ hổng bảo mật trong các ứng dụng web.</p>
+<p>Phiên bản hiện tại (v4.2) là kết quả của hàng chục năm kinh nghiệm từ các chuyên gia bảo mật trên toàn thế giới. Nói cách khác, đây là "kinh nghiệm máu" được đúc kết thành từng dòng chữ.</p>
+<h2 id="tai-sao-ban-nen-quan-tam-ngoai-viec-khong-muon-bi-hack">Tại Sao Bạn Nên Quan Tâm? (Ngoài Việc Không Muốn Bị Hack)<a class="zola-anchor" href="#tai-sao-ban-nen-quan-tam-ngoai-viec-khong-muon-bi-hack" aria-label="Anchor link for: tai-sao-ban-nen-quan-tam-ngoai-viec-khong-muon-bi-hack" style="visibility: hidden;"></a></h2>
+<h3 id="comprehensive-coverage"><strong>Comprehensive Coverage</strong><a class="zola-anchor" href="#comprehensive-coverage" aria-label="Anchor link for: comprehensive-coverage" style="visibility: hidden;"></a></h3>
+<p>WSTG không chỉ nói về SQL Injection hay XSS như những tutorial trên YouTube. Nó bao gồm tất cả mọi thứ từ:</p>
+<ul>
+<li>Information Gathering (Thu thập thông tin)</li>
+<li>Configuration and Deployment Management Testing</li>
+<li>Identity Management Testing</li>
+<li>Authentication Testing</li>
+<li>Authorization Testing</li>
+<li>Session Management Testing</li>
+<li>Input Validation Testing</li>
+<li>Error Handling</li>
+<li>Cryptography</li>
+<li>Business Logic Testing</li>
+<li>Client-side Testing</li>
+</ul>
+<h3 id="methodology-based-approach"><strong>Methodology-Based Approach</strong><a class="zola-anchor" href="#methodology-based-approach" aria-label="Anchor link for: methodology-based-approach" style="visibility: hidden;"></a></h3>
+<p>Không giống như việc "ném đá xem chỗ nào vỡ", WSTG cung cấp một methodology có hệ thống. Từng bước được thiết kế để đảm bảo bạn không bỏ sót bất kỳ khía cạnh nào của security testing.</p>
+<h3 id="real-world-applicability"><strong>Real-world Applicability</strong><a class="zola-anchor" href="#real-world-applicability" aria-label="Anchor link for: real-world-applicability" style="visibility: hidden;"></a></h3>
+<p>Đây không phải là lý thuyết suông. Mỗi test case đều đi kèm với:</p>
+<ul>
+<li>Objectives rõ ràng</li>
+<li>Test procedures cụ thể</li>
+<li>Tools và techniques thực tế</li>
+<li>Remediation guidelines</li>
+</ul>
+<h2 id="cau-truc-cua-owasp-wstg-roadmap-cho-cuoc-phieu-luu-security">Cấu Trúc Của OWASP WSTG: Roadmap Cho Cuộc Phiêu Lưu Security<a class="zola-anchor" href="#cau-truc-cua-owasp-wstg-roadmap-cho-cuoc-phieu-luu-security" aria-label="Anchor link for: cau-truc-cua-owasp-wstg-roadmap-cho-cuoc-phieu-luu-security" style="visibility: hidden;"></a></h2>
+<h3 id="phase-1-information-gathering">Phase 1: Information Gathering<a class="zola-anchor" href="#phase-1-information-gathering" aria-label="Anchor link for: phase-1-information-gathering" style="visibility: hidden;"></a></h3>
+<p><em>"Biết mình biết người, trăm trận trăm thắng" - Sun Tzu (và cả hacker)</em></p>
+<p>Giai đoạn này bao gồm:</p>
+<ul>
+<li><strong>Conduct Search Engine Discovery Reconnaissance</strong>: Google dorking không chỉ để tìm meme</li>
+<li><strong>Fingerprint Web Server</strong>: Xác định server đang chạy gì (Apache? Nginx? IIS đang khóc?)</li>
+<li><strong>Review Webserver Metafiles</strong>: robots.txt và sitemap.xml - những "bản đồ kho báu" mà developer tự tạo ra</li>
+</ul>
+<h3 id="phase-2-configuration-and-deployment-management-testing">Phase 2: Configuration and Deployment Management Testing<a class="zola-anchor" href="#phase-2-configuration-and-deployment-management-testing" aria-label="Anchor link for: phase-2-configuration-and-deployment-management-testing" style="visibility: hidden;"></a></h3>
+<p><em>"Configuration is the new code"</em></p>
+<ul>
+<li><strong>Test Network/Infrastructure Configuration</strong>: Firewall có thực sự "lửa" không?</li>
+<li><strong>Test Application Platform Configuration</strong>: Default credentials vẫn là admin/admin?</li>
+<li><strong>Test File Extensions Handling</strong>: .bak files có ai nhớ xóa không?</li>
+</ul>
+<h3 id="phase-3-identity-management-testing">Phase 3: Identity Management Testing<a class="zola-anchor" href="#phase-3-identity-management-testing" aria-label="Anchor link for: phase-3-identity-management-testing" style="visibility: hidden;"></a></h3>
+<p><em>"You are who you say you are... or are you?"</em></p>
+<ul>
+<li><strong>Test Role Definitions</strong>: Admin có thể làm user, user có thể làm admin không?</li>
+<li><strong>Test User Registration Process</strong>: Đăng ký với email admin@company.com có được không?</li>
+<li><strong>Test Account Provisioning Process</strong>: Tài khoản test có được xóa không?</li>
+</ul>
+<h3 id="phase-4-authentication-testing">Phase 4: Authentication Testing<a class="zola-anchor" href="#phase-4-authentication-testing" aria-label="Anchor link for: phase-4-authentication-testing" style="visibility: hidden;"></a></h3>
+<p><em>"Password123! is not a strong password, Karen!"</em></p>
+<p>Đây là phần mà 90% website fail:</p>
+<ul>
+<li><strong>Test for Default Credentials</strong>: admin/admin, root/root, user/user</li>
+<li><strong>Test for Weak Lock Out Mechanism</strong>: Brute force 1000 lần vẫn không bị khóa</li>
+<li><strong>Test for Bypassing Authentication Schema</strong>: Magic cookies và những tuyệt chiêu</li>
+<li><strong>Test for Browser Cache Weaknesses</strong>: Ctrl+H để xem lịch sử "thú vị"</li>
+</ul>
+<h3 id="phase-5-authorization-testing">Phase 5: Authorization Testing<a class="zola-anchor" href="#phase-5-authorization-testing" aria-label="Anchor link for: phase-5-authorization-testing" style="visibility: hidden;"></a></h3>
+<p><em>"Just because you can login doesn't mean you should see everything"</em></p>
+<ul>
+<li><strong>Test Directory Traversal</strong>: ../../../etc/passwd anyone?</li>
+<li><strong>Test for Bypassing Authorization Schema</strong>: URL manipulation 101</li>
+<li><strong>Test for Privilege Escalation</strong>: Từ user thành admin chỉ với một click</li>
+</ul>
+<h3 id="phase-6-session-management-testing">Phase 6: Session Management Testing<a class="zola-anchor" href="#phase-6-session-management-testing" aria-label="Anchor link for: phase-6-session-management-testing" style="visibility: hidden;"></a></h3>
+<p><em>"Sessions are like relationships - they need proper management"</em></p>
+<ul>
+<li><strong>Test Session Management Schema</strong>: Session ID có random không hay chỉ là 1,2,3,4...?</li>
+<li><strong>Test for Session Fixation</strong>: Hijacking session như hijacking xe buýt</li>
+<li><strong>Test for Session Timeout</strong>: Session sống lâu hơn cả pin iPhone</li>
+</ul>
+<h3 id="phase-7-input-validation-testing">Phase 7: Input Validation Testing<a class="zola-anchor" href="#phase-7-input-validation-testing" aria-label="Anchor link for: phase-7-input-validation-testing" style="visibility: hidden;"></a></h3>
+<p><em>"Trust no input, validate everything"</em></p>
+<p>Phần này là "goldmine" của vulnerabilities:</p>
+<ul>
+<li><strong>Test for SQL Injection</strong>: ' OR 1=1--</li>
+<li><strong>Test for Cross Site Scripting (XSS)</strong>: <code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code></li>
+<li><strong>Test for Command Injection</strong>: ; rm -rf / #</li>
+<li><strong>Test for Buffer Overflow</strong>: AAAAAAAAAAAAAAAAAAAAAA...</li>
+</ul>
+<h3 id="phase-8-error-handling">Phase 8: Error Handling<a class="zola-anchor" href="#phase-8-error-handling" aria-label="Anchor link for: phase-8-error-handling" style="visibility: hidden;"></a></h3>
+<p><em>"Error messages should be helpful to users, not hackers"</em></p>
+<ul>
+<li><strong>Test for Improper Error Handling</strong>: Stack traces với database credentials</li>
+<li><strong>Test for Error Code</strong>: HTTP status codes nói lên tất cả</li>
+</ul>
+<h3 id="phase-9-cryptography">Phase 9: Cryptography<a class="zola-anchor" href="#phase-9-cryptography" aria-label="Anchor link for: phase-9-cryptography" style="visibility: hidden;"></a></h3>
+<p><em>"Encryption without proper key management is like locking your house and leaving the key under the doormat"</em></p>
+<ul>
+<li><strong>Test for Weak SSL/TLS Ciphers</strong>: MD5 và SHA1 đã chết từ lâu</li>
+<li><strong>Test SSL Certificate Validity</strong>: Self-signed certificates = red flag</li>
+<li><strong>Test for Sensitive Information in Transit</strong>: HTTP thay vì HTTPS</li>
+</ul>
+<h3 id="phase-10-business-logic-testing">Phase 10: Business Logic Testing<a class="zola-anchor" href="#phase-10-business-logic-testing" aria-label="Anchor link for: phase-10-business-logic-testing" style="visibility: hidden;"></a></h3>
+<p><em>"The most creative attacks target business logic, not technical vulnerabilities"</em></p>
+<ul>
+<li><strong>Test Business Logic Data Validation</strong>: Giá -100$ cho iPhone có hợp lý không?</li>
+<li><strong>Test for Process Timing</strong>: Race conditions trong payment processing</li>
+<li><strong>Test Number of Times a Function Can Be Used</strong>: Discount code dùng 1000 lần</li>
+</ul>
+<h3 id="phase-11-client-side-testing">Phase 11: Client-side Testing<a class="zola-anchor" href="#phase-11-client-side-testing" aria-label="Anchor link for: phase-11-client-side-testing" style="visibility: hidden;"></a></h3>
+<p><em>"The client is in the hands of the enemy"</em></p>
+<ul>
+<li><strong>Test for DOM-based Cross Site Scripting</strong>: XSS trên client-side</li>
+<li><strong>Test for Client-side Resource Manipulation</strong>: Inspect Element và sửa giá</li>
+<li><strong>Test Cross Origin Resource Sharing</strong>: CORS misconfigurations</li>
+</ul>
+<h2 id="tools-of-the-trade-vu-khi-cua-security-tester">Tools of the Trade: Vũ Khí Của Security Tester<a class="zola-anchor" href="#tools-of-the-trade-vu-khi-cua-security-tester" aria-label="Anchor link for: tools-of-the-trade-vu-khi-cua-security-tester" style="visibility: hidden;"></a></h2>
+<p>WSTG không chỉ nói lý thuyết mà còn recommend tools cụ thể:</p>
+<h3 id="free-tools">Free Tools:<a class="zola-anchor" href="#free-tools" aria-label="Anchor link for: free-tools" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>Burp Suite Community</strong>: Swiss Army knife của web security</li>
+<li><strong>OWASP ZAP</strong>: Open-source alternative cho Burp</li>
+<li><strong>Nikto</strong>: Web server scanner cổ điển</li>
+<li><strong>SQLmap</strong>: SQL injection automation</li>
+<li><strong>Nmap</strong>: Network discovery và security auditing</li>
+</ul>
+<h3 id="browser-extensions">Browser Extensions:<a class="zola-anchor" href="#browser-extensions" aria-label="Anchor link for: browser-extensions" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>Wappalyzer</strong>: Technology profiling</li>
+<li><strong>Cookie Editor</strong>: Session manipulation</li>
+<li><strong>User-Agent Switcher</strong>: Identity changing</li>
+</ul>
+<h3 id="command-line-heroes">Command Line Heroes:<a class="zola-anchor" href="#command-line-heroes" aria-label="Anchor link for: command-line-heroes" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>curl</strong>: HTTP client đa năng</li>
+<li><strong>wget</strong>: Download everything</li>
+<li><strong>netcat</strong>: Network Swiss Army knife</li>
+</ul>
+<h2 id="best-practices-lam-the-nao-de-khong-thanh-nan-nhan">Best Practices: Làm Thế Nào Để Không Thành "Nạn Nhân"<a class="zola-anchor" href="#best-practices-lam-the-nao-de-khong-thanh-nan-nhan" aria-label="Anchor link for: best-practices-lam-the-nao-de-khong-thanh-nan-nhan" style="visibility: hidden;"></a></h2>
+<h3 id="implement-defense-in-depth"><strong>Implement Defense in Depth</strong><a class="zola-anchor" href="#implement-defense-in-depth" aria-label="Anchor link for: implement-defense-in-depth" style="visibility: hidden;"></a></h3>
+<p>Không dựa vào một lớp bảo vệ duy nhất. Giống như mặc áo khoác trong mùa đông - một lớp không đủ.</p>
+<h3 id="follow-secure-coding-practices"><strong>Follow Secure Coding Practices</strong><a class="zola-anchor" href="#follow-secure-coding-practices" aria-label="Anchor link for: follow-secure-coding-practices" style="visibility: hidden;"></a></h3>
+<ul>
+<li>Input validation everywhere</li>
+<li>Output encoding properly</li>
+<li>Use parameterized queries</li>
+<li>Implement proper error handling</li>
+</ul>
+<h3 id="regular-security-testing"><strong>Regular Security Testing</strong><a class="zola-anchor" href="#regular-security-testing" aria-label="Anchor link for: regular-security-testing" style="visibility: hidden;"></a></h3>
+<p>Security testing không phải là hoạt động "one-time". Nó cần được thực hiện:</p>
+<ul>
+<li>Trong quá trình development</li>
+<li>Trước khi deploy</li>
+<li>Định kỳ trong production</li>
+<li>Sau mỗi major update</li>
+</ul>
+<h3 id="keep-everything-updated"><strong>Keep Everything Updated</strong><a class="zola-anchor" href="#keep-everything-updated" aria-label="Anchor link for: keep-everything-updated" style="visibility: hidden;"></a></h3>
+<p>Outdated software = welcome mat for attackers. Update frameworks, libraries, và dependencies thường xuyên.</p>
+<h3 id="security-awareness-training"><strong>Security Awareness Training</strong><a class="zola-anchor" href="#security-awareness-training" aria-label="Anchor link for: security-awareness-training" style="visibility: hidden;"></a></h3>
+<p>Developer cần hiểu security. Không thể viết secure code nếu không biết gì về security.</p>
+<h2 id="ket-luan">Kết Luận<a class="zola-anchor" href="#ket-luan" aria-label="Anchor link for: ket-luan" style="visibility: hidden;"></a></h2>
+<p>OWASP Web Security Testing Guide không phải là một cuốn sách bạn đọc một lần rồi bỏ qua. Đây là một reference guide mà bạn sẽ quay lại nhiều lần trong career.</p>
+<p>Security không phải là thứ có thể "add-on" sau khi hoàn thành sản phẩm. Nó phải được tích hợp từ đầu, giống như việc đặt móng nhà vậy.</p>
+<p>Và nhớ rằng, trong thế giới security, paranoia không phải là bệnh - đó là prerequisite cho job. Khi bạn nghĩ rằng hệ thống đã đủ secure, có lẽ đó là lúc bạn cần lo lắng nhất.</p>
+<h2 id="resources-va-next-steps">Resources và Next Steps<a class="zola-anchor" href="#resources-va-next-steps" aria-label="Anchor link for: resources-va-next-steps" style="visibility: hidden;"></a></h2>
+<ul>
+<li><strong>OWASP WSTG Official</strong>: https://owasp.org/www-project-web-security-testing-guide/</li>
+<li><strong>OWASP Top 10</strong>: Bắt đầu từ những vulnerability phổ biến nhất</li>
+<li><strong>Web Security Academy (PortSwigger)</strong>: Hands-on labs miễn phí</li>
+<li><strong>VulnHub &amp; HackTheBox</strong>: Practice environments</li>
+</ul>
+<p><em>"Security is not a product, but a process" - Bruce Schneier</em></p>
+<hr />
+<p><em>Disclaimer: Thông tin trong bài viết này chỉ dành cho mục đích giáo dục và defensive security. Không sử dụng để thực hiện các hoạt động bất hợp pháp. Be ethical, be responsible.</em></p>
+<hr />
+
+      </article>
+
+      
+      
+
+      
+      
+    </div>
+
+    
+
+
+<footer>
+  <div class="left">
+    <div class="copyright">
+      © 2025 <a href="https:&#x2F;&#x2F;wen.is-a.dev">Wen</a>
+      
+    </div>
+  </div>
+
+  <div class="right">
+    
+    
+    
+    
+
+    <!-- 
+    
+    
+    <button id="theme-toggle" aria-label="theme switch">
+      <span class="moon-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill="currentColor"></path></svg>
+</span>
+      <span class="sun-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z" fill="currentColor"></path></svg>
+</span>
+    </button>
+     -->
+  </div>
+</footer>
+
+
+
+
+  </main>
+</div>
+
+  
+<script src="/js/lightense.min.js"></script>
+
+
+
+  <script src="https://wen.is-a.dev/js/main.js"></script>
+</body>
+
+</html>

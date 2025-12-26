@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  
+
+
+
+<meta name="description" content="You don&#x27;t have to be great to start, but you have to start to be great">
+
+  <title>Posts</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="https://wen.is-a.dev/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://wen.is-a.dev/img/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://wen.is-a.dev/img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Ancizar+Sans:ital,wght@0,100..1000;1,100..1000&family=Bitter:ital,wght@0,100..900;1,100..900&family=Indie+Flower&family=Lora:ital,wght@0,400..700;1,400..700&family=Marcellus&display=swap"
+    rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;1,400;1,600&display=swap"
+    rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500..700&display=swap" rel="stylesheet">
+  
+  <style>
+  /* light mode colors */
+  body {
+    /* --primary-color: #5871a2; */
+    --primary-color: #005e05;
+    --primary-pale-color: #5871a233;
+    --primary-decoration-color: #5871a210;
+    --bg-color: #f0f9ff;
+    /* --text-color: #2f3030; */
+    --text-color: #000000;
+    /* --text-pale-color: #767676; */
+    --text-pale-color: #000000;
+    --text-decoration-color: #a9a9a9;
+    --highlight-mark-color: #5f75b020;
+
+    --callout-note-color: #5871a2;
+    --callout-tip-color: #268556;
+    --callout-important-color: #885fc9;
+    --callout-warning-color: #ab6632;
+    --callout-caution-color: #c64e4e;
+  }
+
+  /* dark mode colors */
+  body.dark {
+    /* --primary-color: #6f8fd1; */
+    --primary-color: #ecf16b;
+    --primary-pale-color: #6f8fd166;
+    --primary-decoration-color: #6f8fd112;
+    /* --bg-color: #1c1c1c; */
+    /* --bg-color: #002727; */
+    /* --bg-color: #002333; */
+    --bg-color: #01242E;
+    /* --text-color: #c1c1c1; */
+    --text-color: #ffffff;
+    /* --text-pale-color: #848484; */
+    --text-pale-color: #ffffff;
+    --text-decoration-color: #5f5f5f;
+    --highlight-mark-color: #8296cb3b;
+
+    --callout-note-color: #6f8fd1;
+    --callout-tip-color: #47976f;
+    --callout-important-color: #9776cd;
+    --callout-warning-color: #ad7a52;
+    --callout-caution-color: #d06161;
+  }
+
+  /* typography */
+  body {
+    /* --main-font: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; */
+    --main-font: 'Nunito', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --heading-font: 'Quicksand', 'Lora', 'Bitter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --code-font: 'Cascadia Code', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    --homepage-max-width: 768px;
+    --main-max-width: 768px;
+    --avatar-size: 75px;
+    --font-size: 16px;
+    --line-height: 1.75;
+    --img-border-radius: 0px;
+    --detail-border-radius: 11px;
+    --dark-mode-img-brightness: 0.75;
+    --dark-mode-chart-brightness: 0.75;
+    --inline-code-border-radius: 2px;
+    --inline-code-bg-color: var(--primary-decoration-color);
+    --block-code-border-radius: 0px;
+    --block-code-border-color: var(--primary-color);
+    --detail-border-color: var(--primary-color);
+  }
+
+
+  #name,
+  #id,
+  #left,
+  a.post,
+  a.back-link,
+  a.tag,
+  a.category,
+  .title {
+    font-family: var(--heading-font);
+  }
+
+  span.date {
+    font-family: var(--code-font);
+    color: var(--text-pale-color);
+  }
+
+  .gif-wrapper {
+    text-align: center;
+    margin: 1.5rem 0;
+  }
+
+  .gif-wrapper .intro-gif {
+    max-width: 96%;
+    height: auto;
+    border-radius: 8px;
+  }
+
+  .verified-icon {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 3px;
+    vertical-align: middle;
+  }
+
+  .verified-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .top-nav {
+    width: 100%;
+    padding-bottom: 1em;
+    border-bottom: 1px solid var(--border-color);
+    background: rgba(var(--background-rgb), 0.85);
+    backdrop-filter: blur(8px);
+    border-radius: var(--detail-border-radius);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .top-nav nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+  }
+
+  .nav-left,
+  .nav-center,
+  .nav-right {
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-center {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-top: 1em;
+  }
+
+  .menu-wrapper {
+    position: relative;
+    margin-top: 1.5em;
+  }
+
+  .menu-trigger {
+    font-size: 1.5em;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-color);
+  }
+
+  .menu-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+
+    background: var(--bg-color);
+    font-family: var(--heading-font);
+    border: 1px solid var(--primary-pale-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    min-width: 85px;
+    padding: 0.25em 0;
+    z-index: 2000;
+
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .menu-wrapper.active .menu-dropdown {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+
+  .menu-dropdown a {
+    display: block;
+    padding: 0.6em 1em;
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 0.95em;
+    margin: auto;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  #theme-toggle:hover,
+  #rain-toggle:hover {
+    cursor: pointer;
+  }
+
+  .foot-quote,
+  .section-title {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    text-align: center;
+    display: block;
+    margin-top: 2em;
+  }
+
+  .layout-list .post {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+  }
+
+  .post>span:first-child {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+
+  .post>.date {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .year-heading {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    font-size: 1.5em;
+    font-weight: bold;
+    font-family: var(--heading-font);
+  }
+
+  /* term-caret  */
+  #id.term-caret {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    position: relative;
+    white-space: nowrap;
+  }
+
+  #id.term-caret::after {
+    content: "_";
+
+    margin-left: 4px;
+    animation: blink 1s steps(1, end) infinite;
+    opacity: 1;
+    color: currentColor;
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #id.term-caret::after {
+      animation: none;
+      opacity: 1;
+    }
+  }
+
+  /* typewriter */
+  #id.typewriter {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    white-space: nowrap;
+    border-right: 1ch solid currentColor;
+    /* caret */
+    /* caret blink */
+    animation: caret-blink 1s steps(1, end) infinite;
+  }
+
+  @keyframes caret-blink {
+    50% {
+      border-right-color: transparent;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #id.typewriter {
+      animation: none;
+      border-right-color: currentColor;
+    }
+  }
+
+  /* glitch effect  */
+  #id.glitch {
+    position: relative;
+    display: inline-block;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  #id.glitch::before,
+  #id.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    clip-path: inset(0 0 0 0);
+    opacity: .85;
+  }
+
+  #id.glitch::before {
+    transform: translate(0, 0);
+    mix-blend-mode: screen;
+    text-shadow: 1px 0 0 #f00;
+    /* viền đỏ */
+    animation: glitch-1 2s infinite linear alternate-reverse;
+  }
+
+  #id.glitch::after {
+    transform: translate(0, 0);
+    mix-blend-mode: screen;
+    text-shadow: -1px 0 0 #0ff;
+    /* viền cyan */
+    animation: glitch-2 2.2s infinite linear alternate-reverse;
+  }
+
+  @keyframes glitch-1 {
+    0% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(0, 0);
+    }
+
+    20% {
+      clip-path: inset(10% 0 60% 0);
+      transform: translate(-1px, -1px);
+    }
+
+    40% {
+      clip-path: inset(40% 0 30% 0);
+      transform: translate(1px, 1px);
+    }
+
+    60% {
+      clip-path: inset(20% 0 55% 0);
+      transform: translate(-1px, 0);
+    }
+
+    80% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 1px);
+    }
+
+    100% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(0, 0);
+    }
+  }
+
+  @keyframes glitch-2 {
+    0% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 0);
+    }
+
+    20% {
+      clip-path: inset(40% 0 30% 0);
+      transform: translate(1px, 0);
+    }
+
+    40% {
+      clip-path: inset(10% 0 60% 0);
+      transform: translate(0, -1px);
+    }
+
+    60% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(-1px, 1px);
+    }
+
+    80% {
+      clip-path: inset(20% 0 55% 0);
+      transform: translate(1px, 0);
+    }
+
+    100% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+
+    #id.glitch::before,
+    #id.glitch::after {
+      animation: none;
+    }
+  }
+</style>
+  <link rel="stylesheet" href="https://wen.is-a.dev/main.css">
+  
+
+
+  
+</head>
+
+<body class="blog">
+
+  
+  <script>
+    const theme = sessionStorage.getItem('theme');
+    const match = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if ((theme && theme === 'dark') || (!theme && match)) {
+      document.body.classList.add('dark');
+      const hl = document.querySelector('link#hl');
+      if (hl) hl.href = 'https://wen.is-a.dev/hl-dark.css';
+    }
+  </script>
+  
+
+  
+
+<div id="wrapper">
+  
+<header class="top-nav">
+  <nav>
+    <!-- Left: Back -->
+    <div class="nav-left">
+      <a href="https:&#x2F;&#x2F;wen.is-a.dev" class="back-link">← Back</a>
+    </div>
+
+    <!-- Center: Avatar -->
+    <div class="nav-center">
+      
+      <a href="/">
+        <img src="https://wen.is-a.dev/img/qwe.jpg" alt="avatar" class="avatar">
+      </a>
+      
+    </div>
+
+    <!-- Right: Menu dropdown -->
+    <div class="nav-right">
+
+      <div class="menu-wrapper">
+
+        <button class="menu-trigger" aria-label="menu">
+          &#9776;
+        </button>
+        <div class="menu-dropdown">
+          <a href="https://wen.is-a.dev/posts">POSTS</a>
+          <a href="https://wen.is-a.dev/about">ABOUT</a>
+          <a href="https://wen.is-a.dev/contact">CONTACT</a>
+          
+          
+          
+          
+          
+
+          <a id="theme-toggle" aria-label="theme switch">
+            <span class="moon-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill="currentColor"></path></svg>
+</span>
+            <span class="sun-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z" fill="currentColor"></path></svg>
+</span>
+          </a>
+
+          
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const trigger = document.querySelector(".menu-trigger");
+    const wrapper = document.querySelector(".menu-wrapper");
+
+    if (trigger && wrapper) {
+      trigger.addEventListener("click", () => {
+        wrapper.classList.toggle("active");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!wrapper.contains(e.target)) {
+          wrapper.classList.remove("active");
+        }
+      });
+    }
+  });
+
+</script>
+
+
+  
+<div class="section-title">
+  
+  <h1>(❁´◡`❁)</h1>
+  
+  
+  <p>You don&#x27;t have to be great to start, but you have to start to be great.</p>
+  
+</div>
+
+
+  <main class="layout-list">
+
+    
+    <div class="post-list">
+      
+      
+      
+
+      
+      <h3 class="year-heading">2025</h3>
+      
+
+      <a class="post instant " href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts&#x2F;containerd&#x2F;">
+        <span>containerd – Runtime container cốt lõi của hệ sinh thái container</span>
+        <span class="date" style="font-family: consolas, 'Courier New', Courier, monospace;">
+          Nov 15
+        </span>
+      </a>
+      
+      
+
+      
+      
+      
+      
+      
+      
+
+      <a class="post instant " href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts&#x2F;docker-nen-tang-container-hoa&#x2F;">
+        <span>Docker – Nền tảng container hóa ứng dụng hiện đại</span>
+        <span class="date" style="font-family: consolas, 'Courier New', Courier, monospace;">
+          Oct 17
+        </span>
+      </a>
+      
+      
+
+      
+      
+      
+      
+      
+      
+
+      <a class="post instant " href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts&#x2F;software-development-strategy&#x2F;">
+        <span>Khám phá các mô hình làm việc phổ biến trong phát triển phần mềm</span>
+        <span class="date" style="font-family: consolas, 'Courier New', Courier, monospace;">
+          Sep 22
+        </span>
+      </a>
+      
+      
+
+      
+      
+      
+      
+      
+      
+
+      <a class="post instant " href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts&#x2F;computer-memory&#x2F;">
+        <span>Một hành trình qua các vùng nhớ của máy tính và chương trình</span>
+        <span class="date" style="font-family: consolas, 'Courier New', Courier, monospace;">
+          Sep 10
+        </span>
+      </a>
+      
+      
+
+      
+      
+      
+      
+      
+      
+
+      <a class="post instant " href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts&#x2F;it-root-roles&#x2F;">
+        <span>Cùng nhìn lại những vai trò gốc rễ đã kiến tạo nên ngành CNTT</span>
+        <span class="date" style="font-family: consolas, 'Courier New', Courier, monospace;">
+          Aug 11
+        </span>
+      </a>
+      
+      
+
+      
+      
+      
+      
+      
+      
+
+      <a class="post instant " href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts&#x2F;ao-hoa-cong-nghe-thay-doi-cach-chung-ta-su-dung-may-tinh&#x2F;">
+        <span>Ảo Hóa – Công nghệ thay đổi cách chúng ta sử dụng máy tính</span>
+        <span class="date" style="font-family: consolas, 'Courier New', Courier, monospace;">
+          Jul 21
+        </span>
+      </a>
+      
+      
+
+      
+      
+      
+      
+      
+      
+
+      <a class="post instant " href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts&#x2F;ecc-nho-gon-nhung-manh-me&#x2F;">
+        <span>ECC – Nhỏ gọn nhưng mạnh mẽ</span>
+        <span class="date" style="font-family: consolas, 'Courier New', Courier, monospace;">
+          Jun 15
+        </span>
+      </a>
+      
+      
+
+      
+      
+      
+      
+      
+      
+
+      <a class="post instant " href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts&#x2F;siem-nguoi-gac-cong-tham-lang-trong-soc&#x2F;">
+        <span>SIEM – Người gác cổng thầm lặng trong SOC</span>
+        <span class="date" style="font-family: consolas, 'Courier New', Courier, monospace;">
+          Jun 01
+        </span>
+      </a>
+      
+      
+
+      
+      
+      
+      
+      
+      
+
+      <a class="post instant " href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts&#x2F;mo-hinh-osi-va-tcp-ip-ban-thiet-ke-bi-mat-cua-the-gioi-internet&#x2F;">
+        <span>Mô hình OSI và TCP&#x2F;IP: Bản thiết kế bí mật của thế giới Internet</span>
+        <span class="date" style="font-family: consolas, 'Courier New', Courier, monospace;">
+          May 19
+        </span>
+      </a>
+      
+      
+
+      
+      
+      
+      
+      
+      
+
+      <a class="post instant " href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts&#x2F;systems-programming-code-cham-toi-loi-he-thong&#x2F;">
+        <span>Systems Programming: Code chạm tới lõi hệ thống</span>
+        <span class="date" style="font-family: consolas, 'Courier New', Courier, monospace;">
+          Apr 30
+        </span>
+      </a>
+      
+      
+
+      
+      
+      
+      
+      
+      
+
+      <a class="post instant " href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts&#x2F;user-mode-vs-kernel-mode-cuoc-chien-quyen-luc-trong-windows&#x2F;">
+        <span>User Mode vs Kernel Mode – Cuộc chiến quyền lực trong Windows</span>
+        <span class="date" style="font-family: consolas, 'Courier New', Courier, monospace;">
+          Apr 12
+        </span>
+      </a>
+      
+      
+
+      
+      
+      
+      
+      
+      
+
+      <a class="post instant " href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts&#x2F;tu-duy-lap-trinh-qua-cac-tang-ngon-ngu&#x2F;">
+        <span>Tư duy lập trình qua các tầng ngôn ngữ</span>
+        <span class="date" style="font-family: consolas, 'Courier New', Courier, monospace;">
+          Mar 20
+        </span>
+      </a>
+      
+      
+
+      
+      
+      
+      
+      
+      
+
+      <a class="post instant " href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts&#x2F;windows-registry-bo-nao-dien-tu-cua-windows&#x2F;">
+        <span>Windows Registry: Bộ não điện tử của Windows</span>
+        <span class="date" style="font-family: consolas, 'Courier New', Courier, monospace;">
+          Feb 14
+        </span>
+      </a>
+      
+      
+
+      
+      
+      
+      
+      
+      
+
+      <a class="post instant " href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts&#x2F;windows-event-logs-cuon-nhat-ky-cua-windows&#x2F;">
+        <span>Windows Event Logs: Cuốn nhật ký của Windows</span>
+        <span class="date" style="font-family: consolas, 'Courier New', Courier, monospace;">
+          Jan 05
+        </span>
+      </a>
+      
+      
+
+      
+      
+      
+      
+      
+      <h3 class="year-heading">2024</h3>
+      
+      
+
+      <a class="post instant " href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts&#x2F;sql-injection-khi-mot-dong-query-co-the-pha-huy-tat-ca&#x2F;">
+        <span>SQL Injection – Khi một dòng query có thể phá hủy tất cả</span>
+        <span class="date" style="font-family: consolas, 'Courier New', Courier, monospace;">
+          Dec 25
+        </span>
+      </a>
+      
+      
+
+      
+      
+      
+      
+      
+      
+
+      <a class="post instant " href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts&#x2F;ryuk-ransomware-deep-dive-technical-analysis&#x2F;">
+        <span>Ryuk Ransomware: Deep Dive &amp; Technical Analysis</span>
+        <span class="date" style="font-family: consolas, 'Courier New', Courier, monospace;">
+          Nov 20
+        </span>
+      </a>
+      
+      
+
+      
+      
+      
+      
+      
+      
+
+      <a class="post instant " href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts&#x2F;malware-101-ai-la-trum-cuoi&#x2F;">
+        <span>Malware 101: Ai là trùm cuối trong thế giới mã độc?</span>
+        <span class="date" style="font-family: consolas, 'Courier New', Courier, monospace;">
+          Nov 11
+        </span>
+      </a>
+      
+      
+
+      
+      
+      
+      
+      
+      
+
+      <a class="post instant " href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts&#x2F;windows-11-system-processes-ai-dang-chay-gi-tren-may-ban&#x2F;">
+        <span>Windows 11 System Processes – Ai đang chạy gì trên máy bạn?</span>
+        <span class="date" style="font-family: consolas, 'Courier New', Courier, monospace;">
+          Oct 14
+        </span>
+      </a>
+      
+      
+
+      
+      
+      
+      
+      
+      
+
+      <a class="post instant " href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts&#x2F;web-security-testing-guide-hoc-di-dung-doi-bi-hack&#x2F;">
+        <span>OWASP Web Security Testing Guide: Học đi, đừng đợi bị hack</span>
+        <span class="date" style="font-family: consolas, 'Courier New', Courier, monospace;">
+          Sep 07
+        </span>
+      </a>
+      
+      
+
+      
+      
+      
+      
+      
+      
+
+      <a class="post instant " href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts&#x2F;mitre-att-ck-chiec-la-ban-dinh-huong-cho-phan-tich-tan-cong&#x2F;">
+        <span>MITRE ATT&amp;CK: Chiếc la bàn định hướng cho phân tích tấn công</span>
+        <span class="date" style="font-family: consolas, 'Courier New', Courier, monospace;">
+          Aug 30
+        </span>
+      </a>
+      
+      
+
+      
+      
+      
+      
+      
+      
+
+      <a class="post instant " href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts&#x2F;wireless-minh-da-hoc-duoc-gi&#x2F;">
+        <span>Kỳ quan công nghệ không dây</span>
+        <span class="date" style="font-family: consolas, 'Courier New', Courier, monospace;">
+          Jun 15
+        </span>
+      </a>
+      
+      
+
+      
+      
+      
+      
+      
+      
+
+      <a class="post instant " href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts&#x2F;linh-tinh-ve-cong-cu-mang-ten-grep&#x2F;">
+        <span>Linh tinh về công cụ mang tên GREP</span>
+        <span class="date" style="font-family: consolas, 'Courier New', Courier, monospace;">
+          Apr 10
+        </span>
+      </a>
+      
+      
+
+      
+      
+      
+      
+      
+      
+
+      <a class="post instant " href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts&#x2F;unix-linux-directory-hierarchy-kham-pha-the-gioi-duoi-terminal&#x2F;">
+        <span>Cùng tham quan Unix&#x2F;Linux Directory Hierarchy</span>
+        <span class="date" style="font-family: consolas, 'Courier New', Courier, monospace;">
+          Mar 20
+        </span>
+      </a>
+      
+      
+
+      
+      
+      
+      
+      
+      
+
+      <a class="post instant " href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts&#x2F;regex-doc-khong-hieu-nhung-chay-duoc-la-vui&#x2F;">
+        <span>Trở thành &quot;phù thủy&quot; với Regular Expression??</span>
+        <span class="date" style="font-family: consolas, 'Courier New', Courier, monospace;">
+          Mar 02
+        </span>
+      </a>
+      
+      
+
+      
+      
+      
+      
+      
+      
+
+      <a class="post instant " href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts&#x2F;git-he-thong-quan-ly-phien-ban-phan-tan-manh-me&#x2F;">
+        <span>Git – Hệ thống quản lý phiên bản phân tán mạnh mẽ</span>
+        <span class="date" style="font-family: consolas, 'Courier New', Courier, monospace;">
+          Feb 05
+        </span>
+      </a>
+      
+      
+
+      
+      
+      
+      
+      
+      
+
+      <a class="post instant " href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts&#x2F;hoc-markdown-de-nhu-an-banh&#x2F;">
+        <span>Học Markdown dễ như ăn bánh??</span>
+        <span class="date" style="font-family: consolas, 'Courier New', Courier, monospace;">
+          Jan 11
+        </span>
+      </a>
+      
+      
+
+      
+      
+      
+      
+      
+      
+
+      <a class="post instant " href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts&#x2F;http-methods-cac-phuong-thuc-giao-tiep-giua-client-va-server&#x2F;">
+        <span>HTTP Methods – Các phương thức giao tiếp giữa Client và Server</span>
+        <span class="date" style="font-family: consolas, 'Courier New', Courier, monospace;">
+          Jan 02
+        </span>
+      </a>
+      
+    </div>
+    
+
+  </main>
+  
+
+
+<footer>
+  <div class="left">
+    <div class="copyright">
+      © 2025 <a href="https:&#x2F;&#x2F;wen.is-a.dev">Wen</a>
+      
+    </div>
+  </div>
+
+  <div class="right">
+    
+    
+    
+    
+
+    <!-- 
+    
+    
+    <button id="theme-toggle" aria-label="theme switch">
+      <span class="moon-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill="currentColor"></path></svg>
+</span>
+      <span class="sun-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z" fill="currentColor"></path></svg>
+</span>
+    </button>
+     -->
+  </div>
+</footer>
+
+
+
+
+</div>
+
+  
+
+  <script src="https://wen.is-a.dev/js/main.js"></script>
+</body>
+
+</html>

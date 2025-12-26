@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  
+
+
+
+<meta name="description" content="User Mode vs Kernel Mode – Cuộc chiến quyền lực trong Windows">
+
+  <title>User Mode vs Kernel Mode – Cuộc chiến quyền lực trong Windows</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="https://wen.is-a.dev/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://wen.is-a.dev/img/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://wen.is-a.dev/img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Ancizar+Sans:ital,wght@0,100..1000;1,100..1000&family=Bitter:ital,wght@0,100..900;1,100..900&family=Indie+Flower&family=Lora:ital,wght@0,400..700;1,400..700&family=Marcellus&display=swap"
+    rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;1,400;1,600&display=swap"
+    rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500..700&display=swap" rel="stylesheet">
+  
+  <style>
+  /* light mode colors */
+  body {
+    /* --primary-color: #5871a2; */
+    --primary-color: #005e05;
+    --primary-pale-color: #5871a233;
+    --primary-decoration-color: #5871a210;
+    --bg-color: #f0f9ff;
+    /* --text-color: #2f3030; */
+    --text-color: #000000;
+    /* --text-pale-color: #767676; */
+    --text-pale-color: #000000;
+    --text-decoration-color: #a9a9a9;
+    --highlight-mark-color: #5f75b020;
+
+    --callout-note-color: #5871a2;
+    --callout-tip-color: #268556;
+    --callout-important-color: #885fc9;
+    --callout-warning-color: #ab6632;
+    --callout-caution-color: #c64e4e;
+  }
+
+  /* dark mode colors */
+  body.dark {
+    /* --primary-color: #6f8fd1; */
+    --primary-color: #ecf16b;
+    --primary-pale-color: #6f8fd166;
+    --primary-decoration-color: #6f8fd112;
+    /* --bg-color: #1c1c1c; */
+    /* --bg-color: #002727; */
+    /* --bg-color: #002333; */
+    --bg-color: #01242E;
+    /* --text-color: #c1c1c1; */
+    --text-color: #ffffff;
+    /* --text-pale-color: #848484; */
+    --text-pale-color: #ffffff;
+    --text-decoration-color: #5f5f5f;
+    --highlight-mark-color: #8296cb3b;
+
+    --callout-note-color: #6f8fd1;
+    --callout-tip-color: #47976f;
+    --callout-important-color: #9776cd;
+    --callout-warning-color: #ad7a52;
+    --callout-caution-color: #d06161;
+  }
+
+  /* typography */
+  body {
+    /* --main-font: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; */
+    --main-font: 'Nunito', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --heading-font: 'Quicksand', 'Lora', 'Bitter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --code-font: 'Cascadia Code', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    --homepage-max-width: 768px;
+    --main-max-width: 768px;
+    --avatar-size: 75px;
+    --font-size: 16px;
+    --line-height: 1.75;
+    --img-border-radius: 0px;
+    --detail-border-radius: 11px;
+    --dark-mode-img-brightness: 0.75;
+    --dark-mode-chart-brightness: 0.75;
+    --inline-code-border-radius: 2px;
+    --inline-code-bg-color: var(--primary-decoration-color);
+    --block-code-border-radius: 0px;
+    --block-code-border-color: var(--primary-color);
+    --detail-border-color: var(--primary-color);
+  }
+
+
+  #name,
+  #id,
+  #left,
+  a.post,
+  a.back-link,
+  a.tag,
+  a.category,
+  .title {
+    font-family: var(--heading-font);
+  }
+
+  span.date {
+    font-family: var(--code-font);
+    color: var(--text-pale-color);
+  }
+
+  .gif-wrapper {
+    text-align: center;
+    margin: 1.5rem 0;
+  }
+
+  .gif-wrapper .intro-gif {
+    max-width: 96%;
+    height: auto;
+    border-radius: 8px;
+  }
+
+  .verified-icon {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 3px;
+    vertical-align: middle;
+  }
+
+  .verified-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .top-nav {
+    width: 100%;
+    padding-bottom: 1em;
+    border-bottom: 1px solid var(--border-color);
+    background: rgba(var(--background-rgb), 0.85);
+    backdrop-filter: blur(8px);
+    border-radius: var(--detail-border-radius);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .top-nav nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+  }
+
+  .nav-left,
+  .nav-center,
+  .nav-right {
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-center {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-top: 1em;
+  }
+
+  .menu-wrapper {
+    position: relative;
+    margin-top: 1.5em;
+  }
+
+  .menu-trigger {
+    font-size: 1.5em;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-color);
+  }
+
+  .menu-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+
+    background: var(--bg-color);
+    font-family: var(--heading-font);
+    border: 1px solid var(--primary-pale-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    min-width: 85px;
+    padding: 0.25em 0;
+    z-index: 2000;
+
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .menu-wrapper.active .menu-dropdown {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+
+  .menu-dropdown a {
+    display: block;
+    padding: 0.6em 1em;
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 0.95em;
+    margin: auto;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  #theme-toggle:hover,
+  #rain-toggle:hover {
+    cursor: pointer;
+  }
+
+  .foot-quote,
+  .section-title {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    text-align: center;
+    display: block;
+    margin-top: 2em;
+  }
+
+  .layout-list .post {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+  }
+
+  .post>span:first-child {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+
+  .post>.date {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .year-heading {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    font-size: 1.5em;
+    font-weight: bold;
+    font-family: var(--heading-font);
+  }
+
+  /* term-caret  */
+  #id.term-caret {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    position: relative;
+    white-space: nowrap;
+  }
+
+  #id.term-caret::after {
+    content: "_";
+
+    margin-left: 4px;
+    animation: blink 1s steps(1, end) infinite;
+    opacity: 1;
+    color: currentColor;
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #id.term-caret::after {
+      animation: none;
+      opacity: 1;
+    }
+  }
+
+  /* typewriter */
+  #id.typewriter {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    white-space: nowrap;
+    border-right: 1ch solid currentColor;
+    /* caret */
+    /* caret blink */
+    animation: caret-blink 1s steps(1, end) infinite;
+  }
+
+  @keyframes caret-blink {
+    50% {
+      border-right-color: transparent;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #id.typewriter {
+      animation: none;
+      border-right-color: currentColor;
+    }
+  }
+
+  /* glitch effect  */
+  #id.glitch {
+    position: relative;
+    display: inline-block;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  #id.glitch::before,
+  #id.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    clip-path: inset(0 0 0 0);
+    opacity: .85;
+  }
+
+  #id.glitch::before {
+    transform: translate(0, 0);
+    mix-blend-mode: screen;
+    text-shadow: 1px 0 0 #f00;
+    /* viền đỏ */
+    animation: glitch-1 2s infinite linear alternate-reverse;
+  }
+
+  #id.glitch::after {
+    transform: translate(0, 0);
+    mix-blend-mode: screen;
+    text-shadow: -1px 0 0 #0ff;
+    /* viền cyan */
+    animation: glitch-2 2.2s infinite linear alternate-reverse;
+  }
+
+  @keyframes glitch-1 {
+    0% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(0, 0);
+    }
+
+    20% {
+      clip-path: inset(10% 0 60% 0);
+      transform: translate(-1px, -1px);
+    }
+
+    40% {
+      clip-path: inset(40% 0 30% 0);
+      transform: translate(1px, 1px);
+    }
+
+    60% {
+      clip-path: inset(20% 0 55% 0);
+      transform: translate(-1px, 0);
+    }
+
+    80% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 1px);
+    }
+
+    100% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(0, 0);
+    }
+  }
+
+  @keyframes glitch-2 {
+    0% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 0);
+    }
+
+    20% {
+      clip-path: inset(40% 0 30% 0);
+      transform: translate(1px, 0);
+    }
+
+    40% {
+      clip-path: inset(10% 0 60% 0);
+      transform: translate(0, -1px);
+    }
+
+    60% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(-1px, 1px);
+    }
+
+    80% {
+      clip-path: inset(20% 0 55% 0);
+      transform: translate(1px, 0);
+    }
+
+    100% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+
+    #id.glitch::before,
+    #id.glitch::after {
+      animation: none;
+    }
+  }
+</style>
+  <link rel="stylesheet" href="https://wen.is-a.dev/main.css">
+  
+
+<link id="hl" rel="stylesheet" type="text/css" href="/hl-light.css" />
+
+
+
+  
+</head>
+
+<body class="post">
+
+  
+  <script>
+    const theme = sessionStorage.getItem('theme');
+    const match = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if ((theme && theme === 'dark') || (!theme && match)) {
+      document.body.classList.add('dark');
+      const hl = document.querySelector('link#hl');
+      if (hl) hl.href = 'https://wen.is-a.dev/hl-dark.css';
+    }
+  </script>
+  
+
+  
+<div id="wrapper">
+  <div id="blank"></div>
+  <aside>
+    
+    
+    
+    <button id="back-to-top" aria-label="back to top">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-up"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+
+    </button>
+    
+  </aside>
+  <main>
+    
+<header class="top-nav">
+  <nav>
+    <!-- Left: Back -->
+    <div class="nav-left">
+      <a href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts" class="back-link">← Back</a>
+    </div>
+
+    <!-- Center: Avatar -->
+    <div class="nav-center">
+      
+      <a href="/">
+        <img src="https://wen.is-a.dev/img/qwe.jpg" alt="avatar" class="avatar">
+      </a>
+      
+    </div>
+
+    <!-- Right: Menu dropdown -->
+    <div class="nav-right">
+
+      <div class="menu-wrapper">
+
+        <button class="menu-trigger" aria-label="menu">
+          &#9776;
+        </button>
+        <div class="menu-dropdown">
+          <a href="https://wen.is-a.dev/posts">POSTS</a>
+          <a href="https://wen.is-a.dev/about">ABOUT</a>
+          <a href="https://wen.is-a.dev/contact">CONTACT</a>
+          
+          
+          
+          
+          
+
+          <a id="theme-toggle" aria-label="theme switch">
+            <span class="moon-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill="currentColor"></path></svg>
+</span>
+            <span class="sun-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z" fill="currentColor"></path></svg>
+</span>
+          </a>
+
+          
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const trigger = document.querySelector(".menu-trigger");
+    const wrapper = document.querySelector(".menu-wrapper");
+
+    if (trigger && wrapper) {
+      trigger.addEventListener("click", () => {
+        wrapper.classList.toggle("active");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!wrapper.contains(e.target)) {
+          wrapper.classList.remove("active");
+        }
+      });
+    }
+  });
+
+</script>
+
+
+    <div>
+      
+      
+      
+      
+      <div id="copy-cfg" style="display: none;" data-copy-icon="&lt;svg xmlns=&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2000&#x2F;svg&quot; viewBox=&quot;0 0 24 24&quot; width=&quot;18&quot; height=&quot;18&quot;&gt;&lt;path d=&quot;M6.9998 6V3C6.9998 2.44772 7.44752 2 7.9998 2H19.9998C20.5521 2 20.9998 2.44772 20.9998 3V17C20.9998 17.5523 20.5521 18 19.9998 18H16.9998V20.9991C16.9998 21.5519 16.5499 22 15.993 22H4.00666C3.45059 22 3 21.5554 3 20.9991L3.0026 7.00087C3.0027 6.44811 3.45264 6 4.00942 6H6.9998ZM5.00242 8L5.00019 20H14.9998V8H5.00242ZM8.9998 6H16.9998V16H18.9998V4H8.9998V6Z&quot; fill=&quot;currentColor&quot;&gt;&lt;&#x2F;path&gt;&lt;&#x2F;svg&gt;
+" data-check-icon="&lt;svg xmlns=&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2000&#x2F;svg&quot; viewBox=&quot;0 0 24 24&quot; width=&quot;18&quot; height=&quot;18&quot;&gt;&lt;path d=&quot;M10.0007 15.1709L19.1931 5.97852L20.6073 7.39273L10.0007 17.9993L3.63672 11.6354L5.05093 10.2212L10.0007 15.1709Z&quot; fill=&quot;currentColor&quot;&gt;&lt;&#x2F;path&gt;&lt;&#x2F;svg&gt;
+">
+      </div>
+      
+      <article class="prose">
+        <h1 class="title">User Mode vs Kernel Mode – Cuộc chiến quyền lực trong Windows</h1>
+        <div id="post-info">
+          <div id="date">
+            <span id="publish">Apr 12, 2025</span>
+            </div>
+
+          
+        </div>
+
+        
+        
+
+        
+
+        <p>Chào mừng các bạn đến với hành trình khám phá bên trong "bộ não" của Windows - nơi mà các bit và byte nhảy múa trong một vũ điệu phức tạp giữa User Mode và Kernel Mode. Nếu bạn từng tự hỏi tại sao máy tính không crash mỗi khi bạn mở Paint (well, hầu hết thời gian), thì bài viết này sẽ giải đáp thắc mắc đó.</p>
+<h2 id="mo-dau-chuyen-gi-xay-ra-khi-ban-click-chuot">Mở Đầu: Chuyện Gì Xảy Ra Khi Bạn Click Chuột?<a class="zola-anchor" href="#mo-dau-chuyen-gi-xay-ra-khi-ban-click-chuot" aria-label="Anchor link for: mo-dau-chuyen-gi-xay-ra-khi-ban-click-chuot" style="visibility: hidden;"></a></h2>
+<p>Tưởng tượng Windows như một tòa nhà chọc trời với hệ thống an ninh nghiêm ngặt. Tầng dưới là "restricted area" chỉ dành cho nhân viên cấp cao (Kernel Mode), còn tầng trên là nơi khách hàng tự do hoạt động (User Mode). Giữa hai tầng này có một hệ thống thang máy và cầu thang bí mật (System Calls) để di chuyển thông tin.</p>
+<h2 id="user-mode-vuong-quoc-cua-ung-dung">User Mode: Vương Quốc Của Ứng Dụng<a class="zola-anchor" href="#user-mode-vuong-quoc-cua-ung-dung" aria-label="Anchor link for: user-mode-vuong-quoc-cua-ung-dung" style="visibility: hidden;"></a></h2>
+<h3 id="dinh-nghia-va-dac-diem">Định Nghĩa và Đặc Điểm<a class="zola-anchor" href="#dinh-nghia-va-dac-diem" aria-label="Anchor link for: dinh-nghia-va-dac-diem" style="visibility: hidden;"></a></h3>
+<p>User Mode là nơi các ứng dụng của bạn "sống" - từ trình duyệt web đến game AAA đắt tiền mà bạn chỉ chơi 10 phút rồi uninstall. Đây là môi trường được cách ly an toàn, nơi mà code có thể chạy mà không làm sập cả hệ thống.</p>
+<p><strong>Đặc điểm chính của User Mode:</strong></p>
+<ul>
+<li><strong>Restricted Access</strong>: Ứng dụng chỉ có thể truy cập virtual memory của chính nó</li>
+<li><strong>No Direct Hardware Access</strong>: Muốn nói chuyện với hardware? Xin lỗi, phải xin phép Kernel trước</li>
+<li><strong>Protected Environment</strong>: Crash của một ứng dụng không làm sập toàn hệ thống</li>
+<li><strong>Ring 3 Privilege Level</strong>: Ở mức thấp nhất trong hệ thống phân quyền x86</li>
+</ul>
+<h3 id="memory-layout-trong-user-mode">Memory Layout trong User Mode<a class="zola-anchor" href="#memory-layout-trong-user-mode" aria-label="Anchor link for: memory-layout-trong-user-mode" style="visibility: hidden;"></a></h3>
+<p>Mỗi process trong User Mode có không gian địa chỉ ảo riêng biệt. Trên Windows x64, mỗi process có thể sử dụng đến 128TB virtual memory (lý thuyết). Cấu trúc thường gồm:</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">0x00000000</span></span><span class="z-meta z-function-call z-arguments z-shell"><span class="z-meta z-group z-expansion z-command z-backticks z-shell"><span class="z-punctuation z-section z-group z-begin z-shell">`</span><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">00000000</span></span><span class="z-meta z-function-call z-arguments z-shell"> - 0x00007FFF</span><span class="z-punctuation z-section z-group z-end z-shell">`</span></span>FFFFFFFF: User Mode Virtual Address Space</span>
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">0x00008000</span></span><span class="z-meta z-function-call z-arguments z-shell"><span class="z-meta z-group z-expansion z-command z-backticks z-shell"><span class="z-punctuation z-section z-group z-begin z-shell">`</span><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">00000000</span></span><span class="z-meta z-function-call z-arguments z-shell"> - 0xFFFFFFFF</span><span class="z-punctuation z-section z-group z-end z-shell">`</span></span>FFFFFFFF: Kernel Mode Virtual Address Space</span>
+</span></code></pre>
+<h3 id="subsystems-va-api-trong-user-mode">Subsystems và API trong User Mode<a class="zola-anchor" href="#subsystems-va-api-trong-user-mode" aria-label="Anchor link for: subsystems-va-api-trong-user-mode" style="visibility: hidden;"></a></h3>
+<p>Windows cung cấp nhiều subsystem để hỗ trợ các loại ứng dụng khác nhau:</p>
+<p><strong>Win32 Subsystem</strong>: Đây là "ngôi sao" chính, hỗ trợ hầu hết các ứng dụng Windows truyền thống. Nó bao gồm:</p>
+<ul>
+<li><strong>Windows API (Win32 API)</strong>: Hàng nghìn function để tương tác với hệ thống</li>
+<li><strong>GDI (Graphics Device Interface)</strong>: Vẽ vời trên màn hình</li>
+<li><strong>USER32</strong>: Quản lý cửa sổ, message loop</li>
+</ul>
+<p><strong>POSIX Subsystem</strong>: Một nỗ lực đáng khen ngợi (nhưng ít ai dùng) để hỗ trợ UNIX applications.</p>
+<h2 id="kernel-mode-trai-tim-cua-he-thong">Kernel Mode: Trái Tim Của Hệ Thống<a class="zola-anchor" href="#kernel-mode-trai-tim-cua-he-thong" aria-label="Anchor link for: kernel-mode-trai-tim-cua-he-thong" style="visibility: hidden;"></a></h2>
+<h3 id="quyen-luc-toi-cao">Quyền Lực Tối Cao<a class="zola-anchor" href="#quyen-luc-toi-cao" aria-label="Anchor link for: quyen-luc-toi-cao" style="visibility: hidden;"></a></h3>
+<p>Kernel Mode là nơi mà "quyền lực tối cao" được trao. Code chạy ở đây có thể:</p>
+<ul>
+<li>Truy cập trực tiếp hardware</li>
+<li>Thao tác với physical memory</li>
+<li>Thực thi các instruction đặc quyền</li>
+<li>Điều khiển interrupt và exception handling</li>
+</ul>
+<p>Tuy nhiên, với quyền lực lớn đến trách nhiệm lớn - một bug trong kernel mode có thể làm toàn hệ thống "lên bàn thờ" với màn hình xanh chết chóc (BSOD).</p>
+<h3 id="cac-thanh-phan-chinh">Các Thành Phần Chính<a class="zola-anchor" href="#cac-thanh-phan-chinh" aria-label="Anchor link for: cac-thanh-phan-chinh" style="visibility: hidden;"></a></h3>
+<p><strong>Windows Executive</strong>: Đây là "CEO" của kernel, quản lý các subsystem khác nhau:</p>
+<ul>
+<li><strong>Object Manager</strong>: Quản lý các kernel object (process, thread, file, registry key...)</li>
+<li><strong>Memory Manager</strong>: Điều phối virtual memory, paging, heap management</li>
+<li><strong>Process Manager</strong>: Tạo, terminate, và quản lý các process/thread</li>
+<li><strong>I/O Manager</strong>: Quản lý input/output operations</li>
+<li><strong>Security Reference Monitor</strong>: Kiểm soát access control</li>
+</ul>
+<p><strong>Windows Kernel</strong>: Lõi thực sự của hệ thống, xử lý:</p>
+<ul>
+<li>Thread scheduling và dispatching</li>
+<li>Interrupt và exception handling</li>
+<li>Synchronization primitives (mutex, semaphore, event...)</li>
+</ul>
+<p><strong>Hardware Abstraction Layer (HAL)</strong>: Lớp trừu tượng hóa giúp Windows chạy trên nhiều kiến trúc hardware khác nhau.</p>
+<h3 id="device-drivers-nhung-cau-noi-quan-trong">Device Drivers: Những Cầu Nối Quan Trọng<a class="zola-anchor" href="#device-drivers-nhung-cau-noi-quan-trong" aria-label="Anchor link for: device-drivers-nhung-cau-noi-quan-trong" style="visibility: hidden;"></a></h3>
+<p>Device drivers chạy trong kernel mode và đóng vai trò cầu nối giữa hệ điều hành và hardware. Chúng được chia thành nhiều loại:</p>
+<ul>
+<li><strong>Kernel-mode drivers</strong>: Chạy hoàn toàn trong kernel space</li>
+<li><strong>User-mode drivers</strong>: Chạy trong user space nhưng giao tiếp với kernel drivers</li>
+<li><strong>Miniport drivers</strong>: Drivers nhỏ gọn cho các thiết bị cụ thể</li>
+</ul>
+<h2 id="system-calls-cau-noi-giua-hai-the-gioi">System Calls: Cầu Nối Giữa Hai Thế Giới<a class="zola-anchor" href="#system-calls-cau-noi-giua-hai-the-gioi" aria-label="Anchor link for: system-calls-cau-noi-giua-hai-the-gioi" style="visibility: hidden;"></a></h2>
+<h3 id="co-che-hoat-dong">Cơ Chế Hoạt Động<a class="zola-anchor" href="#co-che-hoat-dong" aria-label="Anchor link for: co-che-hoat-dong" style="visibility: hidden;"></a></h3>
+<p>System call là cách duy nhất để User Mode code "nói chuyện" với Kernel Mode. Khi bạn gọi một API như <code>CreateFile()</code>, đây là quá trình diễn ra:</p>
+<ol>
+<li><strong>User Mode</strong>: Gọi Win32 API function</li>
+<li><strong>NTDLL.DLL</strong>: Chuyển đổi thành native system call</li>
+<li><strong>Transition</strong>: CPU chuyển từ Ring 3 sang Ring 0</li>
+<li><strong>Kernel Mode</strong>: Xử lý request</li>
+<li><strong>Return</strong>: Quay lại User Mode với kết quả</li>
+</ol>
+<h3 id="vi-du-minh-hoa">Ví Dụ Minh Họa<a class="zola-anchor" href="#vi-du-minh-hoa" aria-label="Anchor link for: vi-du-minh-hoa" style="visibility: hidden;"></a></h3>
+<pre data-lang="c" class="language-c z-code"><code class="language-c" data-lang="c"><span class="z-source z-c"><span class="z-comment z-line z-double-slash z-c"><span class="z-punctuation z-definition z-comment z-c">//</span> User Mode Code
+</span></span><span class="z-source z-c"><span class="z-support z-type z-windows z-c">HANDLE</span> hFile <span class="z-keyword z-operator z-assignment z-c">=</span> <span class="z-meta z-function-call z-c"><span class="z-variable z-function z-c">CreateFile</span><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-begin z-c">(</span></span></span><span class="z-meta z-function-call z-c"><span class="z-meta z-group z-c"><span class="z-string z-quoted z-double z-c"><span class="z-storage z-type z-string z-c">L</span><span class="z-punctuation z-definition z-string z-begin z-c">&quot;</span>test.txt<span class="z-punctuation z-definition z-string z-end z-c">&quot;</span></span><span class="z-punctuation z-separator z-c">,</span> GENERIC_READ<span class="z-punctuation z-separator z-c">,</span> <span class="z-constant z-numeric z-integer z-decimal z-c">0</span><span class="z-punctuation z-separator z-c">,</span> <span class="z-constant z-language z-c">NULL</span><span class="z-punctuation z-separator z-c">,</span> 
+</span></span></span><span class="z-source z-c"><span class="z-meta z-function-call z-c"><span class="z-meta z-group z-c">                         OPEN_EXISTING<span class="z-punctuation z-separator z-c">,</span> FILE_ATTRIBUTE_NORMAL<span class="z-punctuation z-separator z-c">,</span> <span class="z-constant z-language z-c">NULL</span></span></span><span class="z-meta z-function-call z-c"><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-end z-c">)</span></span></span><span class="z-punctuation z-terminator z-c">;</span>
+</span><span class="z-source z-c">
+</span><span class="z-source z-c"><span class="z-comment z-line z-double-slash z-c"><span class="z-punctuation z-definition z-comment z-c">//</span> Thực tế bên dưới:
+</span></span><span class="z-source z-c"><span class="z-comment z-line z-double-slash z-c"><span class="z-punctuation z-definition z-comment z-c">//</span> 1. CreateFile() → CreateFileW() trong kernel32.dll
+</span></span><span class="z-source z-c"><span class="z-comment z-line z-double-slash z-c"><span class="z-punctuation z-definition z-comment z-c">//</span> 2. → NtCreateFile() trong ntdll.dll
+</span></span><span class="z-source z-c"><span class="z-comment z-line z-double-slash z-c"><span class="z-punctuation z-definition z-comment z-c">//</span> 3. → System call interrupt
+</span></span><span class="z-source z-c"><span class="z-comment z-line z-double-slash z-c"><span class="z-punctuation z-definition z-comment z-c">//</span> 4. → Kernel mode NtCreateFile() trong ntoskrnl.exe
+</span></span></code></pre>
+<h2 id="windows-subsystems-da-dang-trong-thong-nhat">Windows Subsystems: Đa Dạng Trong Thống Nhất<a class="zola-anchor" href="#windows-subsystems-da-dang-trong-thong-nhat" aria-label="Anchor link for: windows-subsystems-da-dang-trong-thong-nhat" style="visibility: hidden;"></a></h2>
+<h3 id="win32-subsystem-csrss">Win32 Subsystem (CSRSS)<a class="zola-anchor" href="#win32-subsystem-csrss" aria-label="Anchor link for: win32-subsystem-csrss" style="visibility: hidden;"></a></h3>
+<p>Client/Server Runtime Subsystem (CSRSS) là subsystem quan trọng nhất, chịu trách nhiệm:</p>
+<ul>
+<li>Quản lý console windows</li>
+<li>Tạo và xóa processes/threads</li>
+<li>Quản lý shutdown process</li>
+<li>Một phần của user interface</li>
+</ul>
+<h3 id="windows-subsystem-for-linux-wsl">Windows Subsystem for Linux (WSL)<a class="zola-anchor" href="#windows-subsystem-for-linux-wsl" aria-label="Anchor link for: windows-subsystem-for-linux-wsl" style="visibility: hidden;"></a></h3>
+<p>Một trong những innovation thú vị nhất của Microsoft trong thời gian gần đây:</p>
+<p><strong>WSL 1</strong>: Translate Linux system calls thành Windows NT calls
+<strong>WSL 2</strong>: Chạy Linux kernel thật trong lightweight VM</p>
+<h3 id="uwp-universal-windows-platform">UWP (Universal Windows Platform)<a class="zola-anchor" href="#uwp-universal-windows-platform" aria-label="Anchor link for: uwp-universal-windows-platform" style="visibility: hidden;"></a></h3>
+<p>Subsystem mới hơn dành cho modern Windows applications:</p>
+<ul>
+<li>Sandboxed execution environment</li>
+<li>Declarative capabilities model</li>
+<li>Store-based distribution</li>
+</ul>
+<h2 id="security-bao-mat-trong-thiet-ke">Security: Bảo Mật Trong Thiết Kế<a class="zola-anchor" href="#security-bao-mat-trong-thiet-ke" aria-label="Anchor link for: security-bao-mat-trong-thiet-ke" style="visibility: hidden;"></a></h2>
+<h3 id="ring-based-security">Ring-based Security<a class="zola-anchor" href="#ring-based-security" aria-label="Anchor link for: ring-based-security" style="visibility: hidden;"></a></h3>
+<p>Windows sử dụng kiến trúc ring security của x86:</p>
+<ul>
+<li><strong>Ring 0</strong>: Kernel mode (highest privilege)</li>
+<li><strong>Ring 1-2</strong>: Không sử dụng trong Windows</li>
+<li><strong>Ring 3</strong>: User mode (lowest privilege)</li>
+</ul>
+<h3 id="address-space-layout-randomization-aslr">Address Space Layout Randomization (ASLR)<a class="zola-anchor" href="#address-space-layout-randomization-aslr" aria-label="Anchor link for: address-space-layout-randomization-aslr" style="visibility: hidden;"></a></h3>
+<p>Để chống lại các cuộc tấn công exploit, Windows randomize địa chỉ memory của các module:</p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Mỗi lần khởi động, DLL có thể load ở địa chỉ khác nhau</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">Base</span></span><span class="z-meta z-function-call z-arguments z-shell"> Address của kernel32.dll: 0x76A80000 (lần 1</span><span class="z-meta z-function-call z-shell"></span>)
+</span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">Base</span></span><span class="z-meta z-function-call z-arguments z-shell"> Address của kernel32.dll: 0x77B50000 (lần 2</span><span class="z-meta z-function-call z-shell"></span>)
+</span></code></pre>
+<h3 id="data-execution-prevention-dep">Data Execution Prevention (DEP)<a class="zola-anchor" href="#data-execution-prevention-dep" aria-label="Anchor link for: data-execution-prevention-dep" style="visibility: hidden;"></a></h3>
+<p>Ngăn chặn execute code trong data pages - một cơ chế quan trọng chống buffer overflow attacks.</p>
+<h2 id="performance-va-optimization">Performance và Optimization<a class="zola-anchor" href="#performance-va-optimization" aria-label="Anchor link for: performance-va-optimization" style="visibility: hidden;"></a></h2>
+<h3 id="context-switching-overhead">Context Switching Overhead<a class="zola-anchor" href="#context-switching-overhead" aria-label="Anchor link for: context-switching-overhead" style="visibility: hidden;"></a></h3>
+<p>Mỗi lần chuyển đổi giữa User Mode và Kernel Mode đều có overhead:</p>
+<ul>
+<li>Save/restore registers</li>
+<li>TLB flush (trên một số kiến trúc)</li>
+<li>Cache effects</li>
+</ul>
+<h3 id="batch-system-calls">Batch System Calls<a class="zola-anchor" href="#batch-system-calls" aria-label="Anchor link for: batch-system-calls" style="visibility: hidden;"></a></h3>
+<p>Để giảm overhead, Windows cung cấp các API cho phép batch multiple operations:</p>
+<pre data-lang="c" class="language-c z-code"><code class="language-c" data-lang="c"><span class="z-source z-c"><span class="z-comment z-line z-double-slash z-c"><span class="z-punctuation z-definition z-comment z-c">//</span> Thay vì gọi ReadFile() nhiều lần
+</span></span><span class="z-source z-c"><span class="z-meta z-function-call z-c"><span class="z-variable z-function z-c">ReadFileScatter</span><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-begin z-c">(</span></span></span><span class="z-meta z-function-call z-c"></span><span class="z-meta z-function-call z-c"><span class="z-meta z-group z-c"><span class="z-punctuation z-section z-group z-end z-c">)</span></span></span><span class="z-punctuation z-terminator z-c">;</span> <span class="z-comment z-line z-double-slash z-c"><span class="z-punctuation z-definition z-comment z-c">//</span> Đọc nhiều buffer cùng lúc
+</span></span></code></pre>
+<h2 id="debugging-va-troubleshooting">Debugging và Troubleshooting<a class="zola-anchor" href="#debugging-va-troubleshooting" aria-label="Anchor link for: debugging-va-troubleshooting" style="visibility: hidden;"></a></h2>
+<h3 id="tools-huu-ich">Tools Hữu Ích<a class="zola-anchor" href="#tools-huu-ich" aria-label="Anchor link for: tools-huu-ich" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>WinDbg</strong>: Debugger mạnh mẽ cho kernel debugging</li>
+<li><strong>Process Monitor</strong>: Monitor file system, registry, process activity</li>
+<li><strong>Performance Toolkit</strong>: Phân tích performance bottlenecks</li>
+<li><strong>Sysinternals Suite</strong>: Collection các tools system administration</li>
+</ul>
+<h3 id="common-issues">Common Issues<a class="zola-anchor" href="#common-issues" aria-label="Anchor link for: common-issues" style="visibility: hidden;"></a></h3>
+<p><strong>User Mode Crashes</strong>: Thường do access violation, stack overflow, heap corruption
+<strong>Kernel Mode Crashes</strong>: BSOD với các stop codes khác nhau (0x0000001E, 0x00000050...)</p>
+<h2 id="tuong-lai-nhung-thay-doi-dang-den">Tương Lai: Những Thay Đổi Đang Đến<a class="zola-anchor" href="#tuong-lai-nhung-thay-doi-dang-den" aria-label="Anchor link for: tuong-lai-nhung-thay-doi-dang-den" style="visibility: hidden;"></a></h2>
+<h3 id="kernel-control-flow-guard-kcfg">Kernel Control Flow Guard (kCFG)<a class="zola-anchor" href="#kernel-control-flow-guard-kcfg" aria-label="Anchor link for: kernel-control-flow-guard-kcfg" style="visibility: hidden;"></a></h3>
+<p>Bảo vệ kernel khỏi ROP/JOP attacks bằng cách kiểm soát control flow.</p>
+<h3 id="virtual-secure-mode-vsm">Virtual Secure Mode (VSM)<a class="zola-anchor" href="#virtual-secure-mode-vsm" aria-label="Anchor link for: virtual-secure-mode-vsm" style="visibility: hidden;"></a></h3>
+<p>Sử dụng hypervisor để tạo ra secure world tách biệt với normal world.</p>
+<h3 id="containerization">Containerization<a class="zola-anchor" href="#containerization" aria-label="Anchor link for: containerization" style="visibility: hidden;"></a></h3>
+<p>Windows containers đang phát triển để cạnh tranh với Linux containers:</p>
+<ul>
+<li><strong>Windows Server containers</strong>: Chia sẻ kernel</li>
+<li><strong>Hyper-V containers</strong>: Isolated kernel per container</li>
+</ul>
+<h2 id="ket-luan-ve-dep-trong-su-phuc-tap">Kết Luận: Vẻ Đẹp Trong Sự Phức Tạp<a class="zola-anchor" href="#ket-luan-ve-dep-trong-su-phuc-tap" aria-label="Anchor link for: ket-luan-ve-dep-trong-su-phuc-tap" style="visibility: hidden;"></a></h2>
+<p>Windows architecture với User Mode, Kernel Mode, và các subsystems là một kiệt tác kỹ thuật - phức tạp nhưng elegant, mạnh mẽ nhưng linh hoạt. Hiểu rõ cách chúng hoạt động không chỉ giúp bạn trở thành developer giỏi hơn mà còn khiến bạn trân trọng những gì xảy ra mỗi khi bạn double-click một icon.</p>
+<p>Như một wise man đã nói: "The best way to understand a system is to try to break it." Vậy nên, hãy tiếp tục khám phá, experiment, và đừng ngại "làm hỏng" vài cái VM trong quá trình học tập!</p>
+<h3 id="tai-lieu-tham-khao">Tài Liệu Tham Khảo<a class="zola-anchor" href="#tai-lieu-tham-khao" aria-label="Anchor link for: tai-lieu-tham-khao" style="visibility: hidden;"></a></h3>
+<ul>
+<li>Windows Internals (Mark Russinovich &amp; David Solomon)</li>
+<li>Windows System Programming (Johnson M. Hart)</li>
+<li>Microsoft Documentation</li>
+<li>Intel Software Developer Manual</li>
+<li>Windows Driver Kit (WDK) Documentation</li>
+</ul>
+<hr />
+
+      </article>
+
+      
+      
+
+      
+      
+    </div>
+
+    
+
+
+<footer>
+  <div class="left">
+    <div class="copyright">
+      © 2025 <a href="https:&#x2F;&#x2F;wen.is-a.dev">Wen</a>
+      
+    </div>
+  </div>
+
+  <div class="right">
+    
+    
+    
+    
+
+    <!-- 
+    
+    
+    <button id="theme-toggle" aria-label="theme switch">
+      <span class="moon-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill="currentColor"></path></svg>
+</span>
+      <span class="sun-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z" fill="currentColor"></path></svg>
+</span>
+    </button>
+     -->
+  </div>
+</footer>
+
+
+
+
+  </main>
+</div>
+
+  
+<script src="/js/lightense.min.js"></script>
+
+
+
+  <script src="https://wen.is-a.dev/js/main.js"></script>
+</body>
+
+</html>

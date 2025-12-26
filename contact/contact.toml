@@ -1,0 +1,21 @@
+[[collection]]
+type = "box"
+title = "GitHub"
+subtitle = ""
+img = "https://img.icons8.com/?size=100&id=80462&format=png&color=000000"
+link = "https://github.com/wen0x0"
+
+[[collection]]
+type = "box"
+title = "LinkedIn"
+subtitle = ""
+img = "https://img.icons8.com/?size=100&id=60ZV_wYC0BM2&format=png&color=000000"
+link = "https://www.linkedin.com/in/wenvn"
+
+[[collection]]
+type = "box"
+title = "Gmail"
+subtitle = ""
+img = "https://img.icons8.com/?size=100&id=td499GRWwrWC&format=png&color=000000"
+link = "mailto:wen.cudem@gmail.com"
+

