@@ -1,0 +1,26 @@
+[[collection]]
+type = "box"
+title = "KPOP"
+subtitle = "High-energy tracks with polished sound and emotion."
+link = "https://youtube.com/playlist?list=PLMFWV1p2XWixBpQxXgaUJYsjLpJ7sYB2C&si=WXF70wUutHfB6Pbp"
+
+
+[[collection]]
+type = "box"
+title = "JPOP"
+subtitle = "Nostalgic melodies and stories hidden in sound."
+link = "https://example.com"
+
+
+[[collection]]
+type = "box"
+title = "US-UK"
+subtitle = "Timeless songs across genres and generations."
+link = "https://example.com"
+
+
+[[collection]]
+type = "box"
+title = "VPOP"
+subtitle = "Familiar voices, familiar feelings."
+link = "https://example.com"

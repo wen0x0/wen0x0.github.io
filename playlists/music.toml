@@ -1,0 +1,49 @@
+[[collection]]
+type = "card"
+title = "Title"
+# subtitle = "Subtitle" # optional
+# date = "Date" # optional
+link = "https://example.com" # optional
+# icon = "https://example.com/image.png" # optional
+content = "Content"
+# tags = ["tag1", "tag2"] # optional
+# featured = false  # optional
+
+[[collection]]
+type = "card_simple"
+title = "Title"
+# date = "Date" # optional
+link = "https://example.com" # optional
+# icon = "https://example.com/image.png" # optional
+content = "Content"
+# featured = false  # optional
+
+[[collection]]
+type = "entry"
+title = "Title" # optional
+subtitle = "Subtitle" # optional
+link = "https://example.com" # optional
+# icon = "https://example.com/image.png" # optional
+
+[[collection]]
+type = "box"
+title = "Title"
+subtitle = "Subtitle" # optional
+link = "https://example.com" # optional
+# img = "https://example.com/image.png" # optional
+
+[[collection]]
+type = "art"
+title = "Title"
+subtitle = "Subtitle" # optional
+link = "https://example.com" # optional
+img = "https://example.com/image.png"
+content = "Content" # optional
+footer = "Footer" # optional
+
+[[collection]]
+type = "art_simple"
+title = "Title"
+subtitle = "Subtitle" # optional
+link = "https://example.com" # optional
+img = "https://example.com/image.png"

@@ -1,0 +1,29 @@
+[[collection]]
+type = "entry"
+title = "KPOP"
+subtitle = "Clean production, strong emotions, and perfect late-night vibes."
+link = "https://example.com"
+
+[[collection]]
+type = "entry"
+title = "JPOP"
+subtitle = "Melodies that feel nostalgic, even the first time you hear them."
+link = "https://example.com"
+
+[[collection]]
+type = "entry"
+title = "US-UK"
+subtitle = "Songs I grew up with, and the ones that still stay."
+link = "https://example.com"
+
+[[collection]]
+type = "entry"
+title = "VPOP"
+subtitle = "Familiar words, familiar feelings."
+link = "https://example.com"
+
+[[collection]]
+type = "entry"
+title = "Indie"
+subtitle = "For quiet nights, long thoughts, and headphones on."
+link = "https://example.com"

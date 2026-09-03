@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  
+
+
+
+<meta name="description" content="HTTP Methods – Các phương thức giao tiếp giữa Client và Server">
+
+  <title>HTTP Methods – Các phương thức giao tiếp giữa Client và Server</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="https://wen.is-a.dev/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://wen.is-a.dev/img/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://wen.is-a.dev/img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Ancizar+Sans:ital,wght@0,100..1000;1,100..1000&family=Bitter:ital,wght@0,100..900;1,100..900&family=Indie+Flower&family=Lora:ital,wght@0,400..700;1,400..700&family=Marcellus&display=swap"
+    rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500..700&display=swap" rel="stylesheet">
+  
+  <style>
+  /* light mode colors */
+  body {
+    /* --primary-color: #5871a2; */
+    --primary-color: #005e05;
+    --primary-pale-color: #5871a233;
+    --primary-decoration-color: #5871a210;
+    --bg-color: #f0f9ff;
+    /* --text-color: #2f3030; */
+    --text-color: #000000;
+    /* --text-pale-color: #767676; */
+    --text-pale-color: #000000;
+    --text-decoration-color: #a9a9a9;
+    --highlight-mark-color: #5f75b020;
+
+    --callout-note-color: #5871a2;
+    --callout-tip-color: #268556;
+    --callout-important-color: #885fc9;
+    --callout-warning-color: #ab6632;
+    --callout-caution-color: #c64e4e;
+  }
+
+  /* dark mode colors */
+  body.dark {
+    /* --primary-color: #6f8fd1; */
+    --primary-color: #ecf16b;
+    --primary-pale-color: #6f8fd166;
+    --primary-decoration-color: #6f8fd112;
+    /* --bg-color: #1c1c1c; */
+    /* --bg-color: #002727; */
+    /* --bg-color: #002333; */
+    --bg-color: #01242E;
+    /* --text-color: #c1c1c1; */
+    --text-color: #ffffff;
+    /* --text-pale-color: #848484; */
+    --text-pale-color: #ffffff;
+    --text-decoration-color: #5f5f5f;
+    --highlight-mark-color: #8296cb3b;
+
+    --callout-note-color: #6f8fd1;
+    --callout-tip-color: #47976f;
+    --callout-important-color: #9776cd;
+    --callout-warning-color: #ad7a52;
+    --callout-caution-color: #d06161;
+  }
+
+  /* typography */
+  body {
+    /* --main-font: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; */
+    --main-font: Inter, Nunito, ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --heading-font: 'Quicksand', 'Lora', 'Bitter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --code-font: 'Cascadia Code', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    --homepage-max-width: 768px;
+    --main-max-width: 768px;
+    --avatar-size: 75px;
+    --font-size: 16px;
+    --line-height: 1.75;
+    --img-border-radius: 0px;
+    --detail-border-radius: 11px;
+    --dark-mode-img-brightness: 0.75;
+    --dark-mode-chart-brightness: 0.75;
+    --inline-code-border-radius: 2px;
+    --inline-code-bg-color: var(--primary-decoration-color);
+    --block-code-border-radius: 0px;
+    --block-code-border-color: var(--primary-color);
+    --detail-border-color: var(--primary-color);
+  }
+
+
+  #name,
+  #id,
+  #left,
+  a.post,
+  a.back-link,
+  a.tag,
+  a.category,
+  .title {
+    font-family: var(--heading-font);
+  }
+
+  span.date {
+    font-family: var(--code-font);
+    color: var(--text-pale-color);
+  }
+
+  .gif-wrapper {
+    text-align: center;
+    margin: 1.5rem 0;
+  }
+
+  .gif-wrapper .intro-gif {
+    max-width: 96%;
+    height: auto;
+    border-radius: 8px;
+  }
+
+  .verified-icon {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 3px;
+    vertical-align: middle;
+  }
+
+  .verified-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .top-nav {
+    width: 100%;
+    padding-bottom: 1em;
+    border-bottom: 1px solid var(--border-color);
+    background: rgba(var(--background-rgb), 0.85);
+    backdrop-filter: blur(8px);
+    border-radius: var(--detail-border-radius);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    margin-top: 1em;
+  }
+
+  .top-nav nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+  }
+
+  .nav-left,
+  .nav-center,
+  .nav-right {
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-center {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-top: 1em;
+  }
+
+  .menu-wrapper {
+    position: relative;
+    margin-top: 1.5em;
+  }
+
+  .menu-trigger {
+    font-size: 1.5em;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-color);
+  }
+
+  .menu-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+
+    background: var(--bg-color);
+    font-family: var(--heading-font);
+    border: 1px solid var(--primary-pale-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    min-width: 85px;
+    padding: 0.25em 0;
+    z-index: 2000;
+
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .menu-wrapper.active .menu-dropdown {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+
+  .menu-dropdown a {
+    display: block;
+    padding: 0.6em 1em;
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 0.95em;
+    margin: auto;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  #theme-toggle:hover,
+  #rain-toggle:hover {
+    cursor: pointer;
+  }
+
+  .foot-quote,
+  .section-title {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    text-align: center;
+    display: block;
+    margin-top: 2em;
+  }
+
+  .layout-list .post {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+  }
+
+  .post>span:first-child {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+
+  .post>.date {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .year-heading {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    font-size: 1.5em;
+    font-weight: bold;
+    font-family: var(--heading-font);
+  }
+
+  /* term-caret  */
+  #id.term-caret {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    position: relative;
+    white-space: nowrap;
+  }
+
+  #id.term-caret::after {
+    content: "_";
+
+    margin-left: 4px;
+    animation: blink 1s steps(1, end) infinite;
+    opacity: 1;
+    color: currentColor;
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #id.term-caret::after {
+      animation: none;
+      opacity: 1;
+    }
+  }
+
+  /* typewriter */
+  #id.typewriter {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    white-space: nowrap;
+    border-right: 1ch solid currentColor;
+    /* caret */
+    /* caret blink */
+    animation: caret-blink 1s steps(1, end) infinite;
+  }
+
+  @keyframes caret-blink {
+    50% {
+      border-right-color: transparent;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #id.typewriter {
+      animation: none;
+      border-right-color: currentColor;
+    }
+  }
+
+  /* glitch effect  */
+  #id.glitch {
+    position: relative;
+    display: inline-block;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  #id.glitch::before,
+  #id.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    clip-path: inset(0 0 0 0);
+    opacity: .85;
+  }
+
+  #id.glitch::before {
+    transform: translate(0, 0);
+    mix-blend-mode: screen;
+    text-shadow: 1px 0 0 #f00;
+    /* viền đỏ */
+    animation: glitch-1 2s infinite linear alternate-reverse;
+  }
+
+  #id.glitch::after {
+    transform: translate(0, 0);
+    mix-blend-mode: screen;
+    text-shadow: -1px 0 0 #0ff;
+    /* viền cyan */
+    animation: glitch-2 2.2s infinite linear alternate-reverse;
+  }
+
+  @keyframes glitch-1 {
+    0% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(0, 0);
+    }
+
+    20% {
+      clip-path: inset(10% 0 60% 0);
+      transform: translate(-1px, -1px);
+    }
+
+    40% {
+      clip-path: inset(40% 0 30% 0);
+      transform: translate(1px, 1px);
+    }
+
+    60% {
+      clip-path: inset(20% 0 55% 0);
+      transform: translate(-1px, 0);
+    }
+
+    80% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 1px);
+    }
+
+    100% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(0, 0);
+    }
+  }
+
+  @keyframes glitch-2 {
+    0% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 0);
+    }
+
+    20% {
+      clip-path: inset(40% 0 30% 0);
+      transform: translate(1px, 0);
+    }
+
+    40% {
+      clip-path: inset(10% 0 60% 0);
+      transform: translate(0, -1px);
+    }
+
+    60% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(-1px, 1px);
+    }
+
+    80% {
+      clip-path: inset(20% 0 55% 0);
+      transform: translate(1px, 0);
+    }
+
+    100% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+
+    #id.glitch::before,
+    #id.glitch::after {
+      animation: none;
+    }
+  }
+</style>
+  <link rel="stylesheet" href="https://wen.is-a.dev/main.css">
+  
+
+<link id="hl" rel="stylesheet" type="text/css" href="/hl-light.css" />
+
+
+
+  
+</head>
+
+<body class="post">
+
+  
+  <script>
+    const theme = sessionStorage.getItem('theme');
+    const match = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if ((theme && theme === 'dark') || (!theme && match)) {
+      document.body.classList.add('dark');
+      const hl = document.querySelector('link#hl');
+      if (hl) hl.href = 'https://wen.is-a.dev/hl-dark.css';
+    }
+  </script>
+  
+
+  
+<div id="wrapper">
+  <div id="blank"></div>
+  <aside>
+    
+    
+    
+    <button id="back-to-top" aria-label="back to top">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-up"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+
+    </button>
+    
+  </aside>
+  <main>
+    
+<header class="top-nav">
+  <nav>
+    <!-- Left: Back -->
+    <div class="nav-left">
+      <a href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts" class="back-link">← Back</a>
+    </div>
+
+    <!-- Center: Avatar -->
+    <div class="nav-center">
+      
+      <a href="/">
+        <img src="https://wen.is-a.dev/img/qwe.jpg" alt="avatar" class="avatar">
+      </a>
+      
+    </div>
+
+    <!-- Right: Menu dropdown -->
+    <div class="nav-right">
+
+      <div class="menu-wrapper">
+
+        <button class="menu-trigger" aria-label="menu">
+          &#9776;
+        </button>
+        <div class="menu-dropdown">
+          <a href="https://wen.is-a.dev/posts">POSTS</a>
+          <a href="https://wen.is-a.dev/about">ABOUT</a>
+          <a href="https://wen.is-a.dev/contact">CONTACT</a>
+          
+          
+          
+          
+          
+
+          <a id="theme-toggle" aria-label="theme switch">
+            <span class="moon-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill="currentColor"></path></svg>
+</span>
+            <span class="sun-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z" fill="currentColor"></path></svg>
+</span>
+          </a>
+
+          
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const trigger = document.querySelector(".menu-trigger");
+    const wrapper = document.querySelector(".menu-wrapper");
+
+    if (trigger && wrapper) {
+      trigger.addEventListener("click", () => {
+        wrapper.classList.toggle("active");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!wrapper.contains(e.target)) {
+          wrapper.classList.remove("active");
+        }
+      });
+    }
+  });
+
+</script>
+
+
+    <div>
+      
+      
+      
+      
+      <div id="copy-cfg" style="display: none;" data-copy-icon="&lt;svg xmlns=&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2000&#x2F;svg&quot; viewBox=&quot;0 0 24 24&quot; width=&quot;18&quot; height=&quot;18&quot;&gt;&lt;path d=&quot;M6.9998 6V3C6.9998 2.44772 7.44752 2 7.9998 2H19.9998C20.5521 2 20.9998 2.44772 20.9998 3V17C20.9998 17.5523 20.5521 18 19.9998 18H16.9998V20.9991C16.9998 21.5519 16.5499 22 15.993 22H4.00666C3.45059 22 3 21.5554 3 20.9991L3.0026 7.00087C3.0027 6.44811 3.45264 6 4.00942 6H6.9998ZM5.00242 8L5.00019 20H14.9998V8H5.00242ZM8.9998 6H16.9998V16H18.9998V4H8.9998V6Z&quot; fill=&quot;currentColor&quot;&gt;&lt;&#x2F;path&gt;&lt;&#x2F;svg&gt;
+" data-check-icon="&lt;svg xmlns=&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2000&#x2F;svg&quot; viewBox=&quot;0 0 24 24&quot; width=&quot;18&quot; height=&quot;18&quot;&gt;&lt;path d=&quot;M10.0007 15.1709L19.1931 5.97852L20.6073 7.39273L10.0007 17.9993L3.63672 11.6354L5.05093 10.2212L10.0007 15.1709Z&quot; fill=&quot;currentColor&quot;&gt;&lt;&#x2F;path&gt;&lt;&#x2F;svg&gt;
+">
+      </div>
+      
+      <article class="prose">
+        <h1 class="title">HTTP Methods – Các phương thức giao tiếp giữa Client và Server</h1>
+        <div id="post-info">
+          <div id="date">
+            <span id="publish">Jan 02, 2024</span>
+            </div>
+
+          
+        </div>
+
+        
+        
+
+        
+
+        <p>HTTP (HyperText Transfer Protocol) là giao thức nền tảng của World Wide Web, định nghĩa cách thức client (trình duyệt web, ứng dụng mobile) và server (máy chủ web) giao tiếp với nhau. Trong bài viết này, chúng ta sẽ tìm hiểu chi tiết về các HTTP Methods - những "động từ" mô tả hành động mà client muốn thực hiện với tài nguyên trên server.</p>
+<h2 id="http-method-la-gi">HTTP Method là gì?<a class="zola-anchor" href="#http-method-la-gi" aria-label="Anchor link for: http-method-la-gi" style="visibility: hidden;"></a></h2>
+<p>HTTP Method (hay còn gọi là HTTP Verb) là một phần quan trọng trong HTTP request, cho biết loại hành động mà client muốn thực hiện với tài nguyên được chỉ định. Mỗi method có ý nghĩa và cách hoạt động riêng biệt, giúp tạo ra một hệ thống giao tiếp chuẩn và dễ hiểu.</p>
+<p>Khi bạn nhập một URL vào trình duyệt và nhấn Enter, trình duyệt sẽ gửi một HTTP request với method GET đến server. Khi bạn điền form đăng ký tài khoản và nhấn "Đăng ký", trình duyệt thường gửi POST request.</p>
+<h2 id="cau-truc-cua-http-request">Cấu trúc của HTTP Request<a class="zola-anchor" href="#cau-truc-cua-http-request" aria-label="Anchor link for: cau-truc-cua-http-request" style="visibility: hidden;"></a></h2>
+<p>Trước khi đi sâu vào các methods, hãy xem cấu trúc cơ bản của một HTTP request:</p>
+<pre class="giallo z-code"><code data-lang="plain"><span class="giallo-l"><span>GET /api/users/123 HTTP/1.1</span></span>
+<span class="giallo-l"><span>Host: example.com</span></span>
+<span class="giallo-l"><span>User-Agent: Mozilla/5.0</span></span>
+<span class="giallo-l"><span>Accept: application/json</span></span>
+<span class="giallo-l"><span>Authorization: Bearer token123</span></span></code></pre>
+<p>Trong đó:</p>
+<ul>
+<li><strong>GET</strong> là HTTP method</li>
+<li><strong>/api/users/123</strong> là đường dẫn đến tài nguyên</li>
+<li><strong>HTTP/1.1</strong> là phiên bản HTTP</li>
+<li>Các dòng tiếp theo là headers chứa thông tin bổ sung</li>
+</ul>
+<h2 id="cac-http-methods-chinh">Các HTTP Methods chính<a class="zola-anchor" href="#cac-http-methods-chinh" aria-label="Anchor link for: cac-http-methods-chinh" style="visibility: hidden;"></a></h2>
+<h3 id="1-get-lay-du-lieu">1. GET - Lấy dữ liệu<a class="zola-anchor" href="#1-get-lay-du-lieu" aria-label="Anchor link for: 1-get-lay-du-lieu" style="visibility: hidden;"></a></h3>
+<p><strong>Mục đích</strong>: Yêu cầu lấy dữ liệu từ server mà không thay đổi gì trên server.</p>
+<p><strong>Đặc điểm</strong>:</p>
+<ul>
+<li><strong>Safe</strong>: Không thay đổi trạng thái server</li>
+<li><strong>Idempotent</strong>: Gọi nhiều lần cho kết quả giống nhau</li>
+<li><strong>Cacheable</strong>: Có thể được cache để tăng hiệu suất</li>
+<li>Dữ liệu được gửi qua URL parameters (query string)</li>
+</ul>
+<p><strong>Ví dụ thực tế</strong>:</p>
+<pre class="giallo z-code"><code data-lang="plain"><span class="giallo-l"><span>GET /api/users HTTP/1.1</span></span>
+<span class="giallo-l"><span>Host: example.com</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span># Lấy danh sách người dùng với bộ lọc</span></span>
+<span class="giallo-l"><span>GET /api/products?category=electronics&amp;price_max=500 HTTP/1.1</span></span>
+<span class="giallo-l"><span>Host: shop.com</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span># Lấy thông tin chi tiết một sản phẩm</span></span>
+<span class="giallo-l"><span>GET /api/products/123 HTTP/1.1</span></span>
+<span class="giallo-l"><span>Host: shop.com</span></span></code></pre>
+<p><strong>Khi nào sử dụng</strong>:</p>
+<ul>
+<li>Lấy danh sách dữ liệu (sản phẩm, bài viết, người dùng)</li>
+<li>Xem chi tiết một mục cụ thể</li>
+<li>Tìm kiếm và lọc dữ liệu</li>
+<li>Tải trang web</li>
+</ul>
+<p><strong>Response thành công</strong>: 200 OK</p>
+<h3 id="2-post-tao-moi-du-lieu">2. POST - Tạo mới dữ liệu<a class="zola-anchor" href="#2-post-tao-moi-du-lieu" aria-label="Anchor link for: 2-post-tao-moi-du-lieu" style="visibility: hidden;"></a></h3>
+<p><strong>Mục đích</strong>: Gửi dữ liệu đến server để tạo tài nguyên mới hoặc thực hiện một hành động.</p>
+<p><strong>Đặc điểm</strong>:</p>
+<ul>
+<li><strong>Not Safe</strong>: Có thể thay đổi trạng thái server</li>
+<li><strong>Not Idempotent</strong>: Gọi nhiều lần có thể tạo ra kết quả khác nhau</li>
+<li><strong>Not Cacheable</strong>: Thường không được cache</li>
+<li>Dữ liệu được gửi trong request body</li>
+</ul>
+<p><strong>Ví dụ thực tế</strong>:</p>
+<pre class="giallo z-code"><code data-lang="plain"><span class="giallo-l"><span>POST /api/users HTTP/1.1</span></span>
+<span class="giallo-l"><span>Host: example.com</span></span>
+<span class="giallo-l"><span>Content-Type: application/json</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>{</span></span>
+<span class="giallo-l"><span>  &quot;name&quot;: &quot;Nguyễn Văn A&quot;,</span></span>
+<span class="giallo-l"><span>  &quot;email&quot;: &quot;nguyenvana@example.com&quot;,</span></span>
+<span class="giallo-l"><span>  &quot;password&quot;: &quot;securepassword123&quot;</span></span>
+<span class="giallo-l"><span>}</span></span></code></pre><pre class="giallo z-code"><code data-lang="plain"><span class="giallo-l"><span>POST /api/orders HTTP/1.1</span></span>
+<span class="giallo-l"><span>Host: shop.com</span></span>
+<span class="giallo-l"><span>Content-Type: application/json</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>{</span></span>
+<span class="giallo-l"><span>  &quot;user_id&quot;: 123,</span></span>
+<span class="giallo-l"><span>  &quot;items&quot;: [</span></span>
+<span class="giallo-l"><span>    {&quot;product_id&quot;: 456, &quot;quantity&quot;: 2},</span></span>
+<span class="giallo-l"><span>    {&quot;product_id&quot;: 789, &quot;quantity&quot;: 1}</span></span>
+<span class="giallo-l"><span>  ],</span></span>
+<span class="giallo-l"><span>  &quot;shipping_address&quot;: &quot;123 Đường ABC, Quận 1, TP.HCM&quot;</span></span>
+<span class="giallo-l"><span>}</span></span></code></pre>
+<p><strong>Khi nào sử dụng</strong>:</p>
+<ul>
+<li>Đăng ký tài khoản mới</li>
+<li>Tạo bài viết, sản phẩm mới</li>
+<li>Gửi form liên hệ</li>
+<li>Xử lý thanh toán</li>
+<li>Upload file</li>
+</ul>
+<p><strong>Response thành công</strong>: 201 Created hoặc 200 OK</p>
+<h3 id="3-put-cap-nhat-toan-bo-du-lieu">3. PUT - Cập nhật toàn bộ dữ liệu<a class="zola-anchor" href="#3-put-cap-nhat-toan-bo-du-lieu" aria-label="Anchor link for: 3-put-cap-nhat-toan-bo-du-lieu" style="visibility: hidden;"></a></h3>
+<p><strong>Mục đích</strong>: Thay thế hoàn toàn một tài nguyên hoặc tạo mới nếu không tồn tại.</p>
+<p><strong>Đặc điểm</strong>:</p>
+<ul>
+<li><strong>Not Safe</strong>: Thay đổi trạng thái server</li>
+<li><strong>Idempotent</strong>: Gọi nhiều lần cho kết quả giống nhau</li>
+<li><strong>Not Cacheable</strong>: Không được cache</li>
+<li>Thay thế toàn bộ tài nguyên</li>
+</ul>
+<p><strong>Ví dụ thực tế</strong>:</p>
+<pre class="giallo z-code"><code data-lang="plain"><span class="giallo-l"><span>PUT /api/users/123 HTTP/1.1</span></span>
+<span class="giallo-l"><span>Host: example.com</span></span>
+<span class="giallo-l"><span>Content-Type: application/json</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>{</span></span>
+<span class="giallo-l"><span>  &quot;id&quot;: 123,</span></span>
+<span class="giallo-l"><span>  &quot;name&quot;: &quot;Nguyễn Văn B&quot;,</span></span>
+<span class="giallo-l"><span>  &quot;email&quot;: &quot;nguyenvanb@example.com&quot;,</span></span>
+<span class="giallo-l"><span>  &quot;phone&quot;: &quot;0901234567&quot;,</span></span>
+<span class="giallo-l"><span>  &quot;address&quot;: &quot;456 Đường XYZ, Quận 2, TP.HCM&quot;</span></span>
+<span class="giallo-l"><span>}</span></span></code></pre>
+<p><strong>Khi nào sử dụng</strong>:</p>
+<ul>
+<li>Cập nhật thông tin hồ sơ người dùng</li>
+<li>Thay đổi cấu hình hệ thống</li>
+<li>Cập nhật toàn bộ thông tin sản phẩm</li>
+</ul>
+<p><strong>Response thành công</strong>: 200 OK hoặc 204 No Content</p>
+<h3 id="4-patch-cap-nhat-mot-phan-du-lieu">4. PATCH - Cập nhật một phần dữ liệu<a class="zola-anchor" href="#4-patch-cap-nhat-mot-phan-du-lieu" aria-label="Anchor link for: 4-patch-cap-nhat-mot-phan-du-lieu" style="visibility: hidden;"></a></h3>
+<p><strong>Mục đích</strong>: Cập nhật một phần của tài nguyên, chỉ những trường được chỉ định.</p>
+<p><strong>Đặc điểm</strong>:</p>
+<ul>
+<li><strong>Not Safe</strong>: Thay đổi trạng thái server</li>
+<li><strong>Not Idempotent</strong>: Có thể không idempotent tùy thuộc vào implementation</li>
+<li><strong>Not Cacheable</strong>: Không được cache</li>
+<li>Chỉ cập nhật các trường được gửi</li>
+</ul>
+<p><strong>Ví dụ thực tế</strong>:</p>
+<pre class="giallo z-code"><code data-lang="plain"><span class="giallo-l"><span>PATCH /api/users/123 HTTP/1.1</span></span>
+<span class="giallo-l"><span>Host: example.com</span></span>
+<span class="giallo-l"><span>Content-Type: application/json</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>{</span></span>
+<span class="giallo-l"><span>  &quot;phone&quot;: &quot;0987654321&quot;</span></span>
+<span class="giallo-l"><span>}</span></span></code></pre><pre class="giallo z-code"><code data-lang="plain"><span class="giallo-l"><span>PATCH /api/products/456 HTTP/1.1</span></span>
+<span class="giallo-l"><span>Host: shop.com</span></span>
+<span class="giallo-l"><span>Content-Type: application/json</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>{</span></span>
+<span class="giallo-l"><span>  &quot;price&quot;: 299000,</span></span>
+<span class="giallo-l"><span>  &quot;stock&quot;: 15</span></span>
+<span class="giallo-l"><span>}</span></span></code></pre>
+<p><strong>Khi nào sử dụng</strong>:</p>
+<ul>
+<li>Cập nhật một vài trường thông tin</li>
+<li>Thay đổi trạng thái (active/inactive)</li>
+<li>Cập nhật số lượng tồn kho</li>
+</ul>
+<p><strong>Response thành công</strong>: 200 OK hoặc 204 No Content</p>
+<h3 id="5-delete-xoa-du-lieu">5. DELETE - Xóa dữ liệu<a class="zola-anchor" href="#5-delete-xoa-du-lieu" aria-label="Anchor link for: 5-delete-xoa-du-lieu" style="visibility: hidden;"></a></h3>
+<p><strong>Mục đích</strong>: Xóa tài nguyên được chỉ định trên server.</p>
+<p><strong>Đặc điểm</strong>:</p>
+<ul>
+<li><strong>Not Safe</strong>: Thay đổi trạng thái server</li>
+<li><strong>Idempotent</strong>: Xóa nhiều lần không tạo ra hiệu ứng phụ</li>
+<li><strong>Not Cacheable</strong>: Không được cache</li>
+</ul>
+<p><strong>Ví dụ thực tế</strong>:</p>
+<pre class="giallo z-code"><code data-lang="plain"><span class="giallo-l"><span>DELETE /api/users/123 HTTP/1.1</span></span>
+<span class="giallo-l"><span>Host: example.com</span></span>
+<span class="giallo-l"><span>Authorization: Bearer token123</span></span></code></pre><pre class="giallo z-code"><code data-lang="plain"><span class="giallo-l"><span>DELETE /api/posts/456 HTTP/1.1</span></span>
+<span class="giallo-l"><span>Host: blog.com</span></span>
+<span class="giallo-l"><span>Authorization: Bearer token123</span></span></code></pre>
+<p><strong>Khi nào sử dụng</strong>:</p>
+<ul>
+<li>Xóa tài khoản người dùng</li>
+<li>Xóa bài viết, sản phẩm</li>
+<li>Hủy đơn hàng</li>
+<li>Xóa file upload</li>
+</ul>
+<p><strong>Response thành công</strong>: 200 OK, 202 Accepted, hoặc 204 No Content</p>
+<h3 id="6-head-lay-metadata">6. HEAD - Lấy metadata<a class="zola-anchor" href="#6-head-lay-metadata" aria-label="Anchor link for: 6-head-lay-metadata" style="visibility: hidden;"></a></h3>
+<p><strong>Mục đích</strong>: Giống GET nhưng chỉ trả về headers, không có response body.</p>
+<p><strong>Đặc điểm</strong>:</p>
+<ul>
+<li><strong>Safe</strong>: Không thay đổi trạng thái server</li>
+<li><strong>Idempotent</strong>: Gọi nhiều lần cho kết quả giống nhau</li>
+<li><strong>Cacheable</strong>: Có thể được cache</li>
+<li>Không có response body</li>
+</ul>
+<p><strong>Ví dụ thực tế</strong>:</p>
+<pre class="giallo z-code"><code data-lang="plain"><span class="giallo-l"><span>HEAD /api/users/123 HTTP/1.1</span></span>
+<span class="giallo-l"><span>Host: example.com</span></span></code></pre>
+<p><strong>Khi nào sử dụng</strong>:</p>
+<ul>
+<li>Kiểm tra tài nguyên có tồn tại không</li>
+<li>Lấy thông tin về size file trước khi download</li>
+<li>Kiểm tra Last-Modified để caching</li>
+</ul>
+<h3 id="7-options-lay-thong-tin-ve-cac-methods-duoc-ho-tro">7. OPTIONS - Lấy thông tin về các methods được hỗ trợ<a class="zola-anchor" href="#7-options-lay-thong-tin-ve-cac-methods-duoc-ho-tro" aria-label="Anchor link for: 7-options-lay-thong-tin-ve-cac-methods-duoc-ho-tro" style="visibility: hidden;"></a></h3>
+<p><strong>Mục đích</strong>: Truy vấn các HTTP methods được hỗ trợ cho một tài nguyên.</p>
+<p><strong>Đặc điểm</strong>:</p>
+<ul>
+<li><strong>Safe</strong>: Không thay đổi trạng thái server</li>
+<li><strong>Idempotent</strong>: Gọi nhiều lần cho kết quả giống nhau</li>
+<li>Quan trọng cho CORS (Cross-Origin Resource Sharing)</li>
+</ul>
+<p><strong>Ví dụ thực tế</strong>:</p>
+<pre class="giallo z-code"><code data-lang="plain"><span class="giallo-l"><span>OPTIONS /api/users HTTP/1.1</span></span>
+<span class="giallo-l"><span>Host: example.com</span></span>
+<span class="giallo-l"><span>Origin: https://myapp.com</span></span></code></pre>
+<p><strong>Response</strong>:</p>
+<pre class="giallo z-code"><code data-lang="plain"><span class="giallo-l"><span>HTTP/1.1 200 OK</span></span>
+<span class="giallo-l"><span>Allow: GET, POST, PUT, DELETE, OPTIONS</span></span>
+<span class="giallo-l"><span>Access-Control-Allow-Origin: https://myapp.com</span></span>
+<span class="giallo-l"><span>Access-Control-Allow-Methods: GET, POST, PUT, DELETE</span></span></code></pre>
+<p><strong>Khi nào sử dụng</strong>:</p>
+<ul>
+<li>CORS preflight requests</li>
+<li>API discovery</li>
+<li>Kiểm tra quyền truy cập</li>
+</ul>
+<h2 id="restful-api-va-http-methods">RESTful API và HTTP Methods<a class="zola-anchor" href="#restful-api-va-http-methods" aria-label="Anchor link for: restful-api-va-http-methods" style="visibility: hidden;"></a></h2>
+<p>REST (Representational State Transfer) là một kiến trúc phổ biến cho việc thiết kế web services, sử dụng HTTP methods một cách có ý nghĩa:</p>
+<h3 id="crud-operations-voi-rest">CRUD Operations với REST<a class="zola-anchor" href="#crud-operations-voi-rest" aria-label="Anchor link for: crud-operations-voi-rest" style="visibility: hidden;"></a></h3>
+<pre class="giallo z-code"><code data-lang="plain"><span class="giallo-l"><span># Create (Tạo mới)</span></span>
+<span class="giallo-l"><span>POST /api/products</span></span>
+<span class="giallo-l"><span>{</span></span>
+<span class="giallo-l"><span>  &quot;name&quot;: &quot;iPhone 15&quot;,</span></span>
+<span class="giallo-l"><span>  &quot;price&quot;: 25000000,</span></span>
+<span class="giallo-l"><span>  &quot;category&quot;: &quot;smartphone&quot;</span></span>
+<span class="giallo-l"><span>}</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span># Read (Đọc)</span></span>
+<span class="giallo-l"><span>GET /api/products          # Lấy danh sách</span></span>
+<span class="giallo-l"><span>GET /api/products/123      # Lấy chi tiết</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span># Update (Cập nhật)</span></span>
+<span class="giallo-l"><span>PUT /api/products/123      # Cập nhật toàn bộ</span></span>
+<span class="giallo-l"><span>PATCH /api/products/123    # Cập nhật một phần</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span># Delete (Xóa)</span></span>
+<span class="giallo-l"><span>DELETE /api/products/123</span></span></code></pre><h3 id="restful-url-design">RESTful URL Design<a class="zola-anchor" href="#restful-url-design" aria-label="Anchor link for: restful-url-design" style="visibility: hidden;"></a></h3>
+<pre class="giallo z-code"><code data-lang="plain"><span class="giallo-l"><span># Collection và Resource</span></span>
+<span class="giallo-l"><span>GET /api/users             # Lấy danh sách users</span></span>
+<span class="giallo-l"><span>GET /api/users/123         # Lấy user có ID 123</span></span>
+<span class="giallo-l"><span>POST /api/users            # Tạo user mới</span></span>
+<span class="giallo-l"><span>PUT /api/users/123         # Cập nhật user 123</span></span>
+<span class="giallo-l"><span>DELETE /api/users/123      # Xóa user 123</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span># Nested Resources</span></span>
+<span class="giallo-l"><span>GET /api/users/123/orders      # Lấy đơn hàng của user 123</span></span>
+<span class="giallo-l"><span>POST /api/users/123/orders     # Tạo đơn hàng cho user 123</span></span></code></pre><h2 id="http-status-codes-kem-theo-methods">HTTP Status Codes kèm theo Methods<a class="zola-anchor" href="#http-status-codes-kem-theo-methods" aria-label="Anchor link for: http-status-codes-kem-theo-methods" style="visibility: hidden;"></a></h2>
+<h3 id="get-responses">GET Responses<a class="zola-anchor" href="#get-responses" aria-label="Anchor link for: get-responses" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>200 OK</strong>: Thành công</li>
+<li><strong>404 Not Found</strong>: Không tìm thấy tài nguyên</li>
+<li><strong>304 Not Modified</strong>: Dữ liệu chưa thay đổi (cache)</li>
+</ul>
+<h3 id="post-responses">POST Responses<a class="zola-anchor" href="#post-responses" aria-label="Anchor link for: post-responses" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>201 Created</strong>: Tạo thành công</li>
+<li><strong>400 Bad Request</strong>: Dữ liệu đầu vào không hợp lệ</li>
+<li><strong>409 Conflict</strong>: Tài nguyên đã tồn tại</li>
+</ul>
+<h3 id="put-patch-responses">PUT/PATCH Responses<a class="zola-anchor" href="#put-patch-responses" aria-label="Anchor link for: put-patch-responses" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>200 OK</strong>: Cập nhật thành công</li>
+<li><strong>204 No Content</strong>: Cập nhật thành công, không trả về dữ liệu</li>
+<li><strong>404 Not Found</strong>: Không tìm thấy tài nguyên cần cập nhật</li>
+</ul>
+<h3 id="delete-responses">DELETE Responses<a class="zola-anchor" href="#delete-responses" aria-label="Anchor link for: delete-responses" style="visibility: hidden;"></a></h3>
+<ul>
+<li><strong>200 OK</strong>: Xóa thành công</li>
+<li><strong>204 No Content</strong>: Xóa thành công, không trả về dữ liệu</li>
+<li><strong>404 Not Found</strong>: Không tìm thấy tài nguyên cần xóa</li>
+</ul>
+<h2 id="best-practices-khi-su-dung-http-methods">Best Practices khi sử dụng HTTP Methods<a class="zola-anchor" href="#best-practices-khi-su-dung-http-methods" aria-label="Anchor link for: best-practices-khi-su-dung-http-methods" style="visibility: hidden;"></a></h2>
+<h3 id="1-su-dung-dung-method-cho-dung-muc-dich">1. Sử dụng đúng method cho đúng mục đích<a class="zola-anchor" href="#1-su-dung-dung-method-cho-dung-muc-dich" aria-label="Anchor link for: 1-su-dung-dung-method-cho-dung-muc-dich" style="visibility: hidden;"></a></h3>
+<pre class="giallo z-code"><code data-lang="plain"><span class="giallo-l"><span># Sai: Sử dụng GET để xóa dữ liệu</span></span>
+<span class="giallo-l"><span>GET /api/users/delete/123</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span># Đúng: Sử dụng DELETE</span></span>
+<span class="giallo-l"><span>DELETE /api/users/123</span></span></code></pre><h3 id="2-idempotency-trong-thiet-ke-api">2. Idempotency trong thiết kế API<a class="zola-anchor" href="#2-idempotency-trong-thiet-ke-api" aria-label="Anchor link for: 2-idempotency-trong-thiet-ke-api" style="visibility: hidden;"></a></h3>
+<pre class="giallo z-code"><code data-lang="plain"><span class="giallo-l"><span># PUT nên idempotent</span></span>
+<span class="giallo-l"><span>PUT /api/users/123</span></span>
+<span class="giallo-l"><span>{</span></span>
+<span class="giallo-l"><span>  &quot;name&quot;: &quot;Nguyễn Văn A&quot;,</span></span>
+<span class="giallo-l"><span>  &quot;email&quot;: &quot;nguyenvana@example.com&quot;</span></span>
+<span class="giallo-l"><span>}</span></span>
+<span class="giallo-l"><span># Gọi nhiều lần không tạo ra side effects</span></span></code></pre><h3 id="3-su-dung-patch-cho-partial-updates">3. Sử dụng PATCH cho partial updates<a class="zola-anchor" href="#3-su-dung-patch-cho-partial-updates" aria-label="Anchor link for: 3-su-dung-patch-cho-partial-updates" style="visibility: hidden;"></a></h3>
+<pre class="giallo z-code"><code data-lang="plain"><span class="giallo-l"><span># Không hiệu quả: Gửi toàn bộ object</span></span>
+<span class="giallo-l"><span>PUT /api/users/123</span></span>
+<span class="giallo-l"><span>{</span></span>
+<span class="giallo-l"><span>  &quot;id&quot;: 123,</span></span>
+<span class="giallo-l"><span>  &quot;name&quot;: &quot;Old Name&quot;,</span></span>
+<span class="giallo-l"><span>  &quot;email&quot;: &quot;new.email@example.com&quot;,  # Chỉ thay đổi email</span></span>
+<span class="giallo-l"><span>  &quot;phone&quot;: &quot;0901234567&quot;,</span></span>
+<span class="giallo-l"><span>  &quot;address&quot;: &quot;Old Address&quot;</span></span>
+<span class="giallo-l"><span>}</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span># Hiệu quả: Chỉ gửi trường cần thay đổi</span></span>
+<span class="giallo-l"><span>PATCH /api/users/123</span></span>
+<span class="giallo-l"><span>{</span></span>
+<span class="giallo-l"><span>  &quot;email&quot;: &quot;new.email@example.com&quot;</span></span>
+<span class="giallo-l"><span>}</span></span></code></pre><h3 id="4-content-type-headers">4. Content-Type headers<a class="zola-anchor" href="#4-content-type-headers" aria-label="Anchor link for: 4-content-type-headers" style="visibility: hidden;"></a></h3>
+<pre class="giallo z-code"><code data-lang="plain"><span class="giallo-l"><span># JSON data</span></span>
+<span class="giallo-l"><span>POST /api/users HTTP/1.1</span></span>
+<span class="giallo-l"><span>Content-Type: application/json</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>{</span></span>
+<span class="giallo-l"><span>  &quot;name&quot;: &quot;Test User&quot;</span></span>
+<span class="giallo-l"><span>}</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span># Form data</span></span>
+<span class="giallo-l"><span>POST /api/upload HTTP/1.1</span></span>
+<span class="giallo-l"><span>Content-Type: multipart/form-data</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span># URL encoded</span></span>
+<span class="giallo-l"><span>POST /api/login HTTP/1.1</span></span>
+<span class="giallo-l"><span>Content-Type: application/x-www-form-urlencoded</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>username=testuser&amp;password=123456</span></span></code></pre><h3 id="5-authentication-va-authorization">5. Authentication và Authorization<a class="zola-anchor" href="#5-authentication-va-authorization" aria-label="Anchor link for: 5-authentication-va-authorization" style="visibility: hidden;"></a></h3>
+<pre class="giallo z-code"><code data-lang="plain"><span class="giallo-l"><span># Bearer token</span></span>
+<span class="giallo-l"><span>GET /api/private-data HTTP/1.1</span></span>
+<span class="giallo-l"><span>Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span># Basic auth</span></span>
+<span class="giallo-l"><span>GET /api/admin HTTP/1.1</span></span>
+<span class="giallo-l"><span>Authorization: Basic dXNlcm5hbWU6cGFzc3dvcmQ=</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span># API Key</span></span>
+<span class="giallo-l"><span>GET /api/data HTTP/1.1</span></span>
+<span class="giallo-l"><span>X-API-Key: abc123def456ghi789</span></span></code></pre><h2 id="cac-loi-thuong-gap">Các lỗi thường gặp<a class="zola-anchor" href="#cac-loi-thuong-gap" aria-label="Anchor link for: cac-loi-thuong-gap" style="visibility: hidden;"></a></h2>
+<h3 id="1-su-dung-get-cho-cac-hanh-dong-thay-doi-du-lieu">1. Sử dụng GET cho các hành động thay đổi dữ liệu<a class="zola-anchor" href="#1-su-dung-get-cho-cac-hanh-dong-thay-doi-du-lieu" aria-label="Anchor link for: 1-su-dung-get-cho-cac-hanh-dong-thay-doi-du-lieu" style="visibility: hidden;"></a></h3>
+<pre class="giallo z-code"><code data-lang="plain"><span class="giallo-l"><span># Nguy hiểm: Search engines có thể crawl và xóa dữ liệu</span></span>
+<span class="giallo-l"><span>GET /admin/delete-user?id=123</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span># An toàn</span></span>
+<span class="giallo-l"><span>DELETE /admin/users/123</span></span></code></pre><h3 id="2-khong-handle-idempotency-dung-cach">2. Không handle idempotency đúng cách<a class="zola-anchor" href="#2-khong-handle-idempotency-dung-cach" aria-label="Anchor link for: 2-khong-handle-idempotency-dung-cach" style="visibility: hidden;"></a></h3>
+<pre class="giallo z-code"><code data-lang="plain"><span class="giallo-l"><span># PUT không idempotent</span></span>
+<span class="giallo-l"><span>PUT /api/users/123/increment-score</span></span>
+<span class="giallo-l"><span># Gọi nhiều lần sẽ tăng score nhiều lần</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span># PUT idempotent</span></span>
+<span class="giallo-l"><span>PUT /api/users/123/score</span></span>
+<span class="giallo-l"><span>{</span></span>
+<span class="giallo-l"><span>  &quot;score&quot;: 100</span></span>
+<span class="giallo-l"><span>}</span></span></code></pre><h3 id="3-tra-ve-status-code-khong-phu-hop">3. Trả về status code không phù hợp<a class="zola-anchor" href="#3-tra-ve-status-code-khong-phu-hop" aria-label="Anchor link for: 3-tra-ve-status-code-khong-phu-hop" style="visibility: hidden;"></a></h3>
+<pre class="giallo z-code"><code data-lang="javascript"><span class="giallo-l"><span class="z-punctuation z-definition z-comment">//</span><span class="z-comment"> Sai: Trả về 200 khi không tìm thấy</span></span>
+<span class="giallo-l"><span class="z-variable z-other">app</span><span>.</span><span class="z-entity z-name">get</span><span>(</span><span class="z-punctuation z-definition z-string">&#39;</span><span class="z-string">/api/users/:id</span><span class="z-punctuation z-definition z-string">&#39;</span><span>,</span><span> (</span><span class="z-variable">req</span><span>,</span><span class="z-variable"> res</span><span>)</span><span class="z-storage z-type"> =&gt;</span><span> {</span></span>
+<span class="giallo-l"><span class="z-storage z-type">  const</span><span class="z-variable z-other z-constant"> user</span><span class="z-keyword"> =</span><span class="z-entity z-name"> findUser</span><span>(</span><span class="z-variable z-other">req</span><span>.</span><span class="z-variable z-other">params</span><span>.</span><span class="z-variable z-other">id</span><span>)</span><span>;</span></span>
+<span class="giallo-l"><span class="z-keyword">  if</span><span> (</span><span class="z-keyword">!</span><span class="z-variable z-other">user</span><span>)</span><span> {</span></span>
+<span class="giallo-l"><span class="z-keyword">    return</span><span class="z-variable z-other"> res</span><span>.</span><span class="z-entity z-name">status</span><span>(</span><span class="z-constant">200</span><span>)</span><span>.</span><span class="z-entity z-name">json</span><span>(</span><span>{</span><span> message</span><span>:</span><span class="z-punctuation z-definition z-string"> &#39;</span><span class="z-string">User not found</span><span class="z-punctuation z-definition z-string">&#39;</span><span> }</span><span>)</span><span>;</span></span>
+<span class="giallo-l"><span>  }</span></span>
+<span class="giallo-l"><span class="z-variable z-other">  res</span><span>.</span><span class="z-entity z-name">json</span><span>(</span><span class="z-variable z-other">user</span><span>)</span><span>;</span></span>
+<span class="giallo-l"><span>}</span><span>)</span><span>;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-punctuation z-definition z-comment">//</span><span class="z-comment"> Đúng: Trả về 404</span></span>
+<span class="giallo-l"><span class="z-variable z-other">app</span><span>.</span><span class="z-entity z-name">get</span><span>(</span><span class="z-punctuation z-definition z-string">&#39;</span><span class="z-string">/api/users/:id</span><span class="z-punctuation z-definition z-string">&#39;</span><span>,</span><span> (</span><span class="z-variable">req</span><span>,</span><span class="z-variable"> res</span><span>)</span><span class="z-storage z-type"> =&gt;</span><span> {</span></span>
+<span class="giallo-l"><span class="z-storage z-type">  const</span><span class="z-variable z-other z-constant"> user</span><span class="z-keyword"> =</span><span class="z-entity z-name"> findUser</span><span>(</span><span class="z-variable z-other">req</span><span>.</span><span class="z-variable z-other">params</span><span>.</span><span class="z-variable z-other">id</span><span>)</span><span>;</span></span>
+<span class="giallo-l"><span class="z-keyword">  if</span><span> (</span><span class="z-keyword">!</span><span class="z-variable z-other">user</span><span>)</span><span> {</span></span>
+<span class="giallo-l"><span class="z-keyword">    return</span><span class="z-variable z-other"> res</span><span>.</span><span class="z-entity z-name">status</span><span>(</span><span class="z-constant">404</span><span>)</span><span>.</span><span class="z-entity z-name">json</span><span>(</span><span>{</span><span> error</span><span>:</span><span class="z-punctuation z-definition z-string"> &#39;</span><span class="z-string">User not found</span><span class="z-punctuation z-definition z-string">&#39;</span><span> }</span><span>)</span><span>;</span></span>
+<span class="giallo-l"><span>  }</span></span>
+<span class="giallo-l"><span class="z-variable z-other">  res</span><span>.</span><span class="z-entity z-name">json</span><span>(</span><span class="z-variable z-other">user</span><span>)</span><span>;</span></span>
+<span class="giallo-l"><span>}</span><span>)</span><span>;</span></span></code></pre><h2 id="testing-http-methods">Testing HTTP Methods<a class="zola-anchor" href="#testing-http-methods" aria-label="Anchor link for: testing-http-methods" style="visibility: hidden;"></a></h2>
+<h3 id="su-dung-curl">Sử dụng cURL<a class="zola-anchor" href="#su-dung-curl" aria-label="Anchor link for: su-dung-curl" style="visibility: hidden;"></a></h3>
+<pre class="giallo z-code"><code data-lang="shellscript"><span class="giallo-l"><span class="z-punctuation z-definition z-comment">#</span><span class="z-comment"> GET request</span></span>
+<span class="giallo-l"><span class="z-entity z-name">curl</span><span class="z-constant"> -</span><span class="z-constant">X</span><span class="z-string"> GET</span><span class="z-punctuation z-definition z-string"> &quot;</span><span class="z-string">https://api.example.com/users</span><span class="z-punctuation z-definition z-string">&quot;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-punctuation z-definition z-comment">#</span><span class="z-comment"> POST request</span></span>
+<span class="giallo-l"><span class="z-entity z-name">curl</span><span class="z-constant"> -</span><span class="z-constant">X</span><span class="z-string"> POST</span><span class="z-punctuation z-definition z-string"> &quot;</span><span class="z-string">https://api.example.com/users</span><span class="z-punctuation z-definition z-string">&quot;</span><span class="z-constant"> \</span></span>
+<span class="giallo-l"><span class="z-constant">  -</span><span class="z-constant">H</span><span class="z-punctuation z-definition z-string"> &quot;</span><span class="z-string">Content-Type: application/json</span><span class="z-punctuation z-definition z-string">&quot;</span><span class="z-constant"> \</span></span>
+<span class="giallo-l"><span class="z-constant">  -</span><span class="z-constant">d</span><span class="z-punctuation z-definition z-string"> &#39;</span><span class="z-string">{&quot;name&quot;:&quot;Test User&quot;,&quot;email&quot;:&quot;test@example.com&quot;}</span><span class="z-punctuation z-definition z-string">&#39;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-punctuation z-definition z-comment">#</span><span class="z-comment"> PUT request</span></span>
+<span class="giallo-l"><span class="z-entity z-name">curl</span><span class="z-constant"> -</span><span class="z-constant">X</span><span class="z-string"> PUT</span><span class="z-punctuation z-definition z-string"> &quot;</span><span class="z-string">https://api.example.com/users/123</span><span class="z-punctuation z-definition z-string">&quot;</span><span class="z-constant"> \</span></span>
+<span class="giallo-l"><span class="z-constant">  -</span><span class="z-constant">H</span><span class="z-punctuation z-definition z-string"> &quot;</span><span class="z-string">Content-Type: application/json</span><span class="z-punctuation z-definition z-string">&quot;</span><span class="z-constant"> \</span></span>
+<span class="giallo-l"><span class="z-constant">  -</span><span class="z-constant">d</span><span class="z-punctuation z-definition z-string"> &#39;</span><span class="z-string">{&quot;name&quot;:&quot;Updated Name&quot;,&quot;email&quot;:&quot;updated@example.com&quot;}</span><span class="z-punctuation z-definition z-string">&#39;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-punctuation z-definition z-comment">#</span><span class="z-comment"> DELETE request</span></span>
+<span class="giallo-l"><span class="z-entity z-name">curl</span><span class="z-constant"> -</span><span class="z-constant">X</span><span class="z-string"> DELETE</span><span class="z-punctuation z-definition z-string"> &quot;</span><span class="z-string">https://api.example.com/users/123</span><span class="z-punctuation z-definition z-string">&quot;</span><span class="z-constant"> \</span></span>
+<span class="giallo-l"><span class="z-constant">  -</span><span class="z-constant">H</span><span class="z-punctuation z-definition z-string"> &quot;</span><span class="z-string">Authorization: Bearer token123</span><span class="z-punctuation z-definition z-string">&quot;</span></span></code></pre><h3 id="su-dung-postman">Sử dụng Postman<a class="zola-anchor" href="#su-dung-postman" aria-label="Anchor link for: su-dung-postman" style="visibility: hidden;"></a></h3>
+<p>Postman là công cụ GUI phổ biến để test APIs:</p>
+<ol>
+<li>Tạo collection cho API</li>
+<li>Thêm requests với các methods khác nhau</li>
+<li>Thiết lập headers và body</li>
+<li>Sử dụng variables và environments</li>
+<li>Viết tests tự động</li>
+</ol>
+<h3 id="su-dung-javascript-fetch-api">Sử dụng JavaScript Fetch API<a class="zola-anchor" href="#su-dung-javascript-fetch-api" aria-label="Anchor link for: su-dung-javascript-fetch-api" style="visibility: hidden;"></a></h3>
+<pre class="giallo z-code"><code data-lang="javascript"><span class="giallo-l"><span class="z-punctuation z-definition z-comment">//</span><span class="z-comment"> GET request</span></span>
+<span class="giallo-l"><span class="z-storage z-type">const</span><span class="z-entity z-name"> getUsers</span><span class="z-keyword"> =</span><span class="z-storage"> async</span><span> (</span><span>)</span><span class="z-storage z-type"> =&gt;</span><span> {</span></span>
+<span class="giallo-l"><span class="z-storage z-type">  const</span><span class="z-variable z-other z-constant"> response</span><span class="z-keyword"> =</span><span class="z-keyword"> await</span><span class="z-entity z-name"> fetch</span><span>(</span><span class="z-punctuation z-definition z-string">&#39;</span><span class="z-string">/api/users</span><span class="z-punctuation z-definition z-string">&#39;</span><span>)</span><span>;</span></span>
+<span class="giallo-l"><span class="z-storage z-type">  const</span><span class="z-variable z-other z-constant"> users</span><span class="z-keyword"> =</span><span class="z-keyword"> await</span><span class="z-variable z-other"> response</span><span>.</span><span class="z-entity z-name">json</span><span>(</span><span>)</span><span>;</span></span>
+<span class="giallo-l"><span class="z-keyword">  return</span><span class="z-variable z-other"> users</span><span>;</span></span>
+<span class="giallo-l"><span>}</span><span>;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-punctuation z-definition z-comment">//</span><span class="z-comment"> POST request</span></span>
+<span class="giallo-l"><span class="z-storage z-type">const</span><span class="z-entity z-name"> createUser</span><span class="z-keyword"> =</span><span class="z-storage"> async</span><span> (</span><span class="z-variable">userData</span><span>)</span><span class="z-storage z-type"> =&gt;</span><span> {</span></span>
+<span class="giallo-l"><span class="z-storage z-type">  const</span><span class="z-variable z-other z-constant"> response</span><span class="z-keyword"> =</span><span class="z-keyword"> await</span><span class="z-entity z-name"> fetch</span><span>(</span><span class="z-punctuation z-definition z-string">&#39;</span><span class="z-string">/api/users</span><span class="z-punctuation z-definition z-string">&#39;</span><span>,</span><span> {</span></span>
+<span class="giallo-l"><span>    method</span><span>:</span><span class="z-punctuation z-definition z-string"> &#39;</span><span class="z-string">POST</span><span class="z-punctuation z-definition z-string">&#39;</span><span>,</span></span>
+<span class="giallo-l"><span>    headers</span><span>:</span><span> {</span></span>
+<span class="giallo-l"><span class="z-punctuation z-definition z-string">      &#39;</span><span class="z-string">Content-Type</span><span class="z-punctuation z-definition z-string">&#39;</span><span>:</span><span class="z-punctuation z-definition z-string"> &#39;</span><span class="z-string">application/json</span><span class="z-punctuation z-definition z-string">&#39;</span><span>,</span></span>
+<span class="giallo-l"><span>    }</span><span>,</span></span>
+<span class="giallo-l"><span>    body</span><span>:</span><span class="z-variable z-other z-constant"> JSON</span><span>.</span><span class="z-entity z-name">stringify</span><span>(</span><span class="z-variable z-other">userData</span><span>)</span></span>
+<span class="giallo-l"><span>  }</span><span>)</span><span>;</span></span>
+<span class="giallo-l"><span class="z-keyword">  return</span><span class="z-variable z-other"> response</span><span>.</span><span class="z-entity z-name">json</span><span>(</span><span>)</span><span>;</span></span>
+<span class="giallo-l"><span>}</span><span>;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-punctuation z-definition z-comment">//</span><span class="z-comment"> PUT request</span></span>
+<span class="giallo-l"><span class="z-storage z-type">const</span><span class="z-entity z-name"> updateUser</span><span class="z-keyword"> =</span><span class="z-storage"> async</span><span> (</span><span class="z-variable">id</span><span>,</span><span class="z-variable"> userData</span><span>)</span><span class="z-storage z-type"> =&gt;</span><span> {</span></span>
+<span class="giallo-l"><span class="z-storage z-type">  const</span><span class="z-variable z-other z-constant"> response</span><span class="z-keyword"> =</span><span class="z-keyword"> await</span><span class="z-entity z-name"> fetch</span><span>(</span><span class="z-punctuation z-definition z-string">`</span><span class="z-string">/api/users/</span><span class="z-string">${</span><span class="z-variable z-other">id</span><span class="z-string">}</span><span class="z-punctuation z-definition z-string">`</span><span>,</span><span> {</span></span>
+<span class="giallo-l"><span>    method</span><span>:</span><span class="z-punctuation z-definition z-string"> &#39;</span><span class="z-string">PUT</span><span class="z-punctuation z-definition z-string">&#39;</span><span>,</span></span>
+<span class="giallo-l"><span>    headers</span><span>:</span><span> {</span></span>
+<span class="giallo-l"><span class="z-punctuation z-definition z-string">      &#39;</span><span class="z-string">Content-Type</span><span class="z-punctuation z-definition z-string">&#39;</span><span>:</span><span class="z-punctuation z-definition z-string"> &#39;</span><span class="z-string">application/json</span><span class="z-punctuation z-definition z-string">&#39;</span><span>,</span></span>
+<span class="giallo-l"><span>    }</span><span>,</span></span>
+<span class="giallo-l"><span>    body</span><span>:</span><span class="z-variable z-other z-constant"> JSON</span><span>.</span><span class="z-entity z-name">stringify</span><span>(</span><span class="z-variable z-other">userData</span><span>)</span></span>
+<span class="giallo-l"><span>  }</span><span>)</span><span>;</span></span>
+<span class="giallo-l"><span class="z-keyword">  return</span><span class="z-variable z-other"> response</span><span>.</span><span class="z-entity z-name">json</span><span>(</span><span>)</span><span>;</span></span>
+<span class="giallo-l"><span>}</span><span>;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-punctuation z-definition z-comment">//</span><span class="z-comment"> DELETE request</span></span>
+<span class="giallo-l"><span class="z-storage z-type">const</span><span class="z-entity z-name"> deleteUser</span><span class="z-keyword"> =</span><span class="z-storage"> async</span><span> (</span><span class="z-variable">id</span><span>)</span><span class="z-storage z-type"> =&gt;</span><span> {</span></span>
+<span class="giallo-l"><span class="z-storage z-type">  const</span><span class="z-variable z-other z-constant"> response</span><span class="z-keyword"> =</span><span class="z-keyword"> await</span><span class="z-entity z-name"> fetch</span><span>(</span><span class="z-punctuation z-definition z-string">`</span><span class="z-string">/api/users/</span><span class="z-string">${</span><span class="z-variable z-other">id</span><span class="z-string">}</span><span class="z-punctuation z-definition z-string">`</span><span>,</span><span> {</span></span>
+<span class="giallo-l"><span>    method</span><span>:</span><span class="z-punctuation z-definition z-string"> &#39;</span><span class="z-string">DELETE</span><span class="z-punctuation z-definition z-string">&#39;</span></span>
+<span class="giallo-l"><span>  }</span><span>)</span><span>;</span></span>
+<span class="giallo-l"><span class="z-keyword">  return</span><span class="z-variable z-other"> response</span><span>.</span><span class="z-variable z-other">ok</span><span>;</span></span>
+<span class="giallo-l"><span>}</span><span>;</span></span></code></pre><h2 id="bao-mat-voi-http-methods">Bảo mật với HTTP Methods<a class="zola-anchor" href="#bao-mat-voi-http-methods" aria-label="Anchor link for: bao-mat-voi-http-methods" style="visibility: hidden;"></a></h2>
+<h3 id="1-validation-va-sanitization">1. Validation và Sanitization<a class="zola-anchor" href="#1-validation-va-sanitization" aria-label="Anchor link for: 1-validation-va-sanitization" style="visibility: hidden;"></a></h3>
+<pre class="giallo z-code"><code data-lang="javascript"><span class="giallo-l"><span class="z-punctuation z-definition z-comment">//</span><span class="z-comment"> Kiểm tra dữ liệu đầu vào</span></span>
+<span class="giallo-l"><span class="z-variable z-other">app</span><span>.</span><span class="z-entity z-name">post</span><span>(</span><span class="z-punctuation z-definition z-string">&#39;</span><span class="z-string">/api/users</span><span class="z-punctuation z-definition z-string">&#39;</span><span>,</span><span> (</span><span class="z-variable">req</span><span>,</span><span class="z-variable"> res</span><span>)</span><span class="z-storage z-type"> =&gt;</span><span> {</span></span>
+<span class="giallo-l"><span class="z-storage z-type">  const</span><span> {</span><span class="z-variable z-other z-constant"> name</span><span>,</span><span class="z-variable z-other z-constant"> email</span><span>,</span><span class="z-variable z-other z-constant"> password</span><span> }</span><span class="z-keyword"> =</span><span class="z-variable z-other"> req</span><span>.</span><span class="z-variable z-other">body</span><span>;</span></span>
+<span class="giallo-l"><span>  </span></span>
+<span class="giallo-l"><span class="z-punctuation z-definition z-comment">  //</span><span class="z-comment"> Validation</span></span>
+<span class="giallo-l"><span class="z-keyword">  if</span><span> (</span><span class="z-keyword">!</span><span class="z-variable z-other">name</span><span class="z-keyword"> ||</span><span class="z-variable z-other"> name</span><span>.</span><span class="z-support z-variable">length</span><span class="z-keyword"> &lt;</span><span class="z-constant"> 2</span><span>)</span><span> {</span></span>
+<span class="giallo-l"><span class="z-keyword">    return</span><span class="z-variable z-other"> res</span><span>.</span><span class="z-entity z-name">status</span><span>(</span><span class="z-constant">400</span><span>)</span><span>.</span><span class="z-entity z-name">json</span><span>(</span><span>{</span><span> error</span><span>:</span><span class="z-punctuation z-definition z-string"> &#39;</span><span class="z-string">Tên phải có ít nhất 2 ký tự</span><span class="z-punctuation z-definition z-string">&#39;</span><span> }</span><span>)</span><span>;</span></span>
+<span class="giallo-l"><span>  }</span></span>
+<span class="giallo-l"><span>  </span></span>
+<span class="giallo-l"><span class="z-keyword">  if</span><span> (</span><span class="z-keyword">!</span><span class="z-entity z-name">isValidEmail</span><span>(</span><span class="z-variable z-other">email</span><span>)</span><span>)</span><span> {</span></span>
+<span class="giallo-l"><span class="z-keyword">    return</span><span class="z-variable z-other"> res</span><span>.</span><span class="z-entity z-name">status</span><span>(</span><span class="z-constant">400</span><span>)</span><span>.</span><span class="z-entity z-name">json</span><span>(</span><span>{</span><span> error</span><span>:</span><span class="z-punctuation z-definition z-string"> &#39;</span><span class="z-string">Email không hợp lệ</span><span class="z-punctuation z-definition z-string">&#39;</span><span> }</span><span>)</span><span>;</span></span>
+<span class="giallo-l"><span>  }</span></span>
+<span class="giallo-l"><span>  </span></span>
+<span class="giallo-l"><span class="z-keyword">  if</span><span> (</span><span class="z-variable z-other">password</span><span>.</span><span class="z-support z-variable">length</span><span class="z-keyword"> &lt;</span><span class="z-constant"> 8</span><span>)</span><span> {</span></span>
+<span class="giallo-l"><span class="z-keyword">    return</span><span class="z-variable z-other"> res</span><span>.</span><span class="z-entity z-name">status</span><span>(</span><span class="z-constant">400</span><span>)</span><span>.</span><span class="z-entity z-name">json</span><span>(</span><span>{</span><span> error</span><span>:</span><span class="z-punctuation z-definition z-string"> &#39;</span><span class="z-string">Mật khẩu phải có ít nhất 8 ký tự</span><span class="z-punctuation z-definition z-string">&#39;</span><span> }</span><span>)</span><span>;</span></span>
+<span class="giallo-l"><span>  }</span></span>
+<span class="giallo-l"><span>  </span></span>
+<span class="giallo-l"><span class="z-punctuation z-definition z-comment">  //</span><span class="z-comment"> Sanitization</span></span>
+<span class="giallo-l"><span class="z-storage z-type">  const</span><span class="z-variable z-other z-constant"> sanitizedData</span><span class="z-keyword"> =</span><span> {</span></span>
+<span class="giallo-l"><span>    name</span><span>:</span><span class="z-entity z-name"> sanitize</span><span>(</span><span class="z-variable z-other">name</span><span>)</span><span>,</span></span>
+<span class="giallo-l"><span>    email</span><span>:</span><span class="z-entity z-name"> sanitize</span><span>(</span><span class="z-variable z-other">email</span><span>)</span><span>,</span></span>
+<span class="giallo-l"><span>    password</span><span>:</span><span class="z-entity z-name"> hashPassword</span><span>(</span><span class="z-variable z-other">password</span><span>)</span></span>
+<span class="giallo-l"><span>  }</span><span>;</span></span>
+<span class="giallo-l"><span>  </span></span>
+<span class="giallo-l"><span class="z-punctuation z-definition z-comment">  //</span><span class="z-comment"> Tạo user...</span></span>
+<span class="giallo-l"><span>}</span><span>)</span><span>;</span></span></code></pre><h3 id="2-rate-limiting">2. Rate Limiting<a class="zola-anchor" href="#2-rate-limiting" aria-label="Anchor link for: 2-rate-limiting" style="visibility: hidden;"></a></h3>
+<pre class="giallo z-code"><code data-lang="javascript"><span class="giallo-l"><span class="z-storage z-type">const</span><span class="z-variable z-other z-constant"> rateLimit</span><span class="z-keyword"> =</span><span class="z-entity z-name"> require</span><span>(</span><span class="z-punctuation z-definition z-string">&#39;</span><span class="z-string">express-rate-limit</span><span class="z-punctuation z-definition z-string">&#39;</span><span>)</span><span>;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-punctuation z-definition z-comment">//</span><span class="z-comment"> Giới hạn POST requests</span></span>
+<span class="giallo-l"><span class="z-storage z-type">const</span><span class="z-variable z-other z-constant"> postLimiter</span><span class="z-keyword"> =</span><span class="z-entity z-name"> rateLimit</span><span>(</span><span>{</span></span>
+<span class="giallo-l"><span>  windowMs</span><span>:</span><span class="z-constant"> 15</span><span class="z-keyword"> *</span><span class="z-constant"> 60</span><span class="z-keyword"> *</span><span class="z-constant"> 1000</span><span>,</span><span class="z-punctuation z-definition z-comment"> //</span><span class="z-comment"> 15 phút</span></span>
+<span class="giallo-l"><span>  max</span><span>:</span><span class="z-constant"> 10</span><span>,</span><span class="z-punctuation z-definition z-comment"> //</span><span class="z-comment"> Tối đa 10 requests</span></span>
+<span class="giallo-l"><span>  message</span><span>:</span><span class="z-punctuation z-definition z-string"> &#39;</span><span class="z-string">Quá nhiều yêu cầu tạo mới, vui lòng thử lại sau</span><span class="z-punctuation z-definition z-string">&#39;</span></span>
+<span class="giallo-l"><span>}</span><span>)</span><span>;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-variable z-other">app</span><span>.</span><span class="z-entity z-name">post</span><span>(</span><span class="z-punctuation z-definition z-string">&#39;</span><span class="z-string">/api/users</span><span class="z-punctuation z-definition z-string">&#39;</span><span>,</span><span class="z-variable z-other"> postLimiter</span><span>,</span><span> (</span><span class="z-variable">req</span><span>,</span><span class="z-variable"> res</span><span>)</span><span class="z-storage z-type"> =&gt;</span><span> {</span></span>
+<span class="giallo-l"><span class="z-punctuation z-definition z-comment">  //</span><span class="z-comment"> Xử lý tạo user</span></span>
+<span class="giallo-l"><span>}</span><span>)</span><span>;</span></span></code></pre><h3 id="3-cors-configuration">3. CORS Configuration<a class="zola-anchor" href="#3-cors-configuration" aria-label="Anchor link for: 3-cors-configuration" style="visibility: hidden;"></a></h3>
+<pre class="giallo z-code"><code data-lang="javascript"><span class="giallo-l"><span class="z-storage z-type">const</span><span class="z-variable z-other z-constant"> cors</span><span class="z-keyword"> =</span><span class="z-entity z-name"> require</span><span>(</span><span class="z-punctuation z-definition z-string">&#39;</span><span class="z-string">cors</span><span class="z-punctuation z-definition z-string">&#39;</span><span>)</span><span>;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-variable z-other">app</span><span>.</span><span class="z-entity z-name">use</span><span>(</span><span class="z-entity z-name">cors</span><span>(</span><span>{</span></span>
+<span class="giallo-l"><span>  origin</span><span>:</span><span> [</span><span class="z-punctuation z-definition z-string">&#39;</span><span class="z-string">https://myapp.com</span><span class="z-punctuation z-definition z-string">&#39;</span><span>,</span><span class="z-punctuation z-definition z-string"> &#39;</span><span class="z-string">https://admin.myapp.com</span><span class="z-punctuation z-definition z-string">&#39;</span><span>]</span><span>,</span></span>
+<span class="giallo-l"><span>  methods</span><span>:</span><span> [</span><span class="z-punctuation z-definition z-string">&#39;</span><span class="z-string">GET</span><span class="z-punctuation z-definition z-string">&#39;</span><span>,</span><span class="z-punctuation z-definition z-string"> &#39;</span><span class="z-string">POST</span><span class="z-punctuation z-definition z-string">&#39;</span><span>,</span><span class="z-punctuation z-definition z-string"> &#39;</span><span class="z-string">PUT</span><span class="z-punctuation z-definition z-string">&#39;</span><span>,</span><span class="z-punctuation z-definition z-string"> &#39;</span><span class="z-string">DELETE</span><span class="z-punctuation z-definition z-string">&#39;</span><span>]</span><span>,</span></span>
+<span class="giallo-l"><span>  allowedHeaders</span><span>:</span><span> [</span><span class="z-punctuation z-definition z-string">&#39;</span><span class="z-string">Content-Type</span><span class="z-punctuation z-definition z-string">&#39;</span><span>,</span><span class="z-punctuation z-definition z-string"> &#39;</span><span class="z-string">Authorization</span><span class="z-punctuation z-definition z-string">&#39;</span><span>]</span><span>,</span></span>
+<span class="giallo-l"><span>  credentials</span><span>:</span><span class="z-constant"> true</span></span>
+<span class="giallo-l"><span>}</span><span>)</span><span>)</span><span>;</span></span></code></pre><h2 id="performance-optimization">Performance Optimization<a class="zola-anchor" href="#performance-optimization" aria-label="Anchor link for: performance-optimization" style="visibility: hidden;"></a></h2>
+<h3 id="1-caching-cho-get-requests">1. Caching cho GET requests<a class="zola-anchor" href="#1-caching-cho-get-requests" aria-label="Anchor link for: 1-caching-cho-get-requests" style="visibility: hidden;"></a></h3>
+<pre class="giallo z-code"><code data-lang="javascript"><span class="giallo-l"><span class="z-storage z-type">const</span><span class="z-variable z-other z-constant"> NodeCache</span><span class="z-keyword"> =</span><span class="z-entity z-name"> require</span><span>(</span><span class="z-punctuation z-definition z-string">&#39;</span><span class="z-string">node-cache</span><span class="z-punctuation z-definition z-string">&#39;</span><span>)</span><span>;</span></span>
+<span class="giallo-l"><span class="z-storage z-type">const</span><span class="z-variable z-other z-constant"> cache</span><span class="z-keyword"> =</span><span class="z-keyword"> new</span><span class="z-entity z-name"> NodeCache</span><span>(</span><span>{</span><span> stdTTL</span><span>:</span><span class="z-constant"> 300</span><span> }</span><span>)</span><span>;</span><span class="z-punctuation z-definition z-comment"> //</span><span class="z-comment"> Cache 5 phút</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-variable z-other">app</span><span>.</span><span class="z-entity z-name">get</span><span>(</span><span class="z-punctuation z-definition z-string">&#39;</span><span class="z-string">/api/users</span><span class="z-punctuation z-definition z-string">&#39;</span><span>,</span><span> (</span><span class="z-variable">req</span><span>,</span><span class="z-variable"> res</span><span>)</span><span class="z-storage z-type"> =&gt;</span><span> {</span></span>
+<span class="giallo-l"><span class="z-storage z-type">  const</span><span class="z-variable z-other z-constant"> cacheKey</span><span class="z-keyword"> =</span><span class="z-punctuation z-definition z-string"> &#39;</span><span class="z-string">users_list</span><span class="z-punctuation z-definition z-string">&#39;</span><span>;</span></span>
+<span class="giallo-l"><span class="z-storage z-type">  const</span><span class="z-variable z-other z-constant"> cachedData</span><span class="z-keyword"> =</span><span class="z-variable z-other"> cache</span><span>.</span><span class="z-entity z-name">get</span><span>(</span><span class="z-variable z-other">cacheKey</span><span>)</span><span>;</span></span>
+<span class="giallo-l"><span>  </span></span>
+<span class="giallo-l"><span class="z-keyword">  if</span><span> (</span><span class="z-variable z-other">cachedData</span><span>)</span><span> {</span></span>
+<span class="giallo-l"><span class="z-keyword">    return</span><span class="z-variable z-other"> res</span><span>.</span><span class="z-entity z-name">json</span><span>(</span><span class="z-variable z-other">cachedData</span><span>)</span><span>;</span></span>
+<span class="giallo-l"><span>  }</span></span>
+<span class="giallo-l"><span>  </span></span>
+<span class="giallo-l"><span class="z-storage z-type">  const</span><span class="z-variable z-other z-constant"> users</span><span class="z-keyword"> =</span><span class="z-entity z-name"> getUsersFromDatabase</span><span>(</span><span>)</span><span>;</span></span>
+<span class="giallo-l"><span class="z-variable z-other">  cache</span><span>.</span><span class="z-entity z-name">set</span><span>(</span><span class="z-variable z-other">cacheKey</span><span>,</span><span class="z-variable z-other"> users</span><span>)</span><span>;</span></span>
+<span class="giallo-l"><span class="z-variable z-other">  res</span><span>.</span><span class="z-entity z-name">json</span><span>(</span><span class="z-variable z-other">users</span><span>)</span><span>;</span></span>
+<span class="giallo-l"><span>}</span><span>)</span><span>;</span></span></code></pre><h3 id="2-pagination-cho-get-requests">2. Pagination cho GET requests<a class="zola-anchor" href="#2-pagination-cho-get-requests" aria-label="Anchor link for: 2-pagination-cho-get-requests" style="visibility: hidden;"></a></h3>
+<pre class="giallo z-code"><code data-lang="javascript"><span class="giallo-l"><span class="z-variable z-other">app</span><span>.</span><span class="z-entity z-name">get</span><span>(</span><span class="z-punctuation z-definition z-string">&#39;</span><span class="z-string">/api/users</span><span class="z-punctuation z-definition z-string">&#39;</span><span>,</span><span> (</span><span class="z-variable">req</span><span>,</span><span class="z-variable"> res</span><span>)</span><span class="z-storage z-type"> =&gt;</span><span> {</span></span>
+<span class="giallo-l"><span class="z-storage z-type">  const</span><span class="z-variable z-other z-constant"> page</span><span class="z-keyword"> =</span><span class="z-entity z-name"> parseInt</span><span>(</span><span class="z-variable z-other">req</span><span>.</span><span class="z-variable z-other">query</span><span>.</span><span class="z-variable z-other">page</span><span>)</span><span class="z-keyword"> ||</span><span class="z-constant"> 1</span><span>;</span></span>
+<span class="giallo-l"><span class="z-storage z-type">  const</span><span class="z-variable z-other z-constant"> limit</span><span class="z-keyword"> =</span><span class="z-entity z-name"> parseInt</span><span>(</span><span class="z-variable z-other">req</span><span>.</span><span class="z-variable z-other">query</span><span>.</span><span class="z-variable z-other">limit</span><span>)</span><span class="z-keyword"> ||</span><span class="z-constant"> 10</span><span>;</span></span>
+<span class="giallo-l"><span class="z-storage z-type">  const</span><span class="z-variable z-other z-constant"> offset</span><span class="z-keyword"> =</span><span> (</span><span class="z-variable z-other">page</span><span class="z-keyword"> -</span><span class="z-constant"> 1</span><span>)</span><span class="z-keyword"> *</span><span class="z-variable z-other"> limit</span><span>;</span></span>
+<span class="giallo-l"><span>  </span></span>
+<span class="giallo-l"><span class="z-storage z-type">  const</span><span class="z-variable z-other z-constant"> users</span><span class="z-keyword"> =</span><span class="z-entity z-name"> getUsersFromDatabase</span><span>(</span><span class="z-variable z-other">limit</span><span>,</span><span class="z-variable z-other"> offset</span><span>)</span><span>;</span></span>
+<span class="giallo-l"><span class="z-storage z-type">  const</span><span class="z-variable z-other z-constant"> total</span><span class="z-keyword"> =</span><span class="z-entity z-name"> getTotalUsersCount</span><span>(</span><span>)</span><span>;</span></span>
+<span class="giallo-l"><span>  </span></span>
+<span class="giallo-l"><span class="z-variable z-other">  res</span><span>.</span><span class="z-entity z-name">json</span><span>(</span><span>{</span></span>
+<span class="giallo-l"><span>    data</span><span>:</span><span class="z-variable z-other"> users</span><span>,</span></span>
+<span class="giallo-l"><span>    pagination</span><span>:</span><span> {</span></span>
+<span class="giallo-l"><span class="z-variable z-other">      page</span><span>,</span></span>
+<span class="giallo-l"><span class="z-variable z-other">      limit</span><span>,</span></span>
+<span class="giallo-l"><span class="z-variable z-other">      total</span><span>,</span></span>
+<span class="giallo-l"><span>      totalPages</span><span>:</span><span class="z-variable z-other"> Math</span><span>.</span><span class="z-entity z-name">ceil</span><span>(</span><span class="z-variable z-other">total</span><span class="z-keyword"> /</span><span class="z-variable z-other"> limit</span><span>)</span></span>
+<span class="giallo-l"><span>    }</span></span>
+<span class="giallo-l"><span>  }</span><span>)</span><span>;</span></span>
+<span class="giallo-l"><span>}</span><span>)</span><span>;</span></span></code></pre><h3 id="3-compression">3. Compression<a class="zola-anchor" href="#3-compression" aria-label="Anchor link for: 3-compression" style="visibility: hidden;"></a></h3>
+<pre class="giallo z-code"><code data-lang="javascript"><span class="giallo-l"><span class="z-storage z-type">const</span><span class="z-variable z-other z-constant"> compression</span><span class="z-keyword"> =</span><span class="z-entity z-name"> require</span><span>(</span><span class="z-punctuation z-definition z-string">&#39;</span><span class="z-string">compression</span><span class="z-punctuation z-definition z-string">&#39;</span><span>)</span><span>;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-variable z-other">app</span><span>.</span><span class="z-entity z-name">use</span><span>(</span><span class="z-entity z-name">compression</span><span>(</span><span>{</span></span>
+<span class="giallo-l"><span class="z-entity z-name">  filter</span><span>:</span><span> (</span><span class="z-variable">req</span><span>,</span><span class="z-variable"> res</span><span>)</span><span class="z-storage z-type"> =&gt;</span><span> {</span></span>
+<span class="giallo-l"><span class="z-keyword">    if</span><span> (</span><span class="z-variable z-other">req</span><span>.</span><span class="z-variable z-other">headers</span><span>[</span><span class="z-punctuation z-definition z-string">&#39;</span><span class="z-string">x-no-compression</span><span class="z-punctuation z-definition z-string">&#39;</span><span>]</span><span>)</span><span> {</span></span>
+<span class="giallo-l"><span class="z-keyword">      return</span><span class="z-constant"> false</span><span>;</span></span>
+<span class="giallo-l"><span>    }</span></span>
+<span class="giallo-l"><span class="z-keyword">    return</span><span class="z-variable z-other"> compression</span><span>.</span><span class="z-entity z-name">filter</span><span>(</span><span class="z-variable z-other">req</span><span>,</span><span class="z-variable z-other"> res</span><span>)</span><span>;</span></span>
+<span class="giallo-l"><span>  }</span></span>
+<span class="giallo-l"><span>}</span><span>)</span><span>)</span><span>;</span></span></code></pre><h2 id="ket-luan">Kết luận<a class="zola-anchor" href="#ket-luan" aria-label="Anchor link for: ket-luan" style="visibility: hidden;"></a></h2>
+<p>HTTP Methods là nền tảng của giao tiếp web hiện đại. Hiểu rõ từng method và cách sử dụng chúng đúng cách sẽ giúp bạn:</p>
+<p><strong>Xây dựng APIs chất lượng</strong>: RESTful, dễ hiểu và maintainable</p>
+<p><strong>Tối ưu performance</strong>: Sử dụng caching hiệu quả, giảm tải server</p>
+<p><strong>Đảm bảo bảo mật</strong>: Proper validation, authorization và rate limiting</p>
+<p><strong>Tăng trải nghiệm người dùng</strong>: Responses nhanh, error handling tốt</p>
+<p><strong>Dễ dàng debugging</strong>: Clear semantics giúp troubleshooting dễ dàng hơn</p>
+<p>Hãy luôn nhớ các nguyên tắc cơ bản: GET để lấy dữ liệu, POST để tạo mới, PUT/PATCH để cập nhật, DELETE để xóa. Kết hợp với việc sử dụng đúng status codes và headers, bạn sẽ tạo ra những APIs professional và robust.</p>
+<p>Trong thực tế, việc thiết kế API tốt không chỉ dừng lại ở việc chọn đúng HTTP method mà còn bao gồm nhiều yếu tố khác như authentication, error handling, documentation, và monitoring. Tuy nhiên, nắm vững HTTP Methods là bước đầu tiên và quan trọng nhất trong hành trình này.</p>
+<hr />
+
+      </article>
+
+      
+      
+
+      
+      
+    </div>
+
+    
+
+
+<footer>
+  <div class="left">
+    <div class="copyright">
+      © 2025 <a href="https:&#x2F;&#x2F;wen.is-a.dev">Wen</a>
+      
+    </div>
+  </div>
+
+  <div class="right">
+    
+    
+    
+    
+
+    <!-- 
+    
+    
+    <button id="theme-toggle" aria-label="theme switch">
+      <span class="moon-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill="currentColor"></path></svg>
+</span>
+      <span class="sun-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z" fill="currentColor"></path></svg>
+</span>
+    </button>
+     -->
+  </div>
+</footer>
+
+
+
+
+  </main>
+</div>
+
+  
+<script src="/js/lightense.min.js"></script>
+
+
+
+  <script src="https://wen.is-a.dev/js/main.js"></script>
+</body>
+
+</html>
