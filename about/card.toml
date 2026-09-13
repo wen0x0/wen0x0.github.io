@@ -1,0 +1,22 @@
+[[collection]]
+type = "card"
+title = "Endava Vietnam"
+subtitle = "Software Developer Intern" # optional
+date = "Sep 2025 — Nov 2025" # optional
+# link = "https://example.com" # optional
+icon = "https://th.bing.com/th/id/ODF.BtKI0l-XZHSHwNWdgh1QMw?w=32&h=32&qlt=90&pcl=fffffc&o=6&cb=ucfimg1&pid=1.2&ucfimg=1" # optional
+content = "Worked on C/C++ development for IMS/CSCF systems, including simulation tools, message parsing, and session tracing, with exposure to telecom protocols and Agile/DevOps."
+# tags = ["tag1", "tag2"] # optional
+# featured = false  # optional
+
+[[collection]]
+type = "card"
+title = "HPT Vietnam Corporation"
+subtitle = "Cybersecurity R&D Intern" # optional
+date = "Aug 2025 — Nov 2025" # optional
+# link = "https://example.com" # optional
+icon = "img/hpt_vietnam_corporation_logo.jpg" # optional
+content = "Assisted in building pentesting (PtaaS) workflows, integrating automation into platforms with dashboards and reporting, and contributing to testing and documentation."
+# tags = ["tag1", "tag2"] # optional
+# featured = false  # optional
+

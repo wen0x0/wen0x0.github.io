@@ -1,0 +1,44 @@
+[[collection]]
+type = "card_simple"
+title = "Title"
+# date = "Date" # optional
+link = "https://example.com" # optional
+# icon = "https://example.com/image.png" # optional
+content = "Content"
+# featured = false  # optional
+
+[[collection]]
+type = "card_simple"
+title = "Title"
+# date = "Date" # optional
+link = "https://example.com" # optional
+# icon = "https://example.com/image.png" # optional
+content = "Content"
+# featured = false  # optional
+
+[[collection]]
+type = "card_simple"
+title = "Title"
+# date = "Date" # optional
+link = "https://example.com" # optional
+# icon = "https://example.com/image.png" # optional
+content = "Content"
+# featured = false  # optional
+
+[[collection]]
+type = "card_simple"
+title = "Title"
+# date = "Date" # optional
+link = "https://example.com" # optional
+# icon = "https://example.com/image.png" # optional
+content = "Content"
+# featured = false  # optional
+
+[[collection]]
+type = "card_simple"
+title = "Title"
+# date = "Date" # optional
+link = "https://example.com" # optional
+# icon = "https://example.com/image.png" # optional
+content = "Content"
+# featured = false  # optional
