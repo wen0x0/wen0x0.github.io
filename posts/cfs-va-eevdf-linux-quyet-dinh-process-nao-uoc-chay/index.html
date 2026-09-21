@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  
+
+
+
+<meta name="description" content="So sánh ý tưởng, cơ chế hoạt động và điểm khác biệt giữa CFS và EEVDF, hai bộ lập lịch tiến trình (scheduler) trong nhân Linux">
+
+  <title>CFS và EEVDF – Hai thế hệ bộ lập lịch CPU của Linux</title>
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://wen.is-a.dev/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://wen.is-a.dev/img/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://wen.is-a.dev/img/apple-touch-icon.png">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Ancizar+Sans:ital,wght@0,100..1000;1,100..1000&family=Bitter:ital,wght@0,100..900;1,100..900&family=Indie+Flower&family=Lora:ital,wght@0,400..700;1,400..700&family=Marcellus&display=swap"
+    rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500..700&display=swap" rel="stylesheet">
+  
+  <style>
+  /* Light mode */
+  body {
+    --primary-color: #005e05;
+    --primary-pale-color: #5871a233;
+    --primary-decoration-color: #02020210;
+
+    --bg-color: #F7FAF7;
+    --text-color: #26373a;
+    --text-pale-color: #0f5f63;
+    --text-decoration-color: #a9a9a9;
+
+    --highlight-mark-color: #5f75b020;
+
+    --callout-note-color: #5871a2;
+    --callout-tip-color: #268556;
+    --callout-important-color: #885fc9;
+    --callout-warning-color: #ab6632;
+    --callout-caution-color: #c64e4e;
+
+    /* Typography and layout */
+    --main-font:
+      Nunito, ui-sans-serif, system-ui, Inter, sans-serif,
+      "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+      "Noto Color Emoji";
+
+    --heading-font:
+      "Quicksand", "Lora", "Bitter", ui-sans-serif, system-ui, sans-serif,
+      "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+      "Noto Color Emoji";
+
+    --code-font:
+      "Cascadia Code", "Fira Code", ui-monospace, SFMono-Regular, Menlo,
+      Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+    --homepage-max-width: 800px;
+    --main-max-width: 800px;
+    --avatar-size: 75px;
+    --font-size: 16px;
+    --line-height: 1.75;
+
+    --img-border-radius: 0;
+    --detail-border-radius: 11px;
+    --inline-code-border-radius: 2px;
+    --block-code-border-radius: 0;
+
+    --dark-mode-img-brightness: 0.75;
+    --dark-mode-chart-brightness: 0.75;
+
+    --inline-code-bg-color: var(--primary-decoration-color);
+    --block-code-border-color: var(--primary-color);
+    --detail-border-color: var(--primary-color);
+  }
+
+  /* Dark mode */
+  body.dark {
+    --primary-color: #7cff7c;
+    --primary-pale-color: #6f8fd166;
+    --primary-decoration-color: #717172a9;
+
+    --bg-color: #1c2829;
+    --text-color: #d9f3f1;
+    --text-pale-color: #ffffff;
+    --text-decoration-color: #5f5f5f;
+
+    --highlight-mark-color: #8296cb3b;
+
+    --callout-note-color: #6f8fd1;
+    --callout-tip-color: #47976f;
+    --callout-important-color: #9776cd;
+    --callout-warning-color: #ad7a52;
+    --callout-caution-color: #d06161;
+  }
+
+  /* Typography */
+  #name,
+  #id,
+  #left,
+  a.post,
+  a.back-link,
+  a.tag,
+  a.category,
+  .title {
+    font-family: var(--heading-font);
+  }
+
+  span.date {
+    color: var(--text-pale-color);
+    font-weight: 100;
+    font-family: var(--code-font);
+  }
+
+  /* Homepage GIF */
+  .gif-wrapper {
+    margin: 1.5rem 0;
+    text-align: center;
+  }
+
+  .intro-gif {
+    max-width: 96%;
+    height: auto;
+    border-radius: 8px;
+  }
+
+  /* Verified icon */
+  .verified-icon {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 3px;
+    vertical-align: middle;
+  }
+
+  .verified-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Navigation */
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    width: 100%;
+    height: auto;
+    margin-top: 1em;
+    padding-bottom: 1em;
+
+    background: rgba(var(--background-rgb), 0.85);
+    border: 1px solid var(--border-color);
+    border-radius: var(--detail-border-radius);
+
+    backdrop-filter: blur(8px);
+  }
+
+  .top-nav nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+  }
+
+  .nav-left,
+  .nav-center,
+  .nav-right {
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-center {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    margin-top: 1em;
+    border-radius: 50%;
+  }
+
+  /* Menu */
+  .menu-wrapper {
+    position: relative;
+    margin-top: 1.5em;
+  }
+
+  .menu-trigger {
+    color: var(--text-color);
+    font-size: 1.5em;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+  }
+
+  .menu-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: 2000;
+
+    display: flex;
+    flex-direction: column;
+    min-width: 85px;
+    padding: 0.25em 0;
+
+    background: var(--bg-color);
+    border: 1px solid var(--primary-pale-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
+
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-10px);
+    transition:
+      opacity 0.25s ease,
+      transform 0.25s ease;
+  }
+
+  .menu-wrapper.active .menu-dropdown {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  .menu-dropdown a {
+    display: block;
+    margin: auto;
+    padding: 0.6em 1em;
+
+    color: var(--text-color);
+    font-family: var(--heading-font);
+    font-size: 0.95em;
+    text-decoration: none;
+
+    transition:
+      background 0.2s ease,
+      color 0.2s ease;
+  }
+
+  #theme-toggle:hover,
+  #rain-toggle:hover {
+    cursor: pointer;
+  }
+
+  /* Titles and quotes */
+  .foot-quote,
+  .section-title {
+    display: block;
+    margin-top: 2em;
+
+    font-family: "Lora", serif;
+    font-style: italic;
+    text-align: center;
+  }
+
+  .section-title {
+    margin-top: 0;
+  }
+
+  .year-heading {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+
+    font-family: var(--heading-font);
+    font-size: 1.5em;
+    font-weight: bold;
+  }
+
+  /* Post list */
+  .layout-list .post {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+  }
+
+  .post>span:first-child {
+    flex: 1;
+    min-width: 0;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .post>.date {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  span.title {
+    font-weight: bold;
+  }
+
+  /* Terminal caret */
+  #id.term-caret {
+    position: relative;
+
+    font-family: var(--code-font);
+    white-space: nowrap;
+  }
+
+  #id.term-caret::after {
+    content: "_";
+    margin-left: 4px;
+
+    color: currentColor;
+    opacity: 1;
+    animation: blink 1s steps(1, end) infinite;
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  /* Typewriter */
+  #id.typewriter {
+    font-family: var(--code-font);
+    white-space: nowrap;
+
+    border-right: 1ch solid currentColor;
+    animation: caret-blink 1s steps(1, end) infinite;
+  }
+
+  @keyframes caret-blink {
+    50% {
+      border-right-color: transparent;
+    }
+  }
+
+  /* Glitch effect */
+  #id.glitch {
+    position: relative;
+    display: inline-block;
+    font-family: var(--heading-font);
+  }
+
+  #id.glitch::before,
+  #id.glitch::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    content: attr(data-text);
+    clip-path: inset(0 0 0 0);
+    opacity: 0.85;
+  }
+
+  #id.glitch::before {
+    text-shadow: 1px 0 0 #f00;
+    mix-blend-mode: screen;
+    animation: glitch-1 2s infinite linear alternate-reverse;
+  }
+
+  #id.glitch::after {
+    text-shadow: -1px 0 0 #0ff;
+    mix-blend-mode: screen;
+    animation: glitch-2 2.2s infinite linear alternate-reverse;
+  }
+
+  @keyframes glitch-1 {
+    0% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(0, 0);
+    }
+
+    20% {
+      clip-path: inset(10% 0 60% 0);
+      transform: translate(-1px, -1px);
+    }
+
+    40% {
+      clip-path: inset(40% 0 30% 0);
+      transform: translate(1px, 1px);
+    }
+
+    60% {
+      clip-path: inset(20% 0 55% 0);
+      transform: translate(-1px, 0);
+    }
+
+    80% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 1px);
+    }
+
+    100% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(0, 0);
+    }
+  }
+
+  @keyframes glitch-2 {
+    0% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 0);
+    }
+
+    20% {
+      clip-path: inset(40% 0 30% 0);
+      transform: translate(1px, 0);
+    }
+
+    40% {
+      clip-path: inset(10% 0 60% 0);
+      transform: translate(0, -1px);
+    }
+
+    60% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(-1px, 1px);
+    }
+
+    80% {
+      clip-path: inset(20% 0 55% 0);
+      transform: translate(1px, 0);
+    }
+
+    100% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 0);
+    }
+  }
+
+  /* Accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    #id.term-caret::after {
+      animation: none;
+    }
+
+    #id.typewriter {
+      animation: none;
+      border-right-color: currentColor;
+    }
+
+    #id.glitch::before,
+    #id.glitch::after {
+      animation: none;
+    }
+  }
+
+  /* Entry image */
+  .entry-image {
+    width: 100%;
+    padding: 0 15px;
+    margin: 1rem 0 2rem;
+  }
+
+  .entry-image img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 2 / 1;
+    object-fit: cover;
+    border-radius: 18px;
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+
+  /* Mobile */
+  @media (max-width: 600px) {
+    .entry-image {
+      margin: 1.25rem 0 1.75rem;
+    }
+
+    .entry-image img {
+      aspect-ratio: 1.8 / 1;
+      border-radius: 14px;
+    }
+  }
+
+  /* turn off animation */
+  @media (prefers-reduced-motion: reduce) {
+    .entry-image img {
+      transition: none;
+    }
+
+    .entry-image img:hover {
+      transform: none;
+    }
+  }
+</style>
+  <link rel="stylesheet" href="https://wen.is-a.dev/main.css">
+  
+
+<link id="hl" rel="stylesheet" type="text/css" href="/hl-light.css" />
+
+
+
+  
+</head>
+
+<body class="post">
+
+  
+  <script>
+    const theme = sessionStorage.getItem('theme');
+    const match = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if ((theme && theme === 'dark') || (!theme && match)) {
+      document.body.classList.add('dark');
+      const hl = document.querySelector('link#hl');
+      if (hl) hl.href = 'https://wen.is-a.dev/hl-dark.css';
+    }
+  </script>
+  
+
+  
+<div id="wrapper">
+  <div id="blank"></div>
+  <aside>
+    
+    
+    
+    <button id="back-to-top" aria-label="back to top">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-up"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+
+    </button>
+    
+  </aside>
+  <main>
+    
+<header class="top-nav">
+  <nav>
+    <!-- Left: Back -->
+    <div class="nav-left">
+      <a href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts" class="back-link">← Back</a>
+    </div>
+
+    <!-- Center: Avatar -->
+    <div class="nav-center">
+      
+    </div>
+
+    <!-- Right: Menu dropdown -->
+    <div class="nav-right">
+
+      <div class="menu-wrapper">
+
+        <button class="menu-trigger" aria-label="menu">
+          &#9776;
+        </button>
+        <div class="menu-dropdown">
+          
+          <a  href="https://wen.is-a.dev/posts" >
+            Posts
+          </a>
+          
+          <a  href="https://wen.is-a.dev/tags" >
+            Tags
+          </a>
+          
+          <a  href="https://wen.is-a.dev/about" >
+            About
+          </a>
+          
+          <a  href="https://wen.is-a.dev/contact" >
+            Contact
+          </a>
+          
+
+          
+          
+          
+          
+          
+
+          <a id="theme-toggle" aria-label="theme switch">
+            <span class="moon-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill="currentColor"></path></svg>
+</span>
+            <span class="sun-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z" fill="currentColor"></path></svg>
+</span>
+          </a>
+
+          
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const trigger = document.querySelector(".menu-trigger");
+    const wrapper = document.querySelector(".menu-wrapper");
+
+    if (trigger && wrapper) {
+      trigger.addEventListener("click", () => {
+        wrapper.classList.toggle("active");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!wrapper.contains(e.target)) {
+          wrapper.classList.remove("active");
+        }
+      });
+    }
+  });
+
+</script>
+
+
+    <div>
+      
+      
+      
+      
+      <div id="copy-cfg" style="display: none;" data-copy-icon="&lt;svg xmlns=&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2000&#x2F;svg&quot; viewBox=&quot;0 0 24 24&quot; width=&quot;18&quot; height=&quot;18&quot;&gt;&lt;path d=&quot;M6.9998 6V3C6.9998 2.44772 7.44752 2 7.9998 2H19.9998C20.5521 2 20.9998 2.44772 20.9998 3V17C20.9998 17.5523 20.5521 18 19.9998 18H16.9998V20.9991C16.9998 21.5519 16.5499 22 15.993 22H4.00666C3.45059 22 3 21.5554 3 20.9991L3.0026 7.00087C3.0027 6.44811 3.45264 6 4.00942 6H6.9998ZM5.00242 8L5.00019 20H14.9998V8H5.00242ZM8.9998 6H16.9998V16H18.9998V4H8.9998V6Z&quot; fill=&quot;currentColor&quot;&gt;&lt;&#x2F;path&gt;&lt;&#x2F;svg&gt;
+" data-check-icon="&lt;svg xmlns=&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2000&#x2F;svg&quot; viewBox=&quot;0 0 24 24&quot; width=&quot;18&quot; height=&quot;18&quot;&gt;&lt;path d=&quot;M10.0007 15.1709L19.1931 5.97852L20.6073 7.39273L10.0007 17.9993L3.63672 11.6354L5.05093 10.2212L10.0007 15.1709Z&quot; fill=&quot;currentColor&quot;&gt;&lt;&#x2F;path&gt;&lt;&#x2F;svg&gt;
+">
+      </div>
+      
+      <article class="prose">
+        <h1 class="title">CFS và EEVDF – Hai thế hệ bộ lập lịch CPU của Linux</h1>
+        <div id="post-info">
+          <div id="date">
+            <span id="publish">Dec 27, 2025</span>
+            </div>
+
+          
+          <div id="tags">
+            <a class="instant" href="https://wen.is-a.dev/tags/linux"><span>#</span>linux</a><a class="instant" href="https://wen.is-a.dev/tags/kernel"><span>#</span>kernel</a><a class="instant" href="https://wen.is-a.dev/tags/scheduler"><span>#</span>scheduler</a><a class="instant" href="https://wen.is-a.dev/tags/cfs"><span>#</span>cfs</a><a class="instant" href="https://wen.is-a.dev/tags/eevdf"><span>#</span>eevdf</a>
+          </div>
+          
+        </div>
+
+        
+        
+
+        
+
+        <p>Bộ lập lịch (scheduler) quyết định tiến trình nào được chạy trên CPU, chạy trong bao lâu và khi nào bị nhường chỗ. Trong hơn 15 năm, Linux dùng <strong>CFS</strong> (Completely Fair Scheduler) làm bộ lập lịch mặc định cho các tiến trình thông thường. Từ Linux 6.6, CFS được thay bằng <strong>EEVDF</strong> (Earliest Eligible Virtual Deadline First). Bài này ghi lại ngắn gọn ý tưởng của cả hai và lý do có sự thay đổi này.</p>
+<h2 id="cfs-chia-deu-thoi-gian-cpu">CFS: chia đều thời gian CPU<a class="zola-anchor" href="#cfs-chia-deu-thoi-gian-cpu" aria-label="Anchor link for: cfs-chia-deu-thoi-gian-cpu" style="visibility: hidden;"></a></h2>
+<p>CFS xuất hiện từ Linux 2.6.23 (2007), do Ingo Molnar viết, thay thế bộ lập lịch O(1) trước đó. Ý tưởng cốt lõi: mô phỏng một CPU lý tưởng mà mọi tiến trình chạy song song với tốc độ bằng nhau (tỉ lệ theo trọng số).</p>
+<p>Để làm được điều này, CFS theo dõi <strong>vruntime</strong> (virtual runtime) của mỗi tiến trình:</p>
+<ul>
+<li>Tiến trình chạy càng lâu thì vruntime càng tăng.</li>
+<li>Trọng số (weight) lấy từ giá trị nice. Tiến trình có weight cao thì vruntime tăng chậm hơn, nên được chạy nhiều hơn.</li>
+<li>Các tiến trình sẵn sàng chạy được lưu trong một cây đỏ đen (red-black tree) sắp theo vruntime.</li>
+<li>Khi cần chọn tiến trình tiếp theo, scheduler lấy nút ngoài cùng bên trái, tức là tiến trình có vruntime nhỏ nhất, vì nó đang bị thiệt nhất.</li>
+</ul>
+<p>Công thức cập nhật đơn giản:</p>
+<pre class="giallo z-code"><code data-lang="plain"><span class="giallo-l"><span>vruntime += thoi_gian_da_chay * NICE_0_WEIGHT / weight</span></span></code></pre>
+<p>Thời gian mỗi tiến trình được chạy phụ thuộc vào hai tham số: <code>sched_latency</code> (khoảng thời gian mục tiêu để mọi tiến trình đều được chạy ít nhất một lần) và <code>min_granularity</code> (lát cắt tối thiểu, tránh chuyển ngữ cảnh quá dày).</p>
+<h3 id="han-che-cua-cfs">Hạn chế của CFS<a class="zola-anchor" href="#han-che-cua-cfs" aria-label="Anchor link for: han-che-cua-cfs" style="visibility: hidden;"></a></h3>
+<p>CFS công bằng về <strong>tổng lượng CPU</strong>, nhưng không có khái niệm rõ ràng về <strong>độ trễ</strong> (latency). Một tiến trình cần phản hồi nhanh, như tác vụ giao diện hoặc audio, không có cách chính thống nào để nói điều đó với scheduler. Nice chỉ đổi phần chia CPU chứ không đổi độ trễ.</p>
+<p>Vì vậy, qua nhiều năm CFS tích tụ khá nhiều heuristic để bù: ưu tiên tiến trình vừa thức dậy (wakeup preemption), điều chỉnh vruntime cho tiến trình ngủ lâu, các cơ chế "sleeper fairness"... Những heuristic này khó lập luận về tính đúng đắn và thường phải chỉnh tay cho từng workload.</p>
+<h2 id="eevdf-cong-bang-co-them-han-chot">EEVDF: công bằng có thêm hạn chót<a class="zola-anchor" href="#eevdf-cong-bang-co-them-han-chot" aria-label="Anchor link for: eevdf-cong-bang-co-them-han-chot" style="visibility: hidden;"></a></h2>
+<p>EEVDF bắt nguồn từ một bài báo năm 1995 của Ion Stoica và Hussein Abdel-Wahab. Peter Zijlstra đưa nó vào nhân Linux, và nó được merge trong bản 6.6. EEVDF vẫn giữ mục tiêu chia CPU công bằng theo trọng số, nhưng dựa trên hai khái niệm chặt chẽ hơn.</p>
+<p><strong>Lag.</strong> Lag của một tiến trình là hiệu số giữa thời gian CPU nó <em>đáng lẽ</em> được nhận (theo mô hình lý tưởng) và thời gian nó <em>thực sự</em> nhận. Lag dương nghĩa là tiến trình đang bị thiệt, lag âm nghĩa là nó đã nhận dư.</p>
+<p><strong>Eligible.</strong> Một tiến trình chỉ được xem xét chạy khi lag của nó không âm, tức là nó không đang chạy quá phần của mình.</p>
+<p><strong>Virtual deadline.</strong> Mỗi tiến trình có một hạn chót ảo, tính từ thời điểm nó bắt đầu đủ điều kiện cộng với lát cắt (slice) mà nó yêu cầu, chia cho weight:</p>
+<pre class="giallo z-code"><code data-lang="plain"><span class="giallo-l"><span>virtual_deadline = virtual_eligible_time + slice / weight</span></span></code></pre>
+<p>Quy tắc chọn rất gọn: <strong>trong các tiến trình eligible, chọn tiến trình có virtual deadline sớm nhất</strong>. Đó cũng chính là tên của thuật toán.</p>
+<h3 id="slice-dieu-khien-do-tre">Slice điều khiển độ trễ<a class="zola-anchor" href="#slice-dieu-khien-do-tre" aria-label="Anchor link for: slice-dieu-khien-do-tre" style="visibility: hidden;"></a></h3>
+<p>Đây là điểm khác biệt quan trọng nhất. Slice càng ngắn thì deadline càng sớm, nên tiến trình được chạy sớm hơn, nhưng mỗi lần chạy được ít hơn. Tổng lượng CPU vẫn do weight quyết định.</p>
+<p>Ví dụ hai tiến trình A và B cùng weight, cùng eligible tại một thời điểm:</p>
+<ul>
+<li>A yêu cầu slice 3ms, deadline là T + 3ms.</li>
+<li>B yêu cầu slice 10ms, deadline là T + 10ms.</li>
+</ul>
+<p>A sẽ được chọn trước, dù cả hai về lâu dài nhận lượng CPU như nhau. Nhờ vậy, tiến trình nhạy độ trễ có thể xin slice ngắn để phản hồi nhanh mà không cần "ăn gian" phần CPU của tiến trình khác. Từ Linux 6.12, ứng dụng có thể đặt slice riêng qua <code>sched_setattr()</code> (trường <code>sched_runtime</code>).</p>
+<p>Ngoài ra, các bản kernel mới còn có cơ chế delayed dequeue: tiến trình đi ngủ mà còn lag âm vẫn được giữ lại trong hàng đợi cho đến khi lag về không, để việc ngủ/thức không bị lợi dụng nhằm lấy lại phần CPU đã dùng dư.</p>
+<h2 id="so-sanh-nhanh">So sánh nhanh<a class="zola-anchor" href="#so-sanh-nhanh" aria-label="Anchor link for: so-sanh-nhanh" style="visibility: hidden;"></a></h2>
+<table><thead><tr><th>Tiêu chí</th><th>CFS</th><th>EEVDF</th></tr></thead><tbody>
+<tr><td>Nền tảng</td><td>Vruntime nhỏ nhất chạy trước</td><td>Eligible và deadline sớm nhất chạy trước</td></tr>
+<tr><td>Khái niệm độ trễ</td><td>Không có, dựa vào heuristic</td><td>Có, thể hiện qua slice và deadline</td></tr>
+<tr><td>Cấu trúc dữ liệu</td><td>Cây đỏ đen theo vruntime</td><td>Cây đỏ đen có bổ sung thông tin deadline</td></tr>
+<tr><td>Tiến trình ngủ/thức</td><td>Nhiều heuristic riêng</td><td>Dùng lag để xử lý nhất quán</td></tr>
+<tr><td>Chi phí chọn tiến trình</td><td>O(log n)</td><td>O(log n)</td></tr>
+<tr><td>Có trong nhân từ</td><td>2.6.23</td><td>6.6</td></tr>
+</tbody></table>
+<h2 id="ket-luan">Kết luận<a class="zola-anchor" href="#ket-luan" aria-label="Anchor link for: ket-luan" style="visibility: hidden;"></a></h2>
+<p>CFS trả lời câu hỏi "ai đang bị thiệt nhất?", còn EEVDF trả lời thêm "trong những ai bị thiệt, ai cần được chạy sớm nhất?". Việc tách bạch giữa <strong>phần CPU được chia</strong> (weight) và <strong>độ trễ mong muốn</strong> (slice) giúp scheduler dễ suy luận hơn và bớt phụ thuộc vào các heuristic rời rạc. Với người dùng thông thường, sự khác biệt thể hiện ở chỗ hệ thống phản hồi ổn định hơn khi tải cao, còn với người viết ứng dụng thì đã có thêm một công cụ để nói cho kernel biết tác vụ của mình cần gì.</p>
+<h2 id="tham-khao">Tham khảo<a class="zola-anchor" href="#tham-khao" aria-label="Anchor link for: tham-khao" style="visibility: hidden;"></a></h2>
+<ul>
+<li>Tài liệu kernel: "CFS Scheduler" và "EEVDF Scheduler" tại <a rel="nofollow noreferrer external" href="https://docs.kernel.org">docs.kernel.org</a></li>
+<li>Stoica, Abdel-Wahab, "Earliest Eligible Virtual Deadline First: A Flexible and Accurate Mechanism for Proportional Share Resource Allocation" (1995)</li>
+</ul>
+
+      </article>
+
+      
+      
+
+      
+      
+    </div>
+
+    
+
+
+<footer>
+  <div class="left">
+    <div class="copyright">
+      © 2026 <a href="https:&#x2F;&#x2F;wen.is-a.dev">Wen</a>
+      
+    </div>
+  </div>
+
+  <div class="right">
+    
+    
+    
+    
+
+    <!-- 
+    
+    
+    <button id="theme-toggle" aria-label="theme switch">
+      <span class="moon-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill="currentColor"></path></svg>
+</span>
+      <span class="sun-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z" fill="currentColor"></path></svg>
+</span>
+    </button>
+     -->
+  </div>
+</footer>
+
+
+
+
+  </main>
+</div>
+
+  
+<script src="/js/lightense.min.js"></script>
+
+
+
+  <script src="https://wen.is-a.dev/js/main.js"></script>
+</body>
+
+</html>

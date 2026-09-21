@@ -1,0 +1,54 @@
+/*
+ * theme "One Light"
+ */
+.z-code {
+    color: #383a42;
+    background-color: #fcfcfc;
+}
+
+.z-comment {
+    color: #707072;
+}
+
+.z-keyword,
+.z-storage {
+    color: #a626a4;
+}
+
+.z-variable,
+.z-support.z-other.z-variable {
+    color: #383a42;
+}
+
+.z-constant.z-numeric,
+.z-constant.z-language,
+.z-support.z-constant {
+    color: #986801;
+}
+
+.z-string,
+.z-constant.z-other.z-symbol {
+    color: #50a14f;
+}
+
+.z-entity.z-name.z-function,
+.z-meta.z-function-call,
+.z-support.z-function {
+    color: #4078f2;
+}
+
+.z-type,
+.z-entity.z-name.z-class,
+.z-support.z-type {
+    color: #c18401;
+}
+
+.z-entity.z-other.z-attribute-name,
+.z-meta.z-tag {
+    color: #e45649;
+}
+
+.z-invalid {
+    color: #ffffff;
+    background-color: #e45649;
+}

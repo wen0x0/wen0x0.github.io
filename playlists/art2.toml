@@ -1,0 +1,36 @@
+
+[[collection]]
+type = "art_simple"
+title = "Title"
+subtitle = "Subtitle" # optional
+link = "https://example.com" # optional
+img = "https://example.com/image.png"
+
+[[collection]]
+type = "art_simple"
+title = "Title"
+subtitle = "Subtitle" # optional
+link = "https://example.com" # optional
+img = "https://example.com/image.png"
+
+[[collection]]
+type = "art_simple"
+title = "Title"
+subtitle = "Subtitle" # optional
+link = "https://example.com" # optional
+img = "https://example.com/image.png"
+
+[[collection]]
+type = "art_simple"
+title = "Title"
+subtitle = "Subtitle" # optional
+link = "https://example.com" # optional
+img = "https://example.com/image.png"
+
+[[collection]]
+type = "art_simple"
+title = "Title"
+subtitle = "Subtitle" # optional
+link = "https://example.com" # optional
+img = "https://example.com/image.png"
+
