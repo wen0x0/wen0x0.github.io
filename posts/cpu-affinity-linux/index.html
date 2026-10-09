@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  
+
+
+
+<meta name="description" content="CPU affinity là gì, Linux dùng affinity mask như thế nào và cách quan sát, thay đổi affinity bằng taskset">
+
+  <title>CPU Affinity trong Linux – Tiến trình được chạy trên CPU nào?</title>
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://wen.is-a.dev/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://wen.is-a.dev/img/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://wen.is-a.dev/img/apple-touch-icon.png">
+  
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Ancizar+Sans:ital,wght@0,100..1000;1,100..1000&family=Bitter:ital,wght@0,100..900;1,100..900&family=Indie+Flower&family=Lora:ital,wght@0,400..700;1,400..700&family=Marcellus&display=swap"
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500..700&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+
+  <style>
+  /* Light mode */
+  body {
+    --primary-color: #005e05;
+    --primary-pale-color: #5871a233;
+    --primary-decoration-color: #02020210;
+
+    --bg-color: #F7FAF7;
+    --text-color: #26373a;
+    --text-pale-color: #0f5f63;
+    --text-decoration-color: #a9a9a9;
+
+    --highlight-mark-color: #5f75b020;
+
+    --callout-note-color: #5871a2;
+    --callout-tip-color: #268556;
+    --callout-important-color: #885fc9;
+    --callout-warning-color: #ab6632;
+    --callout-caution-color: #c64e4e;
+
+    /* Typography and layout */
+    --main-font:
+      Nunito, ui-sans-serif, system-ui, Inter, sans-serif,
+      "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+      "Noto Color Emoji";
+
+    --heading-font:
+      "Quicksand", "Lora", "Bitter", ui-sans-serif, system-ui, sans-serif,
+      "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+      "Noto Color Emoji";
+
+    --code-font:
+      "Jetbrains Mono", "Cascadia Code", "Fira Code", ui-monospace, SFMono-Regular, Menlo,
+      Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+    --homepage-max-width: 800px;
+    --main-max-width: 800px;
+    --avatar-size: 75px;
+    --font-size: 16px;
+    --line-height: 1.75;
+
+    --img-border-radius: 0;
+    --detail-border-radius: 11px;
+    --inline-code-border-radius: 2px;
+    --block-code-border-radius: 0;
+
+    --dark-mode-img-brightness: 0.75;
+    --dark-mode-chart-brightness: 0.75;
+
+    --inline-code-bg-color: var(--primary-decoration-color);
+    --block-code-border-color: var(--primary-color);
+    --detail-border-color: var(--primary-color);
+  }
+
+  /* Dark mode */
+  body.dark {
+    /* --primary-color: #7cff7c; */
+    --primary-color: #EFD56F;
+    --primary-pale-color: #6f8fd166;
+    --primary-decoration-color: #394a4f;
+
+    --bg-color: #1c2829;
+    --text-color: #ececec;
+    --text-pale-color: #ffffff;
+    --text-decoration-color: #5f5f5f;
+
+    --highlight-mark-color: #8296cb3b;
+
+    --callout-note-color: #6f8fd1;
+    --callout-tip-color: #47976f;
+    --callout-important-color: #9776cd;
+    --callout-warning-color: #ad7a52;
+    --callout-caution-color: #d06161;
+  }
+
+  /* Typography */
+  #name,
+  #id,
+  #left,
+  a.post,
+  a.back-link,
+  a.tag,
+  a.category,
+  .title {
+    font-family: var(--heading-font);
+  }
+
+  span.date {
+    color: var(--text-pale-color);
+    font-weight: 100;
+    font-family: var(--code-font);
+  }
+
+  /* Homepage GIF */
+  .gif-wrapper {
+    margin: 1.5rem 0;
+    text-align: center;
+  }
+
+  .intro-gif {
+    max-width: 96%;
+    height: auto;
+    border-radius: 8px;
+  }
+
+  /* Verified icon */
+  .verified-icon {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 3px;
+    vertical-align: middle;
+  }
+
+  .verified-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Navigation */
+  .top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    width: 100%;
+    height: auto;
+    margin-top: 1em;
+    padding-bottom: 1em;
+
+    background: rgba(var(--background-rgb), 0.85);
+    border: 1px solid var(--border-color);
+    border-radius: var(--detail-border-radius);
+
+    backdrop-filter: blur(8px);
+  }
+
+  .top-nav nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+  }
+
+	.anv-left,
+	.nav-right {
+		width: 3.2em;
+	}
+
+  .nav-left,
+  .nav-center,
+  .nav-right {
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-center {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    margin-top: 1em;
+    border-radius: 50%;
+  }
+
+  /* Menu */
+  .menu-wrapper {
+    position: relative;
+    margin-top: 1.5em;
+  }
+
+  .menu-trigger {
+    color: var(--text-color);
+    font-size: 1.5em;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+  }
+
+  .menu-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: 2000;
+
+    display: flex;
+    flex-direction: column;
+    min-width: 85px;
+    padding: 0.25em 0;
+
+    background: var(--bg-color);
+    border: 1px solid var(--primary-pale-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
+
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-10px);
+    transition:
+      opacity 0.25s ease,
+      transform 0.25s ease;
+  }
+
+  .menu-wrapper.active .menu-dropdown {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  .menu-dropdown a {
+    display: block;
+    margin: auto;
+    padding: 0.6em 1em;
+
+    color: var(--text-color);
+    font-family: var(--heading-font);
+    font-size: 0.95em;
+    text-decoration: none;
+
+    transition:
+      background 0.2s ease,
+      color 0.2s ease;
+  }
+
+  #theme-toggle:hover,
+  #rain-toggle:hover {
+    cursor: pointer;
+  }
+
+  /* Titles and quotes */
+  .foot-quote,
+  .section-title {
+    display: block;
+    margin-top: 2em;
+
+    font-family: "Lora", serif;
+    text-align: center;
+  }
+
+  .section-title {
+    margin-top: 0;
+  }
+
+  .year-heading {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+
+    font-family: var(--heading-font);
+    font-size: 1.5em;
+    font-weight: bold;
+  }
+
+  /* Post list */
+  .layout-list .post {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+  }
+
+  .post>span:first-child {
+    flex: 1;
+    min-width: 0;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .post>.date {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  span.title {
+    font-weight: bold;
+  }
+
+  /* Terminal caret */
+  #id.term-caret {
+    position: relative;
+
+    font-family: var(--code-font);
+    white-space: nowrap;
+  }
+
+  #id.term-caret::after {
+    content: "_";
+    margin-left: 4px;
+
+    color: currentColor;
+    opacity: 1;
+    animation: blink 1s steps(1, end) infinite;
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  /* Typewriter */
+  #id.typewriter {
+    font-family: var(--code-font);
+    white-space: nowrap;
+
+    border-right: 1ch solid currentColor;
+    animation: caret-blink 1s steps(1, end) infinite;
+  }
+
+  @keyframes caret-blink {
+    50% {
+      border-right-color: transparent;
+    }
+  }
+
+  /* Glitch effect */
+  #id.glitch {
+    position: relative;
+    display: inline-block;
+    font-family: var(--heading-font);
+  }
+
+  #id.glitch::before,
+  #id.glitch::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    content: attr(data-text);
+    clip-path: inset(0 0 0 0);
+    opacity: 0.85;
+  }
+
+  #id.glitch::before {
+    text-shadow: 1px 0 0 #f00;
+    mix-blend-mode: screen;
+    animation: glitch-1 2s infinite linear alternate-reverse;
+  }
+
+  #id.glitch::after {
+    text-shadow: -1px 0 0 #0ff;
+    mix-blend-mode: screen;
+    animation: glitch-2 2.2s infinite linear alternate-reverse;
+  }
+
+  @keyframes glitch-1 {
+    0% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(0, 0);
+    }
+
+    20% {
+      clip-path: inset(10% 0 60% 0);
+      transform: translate(-1px, -1px);
+    }
+
+    40% {
+      clip-path: inset(40% 0 30% 0);
+      transform: translate(1px, 1px);
+    }
+
+    60% {
+      clip-path: inset(20% 0 55% 0);
+      transform: translate(-1px, 0);
+    }
+
+    80% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 1px);
+    }
+
+    100% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(0, 0);
+    }
+  }
+
+  @keyframes glitch-2 {
+    0% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 0);
+    }
+
+    20% {
+      clip-path: inset(40% 0 30% 0);
+      transform: translate(1px, 0);
+    }
+
+    40% {
+      clip-path: inset(10% 0 60% 0);
+      transform: translate(0, -1px);
+    }
+
+    60% {
+      clip-path: inset(0 0 85% 0);
+      transform: translate(-1px, 1px);
+    }
+
+    80% {
+      clip-path: inset(20% 0 55% 0);
+      transform: translate(1px, 0);
+    }
+
+    100% {
+      clip-path: inset(70% 0 5% 0);
+      transform: translate(0, 0);
+    }
+  }
+
+  /* Accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    #id.term-caret::after {
+      animation: none;
+    }
+
+    #id.typewriter {
+      animation: none;
+      border-right-color: currentColor;
+    }
+
+    #id.glitch::before,
+    #id.glitch::after {
+      animation: none;
+    }
+  }
+
+  /* Entry image */
+  .entry-image {
+    width: 100%;
+    padding: 0 15px;
+    margin: 1rem 0 2rem;
+  }
+
+  .entry-image img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 2 / 1;
+    object-fit: cover;
+    border-radius: 18px;
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+
+  /* Mobile */
+  @media (max-width: 600px) {
+    .entry-image {
+      margin: 1.25rem 0 1.75rem;
+    }
+
+    .entry-image img {
+      aspect-ratio: 1.8 / 1;
+      border-radius: 14px;
+    }
+  }
+
+  /* turn off animation */
+  @media (prefers-reduced-motion: reduce) {
+    .entry-image img {
+      transition: none;
+    }
+
+    .entry-image img:hover {
+      transform: none;
+    }
+  }
+</style>
+
+  <link rel="stylesheet" href="https://wen.is-a.dev/main.css">
+  
+
+<link id="hl" rel="stylesheet" type="text/css" href="/hl-light.css" />
+
+
+
+  
+</head>
+
+<body class="post">
+
+  
+  <script>
+    const theme = sessionStorage.getItem('theme');
+    const match = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if ((theme && theme === 'dark') || (!theme && match)) {
+      document.body.classList.add('dark');
+      const hl = document.querySelector('link#hl');
+      if (hl) hl.href = 'https://wen.is-a.dev/hl-dark.css';
+    }
+  </script>
+  
+
+  
+<div id="wrapper">
+  <div id="blank"></div>
+  <aside>
+    
+    
+    
+    <button id="back-to-top" aria-label="back to top">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-up"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+
+    </button>
+    
+  </aside>
+  <main>
+    
+<header class="top-nav">
+  <nav>
+    <!-- Left: Back -->
+    <div class="nav-left">
+      <a href="https:&#x2F;&#x2F;wen.is-a.dev&#x2F;posts" class="back-link">← Back</a>
+    </div>
+
+    <!-- Center: Avatar -->
+    <div class="nav-center">
+      
+      <a href="/">
+        <img src="https://wen.is-a.dev/img/abc.png" alt="avatar" class="avatar">
+      </a>
+      
+    </div>
+
+    <!-- Right: Menu dropdown -->
+    <div class="nav-right">
+
+      <div class="menu-wrapper">
+
+        <button class="menu-trigger" aria-label="menu">
+          &#9776;
+        </button>
+        <div class="menu-dropdown">
+          
+          <a  href="https://wen.is-a.dev/posts" >
+            posts
+          </a>
+          
+          <a  href="https://wen.is-a.dev/tags" >
+            tags
+          </a>
+          
+          <a  href="https://wen.is-a.dev/about" >
+            about
+          </a>
+          
+          <a  href="https://wen.is-a.dev/contact" >
+            contact
+          </a>
+          
+
+          
+          
+          
+          
+          
+
+          <a id="theme-toggle" aria-label="theme switch">
+            <span class="moon-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill="currentColor"></path></svg>
+</span>
+            <span class="sun-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z" fill="currentColor"></path></svg>
+</span>
+          </a>
+
+          
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const trigger = document.querySelector(".menu-trigger");
+    const wrapper = document.querySelector(".menu-wrapper");
+
+    if (trigger && wrapper) {
+      trigger.addEventListener("click", () => {
+        wrapper.classList.toggle("active");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!wrapper.contains(e.target)) {
+          wrapper.classList.remove("active");
+        }
+      });
+    }
+  });
+
+</script>
+
+
+    <div>
+      
+      
+      
+      
+      <div id="copy-cfg" style="display: none;" data-copy-icon="&lt;svg xmlns=&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2000&#x2F;svg&quot; viewBox=&quot;0 0 24 24&quot; width=&quot;18&quot; height=&quot;18&quot;&gt;&lt;path d=&quot;M6.9998 6V3C6.9998 2.44772 7.44752 2 7.9998 2H19.9998C20.5521 2 20.9998 2.44772 20.9998 3V17C20.9998 17.5523 20.5521 18 19.9998 18H16.9998V20.9991C16.9998 21.5519 16.5499 22 15.993 22H4.00666C3.45059 22 3 21.5554 3 20.9991L3.0026 7.00087C3.0027 6.44811 3.45264 6 4.00942 6H6.9998ZM5.00242 8L5.00019 20H14.9998V8H5.00242ZM8.9998 6H16.9998V16H18.9998V4H8.9998V6Z&quot; fill=&quot;currentColor&quot;&gt;&lt;&#x2F;path&gt;&lt;&#x2F;svg&gt;
+" data-check-icon="&lt;svg xmlns=&quot;http:&#x2F;&#x2F;www.w3.org&#x2F;2000&#x2F;svg&quot; viewBox=&quot;0 0 24 24&quot; width=&quot;18&quot; height=&quot;18&quot;&gt;&lt;path d=&quot;M10.0007 15.1709L19.1931 5.97852L20.6073 7.39273L10.0007 17.9993L3.63672 11.6354L5.05093 10.2212L10.0007 15.1709Z&quot; fill=&quot;currentColor&quot;&gt;&lt;&#x2F;path&gt;&lt;&#x2F;svg&gt;
+">
+      </div>
+      
+      <article class="prose">
+        <h1 class="title">CPU Affinity trong Linux – Tiến trình được chạy trên CPU nào?</h1>
+        <div id="post-info">
+          <div id="date">
+            <span id="publish">Jan 09, 2026</span>
+            </div>
+
+          
+          <div id="tags">
+            <a class="instant" href="https://wen.is-a.dev/tags/linux"><span>#</span>linux</a><a class="instant" href="https://wen.is-a.dev/tags/kernel"><span>#</span>kernel</a><a class="instant" href="https://wen.is-a.dev/tags/scheduler"><span>#</span>scheduler</a>
+          </div>
+          
+        </div>
+
+        
+        
+
+        
+
+        <p>Khi có nhiều CPU, Linux scheduler quyết định tác vụ nào sẽ chạy trên CPU nào. Thông thường, scheduler được tự do di chuyển một tác vụ giữa các CPU để cân bằng tải. Nhưng đôi lúc ta muốn giới hạn lựa chọn đó: chẳng hạn chỉ cho một tiến trình chạy trên CPU 2 và 3.</p>
+<p>Danh sách CPU mà một tác vụ được phép chạy trên đó gọi là <strong>CPU affinity</strong>. Bài này tìm hiểu affinity mask trong Linux, cách xem và thay đổi nó, cùng mối liên hệ với CPU set và container.</p>
+<h2 id="cpu-affinity-la-gi">CPU affinity là gì?<a class="zola-anchor" href="#cpu-affinity-la-gi" aria-label="Anchor link for: cpu-affinity-la-gi" style="visibility: hidden;"></a></h2>
+<p><strong>CPU affinity</strong> có thể hiểu là tập hợp các CPU mà một tác vụ được phép chạy trên đó.</p>
+<p>Giả sử máy có 8 CPU logic, được đánh số từ 0 đến 7. Một tác vụ có affinity là <code>{2, 3}</code> có thể chạy trên CPU 2 hoặc CPU 3. Scheduler vẫn quyết định chính xác khi nào tác vụ chạy và chọn CPU nào trong tập hợp đó; affinity chỉ giới hạn những CPU hợp lệ.</p>
+<p>Có thể hình dung affinity như một danh sách các làn đường mà tác vụ được phép đi vào. Nó không bảo đảm tác vụ sẽ luôn chạy trên một CPU cụ thể, cũng không dành riêng CPU đó cho tác vụ.</p>
+<blockquote>
+<p>Trong Linux, “CPU” ở đây thường là <strong>CPU logic</strong> mà kernel nhìn thấy. Một CPU logic có thể tương ứng với một luồng phần cứng, chẳng hạn một logical processor trong hệ thống có SMT.</p>
+</blockquote>
+<h2 id="affinity-mask">Affinity mask<a class="zola-anchor" href="#affinity-mask" aria-label="Anchor link for: affinity-mask" style="visibility: hidden;"></a></h2>
+<p>Kernel biểu diễn tập CPU được phép chạy bằng một <strong>affinity mask</strong> — một mặt nạ bit, trong đó mỗi bit tương ứng với một CPU.</p>
+<p>Ví dụ, nếu CPU 1 và CPU 3 được chọn:</p>
+<pre class="giallo z-code"><code data-lang="plain"><span class="giallo-l"><span>CPU:   7 6 5 4 3 2 1 0</span></span>
+<span class="giallo-l"><span>Mask:  0 0 0 0 1 0 1 0</span></span></code></pre>
+<p>Mask này thường được viết ở dạng hexadecimal là <code>0xa</code>. Cách biểu diễn này tiện cho kernel và chương trình, nhưng khi thao tác trên terminal, ta thường dùng danh sách CPU như <code>1,3</code> hoặc <code>0-3</code>.</p>
+<h2 id="affinity-ap-dung-cho-thread">Affinity áp dụng cho thread<a class="zola-anchor" href="#affinity-ap-dung-cho-thread" aria-label="Anchor link for: affinity-ap-dung-cho-thread" style="visibility: hidden;"></a></h2>
+<p>Trong Linux, affinity được áp dụng theo <strong>thread</strong> (luồng), không phải một cách tuyệt đối cho cả tiến trình.</p>
+<p>Một tiến trình có thể gồm nhiều thread. Mỗi thread là một tác vụ mà scheduler quản lý, và mỗi thread có thể có affinity riêng. Khi tạo thread mới, affinity của thread mới thường được kế thừa từ thread tạo ra nó.</p>
+<p>Vì thế, khi xem hoặc đặt affinity, cần để ý mình đang thao tác với một thread hay với tất cả thread của tiến trình. Công cụ <code>taskset</code> có tùy chọn <code>-a</code> để áp dụng cho các tác vụ (threads) gắn với một PID.</p>
+<h2 id="xem-affinity-hien-tai">Xem affinity hiện tại<a class="zola-anchor" href="#xem-affinity-hien-tai" aria-label="Anchor link for: xem-affinity-hien-tai" style="visibility: hidden;"></a></h2>
+<p>Xem các CPU mà shell hiện tại được phép sử dụng:</p>
+<pre class="giallo z-code"><code data-lang="shellscript"><span class="giallo-l"><span class="z-entity z-name">taskset</span><span class="z-constant"> -</span><span class="z-constant">pc</span><span class="z-variable z-language"> $</span><span class="z-variable z-language">$</span></span></code></pre>
+<p>Ví dụ:</p>
+<pre class="giallo z-code"><code data-lang="plain"><span class="giallo-l"><span>pid 1234&#39;s current affinity list: 0-7</span></span></code></pre>
+<p>Điều đó nghĩa là tác vụ có thể chạy trên CPU logic từ 0 đến 7.</p>
+<p>Muốn kiểm tra một tiến trình đang chạy:</p>
+<pre class="giallo z-code"><code data-lang="plain"><span class="giallo-l"><span>taskset -pc &lt;PID&gt;</span></span></code></pre>
+<p>Để xem tất cả thread thuộc tiến trình:</p>
+<pre class="giallo z-code"><code data-lang="plain"><span class="giallo-l"><span>taskset -apc &lt;PID&gt;</span></span></code></pre>
+<p>Kernel cũng cung cấp thông tin này trong <code>/proc</code>:</p>
+<pre class="giallo z-code"><code data-lang="plain"><span class="giallo-l"><span>grep -E &#39;Cpus_allowed|Cpus_allowed_list&#39; /proc/&lt;PID&gt;/status</span></span></code></pre>
+<p>Có thể thấy kết quả dạng:</p>
+<pre class="giallo z-code"><code data-lang="plain"><span class="giallo-l"><span>Cpus_allowed:       000000ff</span></span>
+<span class="giallo-l"><span>Cpus_allowed_list:  0-7</span></span></code></pre>
+<p><code>Cpus_allowed_list</code> thường dễ đọc hơn: nó cho biết các CPU đang có trong tập được phép.</p>
+<h2 id="thay-doi-affinity-bang-taskset">Thay đổi affinity bằng <code>taskset</code><a class="zola-anchor" href="#thay-doi-affinity-bang-taskset" aria-label="Anchor link for: thay-doi-affinity-bang-taskset" style="visibility: hidden;"></a></h2>
+<p>Có thể chạy một chương trình với affinity được giới hạn ngay từ đầu:</p>
+<pre class="giallo z-code"><code data-lang="shellscript"><span class="giallo-l"><span class="z-entity z-name">taskset</span><span class="z-constant"> -</span><span class="z-constant">c</span><span class="z-string"> 2,3</span><span class="z-string"> ./my-program</span></span></code></pre>
+<p>Lệnh trên cho phép chương trình chạy trên CPU 2 hoặc CPU 3.</p>
+<p>Có thể giới hạn một chương trình đang chạy bằng PID:</p>
+<pre class="giallo z-code"><code data-lang="plain"><span class="giallo-l"><span>taskset -pc 2,3 &lt;PID&gt;</span></span></code></pre>
+<p>Hoặc áp dụng cho tất cả thread của tiến trình:</p>
+<pre class="giallo z-code"><code data-lang="plain"><span class="giallo-l"><span>taskset -apc 2,3 &lt;PID&gt;</span></span></code></pre>
+<p>Sau khi thay đổi, kiểm tra lại:</p>
+<pre class="giallo z-code"><code data-lang="plain"><span class="giallo-l"><span>taskset -pc &lt;PID&gt;</span></span></code></pre>
+<p>Nếu tác vụ đang chạy trên một CPU không còn nằm trong affinity mask mới, kernel có thể chuyển nó sang một CPU được phép.</p>
+<h2 id="affinity-khong-phai-la-ghim-cung-theo-nghia-doc-quyen">Affinity không phải là “ghim cứng” theo nghĩa độc quyền<a class="zola-anchor" href="#affinity-khong-phai-la-ghim-cung-theo-nghia-doc-quyen" aria-label="Anchor link for: affinity-khong-phai-la-ghim-cung-theo-nghia-doc-quyen" style="visibility: hidden;"></a></h2>
+<p>Đặt một tác vụ vào CPU 2 không có nghĩa CPU 2 chỉ chạy tác vụ đó. Những tác vụ khác vẫn có thể chạy trên CPU 2 nếu affinity của chúng cho phép.</p>
+<p>Tương tự, affinity <code>{2,3}</code> không cam kết tác vụ sẽ luôn được chạy ngay khi muốn. Nó chỉ nói với scheduler rằng <strong>nếu tác vụ được chọn để chạy</strong>, thì CPU được chọn phải nằm trong tập <code>{2,3}</code>. Thời điểm chạy vẫn do scheduler quyết định.</p>
+<p>Do đó, affinity khác với:</p>
+<ul>
+<li><strong>CPU reservation</strong>: dành trước năng lực CPU cho một workload.</li>
+<li><strong>CPU quota</strong>: giới hạn lượng thời gian CPU mà workload được dùng.</li>
+<li><strong>CPU isolation</strong>: cấu hình hệ thống để giảm hoặc loại bỏ các tác vụ khác khỏi một CPU.</li>
+</ul>
+<h2 id="tac-dung-va-danh-doi">Tác dụng và đánh đổi<a class="zola-anchor" href="#tac-dung-va-danh-doi" aria-label="Anchor link for: tac-dung-va-danh-doi" style="visibility: hidden;"></a></h2>
+<p>Giới hạn affinity có thể hữu ích khi cần kiểm soát vị trí chạy của workload. Ví dụ, nó có thể giúp giữ tác vụ gần dữ liệu trong cache, giảm việc di chuyển giữa các CPU hoặc hỗ trợ thử nghiệm hiệu năng có kiểm soát. Kernel cũng có thể lọc CPU được yêu cầu theo các giới hạn khác của hệ thống.</p>
+<p>Nhưng giới hạn quá chặt cũng có thể làm giảm hiệu năng:</p>
+<ul>
+<li>Scheduler có ít CPU hơn để cân bằng tải.</li>
+<li>Nếu các CPU được chọn đang bận, tác vụ phải chờ dù CPU khác đang rảnh.</li>
+<li>Chuyển động trong cache có thể giảm, nhưng việc cố định tác vụ không tự động làm toàn workload nhanh hơn.</li>
+<li>Nếu giới hạn cả tiến trình nhiều thread vào một CPU, các thread có thể tranh nhau thời gian trên cùng CPU.</li>
+</ul>
+<p>Vì vậy, affinity thường là một công cụ kiểm soát có mục đích cụ thể, không phải thiết lập mặc định nên áp dụng cho mọi chương trình.</p>
+<h2 id="affinity-va-cpuset">Affinity và cpuset<a class="zola-anchor" href="#affinity-va-cpuset" aria-label="Anchor link for: affinity-va-cpuset" style="visibility: hidden;"></a></h2>
+<p>Affinity của một tác vụ không phải giới hạn duy nhất. <strong>cpuset</strong> (CPU set) trong cgroup có thể giới hạn các CPU mà nhóm tác vụ được phép sử dụng. Kernel kết hợp các giới hạn này: tác vụ chỉ có thể chạy trên CPU vừa được affinity cho phép, vừa nằm trong phạm vi CPU mà cpuset của nó cho phép.</p>
+<p>Có thể hiểu đơn giản:</p>
+<pre class="giallo z-code"><code data-lang="plain"><span class="giallo-l"><span>CPU được phép chạy</span></span>
+<span class="giallo-l"><span>    = affinity của tác vụ</span></span>
+<span class="giallo-l"><span>      giao với CPU được cpuset cho phép</span></span>
+<span class="giallo-l"><span>      giao với CPU đang khả dụng</span></span></code></pre>
+<p>Trong cgroup v2, <code>cpuset.cpus</code> dùng để cấu hình CPU cho cgroup; <code>cpuset.cpus.effective</code> cho biết các CPU thực tế có hiệu lực sau khi xét giới hạn từ cấp cha và trạng thái hệ thống.</p>
+<h2 id="cpu-affinity-trong-container-va-kubernetes">CPU affinity trong container và Kubernetes<a class="zola-anchor" href="#cpu-affinity-trong-container-va-kubernetes" aria-label="Anchor link for: cpu-affinity-trong-container-va-kubernetes" style="visibility: hidden;"></a></h2>
+<p>Container không có một bộ CPU vật lý riêng. Các tiến trình trong container vẫn được scheduler của kernel host lập lịch. Tuy nhiên, runtime có thể dùng cgroup để giới hạn CPU mà container được phép chạy trên đó.</p>
+<p>Docker có tùy chọn <code>--cpuset-cpus</code>, ví dụ:</p>
+<pre class="giallo z-code"><code data-lang="shellscript"><span class="giallo-l"><span class="z-entity z-name">docker</span><span class="z-string"> run</span><span class="z-constant"> -</span><span class="z-constant">-cpuset-cpus=</span><span class="z-punctuation z-definition z-string">&quot;</span><span class="z-string">2,3</span><span class="z-punctuation z-definition z-string">&quot;</span><span class="z-string"> image</span></span></code></pre>
+<p>Tùy chọn này giới hạn container vào CPU 2 và 3 thông qua cơ chế CPU set của Linux.</p>
+<p>Trong Kubernetes, việc container có thể chạy trên CPU nào chịu ảnh hưởng của cấu hình tài nguyên và CPU Manager trên node. Với CPU Manager policy <code>static</code>, kubelet có thể cấp các CPU riêng cho container trong Pod đủ điều kiện, thường gắn với request CPU là số nguyên và QoS class <code>Guaranteed</code>. Đây là cấu hình ở cấp node và cần được bật phù hợp; chỉ khai báo CPU request trong Pod không đồng nghĩa lúc nào cũng được ghim vào một tập CPU riêng.</p>
+<h2 id="thuc-hanh-nhanh">Thực hành nhanh<a class="zola-anchor" href="#thuc-hanh-nhanh" aria-label="Anchor link for: thuc-hanh-nhanh" style="visibility: hidden;"></a></h2>
+<p>Nếu muốn quan sát affinity mà không cần cài thêm công cụ đặc biệt:</p>
+<pre class="giallo z-code"><code data-lang="shellscript"><span class="giallo-l"><span class="z-punctuation z-definition z-comment">#</span><span class="z-comment"> Xem các CPU mà shell hiện tại được phép sử dụng</span></span>
+<span class="giallo-l"><span class="z-entity z-name">taskset</span><span class="z-constant"> -</span><span class="z-constant">pc</span><span class="z-variable z-language"> $</span><span class="z-variable z-language">$</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-punctuation z-definition z-comment">#</span><span class="z-comment"> Chạy lệnh trên CPU 0 và 1</span></span>
+<span class="giallo-l"><span class="z-entity z-name">taskset</span><span class="z-constant"> -</span><span class="z-constant">c</span><span class="z-string"> 0,1</span><span class="z-string"> sh</span><span class="z-constant"> -</span><span class="z-constant">c</span><span class="z-punctuation z-definition z-string"> &#39;</span><span class="z-string">grep Cpus_allowed_list /proc/self/status</span><span class="z-punctuation z-definition z-string">&#39;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-punctuation z-definition z-comment">#</span><span class="z-comment"> Xem affinity của một tiến trình</span></span>
+<span class="giallo-l"><span class="z-entity z-name">taskset</span><span class="z-constant"> -</span><span class="z-constant">pc</span><span class="z-constant"> 1234</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span class="z-punctuation z-definition z-comment">#</span><span class="z-comment"> Xem affinity của mọi thread trong tiến trình</span></span>
+<span class="giallo-l"><span class="z-entity z-name">taskset</span><span class="z-constant"> -</span><span class="z-constant">apc</span><span class="z-constant"> 1234</span></span></code></pre>
+<p>Kết quả của lệnh thứ hai thường hiện danh sách CPU đã giới hạn, chẳng hạn:</p>
+<pre class="giallo z-code"><code data-lang="plain"><span class="giallo-l"><span>Cpus_allowed_list: 0-1</span></span></code></pre>
+<p>Nếu lệnh <code>taskset</code> báo CPU không hợp lệ hoặc không thể đặt affinity, hãy kiểm tra CPU hiện có và giới hạn cpuset của môi trường:</p>
+<pre class="giallo z-code"><code data-lang="shellscript"><span class="giallo-l"><span class="z-entity z-name">lscpu</span></span>
+<span class="giallo-l"><span class="z-entity z-name">grep</span><span class="z-string"> Cpus_allowed_list</span><span class="z-string"> /proc/self/status</span></span></code></pre><h2 id="ket-luan">Kết luận<a class="zola-anchor" href="#ket-luan" aria-label="Anchor link for: ket-luan" style="visibility: hidden;"></a></h2>
+<p>CPU affinity là tập CPU mà một thread được phép chạy trên đó. Scheduler vẫn quyết định thời điểm chạy và CPU cụ thể trong tập hợp hợp lệ; affinity không dành riêng CPU và cũng không bảo đảm hiệu năng cao hơn.</p>
+<p>Có thể dùng <code>taskset</code> để quan sát, giới hạn affinity cho một lệnh hoặc thay đổi affinity của tiến trình đang chạy. Trong môi trường container, cgroup cpuset có thể tiếp tục giới hạn tập CPU đó. Hiểu rõ hai lớp này giúp ta phân biệt việc “được phép chạy trên CPU nào” với “được cấp bao nhiêu CPU”.</p>
+<h2 id="tham-khao">Tham khảo<a class="zola-anchor" href="#tham-khao" aria-label="Anchor link for: tham-khao" style="visibility: hidden;"></a></h2>
+<ul>
+<li><a rel="nofollow noreferrer external" href="https://man7.org/linux/man-pages/man2/sched_setaffinity.2.html"><code>sched_setaffinity(2)</code> – Linux manual page</a></li>
+<li><a rel="nofollow noreferrer external" href="https://man7.org/linux/man-pages/man1/taskset.1.html"><code>taskset(1)</code> – Linux manual page</a></li>
+<li><a rel="nofollow noreferrer external" href="https://docs.kernel.org/admin-guide/cgroup-v2.html">Control Group v2 – Linux kernel documentation</a></li>
+<li><a rel="nofollow noreferrer external" href="https://docs.kernel.org/admin-guide/mm/numa_memory_policy.html">NUMA Memory Policy – Linux kernel documentation</a></li>
+<li><a rel="nofollow noreferrer external" href="https://kubernetes.io/docs/tasks/administer-cluster/cpu-management-policies/">CPU Manager Policies – Kubernetes documentation</a></li>
+</ul>
+
+      </article>
+
+      
+      
+
+      
+      
+    </div>
+
+    
+
+
+<footer>
+  <div class="left">
+    <div class="copyright">
+      © 2026 <a href="https:&#x2F;&#x2F;wen.is-a.dev">Wen</a>
+      
+    </div>
+  </div>
+
+  <div class="right">
+    
+    
+    
+    
+
+    <!-- 
+    
+    
+    <button id="theme-toggle" aria-label="theme switch">
+      <span class="moon-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M10 7C10 10.866 13.134 14 17 14C18.9584 14 20.729 13.1957 21.9995 11.8995C22 11.933 22 11.9665 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C12.0335 2 12.067 2 12.1005 2.00049C10.8043 3.27098 10 5.04157 10 7ZM4 12C4 16.4183 7.58172 20 12 20C15.0583 20 17.7158 18.2839 19.062 15.7621C18.3945 15.9187 17.7035 16 17 16C12.0294 16 8 11.9706 8 7C8 6.29648 8.08133 5.60547 8.2379 4.938C5.71611 6.28423 4 8.9417 4 12Z" fill="currentColor"></path></svg>
+</span>
+      <span class="sun-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z" fill="currentColor"></path></svg>
+</span>
+    </button>
+     -->
+  </div>
+</footer>
+
+
+
+
+  </main>
+</div>
+
+  
+<script src="/js/lightense.min.js"></script>
+
+
+
+  <script src="https://wen.is-a.dev/js/main.js"></script>
+</body>
+
+</html>

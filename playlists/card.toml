@@ -1,0 +1,54 @@
+[[collection]]
+type = "card"
+title = "Title"
+# subtitle = "Subtitle" # optional
+# date = "Date" # optional
+link = "https://example.com" # optional
+# icon = "https://example.com/image.png" # optional
+content = "Content"
+# tags = ["tag1", "tag2"] # optional
+# featured = false  # optional
+
+[[collection]]
+type = "card"
+title = "Title"
+# subtitle = "Subtitle" # optional
+# date = "Date" # optional
+link = "https://example.com" # optional
+# icon = "https://example.com/image.png" # optional
+content = "Content"
+# tags = ["tag1", "tag2"] # optional
+# featured = false  # optional
+
+[[collection]]
+type = "card"
+title = "Title"
+# subtitle = "Subtitle" # optional
+# date = "Date" # optional
+link = "https://example.com" # optional
+# icon = "https://example.com/image.png" # optional
+content = "Content"
+# tags = ["tag1", "tag2"] # optional
+# featured = false  # optional
+
+[[collection]]
+type = "card"
+title = "Title"
+# subtitle = "Subtitle" # optional
+# date = "Date" # optional
+link = "https://example.com" # optional
+# icon = "https://example.com/image.png" # optional
+content = "Content"
+# tags = ["tag1", "tag2"] # optional
+# featured = false  # optional
+
+[[collection]]
+type = "card"
+title = "Title"
+# subtitle = "Subtitle" # optional
+# date = "Date" # optional
+link = "https://example.com" # optional
+# icon = "https://example.com/image.png" # optional
+content = "Content"
+# tags = ["tag1", "tag2"] # optional
+# featured = false  # optional
